@@ -1,0 +1,31 @@
+{% extends "wizard_form.html" %}
+{% load static %}
+
+    {% block title %}3. Образование{% endblock %}
+
+    {% block media %}
+    {{ block.super }}
+    <script src="{% static 'anketa/js/bootstrap-datepicker.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'anketa/css/datepicker.css' %}"></script>
+    {% endblock %}
+
+    {% block header %}Образование{% endblock %}
+
+    {% block toptext %}
+    	<div class="lead">
+	           <p>Какое образование у вас уже есть?</p>
+	    </div>
+        <script type="text/javascript">
+            var max = new Date();
+            $( window ).load(function() {
+                $('#id_1-doc_distributed_date').datepicker({
+                        format: 'dd/mm/yyyy',
+                        weekStart: 1,
+                        onRender: function(date) {
+                            return date.valueOf() > max.valueOf() ? 'disabled' : '';
+                        }
+                    });          
+            });
+        </script>
+
+    {% endblock %}

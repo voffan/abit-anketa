@@ -1,0 +1,29 @@
+.wizardform  h1 {
+  text-align:center;
+}
+
+.wizardform  .lead {
+  text-align:center;
+}
+
+ul.errorlist li {
+  margin-top:4px;
+  font-size:60%;
+  list-style: none;
+  color:#a94442;
+}
+
+.form-horizontal .has-feedback .form-control-feedback {
+  top: 0;
+  right: auto;
+}
+
+.wizardform .errormarks {
+  padding:0px;
+  text-align:left;
+} 
+
+.wizardform .error-message {
+  padding:7px;
+  text-align:left;
+} 

@@ -1,0 +1,47 @@
+{% extends "wizard_form.html" %}
+{% load static %}
+
+    {% block title %}1. Давайте знакомиться{% endblock %}
+
+    {% block media %}
+    {{ block.super }}
+    <script src="{% static 'anketa/js/bootstrap-datepicker.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'anketa/css/datepicker.css' %}"></script>
+    <style type="text/css">
+        #id_0-sex  li {
+            display: inline-block;
+        }
+        #id_0-sex  li+li {
+            margin-left:4em;
+        }
+        #id_0-sex  label {
+            float:left; clear:none; margin-top:7px;                       
+        }
+        #id_0-sex  input {
+            float:left; clear:none; margin-top:4px; margin-right: 6px;
+        }
+    </style>
+    {% endblock %}
+
+    {% block header %}Начнем.{% endblock %}
+
+    {% block toptext %}
+    	<div class="lead">
+	    <p>Представьтесь, пожалуйста. <br /> Далее вы получите регистрационный номер, который понадобится вам для&nbsp;подтверждения заявления в&nbsp;комиссии и&nbsp;позволит нам быстрее его найти. </p>
+	    </div>
+        
+        <script type="text/javascript">
+        var max = new Date();
+        max.setFullYear(max.getFullYear()-10);
+        $( window ).load(function() {
+            $('#id_0-born_date').datepicker({
+                    format: 'dd/mm/yyyy',
+                    weekStart: 1,
+                    onRender: function(date) {
+                        return date.valueOf() > max.valueOf() ? 'disabled' : '';
+                    }
+                });          
+        });
+        </script>
+
+    {% endblock %}
