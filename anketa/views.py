@@ -95,3 +95,6 @@ def autocomplete(request):
     from django.core import serializers
     json_subcat = Universal_directory.objects.filter(name__icontains=request.GET['term'], type=Directory_types.objects.get(name=u'Учебное заведение')).values_list('name', flat=True)
     return HttpResponse(json.dumps([unicode(t) for t in json_subcat]), mimetype="application/javascript")
+
+def try:
+    pass
