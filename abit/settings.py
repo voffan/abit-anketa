@@ -58,7 +58,7 @@ WSGI_APPLICATION = 'abit.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'mysql.connector.django',
         'NAME': 'abit-anketa',
         'USER': 'abit-anketa',
         'PASSWORD': 'CWBvcKayTUKdCU6C',
