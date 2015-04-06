@@ -54,7 +54,7 @@ WSGI_APPLICATION = 'abit.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/1.6/ref/settings/#databases
+# https://docs.djangoproject.com/en/1.6/ref/settings/#databases  
 
 DATABASES = {
     'default': {
@@ -66,6 +66,7 @@ DATABASES = {
         'PORT': '',
     }
 }
+#
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/

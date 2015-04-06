@@ -9,10 +9,12 @@ from anketa.views2 import *
 
 urlpatterns = patterns('',
     url(r'^$', StartPage.as_view()),
-    url(r'^application/$', person_add),
+    url(r'^application/$', person_add, name = 'application'),
     url(r'^feedback/$', FeedbackCreateView.as_view()),
     url(r'^ajax/categ/$', 'anketa.views.feeds_subcat'),
     url(r'^ajax/autocomplete/$', 'anketa.views.autocomplete'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^appwizard/', Application_Wizard.as_view([Step_Name, Step_Document, Step_Education, Step_Address])),
+    url(r'^staff/',include('staff.urls', namespace='staff')),
+    url(r'^auth/', include('staff.urls')),
 )

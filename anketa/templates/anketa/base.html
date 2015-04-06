@@ -15,11 +15,16 @@
 	<title>{% block title %}{% endblock %}</title>
 </head>
 <body>
+
 	<header>
 		<center><img src="{% static "anketa/img/logo.png" %}" /></center>
 	</header>
 	<main>
 		{% block content %}{% endblock %}
 	</main>
+<main>
+		<center>{% block login %}{% endblock %}</center>
+	</main>
+
 </body>
 </html>
