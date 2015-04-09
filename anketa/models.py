@@ -30,11 +30,11 @@ class Person(models.Model):
     mother = models.ForeignKey('self',verbose_name= u'Мать', null = True, blank = True)
 
 class Application(models.Model):
-    Department = models.ForeignKey(Department, verbose_name = u'Институт/факультет')
+    Department = models.ForeignKey('Department', verbose_name = u'Институт/факультет')
     person = models.ForeignKey('Person', verbose_name = u'Абитуриент')
     date = models.DateField(u'Дата подачи')
     number = models.IntegerField(u'Номер зааявления', max_length=10)
-    eduform = models.BooleanField(u'Форма обучения')
+    eduform = models.BooleanField(u'Форма обучения',)
     budget = models.BooleanField(u'В рамках контрольных цифр приёма', default=False)
     withfee = models.BinaryField(u'по договорам об оказании платных обр. услуг', default=False)
 
@@ -57,7 +57,7 @@ class Contacts(models.Model):
     contact_type = models.ForeignKey('Attribute',verbose_name=u'Тип')
 
 class DocAttr(models.Model):
-    doc = models.ForeignKey(Docs, verbose_name=u'Документ')
+    doc = models.ForeignKey('Docs', verbose_name=u'Документ')
     AttrName = models.ForeignKey(Attribute, verbose_name = u'Название атрибута')
     AttrValue = models.CharField(u'Значение атрибута', max_length = 150)
 
@@ -78,7 +78,7 @@ class Exams(models.Model):
     year = models.IntegerField(u'Год', max_length=4)
 
 class Department(models.Model):
-    university = models.ForeignKey(University)
+    university = models.ForeignKey('University')
     name=models.CharField(u'Институт/факультет', max_length=100)
 
 class University(models.Model):
