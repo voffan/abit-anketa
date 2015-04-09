@@ -1,95 +1,127 @@
 ﻿from django.db import models
 
-class Person(models.Model):
-    surname = models.CharField(max_length=30, verbose_name="Фамилия")
-    name = models.CharField(max_length=30, verbose_name="Имя")
-    patronymic = models.CharField(max_length=30, verbose_name="Отчество")
-    sex = models.CharField(choices=((u'М',u'Мужской'),(u'Ж',u'Женский')), max_length=1, verbose_name="Пол")
-    born_date = models.DateField(verbose_name="Дата рождения")
-    id_doc = models.ForeignKey('Universal_directory', verbose_name="вид", related_name='id_doc')
-    doc_serial = models.CharField(max_length=10, verbose_name="серия")
-    doc_no = models.CharField(max_length=30, verbose_name="номер")
-    doc_distributed_date = models.DateField(verbose_name="дата выдачи")
-    doc_distributed_organisation = models.CharField(max_length=100, verbose_name="кем выдан")
-    is_checked = models.BooleanField(default=False, verbose_name="Проверен")
-    to_delete = models.BooleanField(default=False, verbose_name="На удаление")
-    prev_edu_level = models.ForeignKey('Universal_directory', verbose_name="Предыд. образ-ние", related_name='prev_edu_level')
-    prev_edu_start = models.DateField(verbose_name="Дата поступления")
-    prev_edu_end = models.DateField(verbose_name="дата окончания")
-    prev_edu_organisation = models.ForeignKey('Universal_directory', verbose_name="учебное заведение", related_name='prev_edu_organisation')
-    prev_edu_doc_type = models.ForeignKey('Universal_directory', verbose_name="вид документа об образовании", related_name='prev_edu_doc_type')
-    prev_edu_doc_seria = models.CharField(max_length=10, verbose_name="серия")
-    prev_edu_doc_num = models.CharField(max_length=30, verbose_name="номер")
-    hotel = models.BooleanField(default=False, verbose_name="Требуется общежитие")
-    foreign_lang = models.ForeignKey('Universal_directory', verbose_name="Изучаемый иностранный язык", related_name='foreign_lang')
+Sex = (
+    (u'М',u'Мужской'),
+    (u'Ж',u'Женский'),
+    )
 
-class Application(models.Model):
-    id_person = models.ForeignKey('Person')
-    id_pln = models.ForeignKey('Edu_prog')
-    reg_no = models.CharField(max_length=30, verbose_name="шифр по журналу")
-    date_in = models.DateField(verbose_name="дата")
-    is_confirmed = models.BooleanField(default=False, verbose_name="Подтверждено")
-    to_delete = models.BooleanField(default=False, verbose_name="На удаление")
-    to_export = models.BooleanField(default=False, verbose_name="На экспорт")
-    prev_edu_doc_orig = models.BooleanField(default=False, verbose_name="Оригинал документа об образовании")
-    is_exported = models.BooleanField(default=False, verbose_name="Экспортировано")
+class AttrType(models.Model):
+    name=models.CharField(u"", max_length=100)
 
-class Address(models.Model):
-    id_person = models.ForeignKey('Person')
-    id_addr_type = models.ForeignKey('Universal_directory', verbose_name="Тип адреса", related_name='id_addr_type')
-    id_adm_territory = models.ForeignKey('Universal_directory', verbose_name="область\край\респ.", related_name='id_adm_territory', null=True, blank=True)
-    id_adm_unit = models.ForeignKey('Universal_directory', verbose_name="Район\улус", related_name='id_adm_unit', null=True, blank=True)
-    id_settlement = models.ForeignKey('Universal_directory', verbose_name="Город\село", related_name='id_settlement')
-    post_index = models.CharField(max_length=6, verbose_name="Индекс", null=True, blank=True)
-    street_name = models.CharField(max_length=151, verbose_name="Улица\проспект")
-    house_no = models.CharField(max_length=5, verbose_name="дом")
-    block_no = models.CharField(max_length=5, verbose_name="корпус", null=True, blank=True)
-    apart_no = models.CharField(max_length=5, verbose_name="квартира", null=True, blank=True)
-
-class EGE(models.Model):
-    id_person = models.ForeignKey('Person')
-    id_subject = models.ForeignKey('Universal_directory', verbose_name="предмет", related_name='id_subject')
-    year = models.DecimalField(max_digits=4, decimal_places=0, verbose_name="год")
-    mark = models.DecimalField(max_digits=3, decimal_places=0, verbose_name="оценка")
-    sert_no = models.CharField(max_length=15, verbose_name="номер свидетельства")
-    is_checked = models.BooleanField(default=False, verbose_name="Проверен")
-
-class Edu_prog(models.Model):
-    id_spec = models.ForeignKey('Universal_directory', verbose_name="Специализация", related_name='id_spec')
-    id_specialn = models.ForeignKey('Universal_directory', verbose_name="Специальность", related_name='id_specialn')
-    id_study_form = models.ForeignKey('Universal_directory', verbose_name="Форма обучения", related_name='id_study_form')
-    id_institute = models.ForeignKey('Universal_directory', verbose_name="Институт", related_name='id_institute')
-
-class Privilegies(models.Model):
-    id_person = models.ForeignKey('Person')
-    id_privilege = models.ForeignKey('Universal_directory', verbose_name="Льгота\приоритет")
-
-class Milit(models.Model):
-    id_person = models.ForeignKey('Person', primary_key=True)
-    served = models.BooleanField(default=False, verbose_name="служил в армии")
-    year = models.DecimalField(max_digits=4, decimal_places=0, verbose_name="год увольнения из рядов РА", null=True, blank=True)
-    rank = models.CharField(max_length=50, verbose_name="Воинское звание", null=True, blank=True)
-
-class Edu_prog_need_exams(models.Model):
-    id_pln = models.ForeignKey('Edu_prog')
-    id_subject = models.ForeignKey('Universal_directory')
-    min_mark = models.SmallIntegerField()
-
-class Need_exams(models.Model):
-    id_person = models.ForeignKey('Person')
-    subj = models.ForeignKey('Universal_directory', related_name='subj', verbose_name="Дисциплина")
-    exam_form = models.ForeignKey('Universal_directory', related_name='exam_form', verbose_name="Форма экзамена")
-
-class Universal_directory(models.Model):
+class Attribute(models.Model):
     name = models.CharField(max_length=250)
     parent = models.ForeignKey('self', null=True, blank=True)
-    type = models.ForeignKey('Directory_types')
+    type = models.ForeignKey(AttrType,verbose_name = u'')
     def __unicode__(self):
         return self.name
 
-class Directory_types(models.Model):
-    name = models.CharField(max_length=250)
+class Person(models.Model):
+    lname = models.CharField(u'Фамилия', max_length=30)
+    nname = models.CharField(u'Имя', max_length=30)
+    mname = models.CharField(u'Отчество', max_length=30)
+    sex = models.CharField(u'Пол', choices=Sex, max_length=1, default='М')
+    birthdate = models.DateField(u'Дата рождения')
+    bithplace = models.CharField(u'Место рождения', max_length=100)
+    Nationality = models.ForeignKey(Attribute,verbose_name=u'Национальность(по желанию)', limit_choices_to={'type__name':u'Национальность'}, db_index = True, blank = True, null = True)
+    Citizenship = models.ForeignKey(Attribute,verbose_name=u'Гражданство', db_index = True)
+    hostel = models.BooleanField(u'Требуется общежитие',default=False)
+    foreign_lang = models.ForeignKey('Attribute', verbose_name=u'Изучаемый иностранный язык')
+    father = models.ForeignKey('self',verbose_name= u'Отец', null = True, blank = True)
+    mother = models.ForeignKey('self',verbose_name= u'Мать', null = True, blank = True)
 
-class Feedback(models.Model):
-    email = models.EmailField(verbose_name=u'Ваш email для нашего ответа (не обязателен)', null=True, blank=True)
-    text = models.TextField(verbose_name=u'Сообщение')
+class Application(models.Model):
+    Department = models.ForeignKey(Department, verbose_name = u'Институт/факультет')
+    person = models.ForeignKey('Person', verbose_name = u'Абитуриент')
+    date = models.DateField(u'Дата подачи')
+    number = models.IntegerField(u'Номер зааявления', max_length=10)
+    eduform = models.BooleanField(u'Форма обучения')
+    budget = models.BooleanField(u'В рамках контрольных цифр приёма', default=False)
+    withfee = models.BinaryField(u'по договорам об оказании платных обр. услуг', default=False)
+
+class Address(models.Model):
+    person = models.ForeignKey('Person')
+    adrs_type = models.ForeignKey('Attribute', verbose_name=u'Тип адреса')
+    adrs_territory = models.ForeignKey('Attribute', verbose_name=u'область\край\респ.', null=True, blank=True)
+    adrs_district = models.ForeignKey('Attribute', verbose_name=u'Район\улус', null=True, blank=True)
+    adrs_city = models.ForeignKey('Attribute', verbose_name=u'Город\село')
+    adrs_settlement = models.ForeignKey('Attribute', verbose_name=u'Посёлок', null = True, blank = True)
+    zipcode = models.CharField(u'Индекс', max_length=6, null=True, blank=True)
+    street = models.CharField(u'Улица\проспект', max_length=151)
+    house = models.CharField(u'дом', max_length=5)
+    building = models.CharField(u'корпус', max_length=5, null=True, blank=True)
+    flat = models.CharField(u'квартира', max_length=5, null=True, blank=True)
+
+class Contacts(models.Model):
+    person = models.ForeignKey('Person',verbose_name = u'Человек')
+    value = models.CharField(u'Значение', max_length=30)
+    contact_type = models.ForeignKey('Attribute',verbose_name=u'Тип')
+
+class DocAttr(models.Model):
+    doc = models.ForeignKey(Docs, verbose_name=u'Документ')
+    AttrName = models.ForeignKey(Attribute, verbose_name = u'Название атрибута')
+    AttrValue = models.CharField(u'Значение атрибута', max_length = 150)
+
+class Docs(models.Model):
+    person = models.ForeignKey('Person')
+    serialno = models.IntegerField(u'Серия документа', max_length=15)
+    number = models.IntegerField(u'Номер документа', max_length=15)
+    issueDate = models.DateField(u'Дата выдачи')
+    isCopy = models.BooleanField(u'Оригинал документа', default=False)
+    docType = models.ForeignKey('Attribute', verbose_name=u'Тип документа')
+    docIssuer = models.ForeignKey('Attribute', verbose_name=u'Орган выдавший документ')
+
+class Exams(models.Model):
+    person = models.ForeignKey('Person')
+    exam_examType = models.ForeignKey('Attribute', verbose_name=u'Тип экзамена')
+    exam_subjects = models.ForeignKey('Attribute', verbose_name=u'Дисциплина')
+    points = models.IntegerField(u'Кол-во баллов', max_length=3, blank = True, null = True)
+    year = models.IntegerField(u'Год', max_length=4)
+
+class Department(models.Model):
+    university = models.ForeignKey(University)
+    name=models.CharField(u'Институт/факультет', max_length=100)
+
+class University(models.Model):
+    name=models.CharField(u'Университет', max_length=100)
+
+class Qualification(models.Model):
+    name=models.CharField(u'Название', max_length=100)
+
+class Education_Prog(models.Model):
+    department = models.ForeignKey(Department)
+    qual=models.ForeignKey('Qualification')
+    name=models.CharField(u'Направление/специальность', max_length=100)
+
+class Profile(models.Model):
+    edu_prog=models.ForeignKey('Education_Prog')
+    name=models.CharField(u'Профиль', max_length=100)
+
+class Exams_needed(models.Model):
+    profile=models.ForeignKey('Profile')
+    min_points=models.IntegerField(u'Мин-ое кол-во баллов', max_length=100)
+    subject = models.ForeignKey('Attribute', verbose_name=u'Дисциплина')
+    #Форма экзамена?
+
+class Privilegies(models.Model):
+    person = models.ForeignKey('Person')
+    category = models.ForeignKey('Attribute', verbose_name=u'Категория')
+    priv_type = models.ForeignKey('Attribute', verbose_name=u'тип')
+
+#milit
+
+class Milit(models.Model):
+    person=models.ForeignKey(Person, verbose_name = u'Абитуриент')
+    liableForMilit = models.BooleanField(u'Военнообязанный', default=False)
+    isServed=models.BooleanField(u'служил в армии', default=False, null=True, blank=True)
+    yearDismissial=models.IntegerField(u'Год увольнения из рядов РА, max_length=4',blank=True, null= True)
+    rank = models.ForeignKey(Attribute, verbose_name=u'Воинское звание',blank=True, null= True)
+
+class DepAchieves(models.Model):
+    department = models.ForeignKey(Department, verbose_name = u'Институт/факультет', db_index = True, blank = True, null = True)
+    qual = models.ForeignKey(Qualification, verbose_name = u'Квалификация', db_index = True)
+    name = models.CharField(u'Наименование', max_length = 1000, db_index = True)
+    points = models.IntegerField(u'Баллы')
+
+class Achievements(models.Model):
+    person = models.ForeignKey(Person, verbose_name = u'Абитуриент', db_index = True)
+    achieve = models.ForeignKey(DepAchieves, verbose_name = u'Достижение', db_index = True)
