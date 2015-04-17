@@ -111,7 +111,7 @@ class Privilegies(models.Model):
     category = models.ForeignKey('Attribute', verbose_name=u'Категория', related_name='Category')
     priv_type = models.ForeignKey('Attribute', verbose_name=u'тип', related_name='Priv_type')
 
-#milit
+#YASOJGUVASHITRUPI
 
 class Milit(models.Model):
     person=models.ForeignKey(Person, verbose_name = u'Абитуриент')
