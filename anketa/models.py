@@ -4,6 +4,10 @@ Sex = (
     (u'М',u'Мужской'),
     (u'Ж',u'Женский'),
     )
+Eduform = (
+    (u'О',u'Очное'),
+    (u'З',u'Заочное')
+    )
 
 class AttrType(models.Model):
     name=models.CharField(u"", max_length=100)
@@ -11,7 +15,7 @@ class AttrType(models.Model):
 class Attribute(models.Model):
     name = models.CharField(max_length=250)
     parent = models.ForeignKey('self', null=True, blank=True)
-    type = models.ForeignKey(AttrType,verbose_name = u'')
+    type = models.ForeignKey(AttrType,verbose_name = u'Тип атрибута')
     def __unicode__(self):
         return self.name
 
@@ -22,29 +26,29 @@ class Person(models.Model):
     sex = models.CharField(u'Пол', choices=Sex, max_length=1, default='М')
     birthdate = models.DateField(u'Дата рождения')
     bithplace = models.CharField(u'Место рождения', max_length=100)
-    Nationality = models.ForeignKey(Attribute,verbose_name=u'Национальность(по желанию)', limit_choices_to={'type__name':u'Национальность'}, db_index = True, blank = True, null = True)
-    Citizenship = models.ForeignKey(Attribute,verbose_name=u'Гражданство', db_index = True)
+    nationality = models.ForeignKey(Attribute,verbose_name=u'Национальность(по желанию)', limit_choices_to={'type__name':u'Национальность'}, db_index = True, blank = True, null = True, related_name='Nationality')
+    citizenship = models.ForeignKey(Attribute,verbose_name=u'Гражданство', db_index = True,related_name='Citizenship')
     hostel = models.BooleanField(u'Требуется общежитие',default=False)
-    foreign_lang = models.ForeignKey('Attribute', verbose_name=u'Изучаемый иностранный язык')
-    father = models.ForeignKey('self',verbose_name= u'Отец', null = True, blank = True)
-    mother = models.ForeignKey('self',verbose_name= u'Мать', null = True, blank = True)
+    foreign_lang = models.ForeignKey('Attribute', verbose_name=u'Изучаемый иностранный язык',related_name='Foreign')
+    father = models.ForeignKey('self',verbose_name= u'Отец', null = True, blank = True, related_name='Father')
+    mother = models.ForeignKey('self',verbose_name= u'Мать', null = True, blank = True, related_name='Mother')
 
 class Application(models.Model):
     Department = models.ForeignKey('Department', verbose_name = u'Институт/факультет')
     person = models.ForeignKey('Person', verbose_name = u'Абитуриент')
     date = models.DateField(u'Дата подачи')
     number = models.IntegerField(u'Номер зааявления', max_length=10)
-    eduform = models.BooleanField(u'Форма обучения',)
+    eduform = models.CharField(u'Форма обучения',choices=Eduform, default='О', max_length=10)
     budget = models.BooleanField(u'В рамках контрольных цифр приёма', default=False)
     withfee = models.BinaryField(u'по договорам об оказании платных обр. услуг', default=False)
 
 class Address(models.Model):
     person = models.ForeignKey('Person')
-    adrs_type = models.ForeignKey('Attribute', verbose_name=u'Тип адреса')
-    adrs_territory = models.ForeignKey('Attribute', verbose_name=u'область\край\респ.', null=True, blank=True)
-    adrs_district = models.ForeignKey('Attribute', verbose_name=u'Район\улус', null=True, blank=True)
-    adrs_city = models.ForeignKey('Attribute', verbose_name=u'Город\село')
-    adrs_settlement = models.ForeignKey('Attribute', verbose_name=u'Посёлок', null = True, blank = True)
+    adrs_type = models.ForeignKey('Attribute', verbose_name=u'Тип адреса', related_name='Adrs_type')
+    adrs_territory = models.ForeignKey('Attribute', verbose_name=u'область\край\респ.', null=True, blank=True, related_name='Adrs_territory')
+    adrs_district = models.ForeignKey('Attribute', verbose_name=u'Район\улус', null=True, blank=True, related_name='Adrs_district')
+    adrs_city = models.ForeignKey('Attribute', verbose_name=u'Город\село', related_name='Adrs_city')
+    adrs_settlement = models.ForeignKey('Attribute', verbose_name=u'Посёлок', null = True, blank = True, related_name='Adrs_settlement')
     zipcode = models.CharField(u'Индекс', max_length=6, null=True, blank=True)
     street = models.CharField(u'Улица\проспект', max_length=151)
     house = models.CharField(u'дом', max_length=5)
@@ -58,8 +62,8 @@ class Contacts(models.Model):
 
 class DocAttr(models.Model):
     doc = models.ForeignKey('Docs', verbose_name=u'Документ')
-    AttrName = models.ForeignKey(Attribute, verbose_name = u'Название атрибута')
-    AttrValue = models.CharField(u'Значение атрибута', max_length = 150)
+    attrName = models.ForeignKey(Attribute, verbose_name = u'Название атрибута', related_name='Attrname')
+    attrValue = models.CharField(u'Значение атрибута', max_length = 150)
 
 class Docs(models.Model):
     person = models.ForeignKey('Person')
@@ -67,13 +71,13 @@ class Docs(models.Model):
     number = models.IntegerField(u'Номер документа', max_length=15)
     issueDate = models.DateField(u'Дата выдачи')
     isCopy = models.BooleanField(u'Оригинал документа', default=False)
-    docType = models.ForeignKey('Attribute', verbose_name=u'Тип документа')
-    docIssuer = models.ForeignKey('Attribute', verbose_name=u'Орган выдавший документ')
+    docType = models.ForeignKey('Attribute', verbose_name=u'Тип документа', related_name='DocType')
+    docIssuer = models.ForeignKey('Attribute', verbose_name=u'Орган выдавший документ', related_name='DocIssuer')
 
 class Exams(models.Model):
     person = models.ForeignKey('Person')
-    exam_examType = models.ForeignKey('Attribute', verbose_name=u'Тип экзамена')
-    exam_subjects = models.ForeignKey('Attribute', verbose_name=u'Дисциплина')
+    exam_examType = models.ForeignKey('Attribute', verbose_name=u'Тип экзамена', related_name='ExamType')
+    exam_subjects = models.ForeignKey('Attribute', verbose_name=u'Дисциплина',related_name='Exam_Subjects')
     points = models.IntegerField(u'Кол-во баллов', max_length=3, blank = True, null = True)
     year = models.IntegerField(u'Год', max_length=4)
 
@@ -99,22 +103,22 @@ class Profile(models.Model):
 class Exams_needed(models.Model):
     profile=models.ForeignKey('Profile')
     min_points=models.IntegerField(u'Мин-ое кол-во баллов', max_length=100)
-    subject = models.ForeignKey('Attribute', verbose_name=u'Дисциплина')
+    subject = models.ForeignKey('Attribute', verbose_name=u'Дисциплина', related_name='Subject')
     #Форма экзамена?
 
 class Privilegies(models.Model):
     person = models.ForeignKey('Person')
-    category = models.ForeignKey('Attribute', verbose_name=u'Категория')
-    priv_type = models.ForeignKey('Attribute', verbose_name=u'тип')
+    category = models.ForeignKey('Attribute', verbose_name=u'Категория', related_name='Category')
+    priv_type = models.ForeignKey('Attribute', verbose_name=u'тип', related_name='Priv_type')
 
 #milit
 
 class Milit(models.Model):
     person=models.ForeignKey(Person, verbose_name = u'Абитуриент')
     liableForMilit = models.BooleanField(u'Военнообязанный', default=False)
-    isServed=models.BooleanField(u'служил в армии', default=False, null=True, blank=True)
+    isServed=models.BooleanField(u'служил в армии', default=False, blank=True)
     yearDismissial=models.IntegerField(u'Год увольнения из рядов РА, max_length=4',blank=True, null= True)
-    rank = models.ForeignKey(Attribute, verbose_name=u'Воинское звание',blank=True, null= True)
+    rank = models.ForeignKey(Attribute, verbose_name=u'Воинское звание',blank=True, null= True,related_name='Rank')
 
 class DepAchieves(models.Model):
     department = models.ForeignKey(Department, verbose_name = u'Институт/факультет', db_index = True, blank = True, null = True)
