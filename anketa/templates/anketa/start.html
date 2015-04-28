@@ -4,9 +4,20 @@
 <center>
 {% load staticfiles %}
 <link rel="stylesheet" type="text/css" href="{% static 'anketa/css/style.css' %}" />
-<table><tr><td><p class="alertnote">Сервис работает в тестовом режиме до начала приёмной кампании.<br><a href="/abit-anketa/feedback/" target="_blank">Пожалуйста, дайте нам знать, если что-то не работает.<br>Мы рады получить ваши вопросы, комментарии или предложения!</a></p></td></tr></table>
+<table>
+	<tr>
+		<td>
+			<p class="alertnote">Сервис работает в тестовом режиме до начала приёмной кампании.<br>
+				<a href="/abit-anketa/feedback/" target="_blank">
+					Пожалуйста, дайте нам знать, если что-то не работает.<br>
+					Мы рады получить ваши вопросы, комментарии или предложения!
+				</a>
+			</p>
+		</td>
+	</tr>
+</table>
 <h1>
-<a href="{% url 'application' %}">Подать заявление</a>
+<a href="/abit-anketa/application/">Подать заявление</a>
 </h1>
 </center>
 {% endblock %}

@@ -4,27 +4,22 @@
 <head>
 	<link rel="shortcut icon" type="image/x-icon" href="{% static "favicon.ico" %}" />
 
-	<!-- jQuery -->
-	<script src="{% static "anketa/js/jquery-1.11.0.min.js" %}" type="text/javascript"></script>
-
 	<!-- Bootstrap -->
 	<link rel="stylesheet" href="{% static "anketa/css/bootstrap.min.css" %}" />
 	<link rel="stylesheet" href="{% static "anketa/css/bootstrap-theme.min.css" %}" />
-	<script src="{% static "anketa/js/bootstrap.min.js" %}"></script>
-
+	{% block additionalcss %} {% endblock %}
 	<title>{% block title %}{% endblock %}</title>
 </head>
 <body>
-
 	<header>
 		<center><img src="{% static "anketa/img/logo.png" %}" /></center>
 	</header>
 	<main>
 		{% block content %}{% endblock %}
 	</main>
-<main>
-		<center>{% block login %}{% endblock %}</center>
-	</main>
-
 </body>
+<!-- jQuery -->
+<script src="{% static "anketa/js/jquery-1.11.0.min.js" %}" type="text/javascript"></script>
+<script src="{% static "anketa/js/bootstrap.min.js" %}"></script>
+{% block scripts %}{% endblock %}
 </html>

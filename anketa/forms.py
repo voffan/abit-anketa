@@ -1,8 +1,8 @@
-﻿from django.forms import Form, ModelForm, CharField, DateField, Select, ModelChoiceField, BooleanField, ChoiceField, DecimalField
-from anketa.models import Person, Application, Address, Universal_directory, Directory_types, Milit, EGE, Privilegies, Need_exams
+from django.forms import Form, ModelForm, CharField, DateField, Select, ModelChoiceField, BooleanField, ChoiceField, DecimalField
+#from anketa.models import Person, Application, Address, Universal_directory, Directory_types, Milit, EGE, Privilegies, Need_exams
 from django.forms.widgets import NumberInput, Select, TextInput, RadioSelect
 from django.forms.extras.widgets import SelectDateWidget
-
+"""
 class Person_form(ModelForm):
     born_date = DateField(label=u'Дата рождения',widget=SelectDateWidget(years=range(2000,1900,-1)))
     doc_distributed_date = DateField(label=u'Дата выдачи',widget=SelectDateWidget(years=range(2014,1900,-1)))
@@ -250,3 +250,4 @@ class Step_Address(Form):
     class Meta:
         model = Address
         fields = ('id_adm_territory', 'id_adm_unit', 'adm_unit_name', 'id_settlement', 'settlement_name', 'post_index', 'street_name', 'house_no', 'block_no', 'apart_no')
+"""

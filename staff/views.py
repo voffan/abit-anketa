@@ -3,7 +3,7 @@ from django.shortcuts import render, render_to_response, redirect
 from django.contrib import auth
 from django.core.context_processors import csrf
 
-    
+from staff.models import News
 
 # Create your views here.
 
@@ -34,3 +34,9 @@ def logout(request):
     auth.logout(request)
     return redirect("/")
 
+def news_list(request):
+    news = News.objects.all()
+    data={}
+    data['news_list']= news
+    context = {'data':data}
+    render(request,'staff\news.html',conext)
