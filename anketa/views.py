@@ -1,4 +1,4 @@
-﻿import json
+import json
 
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
@@ -7,15 +7,15 @@ from django.utils import timezone
 
 from django.http import HttpResponse
 
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 
-from anketa.models import Person, Address, Universal_directory, Directory_types, Edu_prog, Feedback
-from anketa.forms import Person_form, Address_form, Address_coincides_form, EGE_form, Application_form, Milit_form, Is_mil_service_form, Privilegies_form, Need_exams_form
+from anketa.models import Person, Address
+#from anketa.forms import Person_form, Address_form, Address_coincides_form, EGE_form, Application_form, Milit_form, Is_mil_service_form, Privilegies_form, Need_exams_form
 
 class StartPage(TemplateView):
     template_name = 'anketa/start.html'
-
+"""
 class FeedbackCreateView(CreateView):
     model = Feedback
     template_name = 'anketa/feedback.html'
@@ -95,3 +95,6 @@ def autocomplete(request):
     from django.core import serializers
     json_subcat = Universal_directory.objects.filter(name__icontains=request.GET['term'], type=Directory_types.objects.get(name=u'Учебное заведение')).values_list('name', flat=True)
     return HttpResponse(json.dumps([unicode(t) for t in json_subcat]), mimetype="application/javascript")
+"""
+def StartApp(request):
+    return render(request, 'anketa/wizardform.html')
