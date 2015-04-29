@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<table class="table table-striped table-bordered table-hover ">
+                    <thead> 
+                            <tr>
+                                <th>#</th>
+                                <th>ФИО</th>
+                                <th>Подразделение</th>
+                                <th>Должность</th>
+                            </tr>
+                    </thead>
+                    <tbody>
+                            {% for employee in data.employees %}
+                            <tr>
+                              <td>{{ forcount }}</td>
+                              <td>{{ employee.fullname }}</td>
+                              <td>{{ employee.department.name }}</td>
+                              <td>{{ employee.position }}</td>
+                            </tr>
+                            {% endif %}
+                    </tbody>
+</table>
+                    <div class="pull-right">
+                        <button type="submit" class="btn btn-default">Удалить</button>
+                        <button type="submit" class="btn btn-default">добавить</button>
+                        <button type="submit" class="btn btn-default">УВОЛИТЬ</button>
+                    </div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'anketa\base.html' %}
+
+{% block content %}
+	<form action="/auth/login/" method="post">
+		{% csrf_token %}
+		<label for="username">Имя пользователя</label>
+		<input type="text" name="username" id="username">
+		</br></br>
+		<label for="username"> Пароль</label>
+		<input type="password" name="password" id="password">
+		</br></br>
+		{% if login_error %}
+			<label class="error">{{ login_error }}</label>
+		{% endif %}
+		<input class="button" type="submit" value="Voiti">
+	</form>
+{% endblock %}
