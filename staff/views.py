@@ -11,8 +11,7 @@ def index(request):
     n = 'Anufriev'
     if request.method == 'POST':
         n = request.POST['input1']
-    name = 'Double Hello World!!!'
-    return render(request,'staff_index.html',{'data':name, 'name':n}.update(csrf(request)))
+    return render(request,'staff\staff_index.html',{'data':name, 'name':n}.update(csrf(request)))
 
 def login(request):
          args = {}
@@ -39,4 +38,4 @@ def news_list(request):
     data={}
     data['news_list']= news
     context = {'data':data}
-    render(request,'staff\news.html',conext)
+    return render(request,'staff\\news.html',context)

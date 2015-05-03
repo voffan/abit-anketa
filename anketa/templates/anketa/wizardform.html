@@ -1,0 +1,559 @@
+{% extends "anketa/base.html" %}
+{% load staticfiles %}
+
+
+{% block additionalcss %}
+<link href="{% static "anketa/css/prettify.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static "anketa/js/jquery.bootstrap.wizard.js" %}"></script>
+<script src="{% static "anketa/js/prettify.js" %}"></script>
+<script>
+	$(document).ready(function() {
+	  	$('#rootwizard').bootstrapWizard({onTabShow: function(tab, navigation, index) {
+			var $total = navigation.find('li').length;
+			var $current = index+1;
+			var $percent = ($current/$total) * 100;
+			$('#rootwizard').find('.bar').css({width:$percent+'%'});
+			
+			// If it's the last tab then hide the last button and show the finish instead
+			if($current >= $total) {
+				$('#rootwizard').find('.pager .next').hide();
+				$('#rootwizard').find('.pager .finish').show();
+				$('#rootwizard').find('.pager .finish').removeClass('disabled');
+			} else {
+				$('#rootwizard').find('.pager .next').show();
+				$('#rootwizard').find('.pager .finish').hide();
+			}
+			
+		}});
+		$('#rootwizard .finish').click(function() {
+			alert('Finished!, Starting over!');
+			$('#rootwizard').find("a[href*='tab1']").trigger('click');
+		});	
+		window.prettyPrint && prettyPrint()
+	});	
+</script>
+{% endblock %}
+
+{% block content %}
+<div id = "rootwizard">
+	<div class="navbar">
+		<div class="navbar-inner">
+			<div class="container">
+				<ul>
+					<li><a href="#tab1" data-toggle="tab">Личные данные</a></li>
+					<li><a href="#tab2" data-toggle="tab">Документы</a></li>
+					<li><a href="#tab3" data-toggle="tab">Адрес</a></li>
+					<li><a href="#tab4" data-toggle="tab">Заявления</a></li>
+					<li><a href="#tab5" data-toggle="tab">Экзамены</a></li>
+					<li><a href="#tab6" data-toggle="tab">Льготы</a></li>
+					<li><a href="#tab7" data-toggle="tab">Личные достижения</a></li>
+					<li><a href="#tab8" data-toggle="tab">Прочее</a></li>
+				</ul>
+			</div>
+	 	</div>
+	</div>
+	<div class="tab-content">
+		<div class="tab-pane" id="tab1">
+			<div class = "container-fluid">
+				<div class = "row">
+					<div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                        <p>
+                            <label for="sname">Фамилия</label>
+                            <input type = "text" name= "sname" id = "sname" class = "form-control" placeholder = "Иванов">
+                        </p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+				        <p>
+                            <label for="name">Имя</label>
+                            <input type = "text" name= "name" id = "name" class = "form-control" placeholder = "Иван">
+                        </p>
+					</div>					
+				</div>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                        <p>
+                            <label for="mname">Отчество</label>
+                            <input type="text" name = "mname" id ="mdname" class="form-control" placeholder="Иванович">
+                        </p>
+                    </div>
+                </div>                    
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                        <p>
+                            <label for="birthday">Дата рождения</label>
+                            <input type="date" name = "birthday" id ="birthday" value="1997-01-01" class="form-control">
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                        <p>
+                            <label for="birthplace">Место рождения</label>
+                            <input type="text" name = "birthplace" id ="birthplace" class="form-control" placeholder="Татуин">
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                        <p>
+                            <label for="nationality">Национальность(по желанию)</label>
+                            <input type="text" name = "nationality" id ="nationality" class="form-control" placeholder="">
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                        <p>
+                            <label for="citizenship">Гражданство</label>
+                            <input type="text" name = "citizenship" id ="citizenship" class="form-control" placeholder="РФ">
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                        <p>
+                            <label for="phone">Контактный телефон</label>
+                            <input type="text" name = "phone" id ="phone" class="form-control" placeholder="Телефон">
+                        </p>
+                    </div>
+                </div>
+			</div>
+		</div>
+		<div class="tab-pane" id="tab2">
+			<div class = "container-fluid">
+				<div class = "row">
+					<div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                        <p>
+                            <label for="doctype">Вид документа, удостоверяющего личность</label>
+                            <input type = "text" name= "doctype" id = "doctype" class = "form-control" placeholder = "Паспорт">
+                        </p>
+					</div>
+				</div>
+                <p>
+                    <div class = "row">
+                        <div class = "col-xs-2 col-sm-2 col-md-2 col-md-offset-3">
+                            <label for="serialdoc">Серия</label>
+                            <input type = "text" name = "serialdoc" id = "serialdoc" class = "form-control" placeholder="1234">
+                        </div>
+                        <div class = "col-xs-2 col-sm-2 col-md-2">
+                            <label for="numberdoc">Номер</label>
+                            <input type = "text" name = "numberdoc" id = "numberdoc" class = "form-control" placeholder="123456">
+                        </div>
+                        <div class = "col-xs-2 col-sm-2 col-md-2">
+                            <label for="datedoc">Дата выдачи</label>
+                            <input type = "date" name = "datedoc" id = "datedoc" value="2011-01-01" class = "form-control" placeholder="">
+                        </div>
+                    </div>
+                </p>
+                <div class = "row">
+					<div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                        <p>
+                            <label for="issuerdoc">Кем выдан</label>
+                            <input type = "text" name= "issuerdoc" id = "issuerdoc" class = "form-control" placeholder = "Отделом УФМС по Российской Федерации, г. Якутск">
+                        </p>
+					</div>
+				</div>
+                <div class = "row">
+					<div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                        <p>
+                            <label for="edudoctype">Вид документа об образовании</label>
+                            <input type = "text" name= "edudoctype" id = "edudoctype" class = "form-control" placeholder = "аттестат">
+                        </p>
+					</div>
+				</div>
+                <p>
+                    <div class = "row">
+                        <div class = "col-xs-3 col-sm-3 col-md-3 col-md-offset-3">
+                            <label for="serialedudoc">Серия</label>
+                            <input type = "text" name = "serialedudoc" id = "serialedudoc" class = "form-control" placeholder="1234">
+                        </div>
+                        <div class = "col-xs-3 col-sm-3 col-md-3">
+                            <label for="numberedudoc">Номер</label>
+                            <input type = "text" name = "numberedudoc" id = "numberedudoc" class = "form-control" placeholder="123456">
+                        </div>
+                    </div>
+                </p>
+                <div class = "row">
+					<div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                        <p>
+                            <label for="prevedu">Предыдующие образование</label>
+                            <p>
+                                <input type = "radio" name= "prevedu" id = "prevedu"  value = "soo">СОО
+                                <input type = "radio" name= "prevedu" id = "prevedu"  value = "npo">НПО
+                                <input type = "radio" name= "prevedu" id = "prevedu"  value = "spo">СПО
+                                <input type = "radio" name= "prevedu" id = "prevedu"  value = "vpo">ВПО
+                            </p>
+                        </p>
+					</div>
+				</div>
+                <p>
+                    <div class="row">
+                            <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-3">
+                                <label for="datejoining">Дата поступления</label>
+                                <input type="date" name = "datejoining" id ="datejoining" class="form-control">
+                            </div>
+                            <div class="col-xs-3 col-sm-3 col-md-3">
+                                <label for="dateexiting">Дата окончания</label>
+                                <input type="date" name = "dateexiting" id ="dateexiting" class="form-control">
+                            </div>
+                    </div>
+                </p>
+                <div class = "row">
+					<div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                        <p>
+                            <label for="preveduname">Название учебного заведения</label>
+                            <input type = "text" name= "preveduname" id = "preveduname" class = "form-control" placeholder = "МОУ СОШ № 1, г. Якутск">
+                        </p>
+					</div>
+				</div>
+            </div>
+		</div>
+		<div class="tab-pane" id="tab3">
+            <div class="container-fluid">
+                <p align="center">Прописан по адресу</p>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                        <p>
+                            <label for="adrsindex">Индекс</label>
+                            <input type = "text" name="adrsindex" id="adrsindex" class="form-control" placeholder="677000">
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                        <p>
+                            <label for="adrsterritory">Область/край/респ</label>
+                            <input type = "text" name="adrsterritory" id="adrsterritory" class="form-control" placeholder="Республика Саха(Якутия)">
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                        <p>
+                            <label for="adrsdistrict">Район/улус</label>
+                            <input type = "text" name="adrsdistrict" id="adrsdistrict" class="form-control" placeholder="чОткий">
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                        <p>
+                            <label for="adrscity">Город/село</label>
+                            <input type = "text" name="adrscity" id="adrscity" class="form-control" placeholder="Якутск">
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                        <p>
+                            <label for="adrsstreet">Улица</label>
+                            <input type = "text" name="adrsstreet" id="adrsstreet" class="form-control" placeholder="Ленина">
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <p>
+                    <div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-3">
+                        <label for="adrshouse">Дом</label>
+                        <input type="text" name="adrshouse" id="adrshouse" class="form-control" placeholder="1">
+                    </div>
+                    <div class="col-xs-2 col-sm-2 col-md-2">
+                        <label for="adrsbuilding">Корпус</label>
+                        <input type="text" name="adrsbuilding" id="adrsbuilding" class="form-control" placeholder="1">
+                    </div>
+                    <div class="col-xs-2 col-sm-2 col-md-2">
+                        <label for="adrsflat">Квартира</label>
+                        <input type="text" name="adrsflat" id="adrsflat" class="form-control" placeholder="1">
+                    </div>
+                    </p>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                        <p>
+                            <label for="option1">Адрес прописки совпадает с адресом факт. места жительства</label>
+                            <br>
+                            <input type="radio" name = "option1" value="a11">Нет
+                            <input type="radio" name = "option1" value="a12">Да
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<div class="tab-pane" id="tab4">
+			<div class="container-fluid">
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                        <p>
+                            <label for="option2">Прошу допустить меня к участию в конкурсе</label>
+                            <br>
+                            <input type="radio" name="option2" value="a21">на место в рамках контр.цифр приема
+                            <input type="radio" name="option2" value="a22">на место по договорам об оказании платных обр.услуг
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                        <p>
+                            <label for="department">Институт/факультет</label>
+                            <input type="text" name="department" id="department" class="form-control" placeholder="Институт Математики и Информатики">
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                        <p>
+                            <label for="eduprog">Направление/специальность</label>
+                            <input type="text" name="eduprog" id="eduprog" class="form-control" placeholder="прямое направление">
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                        <p>
+                            <label for="eduprof">Профили в порядке убывания</label>
+                            <input type="text" name="eduprof" id="eduprof" class="form-control" placeholder="а чё, через запятую нельзя?">
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                        <p>
+                            <label for="option4">Форма обучения</label><br>
+                            <input type="radio" name="option4" value="a41">Очная
+                            <input type="radio" name="option4" value="a42">Заочная
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                        <p>
+                            <label for="edulvl">Уровень обучения</label>
+                            <select name = "edulvl" size="1" id ="edulvl" class="form-control">
+                            <option value = "bach">Бакалавриат</option>
+                            <option value = "spec">Специалитет</option>
+                            <option value = "mag">Магистатура</option>
+                            </select>
+                        </p>
+                    </div>
+                </div>
+            </div>
+		</div>
+		<div class="tab-pane" id="tab5">
+			<div class="container-fluid">
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                        <p>
+                           <b>Прошу засчитать рез-ты ЕГЭ</b>
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <p>
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                            <table class="table table-striped" id="table1">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Дисциплина</th>
+                                        <th>Год сдачи</th>
+                                        <th>Баллы</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Ну</td>
+                                        <td>И</td>
+                                        <td>Как</td>
+                                        <td>Её</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Изменять</td>
+                                        <td>То</td>
+                                        <td>?</td>
+                                        <td>?</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    <!--
+                         <div class="col-xs-1 col-sm-1 col-md-1 col-md-offset-3">
+                            <input type="text" name="numberex" id="numberex" class="form-control" placeholder="№">
+                        </div>
+                        <div class="col-xs-3 col-sm-3 col-md-3">
+                            <input type="text" name="subjectex" id="subjectex" class="form-control" placeholder="Дисциплина">
+                        </div>
+                        <div class="col-xs-1 col-sm-1 col-md-1">
+                            <input type="text" name="yearex" id="yearex" class="form-control" placeholder="Год сдачи">
+                        </div>
+                        <div class="col-xs-1 col-sm-1 col-md-1">
+                            <input type="text" name="pointsex" id="pointsex" class="form-control" placeholder="Балл">
+                        </div>
+                    -->
+                    </p>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                        <p>
+                           <b>Также прошу допустить к вступительным испытаниям по следующим предметам</b>
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <p>
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                            <table class="table table-striped" id="table2">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Дисциплина</th>
+                                        <th>Год сдачи</th>
+                                        <th>Баллы</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Ну</td>
+                                        <td>И</td>
+                                        <td>Как</td>
+                                        <td>Её</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Изменять</td>
+                                        <td>То</td>
+                                        <td>?</td>
+                                        <td>?</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!--
+                        <div class="col-xs-1 col-sm-1 col-md-1 col-md-offset-3">
+                            <input type="text" name="numberexadd" id="numberexadd" class="form-control" placeholder="№">
+                        </div>
+                        <div class="col-xs-3 col-sm-3 col-md-3">
+                            <input type="text" name="subjectexadd" id="subjectexadd" class="form-control" placeholder="Дисциплина">
+                        </div>
+                        <div class="col-xs-2 col-sm-2 col-md-2">
+                            <input type="text" name="typeexadd" id="typeexadd" class="form-control" placeholder="Форма экзамена">
+                        </div>
+                        -->
+                    </p>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                        <p>
+                           <b>Прошу создать специальные условия при сдаче вступ. исп-й в связи с ограниченными возможностями здоровья</b>
+                            <br>
+                            <input type="radio" name="option5" value="a51">Нет
+                            <input type="radio" name="option5" value="a52">Да
+                        </p>
+                    </div>
+                </div>
+            </div>
+		</div>
+		<div class="tab-pane" id="tab6">
+			<div class="container-fluid">
+                <div class="row">
+                    <p>
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                            <label for="privcat">Категория</label>
+                            <select id="privcat" size="1" class="form-control">
+                                <option value ="">1</option>
+                                <option value ="">1</option>
+                            </select>
+                        </div>
+                    </p>
+                </div>
+                <div class="row">
+                    <p>
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                            <label for="privtype">Тип</label>
+                            <select id="privtype" size="1" class="form-control">
+                                <option value="">1</option>
+                                <option value="">1</option>
+                            </select>
+                        </div>
+                    </p>
+                </div>
+            </div>
+		</div>
+		<div class="tab-pane" id="tab7">
+			<div class="container-fluid">
+                
+            </div>
+		</div>
+		<div class="tab-pane" id="tab8">
+			<div class="container-fluid">
+                 <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                        <p>
+                            <label for="flang">Изучаемый иностранный язык</label>
+                            <select name = "flang" size="1" id ="flang" class="form-control">
+                            <option value = "eng">Английский</option>
+                            <option value = "ger">Немецкий</option>
+                            <option value = "fre">Французский</option>
+                            </select>
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                        <label for="option">Нуждаетесь ли в общежитие?</label>
+                        <p>
+                            <input type="radio" name = "option" value="a1">Нет
+                            <input type="radio" name = "option" value="a2">Да
+                        </p>
+                    </div>
+                </div>
+                <p>
+                    <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                                <label for="option6">Являетесь ли вы военнообязанным?</label>
+                                <p>
+                                    <input type="radio" name="option6" value="a61">Невоеннообязанный
+                                    <input type="radio" name="option6" value="a62">Военнообязанный
+                                </p>
+                            </div>
+                    </div>
+                </p>
+                <p>
+                    <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                                <label for="option7">Служили в армии?</label>
+                                <p>
+                                    <input type="radio" name="option7" value="a61">Нет
+                                    <input type="radio" name="option7" value="a61">Да
+                                </p>
+                            </div>
+                    </div>
+                </p>
+                <p>
+                    <div class="row">
+                            <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-3">
+                                <label for="yeararmy">Год увольнения из рядов РА</label>
+                                <input type="text" name="yeararmy" id="yeararmy" class="form-control" placeholder="2014">
+                            </div>
+                            <div class="col-xs-3 col-sm-3 col-md-3">
+                                <label for="rankarmy">Воинское звание</label>
+                                <input type="text" name="rankarmy" id="rankarmy" class="form-control" placeholder="копитон">
+                            </div>
+                    </div>
+                </p>
+            </div>
+		</div>
+		<ul class="pager wizard">
+			<li class="previous first"><a href="javascript:;">First</a></li>
+			<li class="previous"><a href="javascript:;">Previous</a></li>
+			<li class="next last"><a href="javascript:;">Last</a></li>
+		  	<li class="next"><a href="javascript:;">Next</a></li>
+			<li class="next finish" style="display:none;"><a href="javascript:;">Finish</a></li>
+		</ul>
+	</div>	
+</div>
+{% endblock %}

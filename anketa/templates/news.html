@@ -1,4 +1,4 @@
-{% extends 'staff/base.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
   {% load staticfiles %}
@@ -6,7 +6,7 @@
   {% for news in data.news_list %}
     <div class = "media">
       <div class = "medai-left">
-        <a href="#"><img src="{% static "anketa/img/logo.png" %}"></a>
+        <a href="#"><img src="{% static "img/1.jpg" %}"></a>
       </div>
       <div class = "media-body">
         <h4 class = "media-heading">{{ news.NewsName }}</h4>

@@ -14,5 +14,6 @@ urlpatterns = patterns('',
     #url(r'^ajax/categ/$', 'anketa.views.feeds_subcat'),
     #url(r'^ajax/autocomplete/$', 'anketa.views.autocomplete'),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^staff/', include('staff.urls',namespace = 'staff')),
     #url(r'^appwizard/', Application_Wizard.as_view([Step_Name, Step_Document, Step_Education, Step_Address])),
 )
