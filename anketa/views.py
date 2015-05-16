@@ -10,11 +10,12 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 
-from anketa.models import Person, Address
-#from anketa.forms import Person_form, Address_form, Address_coincides_form, EGE_form, Application_form, Milit_form, Is_mil_service_form, Privilegies_form, Need_exams_form
+from anketa.models import Person, Address, Attribute, AttrValue
+#from anketa.forms import Person_form, Address_form, Address_coincides_form, EGE_form, Application_form, Milit_form, Is_mil_service_form, Privilegies_form, Need_exams_form	
 
 class StartPage(TemplateView):
     template_name = 'anketa/start.html'
+
 """
 class FeedbackCreateView(CreateView):
     model = Feedback
@@ -96,5 +97,59 @@ def autocomplete(request):
     json_subcat = Universal_directory.objects.filter(name__icontains=request.GET['term'], type=Directory_types.objects.get(name=u'Учебное заведение')).values_list('name', flat=True)
     return HttpResponse(json.dumps([unicode(t) for t in json_subcat]), mimetype="application/javascript")
 """
+
 def StartApp(request):
     return render(request, 'anketa/wizardform.html')
+
+def Streets(request):
+    strs = Address.objects.all().distinct()
+    part = request.POST.get('strs','')
+    if len(part)>0:
+        strs = strs.filter(street__icontains == part)
+    strs = strs.values('street')
+    return json.dumps(strs)
+
+def Zipcode(request):
+    zpcd = Address.objects.all().distinct()
+    part = request.POST.get('zpcd','')
+    if len(part)>0:
+        zpcd = zpcd.filter(zipcode__icontains == part)
+    zpcd = zpcd.values('zipcode')
+    return json.dumps(zpcd)
+
+def Territory(request):
+    trry = AttrValue.objects.filter(attribute__id = 2)
+    part = request.POST.get('query','')
+    if len(part)>0:
+        trry = trry.filter(value__icontains == part)
+    trry = trry.values('id', 'value')
+    result = []
+    for item in trry:
+        result.append(item)
+    result.append({'id':'3','value':part} )
+    return HttpResponse(json.dumps(result), content_type="application/json")
+
+def District(request):
+    dist = Address.objects.all().distinct()
+    part = request.POST['dist']
+    if len(part)>0:
+        dist = dist.filter(district__icontains == part)
+    dist = dist.values('id', 'district')
+    return json.dumps(dist)
+
+def City(request):
+    cty = AttrValue.objects.filter(attribute__id = 3)
+    part = request.POST.get('cty','')
+    if len(part)>0:
+        cty = cty.filter(value__icontains == part)
+    cty = cty.values('id', 'value')
+    return json.dumps(cty)
+
+def Settlement(request):
+    settle = Address.objects.all().distinct()
+    part = request.POST['settle']
+    if len(part)>0:
+        settle = settle.filter(settlement__icontains == part)
+    settle = settle.values('id','settlement')
+    return json.dumps(settle)
+

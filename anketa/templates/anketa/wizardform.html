@@ -9,31 +9,68 @@
 {% block scripts %}
 <script src="{% static "anketa/js/jquery.bootstrap.wizard.js" %}"></script>
 <script src="{% static "anketa/js/prettify.js" %}"></script>
+<script src="{% static "anketa/js/bootstrap-typeahead.js" %}"></script>
 <script>
-	$(document).ready(function() {
-	  	$('#rootwizard').bootstrapWizard({onTabShow: function(tab, navigation, index) {
-			var $total = navigation.find('li').length;
-			var $current = index+1;
-			var $percent = ($current/$total) * 100;
-			$('#rootwizard').find('.bar').css({width:$percent+'%'});
-			
-			// If it's the last tab then hide the last button and show the finish instead
-			if($current >= $total) {
-				$('#rootwizard').find('.pager .next').hide();
-				$('#rootwizard').find('.pager .finish').show();
-				$('#rootwizard').find('.pager .finish').removeClass('disabled');
-			} else {
-				$('#rootwizard').find('.pager .next').show();
-				$('#rootwizard').find('.pager .finish').hide();
-			}
-			
-		}});
-		$('#rootwizard .finish').click(function() {
-			alert('Finished!, Starting over!');
-			$('#rootwizard').find("a[href*='tab1']").trigger('click');
-		});	
-		window.prettyPrint && prettyPrint()
-	});	
+    $(document).ready(function() {
+  	$('#rootwizard').bootstrapWizard({onTabShow: function(tab, navigation, index) {
+		var $total = navigation.find('li').length;
+		var $current = index+1;
+		var $percent = ($current/$total) * 100;
+		$('#rootwizard').find('.bar').css({width:$percent+'%'});
+		
+		// If it's the last tab then hide the last button and show the finish instead
+		if($current >= $total) {
+			$('#rootwizard').find('.pager .next').hide();
+			$('#rootwizard').find('.pager .finish').show();
+			$('#rootwizard').find('.pager .finish').removeClass('disabled');
+		} else {
+			$('#rootwizard').find('.pager .next').show();
+			$('#rootwizard').find('.pager .finish').hide();
+		}
+		
+	}});
+	$('#rootwizard .finish').click(function() {
+		alert('Finished!, Starting over!');
+		$('#rootwizard').find("a[href*='tab1']").trigger('click');
+	});
+});
+</script>
+<script>
+    var citizenship = [
+        "РФ",
+        "Украина",
+        "Казахстан",
+        "Армения",
+        "Грузия"
+    ];
+    $( "#citizenship" ).typeahead({
+        source : citizenship
+    });
+</script>
+<script>
+    var nation = [
+        { 'id' :'1', 'value': 'Саха'}, { 'id' :'2', 'value': 'Русский'}, {'id':'3', 'value': 'Эвен'}, {'id':'4', 'value': 'Эвенка'}
+    ];
+    $("#nationality").typeahead({
+    source : nation,
+    displayField : 'value'
+    });
+</script>
+<script>
+    $("#territory").typeahead({
+        onSelect: function(item) {
+        console.log(item);
+    },
+    ajax: 
+        {
+            url:'{% url 'territory' %}',
+            displayField: 'value',
+            valueField:'id',
+            method:'get',
+            triggerLength: 1
+        }
+    
+});
 </script>
 {% endblock %}
 
@@ -55,6 +92,9 @@
 			</div>
 	 	</div>
 	</div>
+    <div id="bar" class="progress progress-striped active">
+	  <div class="bar"></div>
+    </div>
 	<div class="tab-content">
 		<div class="tab-pane" id="tab1">
 			<div class = "container-fluid">
@@ -102,7 +142,7 @@
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
                             <label for="nationality">Национальность(по желанию)</label>
-                            <input type="text" name = "nationality" id ="nationality" class="form-control" placeholder="">
+                            <input id ="nationality" class="form-control" placeholder="Саха">
                         </p>
                     </div>
                 </div>
@@ -110,7 +150,8 @@
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
                             <label for="citizenship">Гражданство</label>
-                            <input type="text" name = "citizenship" id ="citizenship" class="form-control" placeholder="РФ">
+                            <input id="citizenship" class="form-control" placeholder="РФ" />
+                            <!--<input type="text" name = "citizenship" id ="citizenship" class="form-control" placeholder="РФ">-->
                         </p>
                     </div>
                 </div>
@@ -118,7 +159,7 @@
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
                             <label for="phone">Контактный телефон</label>
-                            <input type="text" name = "phone" id ="phone" class="form-control" placeholder="Телефон">
+                            <input type="tel" name = "phone" id ="phone" class="form-control" placeholder="Телефон в формате 8-ххх-ххххххх или 8-хххх-хххххх" pattern="(8-[0-9]{3}-[0-9]{7})|(8-[0-9]{4}-[0-9]{6})">
                         </p>
                     </div>
                 </div>
@@ -195,11 +236,11 @@
                     <div class="row">
                             <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-3">
                                 <label for="datejoining">Дата поступления</label>
-                                <input type="date" name = "datejoining" id ="datejoining" class="form-control">
+                                <input type="date" name = "datejoining" id ="datejoining" class="form-control" value="2004-01-09">
                             </div>
                             <div class="col-xs-3 col-sm-3 col-md-3">
                                 <label for="dateexiting">Дата окончания</label>
-                                <input type="date" name = "dateexiting" id ="dateexiting" class="form-control">
+                                <input type="date" name = "dateexiting" id ="dateexiting" class="form-control" value="2015-01-06">
                             </div>
                     </div>
                 </p>
@@ -215,20 +256,28 @@
 		</div>
 		<div class="tab-pane" id="tab3">
             <div class="container-fluid">
-                <p align="center">Прописан по адресу</p>
                 <div class="row">
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
-                        <p>
+                    <p>
+                        <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-3">
+                            <label for="adrstype">Тип адреса</label>
+                            <select name="adrstype" id="adrstype" size="1" class="form-control">
+                                <option value="perm">По прописке</option>
+                                <option value="current">Фактический</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-3 col-sm-3 col-md-3">   
                             <label for="adrsindex">Индекс</label>
                             <input type = "text" name="adrsindex" id="adrsindex" class="form-control" placeholder="677000">
-                        </p>
-                    </div>
+                        </div>
+                     </p>
                 </div>
                 <div class="row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
-                            <label for="adrsterritory">Область/край/респ</label>
-                            <input type = "text" name="adrsterritory" id="adrsterritory" class="form-control" placeholder="Республика Саха(Якутия)">
+                 <!--           <label for="adrsterritory">Область/край/респ</label>
+                            <input type = "text" name="adrsterritory" id="adrsterritory" class="form-control" placeholder="Республика Саха(Якутия)">-->
+                            <label for="territory">Область</label>
+                            <input id="territory" class="form-control" placeholder="sss">
                         </p>
                     </div>
                 </div>
@@ -251,8 +300,10 @@
                 <div class="row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
-                            <label for="adrsstreet">Улица</label>
-                            <input type = "text" name="adrsstreet" id="adrsstreet" class="form-control" placeholder="Ленина">
+                            <!--<label for="adrsstreet">Улица</label>
+                            <input type = "text" name="adrsstreet" id="adrsstreet" class="form-control" placeholder="Ленина">-->
+							<label for="streets">Улица </label>
+							<input id ="streets" class="form-control" placeholder="Vyazov">
                         </p>
                     </div>
                 </div>
@@ -282,6 +333,17 @@
                         </p>
                     </div>
                 </div>
+                <div class="row">
+                    <p>
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                            <label for="addbtn"></label>
+                            <button type="button" class="btn btn-default">
+                                <span class="glyphicon glyphicon-plus"></span> Добавить
+                            </button>
+                        </div>
+                    </p>
+                </div>
+
             </div>
         </div>
 		<div class="tab-pane" id="tab4">
@@ -341,6 +403,13 @@
                         </p>
                     </div>
                 </div>
+                <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                            <button type="button" class="btn btn-default">
+                                <span class="glyphicon glyphicon-plus"></span> Добавить
+                            </button>
+                        </div>
+                    </div>
             </div>
 		</div>
 		<div class="tab-pane" id="tab5">
@@ -443,6 +512,14 @@
                             <input type="text" name="typeexadd" id="typeexadd" class="form-control" placeholder="Форма экзамена">
                         </div>
                         -->
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                            <button type="button" class="btn btn-default">
+                                <span class="glyphicon glyphicon-plus"></span> Добавить
+                            </button>
+                        </div>
+                    </div>
+                    
                     </p>
                 </div>
                 <div class="row">
@@ -550,7 +627,7 @@
 		<ul class="pager wizard">
 			<li class="previous first"><a href="javascript:;">First</a></li>
 			<li class="previous"><a href="javascript:;">Previous</a></li>
-			<li class="next last"><a href="javascript:;">Last</a></li>
+			<li class="next last" ><a href="javascript:;">Last</a></li>
 		  	<li class="next"><a href="javascript:;">Next</a></li>
 			<li class="next finish" style="display:none;"><a href="javascript:;">Finish</a></li>
 		</ul>
