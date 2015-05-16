@@ -11,6 +11,9 @@ class Employee(models.Model):
     middle_name = models.CharField(u'Отчество', max_length=100, db_index=True)
     fullname = models.CharField(u'ФИО', max_length = 300, db_index=True)
     position = models.CharField(u'Должность', max_length=200)
+    
+    def __unicode__(self):
+        return self.fullname
 
 class EmplContacts(models.Model):
     employee = models.ForeignKey(Employee, verbose_name=u'Сотрудник')
