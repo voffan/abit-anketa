@@ -1,0 +1,886 @@
+[
+{
+    "pk": 1,
+    "model": "auth.user",
+    "fields": {
+        "username": "dno",
+        "groups": [],
+        "date_joined": "2015-04-30T05:31:27Z",
+        "is_superuser": true,
+        "is_active": true,
+        "user_permissions": [],
+        "is_staff": true,
+        "first_name": "",
+        "password": "pbkdf2_sha256$12000$TC9LMBzoRsTj$agf3H4RmMphPO4wbTsRsuqM4GbQeV67MrYHS7yhG04k=",
+        "last_name": "",
+        "email": "a-n-y-f-r-i-k@mail.ru",
+        "last_login": "2015-04-30T05:32:03Z"
+    }
+},
+{
+    "pk": 2,
+    "model": "auth.user",
+    "fields": {
+        "username": "r",
+        "groups": [],
+        "date_joined": "2015-05-07T01:38:21Z",
+        "is_superuser": false,
+        "is_active": true,
+        "user_permissions": [],
+        "is_staff": false,
+        "first_name": "",
+        "password": "pbkdf2_sha256$12000$8GiaMLQDDBV4$QgOZa4XVK7kQ35j42bKOPoa9d38kCWcgfWYcXTCc1/Q=",
+        "last_name": "",
+        "email": "",
+        "last_login": "2015-05-07T02:11:19Z"
+    }
+},
+{
+    "pk": 3,
+    "model": "auth.user",
+    "fields": {
+        "username": "4ino",
+        "groups": [],
+        "date_joined": "2015-05-07T02:09:09Z",
+        "is_superuser": true,
+        "is_active": true,
+        "user_permissions": [],
+        "is_staff": true,
+        "first_name": "",
+        "password": "pbkdf2_sha256$12000$BDoSCxAlCRjO$/j3T+mrLq9+P9rkBFbj4SzHHGGOnnMMtjmEPWgbSD9k=",
+        "last_name": "",
+        "email": "a@a.ru",
+        "last_login": "2015-05-15T06:21:40Z"
+    }
+},
+{
+    "pk": 4,
+    "model": "auth.user",
+    "fields": {
+        "username": "anu",
+        "groups": [],
+        "date_joined": "2015-05-15T05:42:24Z",
+        "is_superuser": false,
+        "is_active": true,
+        "user_permissions": [],
+        "is_staff": false,
+        "first_name": "\u041d\u0438\u043a\u043e\u043b\u0430\u0439",
+        "password": "pbkdf2_sha256$12000$dDtXlovRJi2I$A22CLHPeq7oa25mc5v8gC2WaR0elEmUVgYHGTLS7EB8=",
+        "last_name": "\u0410\u043d\u0443\u0444\u0440\u0438\u0435\u0432",
+        "email": "",
+        "last_login": "2015-05-15T05:54:07Z"
+    }
+},
+{
+    "pk": 5,
+    "model": "auth.user",
+    "fields": {
+        "username": "anu1",
+        "groups": [],
+        "date_joined": "2015-05-15T06:22:53Z",
+        "is_superuser": false,
+        "is_active": true,
+        "user_permissions": [],
+        "is_staff": false,
+        "first_name": "",
+        "password": "pbkdf2_sha256$12000$zaqwJoyckoAR$ehGzw4codsrnouNHLPTgjrOLxhCNf3vb+Q9koxaK6N4=",
+        "last_name": "",
+        "email": "anu1@ykt.ru",
+        "last_login": "2015-05-15T06:22:53Z"
+    }
+},
+{
+    "pk": "4uh00eqaabva88aev5gg348lwuq23tem",
+    "model": "sessions.session",
+    "fields": {
+        "session_data": "YjM0MDYwNmNhMzE0MWRiN2M1OTIzOGIxZDcxNzFmY2ZhN2UwMmRhYTp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiZWIwMWEwNThiYmQzNjkwMjYyZTgxZTk1NjRkOGVlYzM1YTkyOTBkZSIsIl9hdXRoX3VzZXJfaWQiOjN9",
+        "expire_date": "2015-05-29T06:21:40Z"
+    }
+},
+{
+    "pk": "x25fxvtbzipldhr2wmwco496s1r5lhmh",
+    "model": "sessions.session",
+    "fields": {
+        "session_data": "MWIxOTM3ZGZhMTgwN2UzZjQ0NDAxZDFjNGYyZDgzNjA2NWNmY2EzYzp7Il9hdXRoX3VzZXJfaGFzaCI6ImViMDFhMDU4YmJkMzY5MDI2MmU4MWU5NTY0ZDhlZWMzNWE5MjkwZGUiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOjN9",
+        "expire_date": "2015-05-29T05:55:19Z"
+    }
+},
+{
+    "pk": 1,
+    "model": "anketa.attrtype",
+    "fields": {
+        "name": "\u0440\u0435\u0433\u0438\u043e\u043d"
+    }
+},
+{
+    "pk": 2,
+    "model": "anketa.attrtype",
+    "fields": {
+        "name": "\u0422\u0438\u043f \u0430\u0434\u0440\u0435\u0441\u0430"
+    }
+},
+{
+    "pk": 3,
+    "model": "anketa.attrtype",
+    "fields": {
+        "name": "\u043d\u0430\u0441 \u043f\u0443\u043d\u043a\u0442"
+    }
+},
+{
+    "pk": 4,
+    "model": "anketa.attrtype",
+    "fields": {
+        "name": "\u0440\u0430\u0439\u043e\u043d"
+    }
+},
+{
+    "pk": 1,
+    "model": "anketa.attribute",
+    "fields": {
+        "name": "\u0420\u0435\u0433\u0438\u043e\u043d",
+        "type": 1,
+        "parent": null
+    }
+},
+{
+    "pk": 1,
+    "model": "anketa.department",
+    "fields": {
+        "name": "\u0418\u041c\u0418",
+        "university": 1
+    }
+},
+{
+    "pk": 1,
+    "model": "anketa.university",
+    "fields": {
+        "name": "\u0421\u0412\u0424\u0423"
+    }
+},
+{
+    "pk": 1,
+    "model": "staff.employee",
+    "fields": {
+        "department": 1,
+        "first_name": "\u0430\u044b\u0432\u0430",
+        "position": "\u0442\u043e\u043b",
+        "user": [
+            "anu"
+        ],
+        "last_name": "\u0442",
+        "middle_name": "\u0442\u043e\u043e",
+        "fullname": "\u0442\u043e\u043b\u0442"
+    }
+},
+{
+    "pk": 2,
+    "model": "staff.employee",
+    "fields": {
+        "department": 1,
+        "first_name": "23",
+        "position": "dno",
+        "user": [
+            "4ino"
+        ],
+        "last_name": "34",
+        "middle_name": "56",
+        "fullname": "23456"
+    }
+},
+{
+    "pk": 3,
+    "model": "staff.employee",
+    "fields": {
+        "department": 1,
+        "first_name": "\u041d\u0438\u043a\u043e\u043b\u0430\u0439",
+        "position": "\u0445\u0440\u0435\u043d\u044c",
+        "user": [
+            "anu1"
+        ],
+        "last_name": "\u0410\u043d\u0443\u0444\u0440\u0438\u0435\u0432",
+        "middle_name": "\u0430\u043d\u0430\u0442\u043e\u043b\u044c\u0435\u0432\u0438\u0447",
+        "fullname": "\u0410\u043d\u0443\u0444\u0440\u0438\u0435\u0432 \u043d\u0438\u043a\u043e\u043b\u0430\u0439 \u0410\u043d\u0430\u0442\u043e\u043b\u044c\u0435\u0432\u0438\u0447"
+    }
+},
+{
+    "pk": 13,
+    "model": "staff.news",
+    "fields": {
+        "Description": "wwwwwwwwww",
+        "NewsDate": "2015-05-15",
+        "employee": 1,
+        "NewsText": "rrrrrrrrrrrrrrrrrr",
+        "NewsName": "ewqwer"
+    }
+},
+{
+    "pk": 14,
+    "model": "staff.news",
+    "fields": {
+        "Description": "des",
+        "NewsDate": "2015-05-15",
+        "employee": 1,
+        "NewsText": "content",
+        "NewsName": "name"
+    }
+},
+{
+    "pk": 15,
+    "model": "staff.news",
+    "fields": {
+        "Description": "des",
+        "NewsDate": "2015-05-15",
+        "employee": 2,
+        "NewsText": "cont",
+        "NewsName": "namename"
+    }
+},
+{
+    "pk": 1,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "1",
+        "change_message": "",
+        "user": [
+            "dno"
+        ],
+        "object_repr": "University object",
+        "action_flag": 1,
+        "action_time": "2015-04-30T05:43:17Z",
+        "content_type": [
+            "anketa",
+            "university"
+        ]
+    }
+},
+{
+    "pk": 2,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "1",
+        "change_message": "\u041d\u0438 \u043e\u0434\u043d\u043e \u043f\u043e\u043b\u0435 \u043d\u0435 \u0438\u0437\u043c\u0435\u043d\u0435\u043d\u043e.",
+        "user": [
+            "dno"
+        ],
+        "object_repr": "University object",
+        "action_flag": 2,
+        "action_time": "2015-04-30T05:43:30Z",
+        "content_type": [
+            "anketa",
+            "university"
+        ]
+    }
+},
+{
+    "pk": 3,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "1",
+        "change_message": "",
+        "user": [
+            "dno"
+        ],
+        "object_repr": "Department object",
+        "action_flag": 1,
+        "action_time": "2015-04-30T05:45:05Z",
+        "content_type": [
+            "anketa",
+            "department"
+        ]
+    }
+},
+{
+    "pk": 4,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "1",
+        "change_message": "",
+        "user": [
+            "dno"
+        ],
+        "object_repr": "Employee object",
+        "action_flag": 1,
+        "action_time": "2015-04-30T05:45:30Z",
+        "content_type": [
+            "staff",
+            "employee"
+        ]
+    }
+},
+{
+    "pk": 5,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "1",
+        "change_message": "\u041d\u0438 \u043e\u0434\u043d\u043e \u043f\u043e\u043b\u0435 \u043d\u0435 \u0438\u0437\u043c\u0435\u043d\u0435\u043d\u043e.",
+        "user": [
+            "dno"
+        ],
+        "object_repr": "Employee object",
+        "action_flag": 2,
+        "action_time": "2015-04-30T05:45:46Z",
+        "content_type": [
+            "staff",
+            "employee"
+        ]
+    }
+},
+{
+    "pk": 6,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "1",
+        "change_message": "",
+        "user": [
+            "dno"
+        ],
+        "object_repr": "News object",
+        "action_flag": 1,
+        "action_time": "2015-04-30T05:46:11Z",
+        "content_type": [
+            "staff",
+            "news"
+        ]
+    }
+},
+{
+    "pk": 7,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "1",
+        "change_message": "\u0418\u0437\u043c\u0435\u043d\u0435\u043d NewsName, Description \u0438 NewsText.",
+        "user": [
+            "dno"
+        ],
+        "object_repr": "News object",
+        "action_flag": 2,
+        "action_time": "2015-05-05T02:55:47Z",
+        "content_type": [
+            "staff",
+            "news"
+        ]
+    }
+},
+{
+    "pk": 8,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "1",
+        "change_message": "\u0418\u0437\u043c\u0435\u043d\u0435\u043d NewsName, Description \u0438 NewsText.",
+        "user": [
+            "dno"
+        ],
+        "object_repr": "News object",
+        "action_flag": 2,
+        "action_time": "2015-05-05T02:55:47Z",
+        "content_type": [
+            "staff",
+            "news"
+        ]
+    }
+},
+{
+    "pk": 9,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "1",
+        "change_message": "\u041d\u0438 \u043e\u0434\u043d\u043e \u043f\u043e\u043b\u0435 \u043d\u0435 \u0438\u0437\u043c\u0435\u043d\u0435\u043d\u043e.",
+        "user": [
+            "dno"
+        ],
+        "object_repr": "News object",
+        "action_flag": 2,
+        "action_time": "2015-05-05T02:55:48Z",
+        "content_type": [
+            "staff",
+            "news"
+        ]
+    }
+},
+{
+    "pk": 10,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "1",
+        "change_message": "\u0418\u0437\u043c\u0435\u043d\u0435\u043d NewsName, Description \u0438 NewsText.",
+        "user": [
+            "dno"
+        ],
+        "object_repr": "News object",
+        "action_flag": 2,
+        "action_time": "2015-05-05T02:55:48Z",
+        "content_type": [
+            "staff",
+            "news"
+        ]
+    }
+},
+{
+    "pk": 11,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "1",
+        "change_message": "\u041d\u0438 \u043e\u0434\u043d\u043e \u043f\u043e\u043b\u0435 \u043d\u0435 \u0438\u0437\u043c\u0435\u043d\u0435\u043d\u043e.",
+        "user": [
+            "dno"
+        ],
+        "object_repr": "News object",
+        "action_flag": 2,
+        "action_time": "2015-05-05T02:55:48Z",
+        "content_type": [
+            "staff",
+            "news"
+        ]
+    }
+},
+{
+    "pk": 12,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "2",
+        "change_message": "",
+        "user": [
+            "dno"
+        ],
+        "object_repr": "r",
+        "action_flag": 1,
+        "action_time": "2015-05-07T01:38:22Z",
+        "content_type": [
+            "auth",
+            "user"
+        ]
+    }
+},
+{
+    "pk": 13,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "2",
+        "change_message": "",
+        "user": [
+            "dno"
+        ],
+        "object_repr": "Employee object",
+        "action_flag": 1,
+        "action_time": "2015-05-07T01:38:42Z",
+        "content_type": [
+            "staff",
+            "employee"
+        ]
+    }
+},
+{
+    "pk": 14,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "2",
+        "change_message": "",
+        "user": [
+            "4ino"
+        ],
+        "object_repr": "News object",
+        "action_flag": 1,
+        "action_time": "2015-05-07T02:10:57Z",
+        "content_type": [
+            "staff",
+            "news"
+        ]
+    }
+},
+{
+    "pk": 15,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "5",
+        "change_message": "",
+        "user": [
+            "4ino"
+        ],
+        "object_repr": "News object",
+        "action_flag": 3,
+        "action_time": "2015-05-14T16:32:53Z",
+        "content_type": [
+            "staff",
+            "news"
+        ]
+    }
+},
+{
+    "pk": 16,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "4",
+        "change_message": "",
+        "user": [
+            "4ino"
+        ],
+        "object_repr": "News object",
+        "action_flag": 3,
+        "action_time": "2015-05-14T16:32:53Z",
+        "content_type": [
+            "staff",
+            "news"
+        ]
+    }
+},
+{
+    "pk": 17,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "3",
+        "change_message": "",
+        "user": [
+            "4ino"
+        ],
+        "object_repr": "News object",
+        "action_flag": 3,
+        "action_time": "2015-05-14T16:32:53Z",
+        "content_type": [
+            "staff",
+            "news"
+        ]
+    }
+},
+{
+    "pk": 18,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "2",
+        "change_message": "",
+        "user": [
+            "4ino"
+        ],
+        "object_repr": "News object",
+        "action_flag": 3,
+        "action_time": "2015-05-14T16:32:53Z",
+        "content_type": [
+            "staff",
+            "news"
+        ]
+    }
+},
+{
+    "pk": 19,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "1",
+        "change_message": "",
+        "user": [
+            "4ino"
+        ],
+        "object_repr": "News object",
+        "action_flag": 3,
+        "action_time": "2015-05-14T16:32:53Z",
+        "content_type": [
+            "staff",
+            "news"
+        ]
+    }
+},
+{
+    "pk": 20,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "6",
+        "change_message": "",
+        "user": [
+            "4ino"
+        ],
+        "object_repr": "News object",
+        "action_flag": 1,
+        "action_time": "2015-05-14T16:58:15Z",
+        "content_type": [
+            "staff",
+            "news"
+        ]
+    }
+},
+{
+    "pk": 21,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "1",
+        "change_message": "",
+        "user": [
+            "4ino"
+        ],
+        "object_repr": "AttrType object",
+        "action_flag": 1,
+        "action_time": "2015-05-15T04:48:47Z",
+        "content_type": [
+            "anketa",
+            "attrtype"
+        ]
+    }
+},
+{
+    "pk": 22,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "2",
+        "change_message": "",
+        "user": [
+            "4ino"
+        ],
+        "object_repr": "AttrType object",
+        "action_flag": 1,
+        "action_time": "2015-05-15T04:49:27Z",
+        "content_type": [
+            "anketa",
+            "attrtype"
+        ]
+    }
+},
+{
+    "pk": 23,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "3",
+        "change_message": "",
+        "user": [
+            "4ino"
+        ],
+        "object_repr": "AttrType object",
+        "action_flag": 1,
+        "action_time": "2015-05-15T04:49:44Z",
+        "content_type": [
+            "anketa",
+            "attrtype"
+        ]
+    }
+},
+{
+    "pk": 24,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "4",
+        "change_message": "",
+        "user": [
+            "4ino"
+        ],
+        "object_repr": "AttrType object",
+        "action_flag": 1,
+        "action_time": "2015-05-15T04:49:54Z",
+        "content_type": [
+            "anketa",
+            "attrtype"
+        ]
+    }
+},
+{
+    "pk": 25,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "1",
+        "change_message": "",
+        "user": [
+            "4ino"
+        ],
+        "object_repr": "Attribute object",
+        "action_flag": 1,
+        "action_time": "2015-05-15T04:52:03Z",
+        "content_type": [
+            "anketa",
+            "attribute"
+        ]
+    }
+},
+{
+    "pk": 26,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "11",
+        "change_message": "",
+        "user": [
+            "4ino"
+        ],
+        "object_repr": "News object",
+        "action_flag": 3,
+        "action_time": "2015-05-15T05:10:30Z",
+        "content_type": [
+            "staff",
+            "news"
+        ]
+    }
+},
+{
+    "pk": 27,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "10",
+        "change_message": "",
+        "user": [
+            "4ino"
+        ],
+        "object_repr": "News object",
+        "action_flag": 3,
+        "action_time": "2015-05-15T05:10:30Z",
+        "content_type": [
+            "staff",
+            "news"
+        ]
+    }
+},
+{
+    "pk": 28,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "9",
+        "change_message": "",
+        "user": [
+            "4ino"
+        ],
+        "object_repr": "News object",
+        "action_flag": 3,
+        "action_time": "2015-05-15T05:10:30Z",
+        "content_type": [
+            "staff",
+            "news"
+        ]
+    }
+},
+{
+    "pk": 29,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "8",
+        "change_message": "",
+        "user": [
+            "4ino"
+        ],
+        "object_repr": "News object",
+        "action_flag": 3,
+        "action_time": "2015-05-15T05:10:30Z",
+        "content_type": [
+            "staff",
+            "news"
+        ]
+    }
+},
+{
+    "pk": 30,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "7",
+        "change_message": "",
+        "user": [
+            "4ino"
+        ],
+        "object_repr": "News object",
+        "action_flag": 3,
+        "action_time": "2015-05-15T05:10:30Z",
+        "content_type": [
+            "staff",
+            "news"
+        ]
+    }
+},
+{
+    "pk": 31,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "6",
+        "change_message": "",
+        "user": [
+            "4ino"
+        ],
+        "object_repr": "News object",
+        "action_flag": 3,
+        "action_time": "2015-05-15T05:10:30Z",
+        "content_type": [
+            "staff",
+            "news"
+        ]
+    }
+},
+{
+    "pk": 32,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "12",
+        "change_message": "",
+        "user": [
+            "4ino"
+        ],
+        "object_repr": "News object",
+        "action_flag": 3,
+        "action_time": "2015-05-15T05:10:55Z",
+        "content_type": [
+            "staff",
+            "news"
+        ]
+    }
+},
+{
+    "pk": 33,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "4",
+        "change_message": "",
+        "user": [
+            "4ino"
+        ],
+        "object_repr": "anu",
+        "action_flag": 1,
+        "action_time": "2015-05-15T05:42:25Z",
+        "content_type": [
+            "auth",
+            "user"
+        ]
+    }
+},
+{
+    "pk": 34,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "4",
+        "change_message": "\u0418\u0437\u043c\u0435\u043d\u0435\u043d first_name \u0438 last_name.",
+        "user": [
+            "4ino"
+        ],
+        "object_repr": "anu",
+        "action_flag": 2,
+        "action_time": "2015-05-15T05:42:51Z",
+        "content_type": [
+            "auth",
+            "user"
+        ]
+    }
+},
+{
+    "pk": 35,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "1",
+        "change_message": "\u0418\u0437\u043c\u0435\u043d\u0435\u043d user.",
+        "user": [
+            "4ino"
+        ],
+        "object_repr": "Employee object",
+        "action_flag": 2,
+        "action_time": "2015-05-15T05:53:47Z",
+        "content_type": [
+            "staff",
+            "employee"
+        ]
+    }
+},
+{
+    "pk": 36,
+    "model": "admin.logentry",
+    "fields": {
+        "object_id": "2",
+        "change_message": "\u0418\u0437\u043c\u0435\u043d\u0435\u043d user.",
+        "user": [
+            "4ino"
+        ],
+        "object_repr": "Employee object",
+        "action_flag": 2,
+        "action_time": "2015-05-15T05:55:37Z",
+        "content_type": [
+            "staff",
+            "employee"
+        ]
+    }
+}
+]
