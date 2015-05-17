@@ -1,0 +1,92 @@
+{% extends 'staff/base.html' %}
+{% block head %}
+Управление сотрудниками add
+{% endblock %}
+
+
+
+
+{% block content %}
+{% load staticfiles %}
+
+<form action="{% url 'staff:employee_add' %}" class="form-horizontal" role="form" method="post">
+    {% csrf_token %}
+  <div class="form-group">
+    <label for="username" class="col-sm-2 control-label">Пользователь:</label>
+      <div class="col-sm-9">      
+      <input type="text" class="form-control" name = "username" id="username" placeholder="Имя пользователя" value = "{{ data.employee.user.username }}">
+      <!--select class="form-control">Пользователь</select-->
+    </div>
+      <!--button type="submit" class="btn btn-default"><a href="/admin/" class="add-another" id="add_id_user" onclick="return showAddAnotherPopup(this);"> <img src="/abit-anketa/static/admin/img/icon_addlink.gif" width="10" height="10" alt="Добавить еще"></a></button-->
+  </div>
+  <div class="form-group">
+    <label for="e-mail" class="col-sm-2 control-label">E-amil</label>
+    <div class="col-sm-9">      
+      <input type="text" class="form-control" name = "email" id="email" placeholder="user@yandex.ru" value="{{ data.employee.user.email }}">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="password" class="col-sm-2 control-label">Пароль:</label>
+    <div class="col-sm-9">      
+      <input type="password" class="form-control" name = "password" id="password" placeholder="пароль">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="confirm" class="col-sm-2 control-label">Подтвердите пароль:</label>
+    <div class="col-sm-9">      
+      <input type="password" class="form-control" name = "confirm" id="confirm" placeholder="Подтверждение пароля">
+    </div>
+  </div>
+    
+
+    
+  <div class="form-group">
+    <label for="inputPassword3" class="col-sm-2 control-label">Подразделение:</label>
+    <div class="col-sm-9">
+      <!--<input type="Подразделение" class="form-control" id="inputPassword3" placeholder="Подразделение">-->
+      <select class="form-control" name="department" id = "department" placeholder="Выберете подразделение">
+        {% for dep in data.departments %}
+            <option value="{{ dep.id }}">{{ dep.name }}</option>
+        {% endfor %}      
+      </select>
+    </div>      
+  </div>
+  <div class="form-group">
+    <label for="inputPassword3" class="col-sm-2 control-label">Фамилия:</label>
+    <div class="col-sm-9">
+      <input type="Фамилия" class="form-control" name = "lname" id="inputPassword3" placeholder="Фамилия">
+    </div>
+  </div> 
+    <div class="form-group">
+    <label for="inputPassword3" class="col-sm-2 control-label">Имя:</label>
+    <div class="col-sm-9">
+      <input type="Имя" class="form-control" name="fname" id="inputPassword3" placeholder="Имя">
+    </div>
+  </div> 
+    <div class="form-group">
+    <label for="inputPassword3" class="col-sm-2 control-label">Отчество:</label>
+    <div class="col-sm-9">
+      <input type="Отчество" class="form-control" name="mname" id="inputPassword3" placeholder="Отчество">
+    </div>
+  </div> 
+    <div class="form-group">
+    <label for="inputPassword3" class="col-sm-2 control-label">ФИО:</label>
+    <div class="col-sm-9">
+      <input type="ФИО" class="form-control" name="fullname" id="inputPassword3" placeholder="ФИО">
+    </div>
+  </div> 
+    <div class="form-group">
+    <label for="inputPassword3" class="col-sm-2 control-label">Должность:</label>
+    <div class="col-sm-9">
+      <input type="Должность" class="form-control" name="position" id="inputPassword3" placeholder="Должность">
+    </div>
+  </div> 
+    
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default" name="save">Сохранить</button>
+    </div>
+  </div>
+</form>
+{% endblock %}
+
