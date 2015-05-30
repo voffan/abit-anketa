@@ -119,31 +119,38 @@ def Zipcode(request):
 
 def Territory(request):
     trry = AttrValue.objects.filter(attribute__id = 2)
-    part = request.POST.get('query','')
+    part = request.GET.get('query','')
     if len(part)>0:
-        trry = trry.filter(value__icontains == part)
+        trry = trry.filter(value__icontains = part)
     trry = trry.values('id', 'value')
     result = []
     for item in trry:
         result.append(item)
-    result.append({'id':'3','value':part} )
     return HttpResponse(json.dumps(result), content_type="application/json")
 
 def District(request):
-    dist = Address.objects.all().distinct()
-    part = request.POST['dist']
+    dist = AttrValue.objects.filter(attribute__id = 3)
+    part = request.GET.get('query','')
+    region = request.GET.get('id','')
     if len(part)>0:
-        dist = dist.filter(district__icontains == part)
-    dist = dist.values('id', 'district')
-    return json.dumps(dist)
+        dist = dist.filter(value__icontains = part, parent__id = region)
+    dist = dist.values('id', 'value')
+    result = []
+    for item in dist:
+        result.append({'id':item['id'],'value':item['value']})
+    return HttpResponse(json.dumps(result), content_type="application/json")
 
 def City(request):
-    cty = AttrValue.objects.filter(attribute__id = 3)
-    part = request.POST.get('cty','')
+    cty = AttrValue.objects.filter(attribute__id = 4)
+    part = request.GET.get('query','')
+    district = request.GET.get('id', '')
     if len(part)>0:
-        cty = cty.filter(value__icontains == part)
+        cty = cty.filter(value__icontains = part, parent__id = district)
     cty = cty.values('id', 'value')
-    return json.dumps(cty)
+    result = []
+    for item in cty:
+        result.append({'id':item['id'],'value':item['value']})
+    return HttpResponse(json.dumps(result), content_type="application/json")
 
 def Settlement(request):
     settle = Address.objects.all().distinct()

@@ -11,6 +11,11 @@
 <script src="{% static "anketa/js/prettify.js" %}"></script>
 <script src="{% static "anketa/js/bootstrap-typeahead.js" %}"></script>
 <script>
+    function GetRegionID(){
+        if($("#district").val().length === 0) 
+            return $("#idterritory").val();
+        return $("#iddistrict").val();
+    }
     $(document).ready(function() {
   	$('#rootwizard').bootstrapWizard({onTabShow: function(tab, navigation, index) {
 		var $total = navigation.find('li').length;
@@ -57,17 +62,94 @@
     });
 </script>
 <script>
+    var q;
     $("#territory").typeahead({
         onSelect: function(item) {
-        console.log(item);
+        //console.log(item);
+            //alert(item.value);
+            /*$.each(q,function(index){
+                if(q[index].value == item.text) alert(q[index].id);
+            });*/
+            $("#idterritory").val(item.value);
     },
     ajax: 
         {
-            url:'{% url 'territory' %}',
+            url:"{% url 'territory' %}",
             displayField: 'value',
             valueField:'id',
             method:'get',
-            triggerLength: 1
+            triggerLength: 1,
+            preDispatch: function(query) 
+            {
+                return{
+                        'query':query
+                      }
+            },
+            preProcess: function(data)
+            {
+                q=data;
+                return data;
+            }
+        }
+    
+});
+</script>
+<script>
+    var q;
+    $("#district").typeahead({
+        onSelect: function(item) {
+        //console.log(item);
+            //alert(item.value);
+            /*$.each(q,function(index){
+                if(q[index].value == item.text) alert(q[index].id);
+            });*/
+            $("#iddistrict").val(item.value);
+    },
+    ajax: 
+        {
+            url:"{% url 'district' %}",
+            displayField: 'value',
+            valueField:'id',
+            method:'get',
+            triggerLength: 1,
+            preDispatch: function(query) 
+            {
+                return{
+                        'query':query,
+                        'id':$("#idterritory").val()
+                      }
+            },
+            preProcess: function(data)
+            {
+                q=data;
+                return data;
+            }
+        }
+    
+});
+    $("#city").typeahead({
+        onSelect: function(item) {
+            $("#idcity").val(item.value);
+    },
+    ajax: 
+        {
+            url:"{% url 'city' %}",
+            displayField: 'value',
+            valueField:'id',
+            method:'get',
+            triggerLength: 1,
+            preDispatch: function(query) 
+            {
+                return{
+                        'query':query,
+                        'id':GetRegionID()
+                      }
+            },
+            preProcess: function(data)
+            {
+                q=data;
+                return data;
+            }
         }
     
 });
@@ -278,22 +360,25 @@
                             <input type = "text" name="adrsterritory" id="adrsterritory" class="form-control" placeholder="Республика Саха(Якутия)">-->
                             <label for="territory">Область</label>
                             <input id="territory" class="form-control" placeholder="sss">
+                            <input name = "idterritory" id="idterritory" hidden>
                         </p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
-                            <label for="adrsdistrict">Район/улус</label>
-                            <input type = "text" name="adrsdistrict" id="adrsdistrict" class="form-control" placeholder="чОткий">
+                            <label for="district">Район/улус</label>
+                            <input id="district" class="form-control" placeholder="чОткий">
+                            <input name = "iddistrict" id="iddistrict" hidden>
                         </p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
-                            <label for="adrscity">Город/село</label>
-                            <input type = "text" name="adrscity" id="adrscity" class="form-control" placeholder="Якутск">
+                            <label for="city">Город/село</label>
+                            <input name="city" id="city" class="form-control" placeholder="Якутск">
+                            <input name="idcity" id="idcity" hidden>
                         </p>
                     </div>
                 </div>

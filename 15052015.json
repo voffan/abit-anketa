@@ -138,8 +138,7 @@
     "model": "anketa.attribute",
     "fields": {
         "name": "\u0420\u0435\u0433\u0438\u043e\u043d",
-        "type": 1,
-        "parent": null
+        "type": 1
     }
 },
 {

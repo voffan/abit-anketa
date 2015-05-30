@@ -89,3 +89,7 @@ USE_TZ = True
 STATIC_URL = '/abit-anketa/static/'
 
 STATIC_ROOT = 'static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static\\images')
+
+MEDIA_URL = '/images/'

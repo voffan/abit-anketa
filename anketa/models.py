@@ -6,25 +6,25 @@ Sex = (
     )
 Eduform = (
     (u'О',u'Очное'),
-    (u'З',u'Заочное')
+    (u'З',u'Заочное'),
     )
 
 class AttrType(models.Model):
     name=models.CharField(u"", max_length=100)
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 class Attribute(models.Model):
     name = models.CharField(max_length=250)
-    parent = models.ForeignKey('self', null=True, blank=True)
     type = models.ForeignKey(AttrType,verbose_name = u'Тип атрибута')
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 class AttrValue(models.Model):
     value = models.CharField(u'Значение', max_length=250, db_index = True)
+    parent = models.ForeignKey('self', null=True, blank=True)
     attribute = models.ForeignKey(Attribute, verbose_name=u'Атрибут', db_index = True)
-    def __unicode__(self):
+    def __str__(self):
         return self.attribute.name+' '+self.value
     
 class Person(models.Model):

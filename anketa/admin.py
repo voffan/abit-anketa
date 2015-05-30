@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from staff.models import News, Employee
+from staff.models import News, Employee, Img
 from anketa.models import University, Department, AttrType, Attribute, AttrValue
 
 admin.site.register(News)
@@ -11,4 +11,4 @@ admin.site.register(Department)
 admin.site.register(AttrType)
 admin.site.register(Attribute)
 admin.site.register(AttrValue)
-#admin.site.register(User)
+admin.site.register(Img)

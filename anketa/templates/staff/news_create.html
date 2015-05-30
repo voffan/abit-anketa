@@ -5,14 +5,21 @@
 {% block content %}
 <form action="" method="post">
     {% csrf_token %}
-
-    <div class="row">
+     <!--<div class="row">
         <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
-            <label for="employee_news">Автор</label>
-            <input type="text" name = "employee_news" id ="employee_news" value="тут должен быть селект" class="form-control">
-                        
+            <label for="employee_create">Автор</label>
+            <input type="text" name = "employee_create" id ="employee_create" value= "{{ data.news.employee.fullname }}" class="form-control">
         </div>
-    </div>
+   </div>-->
+    
+    </br>
+        <div class="row">
+        <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+            <label for="name">Название Новости</label>
+            <input type="text" name = "name" id ="name" value="{{ data.news.name }}" class="form-control">
+        </div>
+   </div>
+
     </br>
     <div class="row">
         <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">

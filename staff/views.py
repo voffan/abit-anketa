@@ -41,9 +41,13 @@ def logout(request):
     return redirect("/")
 
 def news_list(request):
+    news_with_img = []
     news = News.objects.all()
     data={}
-    data['news_list']= news
+    for item in news:
+        img = item.img_set.all().first()
+        news_with_img.append((item,img,))
+    data['news_list']= news_with_img
     context = {'data':data}
     return render(request,'staff\\news.html',context)
 
@@ -109,3 +113,13 @@ def AddEmployee(request):
     context = {'data':Data}
     context.update(csrf(request))
     return render(request,'staff\employee_add.html',context)
+
+def News_Change (request, news_id):
+    news = News.objects.all()
+    news_edit = News.objects.get(pk=news_id)
+    Data={}
+    Data['news'] = news
+    Data['news_edit']=news_edit
+    context = {'data':Data}
+    context.update(csrf(request))
+    return render(request,'staff\\news_create.html',context)
