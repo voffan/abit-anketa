@@ -6,7 +6,7 @@ Sex = (
     )
 Eduform = (
     (u'О',u'Очное'),
-    (u'З',u'Заочное'),
+    (u'З',u'Заочное')
     )
 
 class AttrType(models.Model):
@@ -71,7 +71,7 @@ class Contacts(models.Model):
 
 class DocAttr(models.Model):
     doc = models.ForeignKey('Docs', verbose_name=u'Документ')
-    attr = models.ForeignKey(Attribute, verbose_name = u'Значение атрибута', related_name='Attrname', db_index = True)
+    attr = models.ForeignKey(AttrValue, verbose_name = u'Значение атрибута', related_name='Attrname', db_index = True)
 
 class Docs(models.Model):
     person = models.ForeignKey('Person')
@@ -125,7 +125,7 @@ class Milit(models.Model):
     liableForMilit = models.BooleanField(u'Военнообязанный', default=False)
     isServed=models.BooleanField(u'служил в армии', default=False, blank=True)
     yearDismissial=models.IntegerField(u'Год увольнения из рядов РА', max_length=4, blank=True, null= True)
-    rank = models.ForeignKey(Attribute, verbose_name=u'Воинское звание',blank=True, null= True,related_name='Rank')
+    rank = models.ForeignKey(AttrValue, verbose_name=u'Воинское звание',blank=True, null= True,related_name='Rank')
 
 class DepAchieves(models.Model):
     department = models.ForeignKey(Department, verbose_name = u'Институт/факультет', db_index = True, blank = True, null = True)

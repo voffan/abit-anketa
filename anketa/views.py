@@ -101,24 +101,8 @@ def autocomplete(request):
 def StartApp(request):
     return render(request, 'anketa/wizardform.html')
 
-def Streets(request):
-    strs = Address.objects.all().distinct()
-    part = request.POST.get('strs','')
-    if len(part)>0:
-        strs = strs.filter(street__icontains == part)
-    strs = strs.values('street')
-    return json.dumps(strs)
-
-def Zipcode(request):
-    zpcd = Address.objects.all().distinct()
-    part = request.POST.get('zpcd','')
-    if len(part)>0:
-        zpcd = zpcd.filter(zipcode__icontains == part)
-    zpcd = zpcd.values('zipcode')
-    return json.dumps(zpcd)
-
 def Territory(request):
-    trry = AttrValue.objects.filter(attribute__id = 2)
+    trry = AttrValue.objects.filter(attribute__id = 5)
     part = request.GET.get('query','')
     if len(part)>0:
         trry = trry.filter(value__icontains = part)
@@ -129,7 +113,7 @@ def Territory(request):
     return HttpResponse(json.dumps(result), content_type="application/json")
 
 def District(request):
-    dist = AttrValue.objects.filter(attribute__id = 3)
+    dist = AttrValue.objects.filter(attribute__id = 7)
     part = request.GET.get('query','')
     region = request.GET.get('id','')
     if len(part)>0:
@@ -141,7 +125,7 @@ def District(request):
     return HttpResponse(json.dumps(result), content_type="application/json")
 
 def City(request):
-    cty = AttrValue.objects.filter(attribute__id = 4)
+    cty = AttrValue.objects.filter(attribute__id = 6)
     part = request.GET.get('query','')
     district = request.GET.get('id', '')
     if len(part)>0:
@@ -152,11 +136,115 @@ def City(request):
         result.append({'id':item['id'],'value':item['value']})
     return HttpResponse(json.dumps(result), content_type="application/json")
 
-def Settlement(request):
-    settle = Address.objects.all().distinct()
-    part = request.POST['settle']
+def Streets(request):
+    strs = AttrValue.objects.filter(attribute__id = 8)
+    part = request.GET.get('query','')
+    region = request.GET.get('id','')
     if len(part)>0:
-        settle = settle.filter(settlement__icontains == part)
-    settle = settle.values('id','settlement')
-    return json.dumps(settle)
+        strs = strs.filter(value__icontains = part, parent__id = region)
+    strs = strs.values('id', 'value')
+    result = []
+    for item in strs:
+        result.append({'id':item['id'],'value':item['value']})
+    return HttpResponse(json.dumps(result), content_type="application/json")
 
+def Citizenship(request):
+    trry = AttrValue.objects.filter(attribute__id = 9)
+    part = request.GET.get('query','')
+    if len(part)>0:
+        trry = trry.filter(value__icontains = part)
+    trry = trry.values('id', 'value')
+    result = []
+    for item in trry:
+        result.append(item)
+    return HttpResponse(json.dumps(result), content_type="application/json")
+
+def Nation(request):
+    trry = AttrValue.objects.filter(attribute__id = 10)
+    part = request.GET.get('query','')
+    if len(part)>0:
+        trry = trry.filter(value__icontains = part)
+    trry = trry.values('id', 'value')
+    result = []
+    for item in trry:
+        result.append(item)
+    return HttpResponse(json.dumps(result), content_type="application/json")
+
+def DocIssuer(request):
+    trry = AttrValue.objects.filter(attribute__id = 11)
+    part = request.GET.get('query','')
+    if len(part)>0:
+        trry = trry.filter(value__icontains = part)
+    trry = trry.values('id', 'value')
+    result = []
+    for item in trry:
+        result.append(item)
+    return HttpResponse(json.dumps(result), content_type="application/json")
+
+def PrevEduName(request):
+    trry = AttrValue.objects.filter(attribute__id = 12)
+    part = request.GET.get('query','')
+    if len(part)>0:
+        trry = trry.filter(value__icontains = part)
+    trry = trry.values('id', 'value')
+    result = []
+    for item in trry:
+        result.append(item)
+    return HttpResponse(json.dumps(result), content_type="application/json")
+
+def Institute(request):
+    trry = AttrValue.objects.filter(attribute__id = 13)
+    part = request.GET.get('query','')
+    if len(part)>0:
+        trry = trry.filter(value__icontains = part)
+    trry = trry.values('id', 'value')
+    result = []
+    for item in trry:
+        result.append(item)
+    return HttpResponse(json.dumps(result), content_type="application/json")
+
+def EduProg(request):
+    cty = AttrValue.objects.filter(attribute__id = 14)
+    part = request.GET.get('query','')
+    depart = request.GET.get('id', '')
+    if len(part)>0:
+        cty = cty.filter(value__icontains = part, parent__id = depart)
+    cty = cty.values('id', 'value')
+    result = []
+    for item in cty:
+        result.append({'id':item['id'],'value':item['value']})
+    return HttpResponse(json.dumps(result), content_type="application/json")
+
+def EduProf(request):
+    cty = AttrValue.objects.filter(attribute__id = 15)
+    part = request.GET.get('query','')
+    prog = request.GET.get('id', '')
+    if len(part)>0:
+        cty = cty.filter(value__icontains = part, parent__id = prog)
+    cty = cty.values('id', 'value')
+    result = []
+    for item in cty:
+        result.append({'id':item['id'],'value':item['value']})
+    return HttpResponse(json.dumps(result), content_type="application/json")
+
+def Privilegies(request):
+    trry = AttrValue.objects.filter(attribute__id = 16)
+    part = request.GET.get('query','')
+    if len(part)>0:
+        trry = trry.filter(value__icontains = part)
+    trry = trry.values('id', 'value')
+    result = []
+    for item in trry:
+        result.append(item)
+    return HttpResponse(json.dumps(result), content_type="application/json")
+
+def Rank(request):
+    trry = AttrValue.objects.filter(attribute__id = 17)
+    part = request.GET.get('query','')
+    if len(part)>0:
+        trry = trry.filter(value__icontains = part)
+    trry = trry.values('id', 'value')
+    result = []
+    for item in trry:
+        result.append(item)
+    return HttpResponse(json.dumps(result), content_type="application/json")
