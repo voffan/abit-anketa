@@ -42,7 +42,7 @@
 </script>
 <script>
     $("#territory").typeahead({
-        onSelect: function(item) {
+        onSelect: function(item) 
             $("#idterritory").val(item.value);
     },
     ajax: 
@@ -415,9 +415,11 @@
 		<div class="tab-pane" id="tab1">
 			<div class = "container-fluid">
 				<div class = "row">
+                <form action="{% url 'person_add' %}" class="form-horizontal" role="form" method="post">
+                {% csrf_token %}
 					<div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
-                            <label for="sname">Фамилия</label>
+                            <label for="lname">Фамилия</label>
                             <input type = "text" name= "sname" id = "sname" class = "form-control" placeholder = "Иванов">
                         </p>
 					</div>
@@ -425,7 +427,7 @@
 				<div class="row">
 					<div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
 				        <p>
-                            <label for="name">Имя</label>
+                            <label for="nname">Имя</label>
                             <input type = "text" name= "name" id = "name" class = "form-control" placeholder = "Иван">
                         </p>
 					</div>					
@@ -437,13 +439,20 @@
                             <input type="text" name = "mname" id ="mdname" class="form-control" placeholder="Иванович">
                         </p>
                     </div>
-                </div>                    
+                </div>
                 <div class="row">
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-3">
                         <p>
                             <label for="birthday">Дата рождения</label>
                             <input type="date" name = "birthday" id ="birthday" value="1997-01-01" class="form-control">
                         </p>
+                    </div>
+                    <div class ="col-xs-3 col-sm-6 col-md-6">
+                        <label for="sex">Пол</label>    
+                            <p>
+                                <input type="radio" name = "hostel" value="s1">Мужской
+                                <input type="radio" name = "hostel" value="s2">Женский
+                            </p>
                     </div>
                 </div>
                 <div class="row">
@@ -455,15 +464,13 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-3">
                         <p>
                             <label for="nation">Национальность(по желанию)</label>
                             <input id ="nation" name="nation" class="form-control" placeholder="Саха">
                         </p>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                    <div class="col-xs-3 col-sm-3 col-md-3">
                         <p>
                             <label for="citizenship">Гражданство</label>
                             <input id="citizenship" name="citizenship" class="form-control" placeholder="РФ" />
@@ -839,7 +846,7 @@
                     <div>
                         <p>
                         <div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-3">
-                            <label for="achievname[1]">Наименования достижения</label>
+                            <label for="achievname[1]">Наименование достижения</label>
                             <input name="achievname[1]" id="achievname[1]" class="form-control" placeholder="По жизни чемпион">
                         </div>
                         <div class="col-xs-2 col-sm-2 col-md-2">
@@ -874,10 +881,10 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
-                        <label for="option">Нуждаетесь ли в общежитие?</label>
+                        <label for="hostel">Нуждаетесь ли в общежитие?</label>
                         <p>
-                            <input type="radio" name = "option" value="a1">Нет
-                            <input type="radio" name = "option" value="a2">Да
+                            <input type="radio" name = "hostel" value="a1">Нет
+                            <input type="radio" name = "hostel" value="a2">Да
                         </p>
                     </div>
                 </div>
@@ -913,8 +920,11 @@
                                 <label for="rank">Воинское звание</label>
                                 <input name="rank" id="rank" class="form-control" placeholder="капитан">
                             </div>
+                            <p><button type="submit" class="btn btn-default" name="save">Сохранить</button></p>
+                </form>
                     </div>
                 </p>
+
             </div>
 		</div>
 		<ul class="pager wizard">
@@ -922,7 +932,7 @@
 			<li class="previous"><a href="javascript:;">Previous</a></li>
 			<li class="next last" ><a href="javascript:;">Last</a></li>
 		  	<li class="next"><a href="javascript:;">Next</a></li>
-			<li class="next finish" style="display:none;"><a href="javascript:;">Finish</a></li>
+			<form action ="/person/" method="post" accept-charset="utf-8"><li class="next finish" style="display:none;"><a href="javascript:;">Finish</a></li></form>
 		</ul>
 	</div>	
 </div>

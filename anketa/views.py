@@ -248,3 +248,25 @@ def Rank(request):
     for item in trry:
         result.append(item)
     return HttpResponse(json.dumps(result), content_type="application/json")
+
+def AddPerson(request):
+    if request.method =='POST':
+        person = Person()
+        person.lname = request.POST.get('lname','')
+        person.name = request.POST.get('nname','')
+        person.mname = request.POST.get('mname','')
+        person.sex  = request.POST.get('sex','')
+        person.birthdate = request.POST.get('birthdate','')
+        person.bithplace = request.POST.get('birthplace','')
+        person.nationality = request.POST.get('nation','') #foreign attrval
+        person.citizenship = request.POST.get('citizenship','') #foreign attrval
+        person.hostel = request.POST.get('hostel','')
+        person.foreign_lang = request.POST.get('flang','') #foreign attrval
+        person.father = request.POST.get('','') #foreign self can be null
+        person.mother = request.POST.get('','') #foreign self can be null
+        person.save()
+        return HttpResponseRedirect(reverse('/'))
+    data={}
+    context = {'data':data}
+    context.update(csrf(request))
+    return render(request,'/',context)
