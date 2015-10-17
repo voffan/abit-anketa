@@ -252,13 +252,14 @@ def Rank(request):
 def AddPerson(request):
     if request.method =='POST':
         person = Person()
-        person.lname = request.POST.get('lname','')
-        person.name = request.POST.get('nname','')
+        person.lname = request.POST.get('sname','')
+        person.nname = request.POST.get('name','')
         person.mname = request.POST.get('mname','')
         person.sex  = request.POST.get('sex','')
         person.birthdate = request.POST.get('birthdate','')
         person.bithplace = request.POST.get('birthplace','')
-        person.nationality = request.POST.get('nation','') #foreign attrval
+        person.nationality = AttrValue.objects.filter(attribute__id=10)
+        #person.nationality = request.POST.get('nation','') #foreign attrval
         person.citizenship = request.POST.get('citizenship','') #foreign attrval
         person.hostel = request.POST.get('hostel','')
         person.foreign_lang = request.POST.get('flang','') #foreign attrval

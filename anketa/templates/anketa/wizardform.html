@@ -41,10 +41,12 @@
 });
 </script>
 <script>
-    $("#territory").typeahead({
+    $("#territory").typeahead(
+    {
         onSelect: function(item) 
+        {
             $("#idterritory").val(item.value);
-    },
+        },
     ajax: 
         {
             url:"{% url 'territory' %}",
@@ -65,10 +67,12 @@
         }
     
     });
-    $("#district").typeahead({
-        onSelect: function(item) {
+    $("#district").typeahead(
+    {
+        onSelect: function(item) 
+        {
             $("#iddistrict").val(item.value);
-    },
+        },
     ajax: 
         {
             url:"{% url 'district' %}",
@@ -90,10 +94,12 @@
         }
     
     });
-    $("#city").typeahead({
-        onSelect: function(item) {
+    $("#city").typeahead(
+    {
+        onSelect: function(item) 
+        {
             $("#idcity").val(item.value);
-    },
+        },
     ajax: 
         {
             url:"{% url 'city' %}",
@@ -115,10 +121,12 @@
         }
     
     });
-    $("#streets").typeahead({
-        onSelect: function(item) {
+    $("#streets").typeahead(
+    {
+        onSelect: function(item) 
+        {
             $("#idstreets").val(item.value);
-    },
+        },
     ajax: 
         {
             url:"{% url 'streets' %}",
@@ -139,10 +147,12 @@
             }
         }
     });
-    $("#citizenship").typeahead({
-        onSelect: function(item) {
+    $("#citizenship").typeahead(
+    {
+        onSelect: function(item) 
+        {
             $("#idcitizenship").val(item.value);
-    },
+        },
     ajax: 
         {
             url:"{% url 'citizenship' %}",
@@ -162,10 +172,12 @@
             }
         }
     });
-    $("#nation").typeahead({
-        onSelect: function(item) {
+    $("#nation").typeahead(
+    {
+        onSelect: function(item) 
+        {
             $("#idnation").val(item.value);
-    },
+        },
     ajax: 
         {
             url:"{% url 'nation' %}",
@@ -185,10 +197,12 @@
             }
         }
     });
-    $("#docissuer").typeahead({
-        onSelect: function(item) {
+    $("#docissuer").typeahead(
+    {
+        onSelect: function(item) 
+        {
             $("#iddocissuer").val(item.value);
-    },
+        },
     ajax: 
         {
             url:"{% url 'docissuer' %}",
@@ -208,10 +222,12 @@
             }
         }
     });
-    $("#preveduname").typeahead({
-        onSelect: function(item) {
+    $("#preveduname").typeahead(
+    {
+        onSelect: function(item) 
+        {
             $("#idpreveduname").val(item.value);
-    },
+        },
     ajax: 
         {
             url:"{% url 'preveduname' %}",
@@ -231,10 +247,12 @@
             }
         }
     });
-    $("#inst").typeahead({
-        onSelect: function(item) {
+    $("#inst").typeahead(
+    {
+        onSelect: function(item) 
+        {
             $("#idinst").val(item.value);
-    },
+        },
     ajax: 
         {
             url:"{% url 'institute' %}",
@@ -254,10 +272,12 @@
             }
         }
     });
-    $("#eduprog").typeahead({
-        onSelect: function(item) {
+    $("#eduprog").typeahead(
+    {
+        onSelect: function(item) 
+        {
             $("#ideduprog").val(item.value);
-    },
+        },
     ajax: 
         {
             url:"{% url 'eduprog' %}",
@@ -278,10 +298,12 @@
             }
         }
     });
-    $("#eduprof").typeahead({
-        onSelect: function(item) {
+    $("#eduprof").typeahead(
+    {
+        onSelect: function(item) 
+        {
             $("#ideduprof").val(item.value);
-    },
+        },
     ajax: 
         {
             url:"{% url 'eduprof' %}",
@@ -302,10 +324,12 @@
             }
         }
     });
-    $("#rank").typeahead({
-        onSelect: function(item) {
+    $("#rank").typeahead(
+    {
+        onSelect: function(item) 
+        {
             $("#idrank").val(item.value);
-    },
+        },
     ajax: 
         {
             url:"{% url 'rank' %}",
@@ -363,7 +387,8 @@
      // Возвращаем false, чтобы не было перехода по сслыке
      return false;
     }
-
+</script>
+<script>
     var countOfFieldsPersach = 1; 
     var curFieldNameIdPersach = 1;
     var maxFieldLimitPersach = 10;
@@ -394,6 +419,8 @@
 {% endblock %}
 
 {% block content %}
+<form action="{% url 'person_add' %}" class="form-horizontal" role="form" method="post">
+{% csrf_token %}
 <div id = "rootwizard">
 	<div class="navbar">
 		<div class="navbar-inner">
@@ -415,11 +442,9 @@
 		<div class="tab-pane" id="tab1">
 			<div class = "container-fluid">
 				<div class = "row">
-                <form action="{% url 'person_add' %}" class="form-horizontal" role="form" method="post">
-                {% csrf_token %}
 					<div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
-                            <label for="lname">Фамилия</label>
+                            <label for="sname">Фамилия</label>
                             <input type = "text" name= "sname" id = "sname" class = "form-control" placeholder = "Иванов">
                         </p>
 					</div>
@@ -427,7 +452,7 @@
 				<div class="row">
 					<div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
 				        <p>
-                            <label for="nname">Имя</label>
+                            <label for="name">Имя</label>
                             <input type = "text" name= "name" id = "name" class = "form-control" placeholder = "Иван">
                         </p>
 					</div>					
@@ -436,12 +461,12 @@
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
                             <label for="mname">Отчество</label>
-                            <input type="text" name = "mname" id ="mdname" class="form-control" placeholder="Иванович">
+                            <input type="text" name = "mname" id ="mname" class="form-control" placeholder="Иванович">
                         </p>
                     </div>
                 </div>
                 <div class="row">
-                <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-3">
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-3">
                         <p>
                             <label for="birthday">Дата рождения</label>
                             <input type="date" name = "birthday" id ="birthday" value="1997-01-01" class="form-control">
@@ -450,8 +475,8 @@
                     <div class ="col-xs-3 col-sm-6 col-md-6">
                         <label for="sex">Пол</label>    
                             <p>
-                                <input type="radio" name = "hostel" value="s1">Мужской
-                                <input type="radio" name = "hostel" value="s2">Женский
+                                <input type="radio" name = "hostel" value="p1">Мужской
+                                <input type="radio" name = "hostel" value="p2">Женский
                             </p>
                     </div>
                 </div>
@@ -921,10 +946,10 @@
                                 <input name="rank" id="rank" class="form-control" placeholder="капитан">
                             </div>
                             <p><button type="submit" class="btn btn-default" name="save">Сохранить</button></p>
-                </form>
+                
                     </div>
                 </p>
-
+            
             </div>
 		</div>
 		<ul class="pager wizard">
@@ -932,8 +957,9 @@
 			<li class="previous"><a href="javascript:;">Previous</a></li>
 			<li class="next last" ><a href="javascript:;">Last</a></li>
 		  	<li class="next"><a href="javascript:;">Next</a></li>
-			<form action ="/person/" method="post" accept-charset="utf-8"><li class="next finish" style="display:none;"><a href="javascript:;">Finish</a></li></form>
+			<li class="next finish" style="display:none;"><a href="javascript:;">Finish</a></li>
 		</ul>
 	</div>	
 </div>
+</form>
 {% endblock %}
