@@ -9,6 +9,7 @@ Eduform = (
     (u'З',u'Заочное')
     )
 
+
 class AttrType(models.Model):
     name=models.CharField(u"", max_length=100)
     def __str__(self):

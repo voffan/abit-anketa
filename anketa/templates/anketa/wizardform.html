@@ -350,6 +350,32 @@
             }
         }
     });
+    $("#flang").typeahead(
+    {
+        onSelect: function(item) 
+        {
+            $("#idflang").val(item.value);
+        },
+    ajax: 
+        {
+            url:"{% url 'flang' %}",
+            displayField: 'value',
+            valueField:'id',
+            method:'get',
+            triggerLength: 1,
+            preDispatch: function(query) 
+            {
+                return{
+                        'query':query,
+                        'id':$("#idflang").val()
+                      }
+            },
+            preProcess: function(data)
+            {
+                return data;
+            }
+        }
+    });
 </script>
 <script>
     var countOfFields = 1; // Текущее число полей
@@ -503,10 +529,16 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-3">
                         <p>
                             <label for="phone">Контактный телефон</label>
                             <input type="tel" name = "phone" id ="phone" class="form-control" placeholder="Телефон в формате 8-ххх-ххххххх или 8-хххх-хххххх" pattern="(8-[0-9]{3}-[0-9]{7})|(8-[0-9]{4}-[0-9]{6})">
+                        </p>
+                    </div>
+                    <div class="col-xs-3 col-sm-3 col-md-3">
+                        <p>
+                            <label for="inila">СНИЛС</label>
+                            <input id="inila" name="inila" class="form-control" placeholder="123-456-789-00" />
                         </p>
                     </div>
                 </div>
@@ -738,11 +770,19 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-3">
                         <p>
                             <label for="option4">Форма обучения</label><br>
                             <input type="radio" name="option4" value="a41">Очная
                             <input type="radio" name="option4" value="a42">Заочная
+                        </p>
+                    </div>
+                    <div class="col-xs-3 col-sm-3 col-md-3">
+                        <p>
+                            <label for="option8">Приоритетность поступления</label><br>
+                            <input type="radio" name="option8" value="a41">Высокий
+                            <input type="radio" name="option8" value="a42">Средний
+                            <input type="radio" name="option8" value="a43">Низкий
                         </p>
                     </div>
                 </div>
@@ -896,11 +936,7 @@
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
                             <label for="flang">Изучаемый иностранный язык</label>
-                            <select name = "flang" size="1" id ="flang" class="form-control">
-                            <option value = "eng">Английский</option>
-                            <option value = "ger">Немецкий</option>
-                            <option value = "fre">Французский</option>
-                            </select>
+                            <input name="flang" id="flang" class="form-control" placeholder="Английский">
                         </p>
                     </div>
                 </div>

@@ -4,8 +4,11 @@ from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
 from django.forms.formsets import formset_factory
 from django.utils import timezone
+from django.shortcuts import get_object_or_404
+from datetime import datetime
 
-from django.http import HttpResponse
+from django.core.urlresolvers import reverse
+from django.http import HttpResponse, HttpResponseRedirect
 
 from django.shortcuts import render_to_response, render
 from django.template import RequestContext
@@ -249,6 +252,17 @@ def Rank(request):
         result.append(item)
     return HttpResponse(json.dumps(result), content_type="application/json")
 
+def Flang(request):
+    trry = AttrValue.objects.filter(attribute__id = 18)
+    part = request.GET.get('query','')
+    if len(part)>0:
+        trry = trry.filter(value__icontains = part)
+    trry = trry.values('id', 'value')
+    result = []
+    for item in trry:
+        result.append(item)
+    return HttpResponse(json.dumps(result), content_type="application/json")
+
 def AddPerson(request):
     if request.method =='POST':
         person = Person()
@@ -256,17 +270,17 @@ def AddPerson(request):
         person.nname = request.POST.get('name','')
         person.mname = request.POST.get('mname','')
         person.sex  = request.POST.get('sex','')
-        person.birthdate = request.POST.get('birthdate','')
+        person.birthdate = datetime.strptime(request.POST.get('birthday',''),'%Y-%m-%d')
         person.bithplace = request.POST.get('birthplace','')
-        person.nationality = AttrValue.objects.filter(attribute__id=10)
-        #person.nationality = request.POST.get('nation','') #foreign attrval
-        person.citizenship = request.POST.get('citizenship','') #foreign attrval
+        person.nationality = get_object_or_404(AttrValue,pk=10)
+        person.citizenship = get_object_or_404(AttrValue,pk=9) #foreign attrval
         person.hostel = request.POST.get('hostel','')
-        person.foreign_lang = request.POST.get('flang','') #foreign attrval
-        person.father = request.POST.get('','') #foreign self can be null
-        person.mother = request.POST.get('','') #foreign self can be null
+        person.foreign_lang = get_object_or_404(AttrValue,pk=18) #foreign attrval
+        #person.father = get_object_or_404(AttrValue,pk=18) #foreign self can be null
+        #person.mother = get_object_or_404(AttrValue,pk=18) #foreign self can be null
         person.save()
-        return HttpResponseRedirect(reverse('/'))
+        return HttpResponseRedirect(reverse('application'))
+
     data={}
     context = {'data':data}
     context.update(csrf(request))
