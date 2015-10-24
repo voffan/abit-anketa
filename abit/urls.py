@@ -9,7 +9,7 @@ from anketa.views2 import *
 
 urlpatterns = patterns('',
     url(r'^$', StartPage.as_view()),
-    url(r'^application/$', StartApp),
+    url(r'^application/$', StartApp, name = 'application'),
     url(r'^territory/$', Territory, name = 'territory'),
     url(r'^district/$', District, name = 'district'),
     url(r'^city/$', City , name = 'city'), 

@@ -263,24 +263,26 @@ def Flang(request):
         result.append(item)
     return HttpResponse(json.dumps(result), content_type="application/json")
 
+def SavePerson(request):
+    person = Person()
+    person.lname = request.POST.get('sname','')
+    person.nname = request.POST.get('name','')
+    person.mname = request.POST.get('mname','')
+    person.sex  = request.POST.get('sex','')
+    person.birthdate = datetime.strptime(request.POST.get('birthday',''),'%Y-%m-%d')
+    person.bithplace = request.POST.get('birthplace','')
+    person.nationality = get_object_or_404(AttrValue,pk=10)
+    person.citizenship = get_object_or_404(AttrValue,pk=9) #foreign attrval
+    person.hostel = request.POST.get('hostel','')
+    person.foreign_lang = get_object_or_404(AttrValue,pk=18) #foreign attrval
+    #person.father = get_object_or_404(AttrValue,pk=18) #foreign self can be null
+    #person.mother = get_object_or_404(AttrValue,pk=18) #foreign self can be null
+    person.save()
+
 def AddPerson(request):
     if request.method =='POST':
-        person = Person()
-        person.lname = request.POST.get('sname','')
-        person.nname = request.POST.get('name','')
-        person.mname = request.POST.get('mname','')
-        person.sex  = request.POST.get('sex','')
-        person.birthdate = datetime.strptime(request.POST.get('birthday',''),'%Y-%m-%d')
-        person.bithplace = request.POST.get('birthplace','')
-        person.nationality = get_object_or_404(AttrValue,pk=10)
-        person.citizenship = get_object_or_404(AttrValue,pk=9) #foreign attrval
-        person.hostel = request.POST.get('hostel','')
-        person.foreign_lang = get_object_or_404(AttrValue,pk=18) #foreign attrval
-        #person.father = get_object_or_404(AttrValue,pk=18) #foreign self can be null
-        #person.mother = get_object_or_404(AttrValue,pk=18) #foreign self can be null
-        person.save()
+        SavePerson(request)
         return HttpResponseRedirect(reverse('application'))
-
     data={}
     context = {'data':data}
     context.update(csrf(request))
