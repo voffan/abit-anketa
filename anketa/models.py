@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from kladr.models import Street
 
 Sex = (
     (u'М',u'Мужской'),
@@ -66,12 +67,8 @@ class Application(models.Model):
 class Address(models.Model):
     person = models.ForeignKey('Person')
     adrs_type = models.ForeignKey('AttrValue', verbose_name=u'Тип адреса', related_name='Adrs_type')
-    adrs_territory = models.ForeignKey('AttrValue', verbose_name=u'область\край\респ.', null=True, blank=True, related_name='Adrs_territory')
-    adrs_district = models.ForeignKey('AttrValue', verbose_name=u'Район\улус', null=True, blank=True, related_name='Adrs_district')
-    adrs_city = models.ForeignKey('AttrValue', verbose_name=u'Город\село', related_name='Adrs_city')
-    adrs_settlement = models.ForeignKey('AttrValue', verbose_name=u'Посёлок', null = True, blank = True, related_name='Adrs_settlement')
     zipcode = models.CharField(u'Индекс', max_length=6, null=True, blank=True)
-    street = models.CharField(u'Улица\проспект', max_length=151)
+    street = models.ForeignKey('Street',verbose_name=u'Улица', related_name ='Street')
     house = models.CharField(u'дом', max_length=5)
     building = models.CharField(u'корпус', max_length=5, null=True, blank=True)
     flat = models.CharField(u'квартира', max_length=5, null=True, blank=True)
