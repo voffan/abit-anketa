@@ -78,7 +78,7 @@ TIME_ZONE = 'Asia/Yakutsk'
 
 USE_I18N = True
 
-USE_L10N = True
+USE_L10N = False
 
 USE_TZ = True
 
@@ -89,3 +89,7 @@ USE_TZ = True
 STATIC_URL = '/abit-anketa/static/'
 
 STATIC_ROOT = 'static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static\\images')
+
+MEDIA_URL = '/images/'

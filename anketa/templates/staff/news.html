@@ -10,11 +10,11 @@
   {% for news in data.news_list %}
     <div class = "media">
       <div class = "medai-left">
-        <a href="{% url 'staff:news_content' news.id %}"><img src="{% static "anketa/img/logo.png" %}"></a>
+        <a href="{% url 'staff:news_content' news.0.id %}"><img src={% if news.1 %} {{ news.1.img.url }} {% else %}"{% static "anketa/img/logo.png" %}" {% endif %}></a>
       </div>
       <div class = "media-body">
-        <h4 class = "media-heading">{{ news.NewsName }}</h4>
-        {{ news.Description }}
+        <h4 class = "media-heading">{{ news.0.NewsName }}</h4>
+        {{ news.0.Description }}
       </div>
       </div>
   {% endfor %}

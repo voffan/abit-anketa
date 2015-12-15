@@ -1,0 +1,42 @@
+{% extends 'staff/base.html' %}
+{% block head %}
+Создание Новости
+{% endblock %}
+{% block content %}
+<form action="" method="post">
+    {% csrf_token %}
+     <!--<div class="row">
+        <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+            <label for="employee_create">Автор</label>
+            <input type="text" name = "employee_create" id ="employee_create" value= "{{ data.news.employee.fullname }}" class="form-control">
+        </div>
+   </div>-->
+   
+    </br>
+    <div class="form-group">
+    <label for="name" class="col-sm-2 control-label">Название Новости :</label>
+    <div class="col-sm-9">      
+    <input type="text" class="form-control" name = "name" id="name" placeholder="Название Новости" value = "{{ data.news.name }}">
+    </div>
+    </div>
+    </br>
+    <div class="form-group">
+    <label for="Description" class="col-sm-2 control-label">Описание</label>
+    <div class="col-sm-9">      
+    <input type="text" class="form-control" name = "Description" id="Description" placeholder="Описание" value = "{{ data.news.Description }}">
+    </div>
+    </div>
+    </br>
+    </br>
+    <div class="form-group">
+    <label for="Description" class="col-sm-2 control-label">Контент</label>
+    <div class="col-sm-9">      
+   <textarea name = "content" id ="content" class="form-control" rows="10" value = "{{ data.news.NewsText }}"> </textarea>
+    </div>
+        
+    </div>
+    </br>
+    </br>
+    <p align=center><button class="btn btn-primary" type="submit" name="Save">Сохранить</button></p>
+</form>
+{% endblock %}

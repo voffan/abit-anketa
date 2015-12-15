@@ -11,6 +11,11 @@
 <script src="{% static "anketa/js/prettify.js" %}"></script>
 <script src="{% static "anketa/js/bootstrap-typeahead.js" %}"></script>
 <script>
+    function GetRegionID(){
+        if($("#district").val().length === 0) 
+            return $("#idterritory").val();
+        return $("#iddistrict").val();
+    }
     $(document).ready(function() {
   	$('#rootwizard').bootstrapWizard({onTabShow: function(tab, navigation, index) {
 		var $total = navigation.find('li').length;
@@ -36,45 +41,412 @@
 });
 </script>
 <script>
-    var citizenship = [
-        "РФ",
-        "Украина",
-        "Казахстан",
-        "Армения",
-        "Грузия"
-    ];
-    $( "#citizenship" ).typeahead({
-        source : citizenship
-    });
-</script>
-<script>
-    var nation = [
-        { 'id' :'1', 'value': 'Саха'}, { 'id' :'2', 'value': 'Русский'}, {'id':'3', 'value': 'Эвен'}, {'id':'4', 'value': 'Эвенка'}
-    ];
-    $("#nationality").typeahead({
-    source : nation,
-    displayField : 'value'
-    });
-</script>
-<script>
-    $("#territory").typeahead({
-        onSelect: function(item) {
-        console.log(item);
-    },
+    $("#territory").typeahead(
+    {
+        onSelect: function(item) 
+        {
+            $("#idterritory").val(item.value);
+        },
     ajax: 
         {
-            url:'{% url 'territory' %}',
+            url:"{% url 'territory' %}",
             displayField: 'value',
             valueField:'id',
             method:'get',
-            triggerLength: 1
+            triggerLength: 1,
+            preDispatch: function(query) 
+            {
+                return{
+                        'query':query
+                      }
+            },
+            preProcess: function(data)
+            {
+                return data;
+            }
         }
     
-});
+    });
+    $("#district").typeahead(
+    {
+        onSelect: function(item) 
+        {
+            $("#iddistrict").val(item.value);
+        },
+    ajax: 
+        {
+            url:"{% url 'district' %}",
+            displayField: 'value',
+            valueField:'id',
+            method:'get',
+            triggerLength: 1,
+            preDispatch: function(query) 
+            {
+                return{
+                        'query':query,
+                        'id':$("#idterritory").val()
+                      }
+            },
+            preProcess: function(data)
+            {
+                return data;
+            }
+        }
+    
+    });
+    $("#city").typeahead(
+    {
+        onSelect: function(item) 
+        {
+            $("#idcity").val(item.value);
+        },
+    ajax: 
+        {
+            url:"{% url 'city' %}",
+            displayField: 'value',
+            valueField:'id',
+            method:'get',
+            triggerLength: 1,
+            preDispatch: function(query) 
+            {
+                return{
+                        'query':query,
+                        'id':GetRegionID()
+                      }
+            },
+            preProcess: function(data)
+            {
+                return data;
+            }
+        }
+    
+    });
+    $("#streets").typeahead(
+    {
+        onSelect: function(item) 
+        {
+            $("#idstreets").val(item.value);
+        },
+    ajax: 
+        {
+            url:"{% url 'streets' %}",
+            displayField: 'value',
+            valueField:'id',
+            method:'get',
+            triggerLength: 1,
+            preDispatch: function(query) 
+            {
+                return{
+                        'query':query,
+                        'id':$("#idcity").val()
+                      }
+            },
+            preProcess: function(data)
+            {
+                return data;
+            }
+        }
+    });
+    $("#citizenship").typeahead(
+    {
+        onSelect: function(item) 
+        {
+            $("#idcitizenship").val(item.value);
+        },
+    ajax: 
+        {
+            url:"{% url 'citizenship' %}",
+            displayField: 'value',
+            valueField:'id',
+            method:'get',
+            triggerLength: 1,
+            preDispatch: function(query) 
+            {
+                return{
+                        'query':query,
+                      }
+            },
+            preProcess: function(data)
+            {
+                return data;
+            }
+        }
+    });
+    $("#nation").typeahead(
+    {
+        onSelect: function(item) 
+        {
+            $("#idnation").val(item.value);
+        },
+    ajax: 
+        {
+            url:"{% url 'nation' %}",
+            displayField: 'value',
+            valueField:'id',
+            method:'get',
+            triggerLength: 1,
+            preDispatch: function(query) 
+            {
+                return{
+                        'query':query,
+                      }
+            },
+            preProcess: function(data)
+            {
+                return data;
+            }
+        }
+    });
+    $("#docissuer").typeahead(
+    {
+        onSelect: function(item) 
+        {
+            $("#iddocissuer").val(item.value);
+        },
+    ajax: 
+        {
+            url:"{% url 'docissuer' %}",
+            displayField: 'value',
+            valueField:'id',
+            method:'get',
+            triggerLength: 1,
+            preDispatch: function(query) 
+            {
+                return{
+                        'query':query,
+                      }
+            },
+            preProcess: function(data)
+            {
+                return data;
+            }
+        }
+    });
+    $("#preveduname").typeahead(
+    {
+        onSelect: function(item) 
+        {
+            $("#idpreveduname").val(item.value);
+        },
+    ajax: 
+        {
+            url:"{% url 'preveduname' %}",
+            displayField: 'value',
+            valueField:'id',
+            method:'get',
+            triggerLength: 1,
+            preDispatch: function(query) 
+            {
+                return{
+                        'query':query,
+                      }
+            },
+            preProcess: function(data)
+            {
+                return data;
+            }
+        }
+    });
+    $("#inst").typeahead(
+    {
+        onSelect: function(item) 
+        {
+            $("#idinst").val(item.value);
+        },
+    ajax: 
+        {
+            url:"{% url 'institute' %}",
+            displayField: 'value',
+            valueField:'id',
+            method:'get',
+            triggerLength: 1,
+            preDispatch: function(query) 
+            {
+                return{
+                        'query':query,
+                      }
+            },
+            preProcess: function(data)
+            {
+                return data;
+            }
+        }
+    });
+    $("#eduprog").typeahead(
+    {
+        onSelect: function(item) 
+        {
+            $("#ideduprog").val(item.value);
+        },
+    ajax: 
+        {
+            url:"{% url 'eduprog' %}",
+            displayField: 'value',
+            valueField:'id',
+            method:'get',
+            triggerLength: 1,
+            preDispatch: function(query) 
+            {
+                return{
+                        'query':query,
+                        'id':$("#idinst").val()
+                      }
+            },
+            preProcess: function(data)
+            {
+                return data;
+            }
+        }
+    });
+    $("#eduprof").typeahead(
+    {
+        onSelect: function(item) 
+        {
+            $("#ideduprof").val(item.value);
+        },
+    ajax: 
+        {
+            url:"{% url 'eduprof' %}",
+            displayField: 'value',
+            valueField:'id',
+            method:'get',
+            triggerLength: 1,
+            preDispatch: function(query) 
+            {
+                return{
+                        'query':query,
+                        'id':$("#ideduprog").val()
+                      }
+            },
+            preProcess: function(data)
+            {
+                return data;
+            }
+        }
+    });
+    $("#rank").typeahead(
+    {
+        onSelect: function(item) 
+        {
+            $("#idrank").val(item.value);
+        },
+    ajax: 
+        {
+            url:"{% url 'rank' %}",
+            displayField: 'value',
+            valueField:'id',
+            method:'get',
+            triggerLength: 1,
+            preDispatch: function(query) 
+            {
+                return{
+                        'query':query,
+                        'id':$("#idrank").val()
+                      }
+            },
+            preProcess: function(data)
+            {
+                return data;
+            }
+        }
+    });
+    $("#flang").typeahead(
+    {
+        onSelect: function(item) 
+        {
+            $("#idflang").val(item.value);
+        },
+    ajax: 
+        {
+            url:"{% url 'flang' %}",
+            displayField: 'value',
+            valueField:'id',
+            method:'get',
+            triggerLength: 1,
+            preDispatch: function(query) 
+            {
+                return{
+                        'query':query,
+                        'id':$("#idflang").val()
+                      }
+            },
+            preProcess: function(data)
+            {
+                return data;
+            }
+        }
+    });
+</script>
+<script>
+    var countOfFields = 1; // Текущее число полей
+    var curFieldNameId = 1; // Уникальное значение для атрибута name
+    var maxFieldLimit = 10; // Максимальное число возможных полей
+    function deleteField(a) {
+      if (countOfFields > 1)
+      {
+     // Получаем доступ к ДИВу, содержащему поле
+     var contDiv = a.parentNode;
+     // Удаляем этот ДИВ из DOM-дерева
+     contDiv.parentNode.removeChild(contDiv);
+     // Уменьшаем значение текущего числа полей
+     countOfFields--;
+     }
+     // Возвращаем false, чтобы не было перехода по сслыке
+     return false;
+    }
+    function addField() { 
+     // Проверяем, не достигло ли число полей максимума
+     if (countOfFields >= maxFieldLimit) {
+     alert("Число полей достигло своего максимума = " + maxFieldLimit);
+     return false;
+     }
+     // Увеличиваем текущее значение числа полей
+     countOfFields++;
+     // Увеличиваем ID
+     curFieldNameId++;
+     // Создаем элемент ДИВ
+     var div = document.createElement("div");
+     // Добавляем HTML-контент с пом. свойства innerHTML
+     div.innerHTML = "<p><div class=\"col-xs-2 col-sm-2 col-md-2 col-md-offset-3\"><input name=\"subject[1]\" id=\"subject[" + curFieldNameId + "]\" class=\"form-control\"></div><div class=\"col-xs-2 col-sm-2 col-md-2\"><input name=\"points[" + curFieldNameId + "]\" id=\"points[" + curFieldNameId + "]\" class=\"form-control\"></div><div class=\"col-xs-1 col-sm-1 col-md-1\"><input name=\"year[" + curFieldNameId + "]\" id=\"year[" + curFieldNameId + "]\" class=\"form-control\"></div><br><a style=\"\" onclick=\"return deleteField(this)\" href=\"#\"><span class=\"glyphicon glyphicon-minus\"></span></a><a style=\"\" onclick=\"return addField()\" href=\"#\"><span class=\"glyphicon glyphicon-plus\"></span></a></p>";
+     // Добавляем новый узел в конец списка полей
+     document.getElementById("parentsubjectId").appendChild(div);
+     // Возвращаем false, чтобы не было перехода по сслыке
+     return false;
+    }
+</script>
+<script>
+    var countOfFieldsPersach = 1; 
+    var curFieldNameIdPersach = 1;
+    var maxFieldLimitPersach = 10;
+
+    function deleteFieldPersach(a) {
+    if (countOfFieldsPersach > 1)
+    {
+     var contDiv = a.parentNode;
+     contDiv.parentNode.removeChild(contDiv);
+     countOfFieldsPersach--;
+     }
+     return false;
+    }
+
+    function addFieldPersach() {
+     if (countOfFieldsPersach >= maxFieldLimitPersach) {
+     alert("Число полей достигло своего максимума = " + maxFieldLimitPersach);
+     return false;
+     }
+     countOfFieldsPersach++;
+     curFieldNameIdPersach++;
+     var div = document.createElement("div");
+     div.innerHTML = "<p><div class=\"col-xs-2 col-sm-2 col-md-2 col-md-offset-3\"><input name=\"achievname[1]\" id=\"achievname[" + curFieldNameId + "]\" class=\"form-control\"></div><div class=\"col-xs-2 col-sm-2 col-md-2\"><input name=\"proof[" + curFieldNameId + "]\" id=\"proof[" + curFieldNameId + "]\" class=\"form-control\"></div><div class=\"col-xs-2 col-sm-2 col-md-2\"><input name=\"numbofpoints[" + curFieldNameId + "]\" id=\"numbofpoints[" + curFieldNameId + "]\" class=\"form-control\"></div><br><a style=\"\" onclick=\"return deleteFieldPersach(this)\" href=\"#\"><span class=\"glyphicon glyphicon-minus\"></span></a><a style=\"\" onclick=\"return addFieldPersach()\" href=\"#\"><span class=\"glyphicon glyphicon-plus\"></span></a></p>";
+     document.getElementById("parentpersachId").appendChild(div);
+     return false;
+}
 </script>
 {% endblock %}
 
 {% block content %}
+<form action="{% url 'person_add' %}" class="form-horizontal" role="form" method="post">
+{% csrf_token %}
 <div id = "rootwizard">
 	<div class="navbar">
 		<div class="navbar-inner">
@@ -92,9 +464,6 @@
 			</div>
 	 	</div>
 	</div>
-    <div id="bar" class="progress progress-striped active">
-	  <div class="bar"></div>
-    </div>
 	<div class="tab-content">
 		<div class="tab-pane" id="tab1">
 			<div class = "container-fluid">
@@ -118,16 +487,23 @@
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
                             <label for="mname">Отчество</label>
-                            <input type="text" name = "mname" id ="mdname" class="form-control" placeholder="Иванович">
+                            <input type="text" name = "mname" id ="mname" class="form-control" placeholder="Иванович">
                         </p>
                     </div>
-                </div>                    
+                </div>
                 <div class="row">
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-3">
                         <p>
                             <label for="birthday">Дата рождения</label>
                             <input type="date" name = "birthday" id ="birthday" value="1997-01-01" class="form-control">
                         </p>
+                    </div>
+                    <div class ="col-xs-3 col-sm-6 col-md-6">
+                        <label for="sex">Пол</label>    
+                            <p>
+                                <input type="radio" name = "hostel" value="p1">Мужской
+                                <input type="radio" name = "hostel" value="p2">Женский
+                            </p>
                     </div>
                 </div>
                 <div class="row">
@@ -139,27 +515,30 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-3">
                         <p>
-                            <label for="nationality">Национальность(по желанию)</label>
-                            <input id ="nationality" class="form-control" placeholder="Саха">
+                            <label for="nation">Национальность(по желанию)</label>
+                            <input id ="nation" name="nation" class="form-control" placeholder="Саха">
                         </p>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                    <div class="col-xs-3 col-sm-3 col-md-3">
                         <p>
                             <label for="citizenship">Гражданство</label>
-                            <input id="citizenship" class="form-control" placeholder="РФ" />
-                            <!--<input type="text" name = "citizenship" id ="citizenship" class="form-control" placeholder="РФ">-->
+                            <input id="citizenship" name="citizenship" class="form-control" placeholder="РФ" />
                         </p>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-3">
                         <p>
                             <label for="phone">Контактный телефон</label>
                             <input type="tel" name = "phone" id ="phone" class="form-control" placeholder="Телефон в формате 8-ххх-ххххххх или 8-хххх-хххххх" pattern="(8-[0-9]{3}-[0-9]{7})|(8-[0-9]{4}-[0-9]{6})">
+                        </p>
+                    </div>
+                    <div class="col-xs-3 col-sm-3 col-md-3">
+                        <p>
+                            <label for="inila">СНИЛС</label>
+                            <input id="inila" name="inila" class="form-control" placeholder="123-456-789-00" />
                         </p>
                     </div>
                 </div>
@@ -171,7 +550,11 @@
 					<div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
                             <label for="doctype">Вид документа, удостоверяющего личность</label>
-                            <input type = "text" name= "doctype" id = "doctype" class = "form-control" placeholder = "Паспорт">
+                            <select name="doctype" id="doctype" size="1" class="form-control">
+                                <option value="passport">паспорт</option>
+                                <option value="zagran">загранпаспорт</option>
+                                <option value="svid">свидительство о рождении</option>
+                            </select>
                         </p>
 					</div>
 				</div>
@@ -194,8 +577,8 @@
                 <div class = "row">
 					<div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
-                            <label for="issuerdoc">Кем выдан</label>
-                            <input type = "text" name= "issuerdoc" id = "issuerdoc" class = "form-control" placeholder = "Отделом УФМС по Российской Федерации, г. Якутск">
+                            <label for="docissuer">Кем выдан</label>
+                            <input name= "docissuer" id = "docissuer" class = "form-control" placeholder = "Отделом УФМС по Российской Федерации, г. Якутск">
                         </p>
 					</div>
 				</div>
@@ -203,7 +586,10 @@
 					<div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
                             <label for="edudoctype">Вид документа об образовании</label>
-                            <input type = "text" name= "edudoctype" id = "edudoctype" class = "form-control" placeholder = "аттестат">
+                            <select name="edudoctype" id="edudoctype" size="1" class="form-control">
+                                <option value="attestat">аттестат</option>
+                                <option value="diplom">диплом</option>
+                            </select>
                         </p>
 					</div>
 				</div>
@@ -222,7 +608,7 @@
                 <div class = "row">
 					<div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
-                            <label for="prevedu">Предыдующие образование</label>
+                            <label for="prevedu">Предыдущие образование</label>
                             <p>
                                 <input type = "radio" name= "prevedu" id = "prevedu"  value = "soo">СОО
                                 <input type = "radio" name= "prevedu" id = "prevedu"  value = "npo">НПО
@@ -248,7 +634,7 @@
 					<div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
                             <label for="preveduname">Название учебного заведения</label>
-                            <input type = "text" name= "preveduname" id = "preveduname" class = "form-control" placeholder = "МОУ СОШ № 1, г. Якутск">
+                            <input name= "preveduname" id = "preveduname" class = "form-control" placeholder = "МОУ СОШ № 1, г. Якутск">
                         </p>
 					</div>
 				</div>
@@ -274,36 +660,35 @@
                 <div class="row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
-                 <!--           <label for="adrsterritory">Область/край/респ</label>
-                            <input type = "text" name="adrsterritory" id="adrsterritory" class="form-control" placeholder="Республика Саха(Якутия)">-->
                             <label for="territory">Область</label>
-                            <input id="territory" class="form-control" placeholder="sss">
+                            <input id="territory" class="form-control" placeholder="Республика Саха (Якутия)">
+                            <input name = "idterritory" id="idterritory" hidden>
                         </p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
-                            <label for="adrsdistrict">Район/улус</label>
-                            <input type = "text" name="adrsdistrict" id="adrsdistrict" class="form-control" placeholder="чОткий">
+                            <label for="district">Район/улус</label>
+                            <input id="district" class="form-control" placeholder="">
+                            <input name = "iddistrict" id="iddistrict" hidden>
                         </p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
-                            <label for="adrscity">Город/село</label>
-                            <input type = "text" name="adrscity" id="adrscity" class="form-control" placeholder="Якутск">
+                            <label for="city">Город/село</label>
+                            <input name="city" id="city" class="form-control" placeholder="Якутск">
+                            <input name="idcity" id="idcity" hidden>
                         </p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
-                            <!--<label for="adrsstreet">Улица</label>
-                            <input type = "text" name="adrsstreet" id="adrsstreet" class="form-control" placeholder="Ленина">-->
 							<label for="streets">Улица </label>
-							<input id ="streets" class="form-control" placeholder="Vyazov">
+							<input id ="streets" name="streets" class="form-control" placeholder="Ленина">
                         </p>
                     </div>
                 </div>
@@ -333,16 +718,16 @@
                         </p>
                     </div>
                 </div>
-                <div class="row">
+                <!--<div class="row">
                     <p>
                         <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                             <label for="addbtn"></label>
-                            <button type="button" class="btn btn-default">
+                            <button type="button" id="Add" name="Add" class="btn btn-default">
                                 <span class="glyphicon glyphicon-plus"></span> Добавить
                             </button>
                         </div>
                     </p>
-                </div>
+                </div>-->
 
             </div>
         </div>
@@ -361,8 +746,9 @@
                 <div class="row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
-                            <label for="department">Институт/факультет</label>
-                            <input type="text" name="department" id="department" class="form-control" placeholder="Институт Математики и Информатики">
+                            <label for="inst">Институт/факультет</label>
+                            <input name="inst" id="inst" class="form-control" placeholder="Институт Математики и Информатики">
+                            <input name="idinst" id="idinst" hidden>
                         </p>
                     </div>
                 </div>
@@ -370,24 +756,33 @@
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
                             <label for="eduprog">Направление/специальность</label>
-                            <input type="text" name="eduprog" id="eduprog" class="form-control" placeholder="прямое направление">
+                            <input name="eduprog" id="eduprog" class="form-control" placeholder="информатика и вычислительная техника">
+                            <input name="ideduprog" id="ideduprog" hidden>
                         </p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
-                            <label for="eduprof">Профили в порядке убывания</label>
-                            <input type="text" name="eduprof" id="eduprof" class="form-control" placeholder="а чё, через запятую нельзя?">
+                            <label for="eduprof">Профили в порядке убывания приоритета</label>
+                            <input name="eduprof" id="eduprof" class="form-control" placeholder="">
                         </p>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-3">
                         <p>
                             <label for="option4">Форма обучения</label><br>
                             <input type="radio" name="option4" value="a41">Очная
                             <input type="radio" name="option4" value="a42">Заочная
+                        </p>
+                    </div>
+                    <div class="col-xs-3 col-sm-3 col-md-3">
+                        <p>
+                            <label for="option8">Приоритетность поступления</label><br>
+                            <input type="radio" name="option8" value="a41">Высокий
+                            <input type="radio" name="option8" value="a42">Средний
+                            <input type="radio" name="option8" value="a43">Низкий
                         </p>
                     </div>
                 </div>
@@ -403,13 +798,14 @@
                         </p>
                     </div>
                 </div>
-                <div class="row">
+                <!--<div class="row">
                         <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
-                            <button type="button" class="btn btn-default">
+                            <button type="button" id="Add" name="Add" class="btn btn-default">
                                 <span class="glyphicon glyphicon-plus"></span> Добавить
                             </button>
                         </div>
-                    </div>
+                </div>
+                -->
             </div>
 		</div>
 		<div class="tab-pane" id="tab5">
@@ -421,51 +817,29 @@
                         </p>
                     </div>
                 </div>
-                <div class="row">
-                    <p>
-                        <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
-                            <table class="table table-striped" id="table1">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Дисциплина</th>
-                                        <th>Год сдачи</th>
-                                        <th>Баллы</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Ну</td>
-                                        <td>И</td>
-                                        <td>Как</td>
-                                        <td>Её</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Изменять</td>
-                                        <td>То</td>
-                                        <td>?</td>
-                                        <td>?</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                <div id="parentsubjectId" class="row">
+                    <div>
+                        <p>
+                        <div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-3">
+                            <label for="subject[1]">Дисциплина</label>
+                            <input name="subject[1]" id="subject[1]" class="form-control" placeholder="Математика">
                         </div>
-
-                    <!--
-                         <div class="col-xs-1 col-sm-1 col-md-1 col-md-offset-3">
-                            <input type="text" name="numberex" id="numberex" class="form-control" placeholder="№">
-                        </div>
-                        <div class="col-xs-3 col-sm-3 col-md-3">
-                            <input type="text" name="subjectex" id="subjectex" class="form-control" placeholder="Дисциплина">
+                        <div class="col-xs-2 col-sm-2 col-md-2">
+                            <label for="points[1]">Баллы</label>
+                            <input name="points[1]" id="points[1]" class="form-control" placeholder="100">
                         </div>
                         <div class="col-xs-1 col-sm-1 col-md-1">
-                            <input type="text" name="yearex" id="yearex" class="form-control" placeholder="Год сдачи">
+                            <label for="year[1]">Год</label>
+                            <input name="year[1]" id="year[1]" class="form-control" placeholder="2015">
                         </div>
-                        <div class="col-xs-1 col-sm-1 col-md-1">
-                            <input type="text" name="pointsex" id="pointsex" class="form-control" placeholder="Балл">
-                        </div>
-                    -->
-                    </p>
+                        <br>
+                        <a style="" onclick="return deleteField(this)" href="#"><span class="glyphicon glyphicon-minus"></span></a>
+                        <a style="" onclick="return addField()" href="#"><span class="glyphicon glyphicon-plus"></span></a>
+                        </p>
+                    </div>
                 </div>
+            <br>
+            <br>
                 <div class="row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
@@ -475,51 +849,19 @@
                 </div>
                 <div class="row">
                     <p>
-                        <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
-                            <table class="table table-striped" id="table2">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Дисциплина</th>
-                                        <th>Год сдачи</th>
-                                        <th>Баллы</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Ну</td>
-                                        <td>И</td>
-                                        <td>Как</td>
-                                        <td>Её</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Изменять</td>
-                                        <td>То</td>
-                                        <td>?</td>
-                                        <td>?</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div id="parentsubjectId" class="row">
+                    <div>
+                        <p>
+                        <div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-3">
+                            <label for="subject[1]">Дисциплина</label>
+                            <input name="subject[1]" id="subject[1]" class="form-control" placeholder="Математика">
                         </div>
-                        <!--
-                        <div class="col-xs-1 col-sm-1 col-md-1 col-md-offset-3">
-                            <input type="text" name="numberexadd" id="numberexadd" class="form-control" placeholder="№">
-                        </div>
-                        <div class="col-xs-3 col-sm-3 col-md-3">
-                            <input type="text" name="subjectexadd" id="subjectexadd" class="form-control" placeholder="Дисциплина">
-                        </div>
-                        <div class="col-xs-2 col-sm-2 col-md-2">
-                            <input type="text" name="typeexadd" id="typeexadd" class="form-control" placeholder="Форма экзамена">
-                        </div>
-                        -->
-                    <div class="row">
-                        <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
-                            <button type="button" class="btn btn-default">
-                                <span class="glyphicon glyphicon-plus"></span> Добавить
-                            </button>
-                        </div>
+                        <br>
+                        <a style="" onclick="return deleteField(this)" href="#"><span class="glyphicon glyphicon-minus"></span></a>
+                        <a style="" onclick="return addField()" href="#"><span class="glyphicon glyphicon-plus"></span></a>
+                        </p>
                     </div>
-                    
+                </div>
                     </p>
                 </div>
                 <div class="row">
@@ -540,10 +882,7 @@
                     <p>
                         <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                             <label for="privcat">Категория</label>
-                            <select id="privcat" size="1" class="form-control">
-                                <option value ="">1</option>
-                                <option value ="">1</option>
-                            </select>
+                            <input type="text" id="privcat" size="1" class="form-control">
                         </div>
                     </p>
                 </div>
@@ -551,10 +890,7 @@
                     <p>
                         <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                             <label for="privtype">Тип</label>
-                            <select id="privtype" size="1" class="form-control">
-                                <option value="">1</option>
-                                <option value="">1</option>
-                            </select>
+                            <input type="text" id="privtype" size="1" class="form-control">
                         </div>
                     </p>
                 </div>
@@ -562,7 +898,36 @@
 		</div>
 		<div class="tab-pane" id="tab7">
 			<div class="container-fluid">
-                
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                        <label for="persach">Имеются ли достижения?</label>
+                        <p>
+                            <input type="radio" name = "persach" value="a1">Нет
+                            <input type="radio" name = "persach" value="a2">Да
+                        </p>
+                    </div>
+                </div>
+                <div id="parentpersachId" class="row">
+                    <div>
+                        <p>
+                        <div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-3">
+                            <label for="achievname[1]">Наименование достижения</label>
+                            <input name="achievname[1]" id="achievname[1]" class="form-control" placeholder="По жизни чемпион">
+                        </div>
+                        <div class="col-xs-2 col-sm-2 col-md-2">
+                            <label for="proof[1]">Подтверждающие документы</label>
+                            <input name="proof[1]" id="proof[1]" class="form-control" placeholder="Я тебе говорю">
+                        </div>
+                        <div class="col-xs-2 col-sm-2 col-md-2">
+                            <label for="numbofpoints[1]">Причисляемый балл</label>
+                            <input name="numbofpoints[1]" id="numbofpoints[1]" class="form-control" placeholder="+100">
+                        </div>
+                        <br>
+                        <a style="" onclick="return deleteFieldPersach(this)" href="#"><span class="glyphicon glyphicon-minus"></span></a>
+                        <a style="" onclick="return addFieldPersach()" href="#"><span class="glyphicon glyphicon-plus"></span></a>
+                        </p>
+                    </div>
+                </div>
             </div>
 		</div>
 		<div class="tab-pane" id="tab8">
@@ -571,20 +936,16 @@
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
                             <label for="flang">Изучаемый иностранный язык</label>
-                            <select name = "flang" size="1" id ="flang" class="form-control">
-                            <option value = "eng">Английский</option>
-                            <option value = "ger">Немецкий</option>
-                            <option value = "fre">Французский</option>
-                            </select>
+                            <input name="flang" id="flang" class="form-control" placeholder="Английский">
                         </p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
-                        <label for="option">Нуждаетесь ли в общежитие?</label>
+                        <label for="hostel">Нуждаетесь ли в общежитие?</label>
                         <p>
-                            <input type="radio" name = "option" value="a1">Нет
-                            <input type="radio" name = "option" value="a2">Да
+                            <input type="radio" name = "hostel" value="a1">Нет
+                            <input type="radio" name = "hostel" value="a2">Да
                         </p>
                     </div>
                 </div>
@@ -617,11 +978,14 @@
                                 <input type="text" name="yeararmy" id="yeararmy" class="form-control" placeholder="2014">
                             </div>
                             <div class="col-xs-3 col-sm-3 col-md-3">
-                                <label for="rankarmy">Воинское звание</label>
-                                <input type="text" name="rankarmy" id="rankarmy" class="form-control" placeholder="копитон">
+                                <label for="rank">Воинское звание</label>
+                                <input name="rank" id="rank" class="form-control" placeholder="капитан">
                             </div>
+                            <p><button type="submit" class="btn btn-default" name="save">Сохранить</button></p>
+                
                     </div>
                 </p>
+            
             </div>
 		</div>
 		<ul class="pager wizard">
@@ -633,4 +997,5 @@
 		</ul>
 	</div>	
 </div>
+</form>
 {% endblock %}
