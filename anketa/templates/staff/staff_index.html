@@ -3,15 +3,28 @@
 {% block content %}
 	<form action="/auth/login/" method="post">
 		{% csrf_token %}
-		<label for="username">Имя пользователя</label>
-		<input type="text" name="username" id="username">
-		</br></br>
-		<label for="username"> Пароль</label>
-		<input type="password" name="password" id="password">
-		</br></br>
+        <div class="row">
+            <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-2">
+		          <label for="username">Имя пользователя</label>
+		          <input type="text" class="form-control" name="username" id="username" placeholder="Имя пользователя">
+            </div>
+        </div>
+		</br>
+        <div class="row">
+            <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-2">
+		          <label for="username"> Пароль</label>
+		          <input type="password" class="form-control" name="password" id="password" placeholder="Пароль">
+            </div>
+        </div>
+		</br>
 		{% if login_error %}
 			<label class="error">{{ login_error }}</label>
 		{% endif %}
-		<input class="button" type="submit" value="Voiti">
+		<!--<input class="button" type="submit" value="Voiti">-->
+        <div class="row">
+            <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-2">
+                <p align=left><button class="btn btn-primary" type="submit" value="Voiti">Войти</button></p>
+            </div>
+        </div>
 	</form>
 {% endblock %}

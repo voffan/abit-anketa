@@ -1,6 +1,6 @@
 
 from django.shortcuts import render, render_to_response, redirect
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib import auth
 from django.core.context_processors import csrf
 from django.core.urlresolvers import reverse
@@ -32,16 +32,22 @@ def login(request):
                    return redirect('/staff/news/')
               else:
                        args['login_error'] = "Пользователь не найден"
-                       return render_to_response('staff\\staff_index.html', args)
+                       return render_to_response('staff\staff_index.html', args)
         
 
 
 def logout(request):
-    auth.logout(request)
-    return redirect("/")
+    if request.POST:
+        auth.logout(request)
+        return redirect('/staff/')
 
 def news_list(request):
-    news = News.objects.all()
+    #if request.method == 'POST':
+        #if 'accc' in request.POST:
+         #   loyee_id = request.POST.get('','')
+          #  return HttpResponseRedirect(reverse('staff:employee_acc'))
+    #employee = Employee.objects.get(pk=empl_id)      
+    news = News.objects.all()    
     data={}
     data['news_list']= news
     context = {'data':data}
@@ -57,10 +63,12 @@ def news_content(request, news_id):
 def Employee_list(request):
     if request.method == 'POST':
         if 'Delete' in request.POST:
-            return HttpResponse('Delete employee')
+            ids = request.POST.getlist('selected')
+            return HttpResponseRedirect(reverse('staff:employee_list'))
         elif 'Add' in request.POST:
-         
             return HttpResponseRedirect(reverse('staff:employee_add'))
+        elif 'test' in request.POST:
+            return HttpResponse('test')
         else:
             return HttpResponse('Employee fired')
     employee_manage = Employee.objects.all()
@@ -69,7 +77,7 @@ def Employee_list(request):
     context = {'data':data}
     context.update(csrf(request))
     return render(request,'staff\employee_manage.html',  context)
-    '''return render(request,'staff\employee_add.html',  context)'''
+    
 
 @login_required(login_url='/login/')
 def news_create(request):
@@ -90,9 +98,16 @@ def news_create(request):
 
 def AddEmployee(request):
     if request.method == 'POST':
-        user = User.objects.create_user(request.POST['username'], request.POST['email'],request.POST['password'])
-        employee = Employee()
-        employee.user = user
+        empl_id = request.POST.get('user-id','')
+        if len(empl_id)>0:
+            employee = Employee.objects.get(pk=empl_id)
+            user = employee.user
+            user.email = request.POST.get('email','')
+            user.save()
+        else:
+            user = User.objects.create_user(request.POST['username'], request.POST['email'],request.POST['password'])
+            employee = Employee()
+            employee.user = user
         dep = Department.objects.get(pk=request.POST['department'])
         employee.department = dep
         employee.first_name = request.POST.get('fname','')
@@ -109,3 +124,55 @@ def AddEmployee(request):
     context = {'data':Data}
     context.update(csrf(request))
     return render(request,'staff\employee_add.html',context)
+
+
+def EditEmployee(request, employee_id):
+    departments = Department.objects.all()
+    employee = Employee.objects.get(pk=employee_id)
+    Data={}
+    Data['departments'] = departments
+    Data['employee']=employee
+    context = {'data':Data}
+    context.update(csrf(request))
+    return render(request,'staff\employee_add.html',context)
+
+@login_required(login_url='/login/')
+def Employee_Useraccount(request):
+    #user = employee.user
+    #user.email = request.POST.get('email','')
+    user = request.user
+    data={}
+    data['user']=user
+    context = {'data':data}
+    context.update(csrf(request))
+    return render(request,'staff\employee_useraccount.html',context)
+
+def Employee_Personals(request):
+    user = request.user
+    employee = user.employee_set.get()
+    data = {'employee':employee}
+    #employee.first_name = request.POST.get('fname','')
+    #employee.last_name = request.POST.get('lname','')
+    #employee.middle_name = request.POST.get('mname','')
+    #employee.fullname = request.POST.get('fullname','')
+    context = {'data':data}
+    context.update(csrf(request))
+    return render(request, 'staff\employee_personals.html',context)
+
+def Employee_Changepwd(request):
+    if request.method == 'POST':
+        #только если подтверждение совпадает с паролем
+        user = request.user
+        user.change_pwd(request.POST['pwd'])
+        user.save()
+        return HttpResponseRedirect(reverse('staff:employee_acc'))
+    return render(request, 'staff\employee_changepwd.html')
+
+def Employee_Info(request):
+    #employee.position = request.POST.get('position','')
+    departments = Department.objects.all()    
+    Data={}
+    Data['departments'] = departments    
+    context = {'data':Data}
+    context.update(csrf(request))
+    return render(request, 'staff\employee_info.html',context)
