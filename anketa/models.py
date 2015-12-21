@@ -16,10 +16,8 @@ class Relation(models.Model):
     abiturient=models.ForeignKey('Abiturient',verbose_name=u'Abiturient')
     relType = models.ForeignKey('AttrValue',verbose_name=u'RelType')
 
-class User (models.Model):
+class User(User):
     token = models.CharField(u'Token',max_length=100)
-    user = models.ForeignKey(User, verbose_name=u'Пользователь', db_index=True)
-    password = models.ForeignKey(User, verbose_name=u'Пароль', db_index=True)
 
 class Abiturient(Person):
     bithplace = models.CharField(u'Место рождения', max_length=100)
@@ -27,6 +25,8 @@ class Abiturient(Person):
     nationality = models.ForeignKey(AttrValue,verbose_name=u'Национальность(по желанию)', limit_choices_to={'type__name':u'Национальность'}, db_index = True, blank = True, null = True, related_name='Nationality')
     citizenship = models.ForeignKey(AttrValue,verbose_name=u'Гражданство', db_index = True,related_name='Citizenship')
     foreign_lang = models.ForeignKey('AttrValue', verbose_name=u'Изучаемый иностранный язык',related_name='Foreign')
+    milit = models.ForeignKey('Milit', verbose_name=u'Военная обязанность')
+    privilegy = models.ForeignKey('Privilegies', verbose_name=u'Привелегия')
     
 class AttrType(models.Model):
     name=models.CharField(u"", max_length=100)
@@ -47,7 +47,6 @@ class AttrValue(models.Model):
         return self.attribute.name+' '+self.value
     
 class Person(models.Model):
-    abiturient=models.ForeignKey('Abiturient')
     lname = models.CharField(u'Фамилия', max_length=30)
     nname = models.CharField(u'Имя', max_length=30)
     mname = models.CharField(u'Отчество', max_length=30)
@@ -56,12 +55,13 @@ class Person(models.Model):
 
 class Application(models.Model):
     Department = models.ForeignKey('Department', verbose_name = u'Институт/факультет')
-    person = models.ForeignKey('Person', verbose_name = u'Абитуриент')
+    person = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент')
     date = models.DateField(u'Дата подачи')
     number = models.IntegerField(u'Номер зааявления', max_length=10)
     eduform = models.CharField(u'Форма обучения',choices=Eduform, default='О', max_length=10)
     budget = models.BooleanField(u'В рамках контрольных цифр приёма', default=False)
     withfee = models.BinaryField(u'по договорам об оказании платных обр. услуг', default=False)
+    profile = models.ForeignKey('Profile',verbose_name = u'Профиль')
 
 class Address(models.Model):
     person = models.ForeignKey('Person')
@@ -83,7 +83,7 @@ class DocAttr(models.Model):
     attr = models.ForeignKey(AttrValue, verbose_name = u'Значение атрибута', related_name='Attrname', db_index = True)
 
 class Docs(models.Model):
-    person = models.ForeignKey('Person')
+    abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент')
     serialno = models.IntegerField(u'Серия документа', max_length=15)
     number = models.IntegerField(u'Номер документа', max_length=15)
     issueDate = models.DateField(u'Дата выдачи')
