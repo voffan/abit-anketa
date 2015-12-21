@@ -12,18 +12,22 @@ Eduform = (
     )
 
 class Relation(models.Model):
-    person=models.ForeignKey('Person',verbose_name=u'Relation')
-    abiturient=models.ForeignKey('Abiturient',verbose_name=u'Relation')
+    person=models.ForeignKey('Person',verbose_name=u'RelationPerson')
+    abiturient=models.ForeignKey('Abiturient',verbose_name=u'Abiturient')
+    relType = models.ForeignKey('AttrValue',verbose_name=u'RelType')
 
 class User (models.Model):
     token = models.CharField(u'Token',max_length=100)
     user = models.ForeignKey(User, verbose_name=u'Пользователь', db_index=True)
     password = models.ForeignKey(User, verbose_name=u'Пароль', db_index=True)
 
-class Abiturient(models.Model):
+class Abiturient(Person):
     bithplace = models.CharField(u'Место рождения', max_length=100)
     hostel = models.BooleanField(u'Требуется общежитие',default=False)
-
+    nationality = models.ForeignKey(AttrValue,verbose_name=u'Национальность(по желанию)', limit_choices_to={'type__name':u'Национальность'}, db_index = True, blank = True, null = True, related_name='Nationality')
+    citizenship = models.ForeignKey(AttrValue,verbose_name=u'Гражданство', db_index = True,related_name='Citizenship')
+    foreign_lang = models.ForeignKey('AttrValue', verbose_name=u'Изучаемый иностранный язык',related_name='Foreign')
+    
 class AttrType(models.Model):
     name=models.CharField(u"", max_length=100)
     def __str__(self):
@@ -49,11 +53,6 @@ class Person(models.Model):
     mname = models.CharField(u'Отчество', max_length=30)
     sex = models.CharField(u'Пол', choices=Sex, max_length=1, default='М')
     birthdate = models.DateField(u'Дата рождения')
-    nationality = models.ForeignKey(AttrValue,verbose_name=u'Национальность(по желанию)', limit_choices_to={'type__name':u'Национальность'}, db_index = True, blank = True, null = True, related_name='Nationality')
-    citizenship = models.ForeignKey(AttrValue,verbose_name=u'Гражданство', db_index = True,related_name='Citizenship')
-    foreign_lang = models.ForeignKey('AttrValue', verbose_name=u'Изучаемый иностранный язык',related_name='Foreign')
-    father = models.ForeignKey('self',verbose_name= u'Отец', null = True, blank = True, related_name='Father')
-    mother = models.ForeignKey('self',verbose_name= u'Мать', null = True, blank = True, related_name='Mother')
 
 class Application(models.Model):
     Department = models.ForeignKey('Department', verbose_name = u'Институт/факультет')
@@ -117,8 +116,10 @@ class Education_Prog(models.Model):
 class Profile(models.Model):
     edu_prog=models.ForeignKey('Education_Prog')
     application=models.ForeignKey('Application')
-    name=models.CharField(u'Профиль', max_length=100)
     needDoc=models.ForeignKey('NeedDocuments')
+    name=models.CharField(u'Профиль', max_length=100)
+    freespaces=models.IntegerField(u'Места')
+    year=models.IntegerField(u'Год')
 
 class NeedDocuments(models.Model)
     docType = models.ForeignKey('AttrValue', verbose_name=u'Тип документа', related_name='DocType')
