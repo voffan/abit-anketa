@@ -18,15 +18,6 @@ class Relation(models.Model):
 
 class User(User):
     token = models.CharField(u'Token',max_length=100)
-
-class Abiturient(Person):
-    bithplace = models.CharField(u'Место рождения', max_length=100)
-    hostel = models.BooleanField(u'Требуется общежитие',default=False)
-    nationality = models.ForeignKey(AttrValue,verbose_name=u'Национальность(по желанию)', limit_choices_to={'type__name':u'Национальность'}, db_index = True, blank = True, null = True, related_name='Nationality')
-    citizenship = models.ForeignKey(AttrValue,verbose_name=u'Гражданство', db_index = True,related_name='Citizenship')
-    foreign_lang = models.ForeignKey('AttrValue', verbose_name=u'Изучаемый иностранный язык',related_name='Foreign')
-    milit = models.ForeignKey('Milit', verbose_name=u'Военная обязанность')
-    privilegy = models.ForeignKey('Privilegies', verbose_name=u'Привелегия')
     
 class AttrType(models.Model):
     name=models.CharField(u"", max_length=100)
@@ -53,9 +44,18 @@ class Person(models.Model):
     sex = models.CharField(u'Пол', choices=Sex, max_length=1, default='М')
     birthdate = models.DateField(u'Дата рождения')
 
+class Abiturient(Person):
+    bithplace = models.CharField(u'Место рождения', max_length=100)
+    hostel = models.BooleanField(u'Требуется общежитие',default=False)
+    nationality = models.ForeignKey(AttrValue,verbose_name=u'Национальность(по желанию)', limit_choices_to={'type__name':u'Национальность'}, db_index = True, blank = True, null = True, related_name='Nationality')
+    citizenship = models.ForeignKey(AttrValue,verbose_name=u'Гражданство', db_index = True,related_name='Citizenship')
+    foreign_lang = models.ForeignKey('AttrValue', verbose_name=u'Изучаемый иностранный язык',related_name='Foreign')
+    milit = models.ForeignKey('Milit', verbose_name=u'Военная обязанность')
+    privilegy = models.ForeignKey('Privilegies', verbose_name=u'Привелегия')
+
 class Application(models.Model):
     Department = models.ForeignKey('Department', verbose_name = u'Институт/факультет')
-    person = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент')
+    abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент')
     date = models.DateField(u'Дата подачи')
     number = models.IntegerField(u'Номер зааявления', max_length=10)
     eduform = models.CharField(u'Форма обучения',choices=Eduform, default='О', max_length=10)
@@ -64,7 +64,7 @@ class Application(models.Model):
     profile = models.ForeignKey('Profile',verbose_name = u'Профиль')
 
 class Address(models.Model):
-    person = models.ForeignKey('Person')
+    abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент')
     adrs_type = models.ForeignKey('AttrValue', verbose_name=u'Тип адреса', related_name='Adrs_type')
     zipcode = models.CharField(u'Индекс', max_length=6, null=True, blank=True)
     street = models.ForeignKey('Street',verbose_name=u'Улица', related_name ='Street')
@@ -92,7 +92,7 @@ class Docs(models.Model):
     docIssuer = models.ForeignKey('AttrValue', verbose_name=u'Орган выдавший документ', related_name='DocIssuer')
 
 class Exams(models.Model):
-    person = models.ForeignKey('Person')
+    abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент')
     exam_examType = models.ForeignKey('AttrValue', verbose_name=u'Тип экзамена', related_name='ExamType')
     exam_subjects = models.ForeignKey('AttrValue', verbose_name=u'Дисциплина',related_name='Exam_Subjects')
     points = models.IntegerField(u'Кол-во баллов', max_length=3, blank = True, null = True)
@@ -131,13 +131,13 @@ class Exams_needed(models.Model):
 	
 
 class Privilegies(models.Model):
-    person = models.ForeignKey('Person')
+    abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент')
     category = models.ForeignKey('AttrValue', verbose_name=u'Категория', related_name='Category')
     priv_type = models.ForeignKey('AttrValue', verbose_name=u'тип', related_name='Priv_type')
 
 
 class Milit(models.Model):
-    person=models.ForeignKey(Person, verbose_name = u'Абитуриент')
+    abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент')
     liableForMilit = models.BooleanField(u'Военнообязанный', default=False)
     isServed=models.BooleanField(u'служил в армии', default=False, blank=True)
     yearDismissial=models.IntegerField(u'Год увольнения из рядов РА', max_length=4, blank=True, null= True)
@@ -150,5 +150,5 @@ class DepAchieves(models.Model):
     points = models.IntegerField(u'Баллы')
 
 class Achievements(models.Model):
-    person = models.ForeignKey(Person, verbose_name = u'Абитуриент', db_index = True)
+    abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент')
     achieve = models.ForeignKey(DepAchieves, verbose_name = u'Достижение', db_index = True)
