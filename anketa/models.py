@@ -12,12 +12,12 @@ Eduform = (
     )
 
 class Relation(models.Model):
-    person=models.ForeignKey('Person',verbose_name=u'RelationPerson')
-    abiturient=models.ForeignKey('Abiturient',verbose_name=u'Abiturient')
-    relType = models.ForeignKey('AttrValue',verbose_name=u'RelType')
+    person=models.ForeignKey('Person',verbose_name=u'Родственник')
+    abiturient=models.ForeignKey('Abiturient',verbose_name=u'Абитуриент', db_index=True)
+    relType = models.ForeignKey('AttrValue',verbose_name=u'Тип связи', db_index=True)
 
 class User(User):
-    token = models.CharField(u'Token',max_length=100)
+    token = models.CharField(u'Token',max_length=100, db_index = True)
     
 class AttrType(models.Model):
     name=models.CharField(u"", max_length=100)
@@ -25,8 +25,8 @@ class AttrType(models.Model):
         return self.name
 
 class Attribute(models.Model):
-    name = models.CharField(max_length=250)
-    type = models.ForeignKey(AttrType,verbose_name = u'Тип атрибута')
+    name = models.CharField(u'Наименование атрибута',max_length=250, db_index=True)
+    type = models.ForeignKey(AttrType,verbose_name = u'Тип атрибута', db_index=True)
     def __str__(self):
         return self.name
 
@@ -54,13 +54,13 @@ class Abiturient(Person):
     privilegy = models.ForeignKey('Privilegies', verbose_name=u'Привелегия')
 
 class Application(models.Model):
-    Department = models.ForeignKey('Department', verbose_name = u'Институт/факультет')
-    abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент')
-    date = models.DateField(u'Дата подачи')
+    department = models.ForeignKey('Department', verbose_name = u'Институт/факультет', db_index=True)
+    abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент', db_index=True)
+    date = models.DateField(u'Дата подачи', db_index=True)
     number = models.IntegerField(u'Номер зааявления', max_length=10)
     eduform = models.CharField(u'Форма обучения',choices=Eduform, default='О', max_length=10)
     budget = models.BooleanField(u'В рамках контрольных цифр приёма', default=False)
-    withfee = models.BinaryField(u'по договорам об оказании платных обр. услуг', default=False)
+    withfee = models.BooleanField(u'по договорам об оказании платных обр. услуг', default=False)
     profile = models.ForeignKey('Profile',verbose_name = u'Профиль')
 
 class Address(models.Model):
@@ -75,27 +75,29 @@ class Address(models.Model):
     
 
 class Contacts(models.Model):
-    person = models.ForeignKey('Person',verbose_name = u'Человек')
-    contact = models.ForeignKey('AttrValue',verbose_name=u'Контактная информация')
+    person = models.ForeignKey('Person',verbose_name = u'Человек', db_index=True)
+    contact_type = models.ForeignKey('AttrValue',verbose_name=u'Тип контакта')
+    value = models.CharField(u'Контакт', max_length=200)
 
 class DocAttr(models.Model):
     doc = models.ForeignKey('Docs', verbose_name=u'Документ')
-    attr = models.ForeignKey(AttrValue, verbose_name = u'Значение атрибута', related_name='Attrname', db_index = True)
+    attr = models.ForeignKey(AttrValue, verbose_name = u'Наименование атрибута', related_name='Attrname', db_index = True)
+    value = models.CharField(u'Значение атрибута', max_length=200)
 
 class Docs(models.Model):
     abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент')
-    serialno = models.IntegerField(u'Серия документа', max_length=15)
-    number = models.IntegerField(u'Номер документа', max_length=15)
-    issueDate = models.DateField(u'Дата выдачи')
+    serialno = models.IntegerField(u'Серия документа', max_length=15, db_index=True, blank=True, null=True)
+    number = models.IntegerField(u'Номер документа', max_length=15, db_index=True, blank=True, null=True)
+    issueDate = models.DateField(u'Дата выдачи', blank=True, null=True)
     isCopy = models.BooleanField(u'Оригинал документа', default=False)
-    docType = models.ForeignKey('AttrValue', verbose_name=u'Тип документа', related_name='DocType')
+    docType = models.ForeignKey('AttrValue', verbose_name=u'Тип документа', related_name='DocType', db_index=True)
     docIssuer = models.ForeignKey('AttrValue', verbose_name=u'Орган выдавший документ', related_name='DocIssuer')
 
 class Exams(models.Model):
-    abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент')
+    abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент', db_index=True)
     exam_examType = models.ForeignKey('AttrValue', verbose_name=u'Тип экзамена', related_name='ExamType')
     exam_subjects = models.ForeignKey('AttrValue', verbose_name=u'Дисциплина',related_name='Exam_Subjects')
-    points = models.IntegerField(u'Кол-во баллов', max_length=3, blank = True, null = True)
+    points = models.IntegerField(u'Кол-во баллов', max_length=3, blank = True, null = True, db_index=True)
     year = models.IntegerField(u'Год', max_length=4)
 
 class Department(models.Model):
@@ -104,51 +106,47 @@ class Department(models.Model):
 
 class University(models.Model):
     name=models.CharField(u'Университет', max_length=100)
-
-class Qualification(models.Model):
-    name=models.CharField(u'Название', max_length=100)
+    def __str__(self):
+        return self.name
 
 class Education_Prog(models.Model):
-    department = models.ForeignKey(Department)
-    qual=models.ForeignKey('Qualification')
-    name=models.CharField(u'Направление/специальность', max_length=100)
+    department = models.ForeignKey(Department, verbose_name=u'УЧП', db_index=True)
+    qualification=models.ForeignKey('AttrValue', verbose_name=u'Квалификация', db_index=True)
+    name=models.CharField(u'Направление/специальность', max_length=200, db_index=True)
 
 class Profile(models.Model):
     edu_prog=models.ForeignKey('Education_Prog')
-    application=models.ForeignKey('Application')
-    needDoc=models.ForeignKey('NeedDocuments')
-    name=models.CharField(u'Профиль', max_length=100)
+    name=models.CharField(u'Профиль', max_length=100, db_index=True)
     freespaces=models.IntegerField(u'Места')
     year=models.IntegerField(u'Год')
 
 class NeedDocuments(models.Model)
     docType = models.ForeignKey('AttrValue', verbose_name=u'Тип документа', related_name='DocType')
+    profile = models.ForeignKey('Profile', verbose_name=u'Профиль', db_index=True)
 
 class Exams_needed(models.Model):
-    profile=models.ForeignKey('Profile')
-    min_points=models.IntegerField(u'Мин-ое кол-во баллов', max_length=100)
+    profile=models.ForeignKey('Profile', verbose_name=u'Профиль', db_index=True)
     subject = models.ForeignKey('AttrValue', verbose_name=u'Дисциплина', related_name='Subject')
-	
+    min_points=models.IntegerField(u'Мин-ое кол-во баллов')
 
 class Privilegies(models.Model):
     abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент')
     category = models.ForeignKey('AttrValue', verbose_name=u'Категория', related_name='Category')
     priv_type = models.ForeignKey('AttrValue', verbose_name=u'тип', related_name='Priv_type')
 
-
 class Milit(models.Model):
-    abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент')
     liableForMilit = models.BooleanField(u'Военнообязанный', default=False)
     isServed=models.BooleanField(u'служил в армии', default=False, blank=True)
     yearDismissial=models.IntegerField(u'Год увольнения из рядов РА', max_length=4, blank=True, null= True)
     rank = models.ForeignKey(AttrValue, verbose_name=u'Воинское звание',blank=True, null= True,related_name='Rank')
 
 class DepAchieves(models.Model):
-    department = models.ForeignKey(Department, verbose_name = u'Институт/факультет', db_index = True, blank = True, null = True)
-    qual = models.ForeignKey(Qualification, verbose_name = u'Квалификация', db_index = True)
-    name = models.CharField(u'Наименование', max_length = 200, db_index = True)
+    profile = models.ForeignKey(Profile, verbose_name = u'Профиль', db_index = True)
+    contest = models.ForeignKey(AttrValue, verbose_name = u'Мероприятие', db_index = True, related_name='contest')
+    result = models.ForeignKey(AttrValue, verbose_name = u'Достигнутый результат', db_index = True, related_name='contest_result')
     points = models.IntegerField(u'Баллы')
 
 class Achievements(models.Model):
-    abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент')
-    achieve = models.ForeignKey(DepAchieves, verbose_name = u'Достижение', db_index = True)
+    abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент', db_index=True)
+    contest = models.ForeignKey(AttrValue, verbose_name = u'Мероприятие', db_index = True, related_name='contest')
+    result = models.ForeignKey(AttrValue, verbose_name = u'Достигнутый результат', db_index = True, related_name='contest_result')
