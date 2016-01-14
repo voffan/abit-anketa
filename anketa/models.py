@@ -18,7 +18,7 @@ class Relation(models.Model):
 
 class User(User):
     token = models.CharField(u'Token',max_length=100, db_index = True)
-    
+
 class AttrType(models.Model):
     name=models.CharField(u"", max_length=100)
     def __str__(self):
@@ -36,7 +36,7 @@ class AttrValue(models.Model):
     attribute = models.ForeignKey(Attribute, verbose_name=u'Атрибут', db_index = True)
     def __str__(self):
         return self.attribute.name+' '+self.value
-    
+
 class Person(models.Model):
     lname = models.CharField(u'Фамилия', max_length=30)
     nname = models.CharField(u'Имя', max_length=30)
@@ -72,7 +72,7 @@ class Address(models.Model):
     building = models.CharField(u'корпус', max_length=5, null=True, blank=True)
     flat = models.CharField(u'квартира', max_length=5, null=True, blank=True)
     adrs_type_same = models.BooleanField(u'Адрес по прописке совпадает с адресом фактического проживания', default=False)
-    
+
 
 class Contacts(models.Model):
     person = models.ForeignKey('Person',verbose_name = u'Человек', db_index=True)
@@ -120,7 +120,7 @@ class Profile(models.Model):
     freespaces=models.IntegerField(u'Места')
     year=models.IntegerField(u'Год')
 
-class NeedDocuments(models.Model)
+class NeedDocuments(models.Model):
     docType = models.ForeignKey('AttrValue', verbose_name=u'Тип документа', related_name='DocType')
     profile = models.ForeignKey('Profile', verbose_name=u'Профиль', db_index=True)
 
