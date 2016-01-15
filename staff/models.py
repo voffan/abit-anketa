@@ -8,9 +8,9 @@ class Employee(models.Model):
     position = models.ForeignKey('Position', verbose_name=u'Должность')
     uniemployee = models.IntegerField(u'УнивСотрудник', db_index=True)
     fullname = models.CharField(u'ФИО', max_length = 300, db_index=True)
-    first_name = models.Charfield(u'Фамилия', max_length=100)
-    mid_name = models.Charfield(u'Имя', max_length = 100)
-    last_name = models.Charfield(u'Отчество', max_length = 100)
+    first_name = models.CharField(u'Фамилия', max_length=100)
+    mid_name = models.CharField(u'Имя', max_length = 100)
+    last_name = models.CharField(u'Отчество', max_length = 100)
     def __str__(self):
         return self.fullname
 
@@ -26,7 +26,7 @@ class Employee(models.Model):
         super(Person, self).save(*args, **kwargs)
 
 class Position(models.Model):
-    name = models.Charfield(u'Должность',max_length=200, db_index=True)
+    name = models.CharField(u'Должность',max_length=200, db_index=True)
     def __str__(self):
         return self.name
 
