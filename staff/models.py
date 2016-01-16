@@ -32,7 +32,7 @@ class Position(models.Model):
 
 class Contacts(models.Model):
     employee = models.ForeignKey(Employee, verbose_name=u'Сотрудник', db_index=True)
-    contact_type = models.ForeignKey(Attribute, verbose_name=u'Тип контакта')
+    contact_type = models.ForeignKey(AttrValue, verbose_name=u'Тип контакта')
     value = models.CharField(u'Контакт', max_length = 150, db_index=True)
     def __str__(self):
         return self.employee.fullname+' '+value

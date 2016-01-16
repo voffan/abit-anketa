@@ -18,6 +18,8 @@ class Relation(models.Model):
 
 class User(User):
     token = models.CharField(u'Token',max_length=100, db_index = True)
+    isEmployee = models.BooleanField(u'Сотрудник')
+
 class AttrType(models.Model):
     name=models.CharField(u"", max_length=100)
     def __str__(self):
@@ -35,6 +37,7 @@ class AttrValue(models.Model):
     attribute = models.ForeignKey(Attribute, verbose_name=u'Атрибут', db_index = True)
     def __str__(self):
         return self.attribute.name+' '+self.value
+
 class Person(models.Model):
     lname = models.CharField(u'Фамилия', max_length=30)
     nname = models.CharField(u'Имя', max_length=30)
