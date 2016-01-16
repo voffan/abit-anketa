@@ -62,6 +62,8 @@ class Application(models.Model):
     budget = models.BooleanField(u'В рамках контрольных цифр приёма', default=False)
     withfee = models.BooleanField(u'по договорам об оказании платных обр. услуг', default=False)
     profile = models.ForeignKey('Profile',verbose_name = u'Профиль')
+    appState = models.ForeignKey('AttrValue',verbose_name=u'Состояние заявления', db_index=True)
+    points = models.IntegerField(u'Кол-во баллов', db_index=True)
 
 class Address(models.Model):
     abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент')
@@ -72,7 +74,6 @@ class Address(models.Model):
     building = models.CharField(u'корпус', max_length=5, null=True, blank=True)
     flat = models.CharField(u'квартира', max_length=5, null=True, blank=True)
     adrs_type_same = models.BooleanField(u'Адрес по прописке совпадает с адресом фактического проживания', default=False)
-    
 
 class Contacts(models.Model):
     person = models.ForeignKey('Person',verbose_name = u'Человек', db_index=True)
