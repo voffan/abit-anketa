@@ -1,13 +1,13 @@
 from django.contrib import admin
 
 # Register your models here.
-from staff.models import News, Employee, Img
+from staff.models import Employee
 import anketa.models# import University, Department, AttrType, Attribute, AttrValue
 
 #staff
-admin.site.register(News)
+#admin.site.register(News)
 admin.site.register(Employee)
-admin.site.register(Img)
+#admin.site.register(Img)
 #anketa
 admin.site.register(anketa.models.University)
 admin.site.register(anketa.models.Department)

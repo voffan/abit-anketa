@@ -18,7 +18,6 @@ class Relation(models.Model):
 
 class User(User):
     token = models.CharField(u'Token',max_length=100, db_index = True)
-    
 class AttrType(models.Model):
     name=models.CharField(u"", max_length=100)
     def __str__(self):
@@ -36,7 +35,6 @@ class AttrValue(models.Model):
     attribute = models.ForeignKey(Attribute, verbose_name=u'Атрибут', db_index = True)
     def __str__(self):
         return self.attribute.name+' '+self.value
-    
 class Person(models.Model):
     lname = models.CharField(u'Фамилия', max_length=30)
     nname = models.CharField(u'Имя', max_length=30)
@@ -50,8 +48,6 @@ class Abiturient(Person):
     nationality = models.ForeignKey(AttrValue,verbose_name=u'Национальность(по желанию)', limit_choices_to={'type__name':u'Национальность'}, db_index = True, blank = True, null = True, related_name='Nationality')
     citizenship = models.ForeignKey(AttrValue,verbose_name=u'Гражданство', db_index = True,related_name='Citizenship')
     foreign_lang = models.ForeignKey('AttrValue', verbose_name=u'Изучаемый иностранный язык',related_name='Foreign')
-    milit = models.ForeignKey('Milit', verbose_name=u'Военная обязанность')
-    privilegy = models.ForeignKey('Privilegies', verbose_name=u'Привелегия')
 
 class Application(models.Model):
     department = models.ForeignKey('Department', verbose_name = u'Институт/факультет', db_index=True)
@@ -121,7 +117,7 @@ class Profile(models.Model):
     freespaces=models.IntegerField(u'Места')
     year=models.IntegerField(u'Год')
 
-class NeedDocuments(models.Model)
+class NeedDocuments(models.Model):
     docType = models.ForeignKey('AttrValue', verbose_name=u'Тип документа', related_name='DocType')
     profile = models.ForeignKey('Profile', verbose_name=u'Профиль', db_index=True)
 
@@ -136,6 +132,7 @@ class Privilegies(models.Model):
     priv_type = models.ForeignKey('AttrValue', verbose_name=u'тип', related_name='Priv_type')
 
 class Milit(models.Model):
+    abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент')
     liableForMilit = models.BooleanField(u'Военнообязанный', default=False)
     isServed=models.BooleanField(u'служил в армии', default=False, blank=True)
     yearDismissial=models.IntegerField(u'Год увольнения из рядов РА', max_length=4, blank=True, null= True)
