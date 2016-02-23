@@ -12,8 +12,8 @@ Eduform = (
     )
 
 class Relation(models.Model):
-    person=models.ForeignKey('Person',verbose_name=u'Родственник')
-    abiturient=models.ForeignKey('Abiturient',verbose_name=u'Абитуриент', db_index=True)
+    person=models.ForeignKey('Person',verbose_name=u'Родственник') # ??????
+    abiturient=models.ForeignKey('Abiturient',verbose_name=u'Абитуриент', db_index=True)# ??????# ??????# ??????# ??????# ??????# ??????# ??????# ??????# ??????
     relType = models.ForeignKey('AttrValue',verbose_name=u'Тип связи', db_index=True)
 
 class User(User):
@@ -76,7 +76,7 @@ class Address(models.Model):
 
 class Contacts(models.Model):
     person = models.ForeignKey('Person',verbose_name = u'Человек', db_index=True)
-    contact_type_anketa = models.ForeignKey('AttrValue',verbose_name=u'Тип контакта')
+    contact_type = models.ForeignKey('AttrValue',verbose_name=u'Тип контакта', related_name="ContactTypeAnketa")
     value = models.CharField(u'Контакт', max_length=200)
 
 class DocAttr(models.Model):
@@ -90,7 +90,7 @@ class Docs(models.Model):
     number = models.IntegerField(u'Номер документа', max_length=15, db_index=True, blank=True, null=True)
     issueDate = models.DateField(u'Дата выдачи', blank=True, null=True)
     isCopy = models.BooleanField(u'Оригинал документа', default=False)
-    docType = models.ForeignKey('AttrValue', verbose_name=u'Тип документа', related_name='DocType', db_index=True)
+    docType = models.ForeignKey('AttrValue', verbose_name=u'Тип документа', related_name='DocType_docs', db_index=True)
     docIssuer = models.ForeignKey('AttrValue', verbose_name=u'Орган выдавший документ', related_name='DocIssuer')
 
 class Exams(models.Model):
@@ -121,7 +121,7 @@ class Profile(models.Model):
     year=models.IntegerField(u'Год')
 
 class NeedDocuments(models.Model):
-    docType = models.ForeignKey('AttrValue', verbose_name=u'Тип документа', related_name='DocType')
+    docType = models.ForeignKey('AttrValue', verbose_name=u'Тип документа', related_name='DocType_need')
     profile = models.ForeignKey('Profile', verbose_name=u'Профиль', db_index=True)
 
 class Exams_needed(models.Model):
@@ -143,11 +143,11 @@ class Milit(models.Model):
 
 class DepAchieves(models.Model):
     profile = models.ForeignKey(Profile, verbose_name = u'Профиль', db_index = True)
-    contest = models.ForeignKey(AttrValue, verbose_name = u'Мероприятие', db_index = True, related_name='contest')
+    contest = models.ForeignKey(AttrValue, verbose_name = u'Мероприятие', db_index = True, related_name='contest_dep')
     result = models.ForeignKey(AttrValue, verbose_name = u'Достигнутый результат', db_index = True, related_name='contest_result_dep')
     points = models.IntegerField(u'Баллы')
 
 class Achievements(models.Model):
     abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент', db_index=True)
-    contest = models.ForeignKey(AttrValue, verbose_name = u'Мероприятие', db_index = True, related_name='contest')
+    contest = models.ForeignKey(AttrValue, verbose_name = u'Мероприятие', db_index = True, related_name='contest_ach')
     result = models.ForeignKey(AttrValue, verbose_name = u'Достигнутый результат', db_index = True, related_name='contest_result_ach')
