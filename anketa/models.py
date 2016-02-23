@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from kladr.models import Street
+##from kladr.models import Street
 
 Sex = (
     (u'М',u'Мужской'),
@@ -76,7 +76,7 @@ class Address(models.Model):
 
 class Contacts(models.Model):
     person = models.ForeignKey('Person',verbose_name = u'Человек', db_index=True)
-    contact_type = models.ForeignKey('AttrValue',verbose_name=u'Тип контакта')
+    contact_type_anketa = models.ForeignKey('AttrValue',verbose_name=u'Тип контакта')
     value = models.CharField(u'Контакт', max_length=200)
 
 class DocAttr(models.Model):
@@ -144,10 +144,10 @@ class Milit(models.Model):
 class DepAchieves(models.Model):
     profile = models.ForeignKey(Profile, verbose_name = u'Профиль', db_index = True)
     contest = models.ForeignKey(AttrValue, verbose_name = u'Мероприятие', db_index = True, related_name='contest')
-    result = models.ForeignKey(AttrValue, verbose_name = u'Достигнутый результат', db_index = True, related_name='contest_result')
+    result = models.ForeignKey(AttrValue, verbose_name = u'Достигнутый результат', db_index = True, related_name='contest_result_dep')
     points = models.IntegerField(u'Баллы')
 
 class Achievements(models.Model):
     abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент', db_index=True)
     contest = models.ForeignKey(AttrValue, verbose_name = u'Мероприятие', db_index = True, related_name='contest')
-    result = models.ForeignKey(AttrValue, verbose_name = u'Достигнутый результат', db_index = True, related_name='contest_result')
+    result = models.ForeignKey(AttrValue, verbose_name = u'Достигнутый результат', db_index = True, related_name='contest_result_ach')
