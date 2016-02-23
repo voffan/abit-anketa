@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from anketa.models import Attribute, Department, AttrValue
+from anketa.models import Attribute, Department, AttrValue, Application
 
 class Employee(models.Model):
     user = models.ForeignKey(User, verbose_name=u'Пользователь', db_index=True)
@@ -36,3 +36,11 @@ class Contacts(models.Model):
     value = models.CharField(u'Контакт', max_length = 150, db_index=True)
     def __str__(self):
         return self.employee.fullname+' '+value
+
+
+
+
+
+
+
+

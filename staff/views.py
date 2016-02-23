@@ -5,11 +5,12 @@ from django.contrib import auth
 from django.core.context_processors import csrf
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from django.views.generic import ListView
 
 from datetime import date
 
 from staff.models import News, Employee
-from anketa.models import Department, Attribute 
+from anketa.models import Department, Attribute, Application, DocAttr, Abiturient
 from django.contrib.auth.models import User
 
 # Create your views here.
@@ -33,7 +34,7 @@ def login(request):
               else:
                        args['login_error'] = "Пользователь не найден"
                        return render_to_response('staff\staff_index.html', args)
-        
+
 
 
 def logout(request):
@@ -47,8 +48,8 @@ def news_list(request):
         #if 'accc' in request.POST:
          #   loyee_id = request.POST.get('','')
           #  return HttpResponseRedirect(reverse('staff:employee_acc'))
-    #employee = Employee.objects.get(pk=empl_id)      
-    news = News.objects.all()    
+    #employee = Employee.objects.get(pk=empl_id)
+    news = News.objects.all()
 =======
     news_with_img = []
     news = News.objects.all()
@@ -85,7 +86,7 @@ def Employee_list(request):
     context = {'data':data}
     context.update(csrf(request))
     return render(request,'staff\employee_manage.html',  context)
-    
+
 
 @login_required(login_url='/login/')
 def news_create(request):
@@ -179,9 +180,9 @@ def Employee_Changepwd(request):
 
 def Employee_Info(request):
     #employee.position = request.POST.get('position','')
-    departments = Department.objects.all()    
+    departments = Department.objects.all()
     Data={}
-    Data['departments'] = departments    
+    Data['departments'] = departments
     context = {'data':Data}
     context.update(csrf(request))
     return render(request, 'staff\employee_info.html',context)
@@ -196,3 +197,48 @@ def News_Change (request, news_id):
     context.update(csrf(request))
     return render(request,'staff\\news_create.html',context)
 >>>>>>> 050749fd77a0ee07e5c21a51b107ebeb212156ae
+
+class ApplicationList(ListView):
+    model = Application
+    model = Abiturient
+    model = DocAttr
+    context_object_name = 'application'
+
+def Application_list (request, appl_id):
+    if request.method == 'POST':
+        if 'submitted' in request.POST:
+            #appl.status = request.POST.get('status','')
+            appl = Application()
+
+
+
+            appl.save()
+            return HttpResponseRedirect(reverse('staff:application_list'))
+
+        elif 'canceled' in request.POST:
+
+            return HttpResponseRedirect(reverse('staff:application_list'))
+
+        elif 'confirmed' in request.POST:
+
+            return HttpResponseRedirect(reverse('staff:application_list'))
+
+        elif 'ready' in request.POST:
+
+            return HttpResponseRedirect(reverse('staff:application_list'))
+
+        elif 'exported' in request.POST:
+
+            return HttpResponseRedirect(reverse('staff:application_list'))
+
+
+    doc = DocAttr.objects.all()
+    application = Application.objects.all()
+    abitura = Abiturient.objects.all()
+    data={}
+    data['document'] = doc
+    data['abiturient'] = abitura
+    data['application'] = application
+    context = {'data':data}
+    context.update(csrf(request))
+    return render(request,'staff\\application_list.html', context)
