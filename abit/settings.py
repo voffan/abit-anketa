@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'anketa',
     'staff',
+    'kladr',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -55,7 +56,7 @@ WSGI_APPLICATION = 'abit.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/1.6/ref/settings/#databases  
+# https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
 DATABASES = {
     'default': {
