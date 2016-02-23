@@ -68,7 +68,7 @@ class Address(models.Model):
     abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент')
     adrs_type = models.ForeignKey('AttrValue', verbose_name=u'Тип адреса', related_name='Adrs_type')
     zipcode = models.CharField(u'Индекс', max_length=6, null=True, blank=True)
-    street = models.ForeignKey('Street',verbose_name=u'Улица', related_name ='Street')
+    street = models.ForeignKey(Street,verbose_name=u'Улица', related_name ='Street')
     house = models.CharField(u'дом', max_length=5)
     building = models.CharField(u'корпус', max_length=5, null=True, blank=True)
     flat = models.CharField(u'квартира', max_length=5, null=True, blank=True)
