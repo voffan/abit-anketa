@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.auth.models import User
 from kladr.models import Street
@@ -18,7 +19,7 @@ class Relation(models.Model):
 
 class User(User):
     token = models.CharField(u'Token',max_length=100, db_index = True)
-    isEmployee = models.BooleanField(u'Сотрудник')
+    isEmployee = models.BooleanField(u'Сотрудник', default=False)
 
 class AttrType(models.Model):
     name=models.CharField(u"", max_length=100)
