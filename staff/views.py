@@ -9,7 +9,7 @@ from django.views.generic import ListView
 
 from datetime import date
 
-from staff.models import News, Employee
+from staff.models import Employee
 from anketa.models import Department, Attribute, Application, DocAttr, Abiturient
 from django.contrib.auth.models import User
 
@@ -30,7 +30,7 @@ def login(request):
               user = auth.authenticate(username=username, password=password)
               if user is not None:
                    auth.login(request, user)
-                   return redirect('/staff/news/')
+                   return redirect('/staff/') # Was '/staff/news'
               else:
                        args['login_error'] = "Пользователь не найден"
                        return render_to_response('staff\staff_index.html', args)
@@ -43,17 +43,14 @@ def logout(request):
         return redirect('/staff/')
 
 def news_list(request):
-<<<<<<< HEAD
     #if request.method == 'POST':
         #if 'accc' in request.POST:
          #   loyee_id = request.POST.get('','')
           #  return HttpResponseRedirect(reverse('staff:employee_acc'))
     #employee = Employee.objects.get(pk=empl_id)
     news = News.objects.all()
-=======
     news_with_img = []
     news = News.objects.all()
->>>>>>> 050749fd77a0ee07e5c21a51b107ebeb212156ae
     data={}
     for item in news:
         img = item.img_set.all().first()
@@ -134,8 +131,6 @@ def AddEmployee(request):
     context.update(csrf(request))
     return render(request,'staff\employee_add.html',context)
 
-<<<<<<< HEAD
-
 def EditEmployee(request, employee_id):
     departments = Department.objects.all()
     employee = Employee.objects.get(pk=employee_id)
@@ -186,7 +181,7 @@ def Employee_Info(request):
     context = {'data':Data}
     context.update(csrf(request))
     return render(request, 'staff\employee_info.html',context)
-=======
+
 def News_Change (request, news_id):
     news = News.objects.all()
     news_edit = News.objects.get(pk=news_id)
@@ -196,7 +191,6 @@ def News_Change (request, news_id):
     context = {'data':Data}
     context.update(csrf(request))
     return render(request,'staff\\news_create.html',context)
->>>>>>> 050749fd77a0ee07e5c21a51b107ebeb212156ae
 
 class ApplicationList(ListView):
     model = Application
