@@ -150,5 +150,5 @@ class DepAchieves(models.Model):
 
 class Achievements(models.Model):
     abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент', db_index=True)
-    contest = models.ForeignKey(AttrValue, verbose_name = u'Мероприятие', db_index = True, related_name='contest_ach')
-    result = models.ForeignKey(AttrValue, verbose_name = u'Достигнутый результат', db_index = True, related_name='contest_result_ach')
+    contest = models.ForeignKey(AttrValue, verbose_name = u'Мероприятие', db_index = True, related_name='contest_achievement')
+    result = models.ForeignKey(AttrValue, verbose_name = u'Достигнутый результат', db_index = True, related_name='contest_result_achievement')
