@@ -36,11 +36,4 @@ class Contacts(models.Model):
     value = models.CharField(u'Контакт', max_length = 150, db_index=True)
     def __str__(self):
         return self.employee.fullname+' '+value
-
-
-
-
-
-
-
-
+        

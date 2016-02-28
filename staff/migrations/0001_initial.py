@@ -14,11 +14,11 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='EmplContacts',
+            name='Contacts',
             fields=[
                 ('id', models.AutoField(primary_key=True, serialize=False, auto_created=True, verbose_name='ID')),
-                ('value', models.CharField(db_index=True, max_length=150, verbose_name='Контакт')),
-                ('contact_type', models.ForeignKey(to='anketa.Attribute', verbose_name='Тип контакта')),
+                ('value', models.CharField(max_length=150, verbose_name='Контакт', db_index=True)),
+                ('contact_type', models.ForeignKey(to='anketa.AttrValue', verbose_name='Тип контакта')),
             ],
             options={
             },
@@ -28,34 +28,41 @@ class Migration(migrations.Migration):
             name='Employee',
             fields=[
                 ('id', models.AutoField(primary_key=True, serialize=False, auto_created=True, verbose_name='ID')),
-                ('first_name', models.CharField(db_index=True, max_length=100, verbose_name='Фамилия')),
-                ('last_name', models.CharField(db_index=True, max_length=100, verbose_name='Имя')),
-                ('middle_name', models.CharField(db_index=True, max_length=100, verbose_name='Отчество')),
-                ('fullname', models.CharField(db_index=True, max_length=300, verbose_name='ФИО')),
-                ('position', models.CharField(max_length=200, verbose_name='Должность')),
+                ('uniemployee', models.IntegerField(verbose_name='УнивСотрудник', db_index=True)),
+                ('fullname', models.CharField(max_length=300, verbose_name='ФИО', db_index=True)),
+                ('first_name', models.CharField(max_length=100, verbose_name='Фамилия')),
+                ('mid_name', models.CharField(max_length=100, verbose_name='Имя')),
+                ('last_name', models.CharField(max_length=100, verbose_name='Отчество')),
                 ('department', models.ForeignKey(to='anketa.Department', verbose_name='Подразделение')),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, verbose_name='Пользователь')),
             ],
             options={
             },
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name='News',
+            name='Position',
             fields=[
                 ('id', models.AutoField(primary_key=True, serialize=False, auto_created=True, verbose_name='ID')),
-                ('NewsName', models.CharField(max_length=30, verbose_name='Название новости')),
-                ('Description', models.CharField(max_length=100, verbose_name='Описание')),
-                ('NewsDate', models.DateField(db_index=True, verbose_name='Дата новости')),
-                ('NewsText', models.CharField(max_length=3000, verbose_name='Контент')),
-                ('employee', models.ForeignKey(to='staff.Employee', verbose_name='Автор')),
+                ('name', models.CharField(max_length=200, verbose_name='Должность', db_index=True)),
             ],
             options={
             },
             bases=(models.Model,),
         ),
         migrations.AddField(
-            model_name='emplcontacts',
+            model_name='employee',
+            name='position',
+            field=models.ForeignKey(to='staff.Position', verbose_name='Должность'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='employee',
+            name='user',
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL, verbose_name='Пользователь'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='contacts',
             name='employee',
             field=models.ForeignKey(to='staff.Employee', verbose_name='Сотрудник'),
             preserve_default=True,

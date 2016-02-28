@@ -6,11 +6,12 @@ from django.core.context_processors import csrf
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView
+from django.core.paginator import Paginator, EmptyPage
 
 from datetime import date
 
-from staff.models import News, Employee
-from anketa.models import Department, Attribute, Application, DocAttr, Abiturient
+from staff.models import Employee
+from anketa.models import Department, Attribute, Application, Abiturient, Docs
 from django.contrib.auth.models import User
 
 # Create your views here.
@@ -42,32 +43,6 @@ def logout(request):
         auth.logout(request)
         return redirect('/staff/')
 
-def news_list(request):
-<<<<<<< HEAD
-    #if request.method == 'POST':
-        #if 'accc' in request.POST:
-         #   loyee_id = request.POST.get('','')
-          #  return HttpResponseRedirect(reverse('staff:employee_acc'))
-    #employee = Employee.objects.get(pk=empl_id)
-    news = News.objects.all()
-=======
-    news_with_img = []
-    news = News.objects.all()
->>>>>>> 050749fd77a0ee07e5c21a51b107ebeb212156ae
-    data={}
-    for item in news:
-        img = item.img_set.all().first()
-        news_with_img.append((item,img,))
-    data['news_list']= news_with_img
-    context = {'data':data}
-    return render(request,'staff\\news.html',context)
-
-def news_content(request, news_id):
-    news = News.objects.get(pk=news_id)
-    data={}
-    data['news']= news
-    context = {'data':data}
-    return render(request,'staff\\news_content.html',context)
 
 def Employee_list(request):
     if request.method == 'POST':
@@ -86,24 +61,6 @@ def Employee_list(request):
     context = {'data':data}
     context.update(csrf(request))
     return render(request,'staff\employee_manage.html',  context)
-
-
-@login_required(login_url='/login/')
-def news_create(request):
-    if request.method == 'POST':
-        news = News()
-        empl = Employee.objects.all().first()
-        news.employee= request.user.employee_set.get()
-        news.NewsName = request.POST.get('name','')
-        news.Description = request.POST.get('Description','')
-        news.NewsText = request.POST.get('content','')
-        news.NewsDate = date.today()
-        news.save()
-        return HttpResponseRedirect(reverse('staff:news'))
-    data={}
-    context = {'data':data}
-    context.update(csrf(request))
-    return render(request,'staff\\news_create.html',context)
 
 def AddEmployee(request):
     if request.method == 'POST':
@@ -134,7 +91,7 @@ def AddEmployee(request):
     context.update(csrf(request))
     return render(request,'staff\employee_add.html',context)
 
-<<<<<<< HEAD
+
 
 def EditEmployee(request, employee_id):
     departments = Department.objects.all()
@@ -186,59 +143,27 @@ def Employee_Info(request):
     context = {'data':Data}
     context.update(csrf(request))
     return render(request, 'staff\employee_info.html',context)
-=======
-def News_Change (request, news_id):
-    news = News.objects.all()
-    news_edit = News.objects.get(pk=news_id)
-    Data={}
-    Data['news'] = news
-    Data['news_edit']=news_edit
-    context = {'data':Data}
-    context.update(csrf(request))
-    return render(request,'staff\\news_create.html',context)
->>>>>>> 050749fd77a0ee07e5c21a51b107ebeb212156ae
 
-class ApplicationList(ListView):
-    model = Application
-    model = Abiturient
-    model = DocAttr
-    context_object_name = 'application'
 
 def Application_list (request, appl_id):
-    if request.method == 'POST':
-        if 'submitted' in request.POST:
-            #appl.status = request.POST.get('status','')
-            appl = Application()
-
-
-
-            appl.save()
-            return HttpResponseRedirect(reverse('staff:application_list'))
-
-        elif 'canceled' in request.POST:
-
-            return HttpResponseRedirect(reverse('staff:application_list'))
-
-        elif 'confirmed' in request.POST:
-
-            return HttpResponseRedirect(reverse('staff:application_list'))
-
-        elif 'ready' in request.POST:
-
-            return HttpResponseRedirect(reverse('staff:application_list'))
-
-        elif 'exported' in request.POST:
-
-            return HttpResponseRedirect(reverse('staff:application_list'))
-
-
-    doc = DocAttr.objects.all()
-    application = Application.objects.all()
-    abitura = Abiturient.objects.all()
+    employee = request.user.employee_set.get()
+    applications = Application.objects.select_related('Abiturient').filter(department__id = employee.department.id)
+    number = request.GET.get('page','1')
+    app_pages = Paginator(applications, 25)
+    try:
+        current_page = app_pages.page(number)
+    except Exception, e:
+        current_page = app_pages.page(1)
+    except EmptyPage:
+        current_page = app_pages.page(app_pages.num_pages)
+    applications = current_page.object_list
+    abuturients = [app.abiturient for app in applications]
+    docs = Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains='аттестат')|Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains='Диплом')
+    apps_with_docs=[]
+    for app in applications:
+        doc = docs.get(abiturient__id = app.abiturient.id)
+        apps_with_docs.append({'app':app, 'doc':doc})
     data={}
-    data['document'] = doc
-    data['abiturient'] = abitura
-    data['application'] = application
-    context = {'data':data}
-    context.update(csrf(request))
-    return render(request,'staff\\application_list.html', context)
+    data['applications'] = apps_with_docs
+    data.update(csrf(request))
+    return render(request,'staff\\application_list.html', data)
