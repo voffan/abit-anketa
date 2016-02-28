@@ -58,5 +58,5 @@ class Street(models.Model):
     gninmb = models.CharField(u'Код ИФНС',max_length = 4, null=True, blank=True, db_index = True)
     uno = models.CharField(u'Код терр-го участка ИФНС',max_length = 4, null=True, blank=True, db_index = True)
     ocatd = models.CharField(u'ОКАТО',max_length = 11, null=True, blank=True, db_index = True)
-    def __unicode__(self):
+    def __str__(self):
         return self.name

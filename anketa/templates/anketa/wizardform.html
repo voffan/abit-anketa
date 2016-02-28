@@ -17,27 +17,27 @@
         return $("#iddistrict").val();
     }
     $(document).ready(function() {
-  	$('#rootwizard').bootstrapWizard({onTabShow: function(tab, navigation, index) {
-		var $total = navigation.find('li').length;
-		var $current = index+1;
-		var $percent = ($current/$total) * 100;
-		$('#rootwizard').find('.bar').css({width:$percent+'%'});
-		
-		// If it's the last tab then hide the last button and show the finish instead
-		if($current >= $total) {
-			$('#rootwizard').find('.pager .next').hide();
-			$('#rootwizard').find('.pager .finish').show();
-			$('#rootwizard').find('.pager .finish').removeClass('disabled');
-		} else {
-			$('#rootwizard').find('.pager .next').show();
-			$('#rootwizard').find('.pager .finish').hide();
-		}
-		
-	}});
-	$('#rootwizard .finish').click(function() {
-		alert('Finished!, Starting over!');
-		$('#rootwizard').find("a[href*='tab1']").trigger('click');
-	});
+    $('#rootwizard').bootstrapWizard({onTabShow: function(tab, navigation, index) {
+        var $total = navigation.find('li').length;
+        var $current = index+1;
+        var $percent = ($current/$total) * 100;
+        $('#rootwizard').find('.bar').css({width:$percent+'%'});
+        
+        // If it's the last tab then hide the last button and show the finish instead
+        if($current >= $total) {
+            $('#rootwizard').find('.pager .next').hide();
+            $('#rootwizard').find('.pager .finish').show();
+            $('#rootwizard').find('.pager .finish').removeClass('disabled');
+        } else {
+            $('#rootwizard').find('.pager .next').show();
+            $('#rootwizard').find('.pager .finish').hide();
+        }
+        
+    }});
+    $('#rootwizard .finish').click(function() {
+        alert('Finished!, Starting over!');
+        $('#rootwizard').find("a[href*='tab1']").trigger('click');
+    });
 });
 </script>
 <script>
@@ -448,41 +448,41 @@
 <form action="{% url 'person_add' %}" class="form-horizontal" role="form" method="post">
 {% csrf_token %}
 <div id = "rootwizard">
-	<div class="navbar">
-		<div class="navbar-inner">
-			<div class="container">
-				<ul>
-					<li><a href="#tab1" data-toggle="tab">Личные данные</a></li>
-					<li><a href="#tab2" data-toggle="tab">Документы</a></li>
-					<li><a href="#tab3" data-toggle="tab">Адрес</a></li>
-					<li><a href="#tab4" data-toggle="tab">Заявления</a></li>
-					<li><a href="#tab5" data-toggle="tab">Экзамены</a></li>
-					<li><a href="#tab6" data-toggle="tab">Льготы</a></li>
-					<li><a href="#tab7" data-toggle="tab">Личные достижения</a></li>
-					<li><a href="#tab8" data-toggle="tab">Прочее</a></li>
-				</ul>
-			</div>
-	 	</div>
-	</div>
-	<div class="tab-content">
-		<div class="tab-pane" id="tab1">
-			<div class = "container-fluid">
-				<div class = "row">
-					<div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+    <div class="navbar">
+        <div class="navbar-inner">
+            <div class="container">
+                <ul>
+                    <li><a href="#tab1" data-toggle="tab">Личные данные</a></li>
+                    <li><a href="#tab2" data-toggle="tab">Документы</a></li>
+                    <li><a href="#tab3" data-toggle="tab">Адрес</a></li>
+                    <li><a href="#tab4" data-toggle="tab">Заявления</a></li>
+                    <li><a href="#tab5" data-toggle="tab">Экзамены</a></li>
+                    <li><a href="#tab6" data-toggle="tab">Льготы</a></li>
+                    <li><a href="#tab7" data-toggle="tab">Личные достижения</a></li>
+                    <li><a href="#tab8" data-toggle="tab">Прочее</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="tab-content">
+        <div class="tab-pane" id="tab1">
+            <div class = "container-fluid">
+                <div class = "row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
                             <label for="sname">Фамилия</label>
                             <input type = "text" name= "sname" id = "sname" class = "form-control" placeholder = "Иванов">
                         </p>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
-				        <p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                        <p>
                             <label for="name">Имя</label>
                             <input type = "text" name= "name" id = "name" class = "form-control" placeholder = "Иван">
                         </p>
-					</div>					
-				</div>
+                    </div>                  
+                </div>
                 <div class="row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
@@ -542,12 +542,12 @@
                         </p>
                     </div>
                 </div>
-			</div>
-		</div>
-		<div class="tab-pane" id="tab2">
-			<div class = "container-fluid">
-				<div class = "row">
-					<div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+            </div>
+        </div>
+        <div class="tab-pane" id="tab2">
+            <div class = "container-fluid">
+                <div class = "row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
                             <label for="doctype">Вид документа, удостоверяющего личность</label>
                             <select name="doctype" id="doctype" size="1" class="form-control">
@@ -556,8 +556,8 @@
                                 <option value="svid">свидительство о рождении</option>
                             </select>
                         </p>
-					</div>
-				</div>
+                    </div>
+                </div>
                 <p>
                     <div class = "row">
                         <div class = "col-xs-2 col-sm-2 col-md-2 col-md-offset-3">
@@ -575,15 +575,15 @@
                     </div>
                 </p>
                 <div class = "row">
-					<div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
                             <label for="docissuer">Кем выдан</label>
                             <input name= "docissuer" id = "docissuer" class = "form-control" placeholder = "Отделом УФМС по Российской Федерации, г. Якутск">
                         </p>
-					</div>
-				</div>
+                    </div>
+                </div>
                 <div class = "row">
-					<div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
                             <label for="edudoctype">Вид документа об образовании</label>
                             <select name="edudoctype" id="edudoctype" size="1" class="form-control">
@@ -591,8 +591,8 @@
                                 <option value="diplom">диплом</option>
                             </select>
                         </p>
-					</div>
-				</div>
+                    </div>
+                </div>
                 <p>
                     <div class = "row">
                         <div class = "col-xs-3 col-sm-3 col-md-3 col-md-offset-3">
@@ -606,7 +606,7 @@
                     </div>
                 </p>
                 <div class = "row">
-					<div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
                             <label for="prevedu">Предыдущие образование</label>
                             <p>
@@ -616,8 +616,8 @@
                                 <input type = "radio" name= "prevedu" id = "prevedu"  value = "vpo">ВПО
                             </p>
                         </p>
-					</div>
-				</div>
+                    </div>
+                </div>
                 <p>
                     <div class="row">
                             <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-3">
@@ -631,16 +631,16 @@
                     </div>
                 </p>
                 <div class = "row">
-					<div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
                             <label for="preveduname">Название учебного заведения</label>
                             <input name= "preveduname" id = "preveduname" class = "form-control" placeholder = "МОУ СОШ № 1, г. Якутск">
                         </p>
-					</div>
-				</div>
+                    </div>
+                </div>
             </div>
-		</div>
-		<div class="tab-pane" id="tab3">
+        </div>
+        <div class="tab-pane" id="tab3">
             <div class="container-fluid">
                 <div class="row">
                     <p>
@@ -687,8 +687,8 @@
                 <div class="row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
-							<label for="streets">Улица </label>
-							<input id ="streets" name="streets" class="form-control" placeholder="Ленина">
+                            <label for="streets">Улица </label>
+                            <input id ="streets" name="streets" class="form-control" placeholder="Ленина">
                         </p>
                     </div>
                 </div>
@@ -731,8 +731,8 @@
 
             </div>
         </div>
-		<div class="tab-pane" id="tab4">
-			<div class="container-fluid">
+        <div class="tab-pane" id="tab4">
+            <div class="container-fluid">
                 <div class="row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
@@ -807,9 +807,9 @@
                 </div>
                 -->
             </div>
-		</div>
-		<div class="tab-pane" id="tab5">
-			<div class="container-fluid">
+        </div>
+        <div class="tab-pane" id="tab5">
+            <div class="container-fluid">
                 <div class="row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
@@ -875,9 +875,9 @@
                     </div>
                 </div>
             </div>
-		</div>
-		<div class="tab-pane" id="tab6">
-			<div class="container-fluid">
+        </div>
+        <div class="tab-pane" id="tab6">
+            <div class="container-fluid">
                 <div class="row">
                     <p>
                         <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
@@ -895,9 +895,9 @@
                     </p>
                 </div>
             </div>
-		</div>
-		<div class="tab-pane" id="tab7">
-			<div class="container-fluid">
+        </div>
+        <div class="tab-pane" id="tab7">
+            <div class="container-fluid">
                 <div class="row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <label for="persach">Имеются ли достижения?</label>
@@ -929,9 +929,9 @@
                     </div>
                 </div>
             </div>
-		</div>
-		<div class="tab-pane" id="tab8">
-			<div class="container-fluid">
+        </div>
+        <div class="tab-pane" id="tab8">
+            <div class="container-fluid">
                  <div class="row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
@@ -987,15 +987,15 @@
                 </p>
             
             </div>
-		</div>
-		<ul class="pager wizard">
-			<li class="previous first"><a href="javascript:;">First</a></li>
-			<li class="previous"><a href="javascript:;">Previous</a></li>
-			<li class="next last" ><a href="javascript:;">Last</a></li>
-		  	<li class="next"><a href="javascript:;">Next</a></li>
-			<li class="next finish" style="display:none;"><a href="javascript:;">Finish</a></li>
-		</ul>
-	</div>	
+        </div>
+        <ul class="pager wizard">
+            <li class="previous first"><a href="javascript:;">First</a></li>
+            <li class="previous"><a href="javascript:;">Previous</a></li>
+            <li class="next last" ><a href="javascript:;">Last</a></li>
+            <li class="next"><a href="javascript:;">Next</a></li>
+            <li class="next finish" style="display:none;"><a href="javascript:;">Finish</a></li>
+        </ul>
+    </div>  
 </div>
 </form>
 {% endblock %}
