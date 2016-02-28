@@ -9,13 +9,8 @@ from django.views.generic import ListView
 from django.core.paginator import Paginator, EmptyPage
 
 from datetime import date
-
 from staff.models import Employee
-<<<<<<< HEAD
 from anketa.models import Department, Attribute, Application, Abiturient, Docs
-=======
-from anketa.models import Department, Attribute, Application, DocAttr, Abiturient
->>>>>>> b4f4e7fcfe4bfcbc092b241fdcdfab1440398c7b
 from django.contrib.auth.models import User
 
 # Create your views here.
@@ -46,33 +41,6 @@ def logout(request):
     if request.POST:
         auth.logout(request)
         return redirect('/staff/')
-
-<<<<<<< HEAD
-=======
-def news_list(request):
-    #if request.method == 'POST':
-        #if 'accc' in request.POST:
-         #   loyee_id = request.POST.get('','')
-          #  return HttpResponseRedirect(reverse('staff:employee_acc'))
-    #employee = Employee.objects.get(pk=empl_id)
-    news = News.objects.all()
-    news_with_img = []
-    news = News.objects.all()
-    data={}
-    for item in news:
-        img = item.img_set.all().first()
-        news_with_img.append((item,img,))
-    data['news_list']= news_with_img
-    context = {'data':data}
-    return render(request,'staff\\news.html',context)
-
-def news_content(request, news_id):
-    news = News.objects.get(pk=news_id)
-    data={}
-    data['news']= news
-    context = {'data':data}
-    return render(request,'staff\\news_content.html',context)
->>>>>>> b4f4e7fcfe4bfcbc092b241fdcdfab1440398c7b
 
 def Employee_list(request):
     if request.method == 'POST':
@@ -121,11 +89,6 @@ def AddEmployee(request):
     context.update(csrf(request))
     return render(request,'staff\employee_add.html',context)
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> b4f4e7fcfe4bfcbc092b241fdcdfab1440398c7b
 def EditEmployee(request, employee_id):
     departments = Department.objects.all()
     employee = Employee.objects.get(pk=employee_id)
@@ -176,21 +139,7 @@ def Employee_Info(request):
     context = {'data':Data}
     context.update(csrf(request))
     return render(request, 'staff\employee_info.html',context)
-<<<<<<< HEAD
-=======
-
-def News_Change (request, news_id):
-    news = News.objects.all()
-    news_edit = News.objects.get(pk=news_id)
-    Data={}
-    Data['news'] = news
-    Data['news_edit']=news_edit
-    context = {'data':Data}
-    context.update(csrf(request))
-    return render(request,'staff\\news_create.html',context)
->>>>>>> b4f4e7fcfe4bfcbc092b241fdcdfab1440398c7b
-
-
+    
 def Application_list (request, appl_id):
     employee = request.user.employee_set.get()
     applications = Application.objects.select_related('Abiturient').filter(department__id = employee.department.id)

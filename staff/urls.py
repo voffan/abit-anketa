@@ -3,7 +3,6 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 from staff import views
-from staff.views import ApplicationList
 from django.contrib import admin
 admin.autodiscover()
 
@@ -19,14 +18,4 @@ urlpatterns = patterns('',
     url(r'^employee_changepwd/',views.Employee_Changepwd, name = 'employee_acc_2'),
     url(r'^employee_info/',views.Employee_Info, name = 'employee_acc_3'),
     url(r'^application_list/',views.Application_list, name = 'application_list'),
-<<<<<<< HEAD
                       )
-
- 
-=======
-    url(r'^application_list/$', ApplicationList.as_view()),
-    url(r'^news_create/',views.news_create, name = 'create'),                      
-    url(r'^news_create/',views.news_create, name = 'create'),
-    url(r'^news_change/(?P<news_id>\d+)',views.News_Change, name = 'news_change'),
-)+static(settings.MEDIA_URL,document_root = settings.MEDIA_ROOT)
->>>>>>> b4f4e7fcfe4bfcbc092b241fdcdfab1440398c7b
