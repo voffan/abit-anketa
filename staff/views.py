@@ -6,7 +6,7 @@ from django.core.context_processors import csrf
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView
-from django.core.paginator import Paginator, EmptyPage
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from datetime import date
 from staff.models import Employee
@@ -147,7 +147,7 @@ def Application_list (request, appl_id):
     app_pages = Paginator(applications, 25)
     try:
         current_page = app_pages.page(number)
-    except Exception, e:
+    except PageNotAnInteger:
         current_page = app_pages.page(1)
     except EmptyPage:
         current_page = app_pages.page(app_pages.num_pages)
