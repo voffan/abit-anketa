@@ -27,5 +27,5 @@ urlpatterns = patterns('',
     url(r'^person_add/',AddPerson, name = 'person_add'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^staff/', include('staff.urls',namespace = 'staff')),
-    url(r'^auth/', include('authApp.urls')),
+    url(r'^auth/', include('authApp.urls', namespace = 'authapp')),
 )

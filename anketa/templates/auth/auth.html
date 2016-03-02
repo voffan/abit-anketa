@@ -7,8 +7,7 @@
 {% endblock %}
 -->
 {% block content %}
-<form action="{%url 'login'%}" class="form-horizontal" role="form" method="post">
-		{% csrf_token %}
+<form action="{%url 'authapp:login'%}" class="form-horizontal" role="form" method="get">
         <div class="row">
             <div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-5">
 		          <label for="username">Имя пользователя</label>
