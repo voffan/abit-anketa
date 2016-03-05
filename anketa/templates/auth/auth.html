@@ -1,0 +1,40 @@
+{% extends "anketa/base.html" %}
+{% load staticfiles %}
+
+<!--
+{% block additionalcss %}
+<link href="{% static "anketa/css/prettify.css" %}" rel="stylesheet">
+{% endblock %}
+-->
+{% block content %}
+<form action="{%url 'authapp:login'%}" class="form-horizontal" role="form" method="get">
+        <div class="row">
+            <div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-5">
+		          <label for="username">Имя пользователя</label>
+		          <input type="text" class="form-control" name="username" id="username" placeholder="Имя пользователя">
+            </div>
+        </div>
+		</br>
+        <div class="row">
+            <div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-5">
+		          <label for="username"> Пароль</label>
+		          <input type="password" class="form-control" name="password" id="password" placeholder="Пароль">
+            </div>
+        </div>
+        </br>
+        <div class="row">
+            <div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-5">
+		          <input type="checkbox" name="option1" value="a1">Запомнить
+            </div>
+        </div>
+		</br>
+		{% if login_error %}
+			<label class="error">{{ login_error }}</label>
+		{% endif %}
+        <div class="row">
+            <div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-5">
+                <p align=left><button class="btn btn-primary" type="submit" value="Voiti">Войти</button></p>
+            </div>
+        </div>
+	</form>
+{% endblock%}

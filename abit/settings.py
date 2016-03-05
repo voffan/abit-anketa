@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'anketa',
     'staff',
     'kladr',
+    'authApp'
 )
 
 MIDDLEWARE_CLASSES = (
