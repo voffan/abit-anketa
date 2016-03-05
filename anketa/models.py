@@ -104,6 +104,8 @@ class Exams(models.Model):
 class Department(models.Model):
     university = models.ForeignKey('University')
     name=models.CharField(u'Институт/факультет', max_length=100)
+    def __str__(self):
+        return self.name
 
 class University(models.Model):
     name=models.CharField(u'Университет', max_length=100)

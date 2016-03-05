@@ -1,13 +1,12 @@
 from django.db import models
-from django.contrib.auth.models import User
-from anketa.models import Attribute, Department, AttrValue, Application
+from anketa.models import Attribute, Department, AttrValue, Application, User
 
 class Employee(models.Model):
     user = models.ForeignKey(User, verbose_name=u'Пользователь', db_index=True)
     department = models.ForeignKey(Department,verbose_name=u'Подразделение', db_index=True)
-    position = models.ForeignKey('Position', verbose_name=u'Должность')
+    position = models.ForeignKey('Position', verbose_name=u'Должность',db_index=True)
     uniemployee = models.IntegerField(u'УнивСотрудник', db_index=True)
-    fullname = models.CharField(u'ФИО', max_length = 300, db_index=True)
+    fullname = models.CharField(u'ФИО', max_length = 200, db_index=True)
     first_name = models.CharField(u'Фамилия', max_length=100)
     mid_name = models.CharField(u'Имя', max_length = 100)
     last_name = models.CharField(u'Отчество', max_length = 100)
@@ -16,14 +15,14 @@ class Employee(models.Model):
 
     def save(self, *args, **kwargs):
         s=''
-        if len(self.firstname)>0:
-            s+=self.firstname
-        if len(self.name)>0:
-            s+=' '+self.name
-        if len(self.midname)>0:
-            s+=' '+self.midname
+        if len(self.first_name)>0:
+            s+=self.first_name
+        if len(self.mid_name)>0:
+            s+=' '+self.mid_name
+        if len(self.last_name)>0:
+            s+=' '+self.last_name
         self.fullname = s
-        super(Person, self).save(*args, **kwargs)
+        super(Employee, self).save(*args, **kwargs)
 
 class Position(models.Model):
     name = models.CharField(u'Должность',max_length=200, db_index=True)
