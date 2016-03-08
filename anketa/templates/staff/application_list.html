@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+{% extends 'staff\base.html' %}
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+{% block head %}
+  Заявления
+{% endblock %}
+
+{% block additionalcss %}
+  <link rel="stylesheet" href="https://cdn.rawgit.com/esvit/ng-table/v1.0.0/dist/ng-table.min.css">
+{% endblock %}
+
+{% block leftmenu %}
+        <th st-sort="#">#</th>
+        <th st-sort="FIO">Фамилия Имя Отчество</th>
+        <th st-sort="Form">Форма Обучения</th>
+        <th st-sort="Date">Дата Подачи Документов</th>
+        <th st-sort="Doc_Type">Документ</th>
+        <th st-sort="isCopy" width="10%">Копия/Оригинал</th>
+        <th st-sort="Napravlenie">Направление</th>
+        <th st-sort="bali">Баллы</th>
+        <th st-sort="state">Статус</th>
+        <th st-sort="check">Отметить</th>
+
+{% endblock %}
+
+{% block content %}
+<form action="{% url 'staff:application_list' %}"  method="GET">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Фильтры</h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-4">              
+              <select class="form-control" name="status">
+                <option {% if select == "1" %} selected {% endif %} value="1">все</option>
+                <option {% if select == "2" %} selected {% endif %} value="2">поданные</option>
+                <option {% if select == "3" %} selected {% endif %} value="3">подтвержденные</option>
+                <option {% if select == "4" %} selected {% endif %} value="4">экспортированные</option>
+                <option {% if select == "5" %} selected {% endif %} value="5">анулированные</option>
+              </select>
+            </div>
+              <div class="col-xs-12 col-sm-12 col-md-4">               
+                <input name="fio" class="form-control" placeholder=" поиск по имени..."/>
+            </div>
+        </div>
+        <div>
+        <button type="submit" class="btn btn-primary" name="apply">Применить фильтр</button>
+      </div>
+    </div>
+  </div>
+    <table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-striped">
+      <thead>
+        <tr>
+          <th colspan="7"><input st-search="" class="form-control" placeholder=" поиск по таблице..." type="text"/></th>
+        </tr>
+      <tr>
+        <th st-sort="#">#</th>
+        <th st-sort="FIO">Фамилия Имя Отчество</th>
+        <th st-sort="Form">Форма Обучения</th>
+        <th st-sort="Date">Дата Подачи Документов</th>
+        <th st-sort="Doc_Type">Документ</th>
+        <th st-sort="isCopy" width="10%">Копия/Оригинал</th>
+        <th st-sort="Napravlenie">Направление</th>
+        <th st-sort="bali">Баллы</th>
+        <th st-sort="state">Статус</th>
+        <th st-sort="check">Отметить</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for item in applications %}
+      <tr ng-repeat="row in displayedCollection">
+        <td>{{ forloop.counter }}</td>
+        <td>{{ item.app.abiturient.fullname }}</td>
+        <td>{% if item.app.eduform == 'О'%}Очная{% endif %}{% if not item.app.eduform == 'О'%}Заочная{%endif%}</td>
+        <td>{{ item.app.date }}</td>
+        <td>{{ item.doc.docType.value }}</td>
+        <td>{% if item.doc.isCopy %} Оригинал {% endif %}{% if not item.doc.isCopy %} Копия {% endif %}</td>
+        <td>{{ item.app.profile }}</td>
+        <td>{{ item.app.points }}</td>
+        <td>{{ item.app.appState }}</td>
+        <th><div class="checkbox"><input type="checkbox" name="selected"></div></th>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    <nav>
+  <ul class="pagination">
+    <li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+    <li class="active"  ><a href="#">1 <span class="sr-only">(current)</span></a></li>
+    <li class="disabled"><a href="#">2 <span class="sr-only">(current)</span></a></li>
+    <li class="disabled"><a href="#">3 <span class="sr-only">(current)</span></a></li>
+    <li class="disabled"><a href="#">4 <span class="sr-only">(current)</span></a></li>
+    <li class="disabled"><a href="#">5 <span class="sr-only">(current)</span></a></li>
+    <li class="disabled"><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+  </ul>
+</nav>
+  </form>
+{% endblock %}
+
+{% block scripts %}
+  <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js"></script>
+  <script src="https://cdn.rawgit.com/esvit/ng-table/v1.0.0/dist/ng-table.js"></script>
+{% endblock %}
