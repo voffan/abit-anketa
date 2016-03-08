@@ -90,8 +90,15 @@
             <div class="row">
                 
                <div  class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-                   {% block leftmenu %}
-                   {% endblock %}
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">здксь что-то будет</h3>
+                    </div>
+                    <div class="panel-body">
+                      {% block leftmenu %}
+                      {% endblock %}
+                    </div>
+                  </div>                  
                    <ul class="nav nav-pills nav-stacked">
                        {% for menu_item in data.menu %}
                         <li><a href="{{ menu_item.url }}">menu_item.name</a></li>

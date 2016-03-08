@@ -6,7 +6,7 @@ class Employee(models.Model):
     department = models.ForeignKey(Department,verbose_name=u'Подразделение', db_index=True)
     position = models.ForeignKey('Position', verbose_name=u'Должность',db_index=True)
     uniemployee = models.IntegerField(u'УнивСотрудник', db_index=True)
-    fullname = models.CharField(u'ФИО', max_length = 200, db_index=True)
+    fullname = models.CharField(u'ФИО', max_length = 200, blank=True, null=True, db_index=True)
     first_name = models.CharField(u'Фамилия', max_length=100)
     mid_name = models.CharField(u'Имя', max_length = 100)
     last_name = models.CharField(u'Отчество', max_length = 100)

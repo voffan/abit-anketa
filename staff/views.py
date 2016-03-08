@@ -148,20 +148,25 @@ def Application_list (request):
     #employee = request.user.employee_set.get()
     #applications = Application.objects.select_related('Abiturient').filter(department__id = employee.department.id)
     applications = Application.objects.all()
+    select = '1'
     if 'apply' in request.GET:
         if 'status' in request.GET:
             if request.GET['status'] =='2':
-                applications = applications.filter(appState__value__icontains=u'поданные')
+                applications = applications.filter(appState__value__icontains=u'поданный')
+                select = '2'
             elif request.GET['status'] =='3':
-                applications = applications.filter(appState__value__icontains=u'подтвержденные')
+                applications = applications.filter(appState__value__icontains=u'подтвержденный')
+                select = '3'
             elif request.GET['status'] =='4':
-                applications = applications.filter(appState__value__icontains=u'экспортированные')
+                applications = applications.filter(appState__value__icontains=u'экспортированный')
+                select = '4'
             elif request.GET['status'] =='5':
-                applications = applications.filter(appState__value__icontains=u'анулированные')   
+                applications = applications.filter(appState__value__icontains=u'анулированный')   
+                select = '5'
 
-        if 'fio' in request.GET:
-            applicationsa=applications(abiturient__fio__icontains=request.GET['fio'])
-            #applications = applicationsa
+        if 'fio' in request.GET and len(request.GET['fio'])>0:
+            applications=applications.filter(abiturient__fullname__icontains=request.GET['fio'])
+            
 
 
 
@@ -174,13 +179,14 @@ def Application_list (request):
     except EmptyPage:
         current_page = app_pages.page(app_pages.num_pages)
     applications = current_page.object_list
-    abiturients = [app.abiturient for app in applications]
+    abiturients = [app.abiturient.id for app in applications]
     docs = Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains='аттестат')|Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains='Диплом')
     apps_with_docs=[]
     for app in applications:
         doc = docs.get(abiturient__id = app.abiturient.id)
-        apps_with_docs.append({'app':app, 'doc':doc})
+        apps_with_docs.append({'app':app, 'doc':doc})   
     data={}
     data['applications'] = apps_with_docs
+    data['select'] = select
     data.update(csrf(request))
     return render(request,'staff\\application_list.html', data)

@@ -43,13 +43,27 @@ class Person(models.Model):
     lname = models.CharField(u'Фамилия', max_length=30)
     nname = models.CharField(u'Имя', max_length=30)
     mname = models.CharField(u'Отчество', max_length=30)
+    fullname = models.CharField(u'ФИО', max_length = 200, blank=True, null=True, db_index=True)
     sex = models.CharField(u'Пол', choices=Sex, max_length=1, default='М')
     birthdate = models.DateField(u'Дата рождения')
+    def __str__(self):
+        return self.fullname
+
+    def save(self, *args, **kwargs):
+        s=''
+        if len(self.lname)>0:
+            s+=self.lname
+        if len(self.nname)>0:
+            s+=' '+self.nname
+        if len(self.mname)>0:
+            s+=' '+self.mname
+        self.fullname = s
+        super(Person, self).save(*args, **kwargs)
 
 class Abiturient(Person):
     bithplace = models.CharField(u'Место рождения', max_length=100)
     hostel = models.BooleanField(u'Требуется общежитие',default=False)
-    nationality = models.ForeignKey(AttrValue,verbose_name=u'Национальность(по желанию)', limit_choices_to={'type__name':u'Национальность'}, db_index = True, blank = True, null = True, related_name='Nationality')
+    nationality = models.ForeignKey(AttrValue,verbose_name=u'Национальность(по желанию)', limit_choices_to={'attribute__name':u'Национальность'}, db_index = True, blank = True, null = True, related_name='Nationality')
     citizenship = models.ForeignKey(AttrValue,verbose_name=u'Гражданство', db_index = True,related_name='Citizenship')
     foreign_lang = models.ForeignKey('AttrValue', verbose_name=u'Изучаемый иностранный язык',related_name='Foreign')
 
@@ -63,7 +77,7 @@ class Application(models.Model):
     withfee = models.BooleanField(u'по договорам об оказании платных обр. услуг', default=False)
     profile = models.ForeignKey('Profile',verbose_name = u'Профиль')
     appState = models.ForeignKey('AttrValue',verbose_name=u'Состояние заявления', db_index=True)
-    points = models.IntegerField(u'Кол-во баллов', db_index=True)
+    points = models.IntegerField(u'Кол-во баллов', db_index=True)  
 
 class Address(models.Model):
     abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент')
@@ -93,6 +107,8 @@ class Docs(models.Model):
     isCopy = models.BooleanField(u'Оригинал документа', default=False)
     docType = models.ForeignKey('AttrValue', verbose_name=u'Тип документа', related_name='DocType_docs', db_index=True)
     docIssuer = models.ForeignKey('AttrValue', verbose_name=u'Орган выдавший документ', related_name='DocIssuer')
+    def __str__(self):
+        return self.abiturient.fullname+' '+self.docType.value
 
 class Exams(models.Model):
     abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент', db_index=True)
@@ -116,12 +132,16 @@ class Education_Prog(models.Model):
     department = models.ForeignKey(Department, verbose_name=u'УЧП', db_index=True)
     qualification=models.ForeignKey('AttrValue', verbose_name=u'Квалификация', db_index=True)
     name=models.CharField(u'Направление/специальность', max_length=200, db_index=True)
+    def __str__(self):
+        return self.name
 
 class Profile(models.Model):
     edu_prog=models.ForeignKey('Education_Prog')
     name=models.CharField(u'Профиль', max_length=100, db_index=True)
     freespaces=models.IntegerField(u'Места')
     year=models.IntegerField(u'Год')
+    def __str__(self):
+        return self.name
 
 class NeedDocuments(models.Model):
     docType = models.ForeignKey('AttrValue', verbose_name=u'Тип документа', related_name='DocType_need')
