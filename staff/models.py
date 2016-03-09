@@ -1,5 +1,6 @@
 from django.db import models
-from anketa.models import Attribute, Department, AttrValue, Application, User
+from django.contrib.auth.models import User
+from anketa.models import Attribute, Department, AttrValue, Application
 
 class Employee(models.Model):
     user = models.ForeignKey(User, verbose_name=u'Пользователь', db_index=True)
