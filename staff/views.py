@@ -9,7 +9,7 @@ from django.views.generic import ListView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from datetime import date
-from staff.models import Employee
+from staff.models import Employee, Position
 from anketa.models import Department, Attribute, Application, Abiturient, Docs
 from django.contrib.auth.models import User
 
@@ -30,7 +30,7 @@ def login(request):
               user = auth.authenticate(username=username, password=password)
               if user is not None:
                    auth.login(request, user)
-                   return redirect('/staff/') # Was '/staff/news'
+                   return redirect('/staff/application_list/') # Was '/staff/news'
               else:
                        args['login_error'] = "Пользователь не найден"
                        return render_to_response('staff\staff_index.html', args)
@@ -73,18 +73,21 @@ def AddEmployee(request):
             employee = Employee()
             employee.user = user
         dep = Department.objects.get(pk=request.POST['department'])
+        posit = Position.objects.get(pk=request.POST['position'])
         employee.department = dep
         employee.first_name = request.POST.get('fname','')
         employee.last_name = request.POST.get('lname','')
         employee.middle_name = request.POST.get('mname','')
         employee.fullname = request.POST.get('fullname','')
-        employee.position = request.POST.get('position','')
+        employee.position = posit#request.POST.get('position','')
         employee.save()
         return HttpResponseRedirect(reverse('staff:employee_list'))
 
+    positions = Position.objects.all()
     departments = Department.objects.all()
     Data={}
     Data['departments'] = departments
+    Data['positions'] = positions
     context = {'data':Data}
     context.update(csrf(request))
     return render(request,'staff\employee_add.html',context)
@@ -108,7 +111,7 @@ def Employee_Useraccount(request):
     data['user']=user
     context = {'data':data}
     context.update(csrf(request))
-    return render(request,'staff\employee_useraccount.html',context)
+    return render(request,'staff\employee_acc.html',context)
 
 def Employee_Personals(request):
     user = request.user
@@ -140,9 +143,33 @@ def Employee_Info(request):
     context.update(csrf(request))
     return render(request, 'staff\employee_info.html',context)
     
-def Application_list (request, appl_id):
-    employee = request.user.employee_set.get()
-    applications = Application.objects.select_related('Abiturient').filter(department__id = employee.department.id)
+def Application_list (request):
+    applications = Application.objects.all()
+    #employee = request.user.employee_set.get()
+    #applications = Application.objects.select_related('Abiturient').filter(department__id = employee.department.id)
+    applications = Application.objects.all()
+    select = '1'
+    if 'apply' in request.GET:
+        if 'status' in request.GET:
+            if request.GET['status'] =='2':
+                applications = applications.filter(appState__value__icontains=u'поданный')
+                select = '2'
+            elif request.GET['status'] =='3':
+                applications = applications.filter(appState__value__icontains=u'подтвержденный')
+                select = '3'
+            elif request.GET['status'] =='4':
+                applications = applications.filter(appState__value__icontains=u'экспортированный')
+                select = '4'
+            elif request.GET['status'] =='5':
+                applications = applications.filter(appState__value__icontains=u'анулированный')   
+                select = '5'
+
+        if 'fio' in request.GET and len(request.GET['fio'])>0:
+            applications=applications.filter(abiturient__fullname__icontains=request.GET['fio'])
+            
+
+
+
     number = request.GET.get('page','1')
     app_pages = Paginator(applications, 25)
     try:
@@ -152,13 +179,14 @@ def Application_list (request, appl_id):
     except EmptyPage:
         current_page = app_pages.page(app_pages.num_pages)
     applications = current_page.object_list
-    abuturients = [app.abiturient for app in applications]
+    abiturients = [app.abiturient.id for app in applications]
     docs = Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains='аттестат')|Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains='Диплом')
     apps_with_docs=[]
     for app in applications:
         doc = docs.get(abiturient__id = app.abiturient.id)
-        apps_with_docs.append({'app':app, 'doc':doc})
+        apps_with_docs.append({'app':app, 'doc':doc})   
     data={}
     data['applications'] = apps_with_docs
+    data['select'] = select
     data.update(csrf(request))
     return render(request,'staff\\application_list.html', data)

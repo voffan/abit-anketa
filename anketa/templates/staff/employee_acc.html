@@ -22,7 +22,7 @@
   <div class="form-group">
     <label for="username" class="col-sm-2 control-label">Пользователь:</label>
       <div class="col-sm-9">      
-      <input type="text" class="form-control" name = "username" id="username" placeholder="Имя пользователя" value = "{{ data.employee.user.username }}">
+      <input type="text" class="form-control" name = "username" id="username" placeholder="Имя пользователя" value = "{{ data.user.username }}">
       <!--select class="form-control">Пользователь</select-->
     </div>
       <!--button type="submit" class="btn btn-default"><a href="/admin/" class="add-another" id="add_id_user" onclick="return showAddAnotherPopup(this);"> <img src="/abit-anketa/static/admin/img/icon_addlink.gif" width="10" height="10" alt="Добавить еще"></a></button-->
@@ -30,7 +30,7 @@
   <div class="form-group">
     <label for="e-mail" class="col-sm-2 control-label">E-mail</label>
     <div class="col-sm-9">      
-      <input type="text" class="form-control" name = "email" id="email" placeholder="user@yandex.ru" value="{{ data.employee.user.email }}">
+      <input type="text" class="form-control" name = "email" id="email" placeholder="user@yandex.ru" value="{{ data.user.email }}">
     </div>
   </div>
   <div class="form-group">

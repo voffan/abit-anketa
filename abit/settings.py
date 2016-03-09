@@ -51,6 +51,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+# AUTH_USER_MODEL = 'anketa.User'
+
+
 ROOT_URLCONF = 'abit.urls'
 
 WSGI_APPLICATION = 'abit.wsgi.application'
