@@ -17,10 +17,6 @@ class Relation(models.Model):
     abiturient=models.ForeignKey('Abiturient',verbose_name=u'Абитуриент', related_name="RelationAbiturient", db_index=True)# ??????# ??????# ??????# ??????# ??????# ??????# ??????# ??????# ??????
     relType = models.ForeignKey('AttrValue',verbose_name=u'Тип связи', db_index=True)
 
-class User(User):
-    token = models.CharField(u'Token',max_length=100, db_index = True)
-    isEmployee = models.BooleanField(u'Сотрудник', default=False)
-
 class AttrType(models.Model):
     name=models.CharField(u"", max_length=100)
     def __str__(self):
@@ -66,6 +62,7 @@ class Abiturient(Person):
     nationality = models.ForeignKey(AttrValue,verbose_name=u'Национальность(по желанию)', limit_choices_to={'attribute__name':u'Национальность'}, db_index = True, blank = True, null = True, related_name='Nationality')
     citizenship = models.ForeignKey(AttrValue,verbose_name=u'Гражданство', db_index = True,related_name='Citizenship')
     foreign_lang = models.ForeignKey('AttrValue', verbose_name=u'Изучаемый иностранный язык',related_name='Foreign')
+    token = models.CharField(u'Token',max_length=100, db_index = True)
 
 class Application(models.Model):
     department = models.ForeignKey('Department', verbose_name = u'Институт/факультет', db_index=True)
