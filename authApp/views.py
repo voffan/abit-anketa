@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse,HttpResponseRedirect
-from anketa.models import User
+#from anketa.models import User
 from django.core.context_processors import csrf
 from django.contrib.auth import authenticate
-#from django.contrib.auth.models import User
+from django.contrib.auth.models import User
 
 # Create your views here.
 
@@ -18,5 +18,5 @@ def login(request):
         auth.login(request, user)
         return redirect('/')
     else:
-        args['login_error'] = "Пользователь не найден"
+        args={'login_error':'Пользователь не найден'}
         return render(request, 'auth/auth.html', args)
