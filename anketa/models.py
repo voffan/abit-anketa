@@ -63,6 +63,7 @@ class Abiturient(Person):
     citizenship = models.ForeignKey(AttrValue,verbose_name=u'Гражданство', db_index = True,related_name='Citizenship')
     foreign_lang = models.ForeignKey('AttrValue', verbose_name=u'Изучаемый иностранный язык',related_name='Foreign')
     token = models.CharField(u'Token',max_length=100, db_index = True)
+    user = models.ForeignKey(User, verbose_name=u'Пользователь', db_index=True)
 
 class Application(models.Model):
     department = models.ForeignKey('Department', verbose_name = u'Институт/факультет', db_index=True)
