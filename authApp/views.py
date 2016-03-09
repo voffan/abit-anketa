@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse,HttpResponseRedirect
 #from anketa.models import User
 from django.core.context_processors import csrf
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 
 # Create your views here.
@@ -10,13 +10,17 @@ from django.contrib.auth.models import User
 def index(request):
 	return render (request, 'auth/auth.html')
 
-def login(request):
-    username = request.POST.get('username', '')
-    password = request.POST.get('password', '')
+def login_user(request):
+    username = request.GET.get('username', '')
+    password = request.GET.get('password', '')
     user = authenticate(username=username, password=password)
     if user is not None:
-        auth.login(request, user)
-        return redirect('/')
+        login(request, user)
+        abiturient=user.abiturient_set.first()
+        if abiturient is None:
+            return HttpResponseRedirect('/')
+        else:
+            return HttpResponseRedirect('/')
     else:
         args={'login_error':'Пользователь не найден'}
         return render(request, 'auth/auth.html', args)

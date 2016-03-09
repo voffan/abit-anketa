@@ -81,7 +81,7 @@
         <td>{% if item.doc.isCopy %} Оригинал {% endif %}{% if not item.doc.isCopy %} Копия {% endif %}</td>
         <td>{{ item.app.profile }}</td>
         <td>{{ item.app.points }}</td>
-        <td>{{ item.app.appState }}</td>
+        <td>{{ item.app.appState.value }}</td>
         <th><div class="checkbox"><input type="checkbox" name="selected"></div></th>
       </tr>
       {% endfor %}
