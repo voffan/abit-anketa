@@ -57,12 +57,12 @@ class Person(models.Model):
         super(Person, self).save(*args, **kwargs)
 
 class Abiturient(Person):
-    bithplace = models.CharField(u'Место рождения', max_length=100)
-    hostel = models.BooleanField(u'Требуется общежитие',default=False)
+    bithplace = models.CharField(u'Место рождения', max_length=100, null=True, blank=True)
+    hostel = models.NullBooleanField(u'Требуется общежитие',default=False)
     nationality = models.ForeignKey(AttrValue,verbose_name=u'Национальность(по желанию)', limit_choices_to={'attribute__name':u'Национальность'}, db_index = True, blank = True, null = True, related_name='Nationality')
-    citizenship = models.ForeignKey(AttrValue,verbose_name=u'Гражданство', db_index = True,related_name='Citizenship')
-    foreign_lang = models.ForeignKey('AttrValue', verbose_name=u'Изучаемый иностранный язык',related_name='Foreign')
-    token = models.CharField(u'Token',max_length=100, db_index = True)
+    citizenship = models.ForeignKey(AttrValue,verbose_name=u'Гражданство', db_index = True,related_name='Citizenship', null=True, blank=True)
+    foreign_lang = models.ForeignKey('AttrValue', verbose_name=u'Изучаемый иностранный язык',related_name='Foreign', null=True, blank=True)
+    token = models.CharField(u'Token',max_length=100, db_index = True, null=True, blank=True)
     user = models.ForeignKey(User, verbose_name=u'Пользователь', db_index=True)
 
 class Application(models.Model):
