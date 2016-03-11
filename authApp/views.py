@@ -18,9 +18,9 @@ def login_user(request):
         login(request, user)
         abiturient=user.abiturient_set.first()
         if abiturient is None:
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/staff')
         else:
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/application')
     else:
         args={'login_error':'Пользователь не найден'}
         return render(request, 'auth/auth.html', args)
