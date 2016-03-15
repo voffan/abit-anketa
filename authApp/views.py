@@ -10,28 +10,36 @@ from django.contrib.auth.models import User
 def index(request):
 	return render (request, 'auth/auth.html')
 
-def login_user(request,username, pwd):
-    user = authenticate(username=username, password=pwd)
-    if user is not None:
-        login(request, user)
-    return user
+def login_user(request):
+	username = request.GET.get('username', '')
+	password = request.GET.get('password', '')
+	user = authenticate(username=username, password=pwd)
+	if user is not None:
+		login(request, user)
+	return user
 
 def login_web(request):
-    username = request.GET.get('username', '')
-    password = request.GET.get('password', '')
-    user = login_user(request,username, password)
-    if user is not None:
-        abiturient=user.abiturient_set.first()
-        if abiturient is None:
-            return HttpResponseRedirect('/staff')
-        else:
-            return HttpResponseRedirect('/application')
-    else:
-        args={'login_error':'Пользователь не найден'}
-        return render(request, 'auth/auth.html', args)
+	user = login_user(request)
+	if user is not None:
+		abiturient=user.abiturient_set.first()
+		if abiturient is None:
+			return HttpResponseRedirect('/staff')
+		else:
+			return HttpResponseRedirect('/application')
+	else:
+		args={'login_error':'Пользователь не найден'}
+		return render(request, 'auth/auth.html', args)
 
 def register_index(request):
 	return render(request, 'auth/register.html')
 
-def checkuser(request):
-    return json.dump()
+def checkPasswordsIdentity(request):
+	return json.dump()
+
+def checkEmail(request):
+	return json.dump()
+
+def checkUser(request):
+	username=request.GET.get('username','')
+	userBase = User.objects.all()
+	return json.dump()
