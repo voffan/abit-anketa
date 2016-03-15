@@ -40,6 +40,6 @@ def checkEmail(request):
 	return json.dump()
 
 def checkUser(request):
-	username=request.GET.get('username','')
-	userBase = User.objects.all()
+	name=request.GET.get('username','')
+	check = User.objects.filter(username=name)
 	return json.dump()
