@@ -196,7 +196,7 @@ def SavePerson(request):
     #person.mother = get_object_or_404(AttrValue,pk=18) #foreign self can be null
     person.save()
 
-def AddPerson(request):
+def CreatePerson(request):
     if request.method =='POST':
         SavePerson(request)
         return HttpResponseRedirect(reverse('application'))

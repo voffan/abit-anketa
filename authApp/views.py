@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 def index(request):
 	return render (request, 'auth/auth.html')
 
-def login_user(username, pwd):
+def login_user(request,username, pwd):
     user = authenticate(username=username, password=pwd)
     if user is not None:
         login(request, user)
@@ -19,7 +19,7 @@ def login_user(username, pwd):
 def login_web(request):
     username = request.GET.get('username', '')
     password = request.GET.get('password', '')
-    user = login_user(username, password)
+    user = login_user(request,username, password)
     if user is not None:
         abiturient=user.abiturient_set.first()
         if abiturient is None:
@@ -29,6 +29,9 @@ def login_web(request):
     else:
         args={'login_error':'Пользователь не найден'}
         return render(request, 'auth/auth.html', args)
+
+def register_index(request):
+	return render(request, 'auth/register.html')
 
 def checkuser(request):
     return json.dump()
