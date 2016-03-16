@@ -11,16 +11,43 @@ def index(request):
 	return render (request, 'auth/auth.html')
 
 def login_user(request):
-    username = request.GET.get('username', '')
-    password = request.GET.get('password', '')
-    user = authenticate(username=username, password=password)
-    if user is not None:
-        login(request, user)
-        abiturient=user.abiturient_set.first()
-        if abiturient is None:
-            return HttpResponseRedirect('/')
-        else:
-            return HttpResponseRedirect('/')
-    else:
-        args={'login_error':'Пользователь не найден'}
-        return render(request, 'auth/auth.html', args)
+	username = request.GET.get('username', '')
+	password = request.GET.get('password', '')
+	user = authenticate(username=username, password=pwd)
+	if user is not None:
+		login(request, user)
+	return user
+
+def login_web(request):
+	user = login_user(request)
+	if user is not None:
+		abiturient=user.abiturient_set.first()
+		if abiturient is None:
+			return HttpResponseRedirect('/staff')
+		else:
+			return HttpResponseRedirect('/application')
+	else:
+		args={'login_error':'Пользователь не найден'}
+		return render(request, 'auth/auth.html', args)
+
+def register_index(request):
+	return render(request, 'auth/register.html')
+
+def checkPasswordsIdentity(request):
+	return json.dump()
+
+def checkEmail(request):
+	return json.dump()
+
+def checkUser(request):
+	result = [{'username':{'result':1, 'error_msg':''},'e-mail':{'result':1, 'error_msg':''}, 'pwd':{'result':1, 'error_msg':''}}]
+	name=request.GET.get('username','')
+	check = User.objects.filter(username=name).first()
+	if check is None:
+		result[0]['username']['result']=0
+		result[0]['username']['error_msg']='имя пользователя занято'
+	checkemail = None
+	if checkemail is None:
+		result[0]['e-mail']['result']=0
+		result[0]['e-mail']['error_msg']='e-mail занят! Выберете другой!'
+	return HttpResponse(json.dumps(result), content_type='application/json')

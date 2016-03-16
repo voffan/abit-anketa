@@ -1,40 +1,86 @@
 {% extends "anketa/base.html" %}
 {% load staticfiles %}
 
-<!--
-{% block additionalcss %}
-<link href="{% static "anketa/css/prettify.css" %}" rel="stylesheet">
+{% block scripts %}
+<script src="{% static "anketa/js/jquery.bootstrap.wizard.js" %}"></script>
+<script src="{% static "anketa/js/prettify.js" %}"></script>
+<script src="{% static "anketa/js/bootstrap-typeahead.js" %}"></script>
+<script>
+	$(document).ready(function() 
+	{
+		var $validator = $("#login_form").validate
+		({
+			rules: 
+			{
+				username: 
+				{
+					required: true,
+					minlength: 3
+				},
+				password: 
+				{
+					required: true,
+					minlength: 3
+				}
+			}
+		});
+			$('#rootwizard').bootstrapWizard
+			({
+				'tabClass': 'nav nav-pills',
+				'onNext': function(tab, navigation, index) 
+				{
+					var $valid = $("#login_form").valid();
+					if(!$valid) 
+					{
+						$validator.focusInvalid();
+						return false;
+					}
+					else
+					{
+						window.location.replace("login");
+					}
+				}
+			});	
+	});
+</script>
 {% endblock %}
--->
 {% block content %}
-<form action="{%url 'authapp:login'%}" class="form-horizontal" role="form" method="get">
-        <div class="row">
-            <div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-5">
-		          <label for="username">Имя пользователя</label>
-		          <input type="text" class="form-control" name="username" id="username" placeholder="Имя пользователя">
-            </div>
-        </div>
-		</br>
-        <div class="row">
-            <div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-5">
-		          <label for="username"> Пароль</label>
-		          <input type="password" class="form-control" name="password" id="password" placeholder="Пароль">
-            </div>
-        </div>
-        </br>
-        <div class="row">
-            <div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-5">
-		          <input type="checkbox" name="option1" value="a1">Запомнить
-            </div>
-        </div>
-		</br>
-		{% if login_error %}
-			<label class="error">{{ login_error }}</label>
-		{% endif %}
-        <div class="row">
-            <div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-5">
-                <p align=left><button class="btn btn-primary" type="submit" value="Voiti">Войти</button></p>
-            </div>
-        </div>
-	</form>
+<form name="login_form" action="{%url 'authapp:login'%}" class="form-horizontal" role="form" method="get">
+	<div class="row">
+		<div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-5">
+			<label for="username">Имя пользователя</label>
+			<input type="text" class="form-control" name="username" id="username" placeholder="Имя пользователя" required>
+		</div>
+	</div>
+	</br>
+	<div class="row">
+		<div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-5">
+			<label for="password"> Пароль</label>
+			<input type="password" class="form-control" name="password" id="password" placeholder="Пароль" required>
+		</div>
+	</div>
+	</br>
+	<div class="row">
+		<div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-5">
+			<input type="checkbox" name="option1" value="a1">Запомнить
+		</div>
+	</div>
+	</br>
+	{% if login_error %}
+		<div class="row">
+			<div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-5">
+				<div class="alert alert-danger" role="alert">
+					<label class="error">{{ login_error }}</label>
+				</div>
+			</div>
+		</div>
+	{% endif %}
+	<div class="row">
+		<div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-5">
+			<p align=left>
+				<button class="btn btn-primary btn-block" type="submit" value="Voiti">Войти</button>
+			</p>
+		</div>
+	</div>
+</form>
 {% endblock%}

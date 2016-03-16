@@ -445,7 +445,6 @@
 {% endblock %}
 
 {% block content %}
-<form action="{% url 'person_add' %}" class="form-horizontal" role="form" method="post">
 {% csrf_token %}
 <div id = "rootwizard">
     <div class="navbar">
@@ -997,5 +996,4 @@
         </ul>
     </div>  
 </div>
-</form>
 {% endblock %}

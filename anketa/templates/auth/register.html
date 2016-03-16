@@ -1,0 +1,175 @@
+{% extends "anketa/base.html" %}
+{% load staticfiles %}
+
+
+{% block additionalcss %}
+<link href="{% static "anketa/css/prettify.css" %}" rel="stylesheet">
+{% endblock %}
+{% block scripts %}
+<script src="{% static "anketa/js/jquery.bootstrap.wizard.js" %}"></script>
+<script src="{% static "anketa/js/prettify.js" %}"></script>
+<script src="{% static "anketa/js/bootstrap-typeahead.js" %}"></script>
+<script>
+    $(document).ready(function() {
+    $('#rootwizard').bootstrapWizard({onTabShow: function(tab, navigation, index) {
+        var $total = navigation.find('li').length;
+        var $current = index+1;
+        var $percent = ($current/$total) * 100;
+        $('#rootwizard').find('.bar').css({width:$percent+'%'});
+        
+        $('')
+        // If it's the last tab then hide the last button and show the finish instead
+        if($current >= $total) 
+        {
+            $('#rootwizard').find('.pager .next').hide();
+            $('#rootwizard').find('.pager .finish').show();
+            $('#rootwizard').find('.pager .finish').removeClass('disabled');
+        } else 
+        {
+            $('#rootwizard').find('.pager .next').show();
+            $('#rootwizard').find('.pager .finish').hide();
+        }
+        
+    },
+    'onNext': function(tab, navigation, index)
+    {
+    	//alert(str(index));
+    	if(index === 1)
+    	{
+    		$.ajax({
+    			url:"{% url 'auth:checkuser' %}",
+				method:"GET",
+				data:{'username':$('#username').val()},
+				dataProcess:true,
+				timeout:500,
+				success:function(data){
+					//console.log(data);
+					if(parseInt(data[0]['username']['result'])===0){
+						alert(data[0]['username']['error_msg']);
+						return false;
+					}
+				},
+				error:function(){
+					alert('Check Internet connnection!');
+				}
+    		});
+    	}
+    }
+	});
+    $('#rootwizard .finish').click(function() {
+        alert('Finished!, Starting over!');
+        $('#rootwizard').find("a[href*='tab1']").trigger('click');
+    });
+});
+</script>
+{% endblock %}
+{% block content %}
+<form name="login_form" action="{%url 'create_person'%}" class="form-horizontal" role="form" method="post">
+	<div id="rootwizard">
+		<div class="navbar">
+			<div class="navbar-inner">
+				<div class="container">
+					<ul>
+						<li><a href="#tab1" data-toggle="tab">Создание пользователя</a></li>
+						<li><a href="#tab2" data-toggle="tab">Личные данные</a></li>
+						<li><a href="#tab3" data-toggle="tab">Завершить</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="tab-content">
+			<div class="tab-pane" id="tab1">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-5">
+							<p>
+								<label for="username">Имя пользователя</label>
+								<input type="text" class="form-control" name="username" id="username" placeholder="Имя пользователя">
+							</p>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-5">
+							<p>
+								<label class="control-label" for="password">Пароль</label>
+								<input type="password" class="form-control" name="password" id="password" placeholder="Пароль">
+							</p>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-5">
+							<p>
+								<label for="passwordverify">Повторите пароль</label>
+								<input type="password" class="form-control" name="passwordverify" id="passwordverify" placeholder="Повторите пароль">
+							</p>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-5">
+							<p>
+								<label for="email">Ваша электронная почта</label>
+								<input type="text" class="form-control" name="email" id="email" placeholder="Электронная почта">
+							</p>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="tab-pane" id="tab2">
+				<div class="container-fluid">
+					<div class = "row">
+						<div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+							<p>
+								<label for="sname">Фамилия</label>
+								<input type = "text" name= "sname" id = "sname" class = "form-control" placeholder = "Иванов">
+							</p>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+							<p>
+								<label for="name">Имя</label>
+								<input type = "text" name= "name" id = "name" class = "form-control" placeholder = "Иван">
+							</p>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+							<p>
+								<label for="mname">Отчество</label>
+								<input type="text" name = "mname" id ="mname" class="form-control" placeholder="Иванович">
+							</p>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-3">
+							<p>
+								<label for="birthday">Дата рождения</label>
+								<input type="date" name = "birthday" id ="birthday" value="1997-01-01" class="form-control">
+							</p>
+						</div>
+						<div class ="col-xs-3 col-sm-6 col-md-6">
+							<label for="sex">Пол</label>
+								<p>
+									<input type="radio" name = "sex" value="p1">Мужской
+									<input type="radio" name = "sex" value="p2">Женский
+								</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane" id="tab3">
+				<div class="container-fluid">
+					3
+				</div>
+			</div>
+			<ul class="pager wizard">
+				<li class="previous"><a href="javascript:;">Previous</a></li>
+				<li class="next"><a href="javascript:;">Next</a></li>
+				<li class="next finish" style="display:none;"><a href="javascript:;">Finish</a></li>
+			</ul>
+		</div>
+	</div>
+</form>
+{% endblock%}
