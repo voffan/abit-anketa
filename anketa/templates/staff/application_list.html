@@ -56,10 +56,11 @@
           </table>                    
         </th>
         <th st-sort="Doc_Type">
+          {{selectdoc}}
           <select class="form-control" name="doctype" placeholder="Тип документа">
             <option {% if selectdoc == "0" %} selected {% endif %} value="0">Все</option>
             {% for item in docType %}
-            <option {% if selectdoc == "{{item.id}}" %} selected {% endif %} value="{{ item.id }}">{{item.value}}</option>
+            <option {% if selectdoc == item.id %} selected {% endif %} value="{{ item.id }}">{{item.value}}</option>
             {% endfor %}
             <option > 
           </select>

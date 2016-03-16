@@ -11,7 +11,7 @@ from django.db import transaction
 
 from datetime import date
 from staff.models import Employee, Position
-from anketa.models import Department, Attribute, Application, Abiturient, Docs, AttrValue, Profile
+from anketa.models import Department, Attribute, Application, Abiturient, Docs, AttrValue, Profile, Contacts, Address, Education_Prog , Privilegies, Exams, DepAchieves, Milit
 from django.contrib.auth.models import User
 
 # Create your views here.
@@ -161,6 +161,11 @@ def Application_list (request):
     selectdoc = '0'
     fname = '0'
     if 'apply' in request.GET:
+        if 'doctype' in request.GET and int(request.GET['doctype'])>0:
+                selectdoc = request.GET['doctype']
+                docs = Docs.objects.select_related('Abiturient').filter(docType__id=selectdoc)
+                abiturients = [item.abiturient.id for item in docs]
+                applications = Application.objects.filter(abiturient__id__in=abiturients)
         if 'status' in request.GET:
             if request.GET['status'] =='2':
                 applications = applications.filter(appState__value__icontains=u'поданный')
@@ -186,8 +191,6 @@ def Application_list (request):
             if request.GET['forma'] =='3':
                 applications = applications.filter(eduform__icontains=u'З')
                 selectform = '3'
-        if 'doctype' in request.GET:
-                selectdoc = request.GET['doctype']
 
 
         if 'balli>' in request.GET and len(request.GET['balli>'])>0:
@@ -230,17 +233,18 @@ def Application_list (request):
 #    if selectdoc == '2':
 #        docs = Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains='Диплом')
     docs = Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains=u'аттестат')|Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains=u'Диплом')
-    if selectdoc != '0':
-        docs.filter(docType__id=selectdoc)
+    #if int(selectdoc) != 0:
+     #   docs=docs.filter(docType__id=selectdoc)
+
     apps_with_docs=[]
     for app in applications:
-        doc = docs.get(abiturient__id = app.abiturient.id)
+        doc = docs.filter(abiturient__id = app.abiturient.id).first()
         apps_with_docs.append({'app':app, 'doc':doc})   
     data={}
     data['applications'] = apps_with_docs
     data['select'] = select
     data['fname'] = fname
-    data['selectdoc'] = selectdoc
+    data['selectdoc'] = int(selectdoc)
     data['selectform'] = selectform
     data['selectnapr'] = selectnapr
     data['docType'] = AttrValue.objects.filter(attribute__name__icontains=u'тип док')
@@ -253,10 +257,18 @@ def Application_review (request, application_id):
         #save_application(request)
         return HttpResponseRedirect(reverse('staff:application_list'))
     docs = Docs.objects.all()
-    application = Application.objects.get(pk=application_id)
+    application = Application.objects.select_related('Abiturient').get(pk=application_id)
     Data={}
     Data['docs'] = docs
     Data['application']=application
+    Data['contacts'] = Contacts.objects.filter(pk=application_id)
+    Data['address'] = Address.objects.filter(pk=application_id)
+    Data['education_prog'] = Education_Prog.objects.filter(pk=application_id)
+    Data['exams'] = Exams.objects.filter(pk=application_id)
+    Data['privilegies'] = Privilegies.objects.filter(pk=application_id)
+    Data['depachieves'] = DepAchieves.objects.filter(pk=application_id)
+    Data['milit'] = application.abiturient.milit_set.first()
+
     context = {'data':Data}
     context.update(csrf(request))
-    return render(request,'staff\\application_review.html',context)
+    return render(request,'staff\\wizardform.html',context)
