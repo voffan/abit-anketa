@@ -18,4 +18,5 @@ urlpatterns = patterns('',
     url(r'^employee_changepwd/',views.Employee_Changepwd, name = 'employee_acc_2'),
     url(r'^employee_info/',views.Employee_Info, name = 'employee_acc_3'),
     url(r'^application_list/',views.Application_list, name = 'application_list'),
+    url(r'^application_review/(?P<application_id>\d+)',views.Application_review, name = 'application_review'),
                       )

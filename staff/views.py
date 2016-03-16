@@ -7,10 +7,11 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db import transaction
 
 from datetime import date
 from staff.models import Employee, Position
-from anketa.models import Department, Attribute, Application, Abiturient, Docs
+from anketa.models import Department, Attribute, Application, Abiturient, Docs, AttrValue, Profile
 from django.contrib.auth.models import User
 
 # Create your views here.
@@ -78,8 +79,8 @@ def AddEmployee(request):
         employee.first_name = request.POST.get('fname','')
         employee.last_name = request.POST.get('lname','')
         employee.middle_name = request.POST.get('mname','')
-        employee.fullname = request.POST.get('fullname','')
-        employee.position = posit#request.POST.get('position','')
+        employee.uniemployee = 0
+        employee.position = posit
         employee.save()
         return HttpResponseRedirect(reverse('staff:employee_list'))
 
@@ -95,9 +96,11 @@ def AddEmployee(request):
 def EditEmployee(request, employee_id):
     departments = Department.objects.all()
     employee = Employee.objects.get(pk=employee_id)
+    positions = Position.objects.all()
     Data={}
     Data['departments'] = departments
     Data['employee']=employee
+    Data['positions']=positions
     context = {'data':Data}
     context.update(csrf(request))
     return render(request,'staff\employee_add.html',context)
@@ -142,13 +145,21 @@ def Employee_Info(request):
     context = {'data':Data}
     context.update(csrf(request))
     return render(request, 'staff\employee_info.html',context)
+
+#@transaction.atomic
+#def jopa(request):
+    
     
 def Application_list (request):
     applications = Application.objects.all()
     #employee = request.user.employee_set.get()
     #applications = Application.objects.select_related('Abiturient').filter(department__id = employee.department.id)
-    applications = Application.objects.all()
+    profiles = Profile.objects.all()   
     select = '1'
+    selectform = '1'
+    selectnapr = '0'
+    selectdoc = '0'
+    fname = '0'
     if 'apply' in request.GET:
         if 'status' in request.GET:
             if request.GET['status'] =='2':
@@ -166,10 +177,44 @@ def Application_list (request):
 
         if 'fio' in request.GET and len(request.GET['fio'])>0:
             applications=applications.filter(abiturient__fullname__icontains=request.GET['fio'])
+            fname = '1'
             
+        if 'forma' in request.GET:
+            if request.GET['forma'] =='2':
+                applications = applications.filter(eduform__icontains=u'О')
+                selectform = '2'
+            if request.GET['forma'] =='3':
+                applications = applications.filter(eduform__icontains=u'З')
+                selectform = '3'
+        if 'doctype' in request.GET:
+                selectdoc = request.GET['doctype']
 
 
+        if 'balli>' in request.GET and len(request.GET['balli>'])>0:
+            applications = applications.filter(points__gt=request.GET['balli>'])
+        if 'balli<' in request.GET and len(request.GET['balli<'])>0:
+            applications = applications.filter(points__lt=request.GET['balli<'])
 
+        if 'datedoc>' in request.GET and len(request.GET['datedoc>'])>0:
+            applications = applications.filter(date__gt=request.GET['datedoc>'])
+        if 'datedoc<' in request.GET and len(request.GET['datedoc<'])>0:
+            applications = applications.filter(date__lt=request.GET['datedoc<'])
+
+        if 'napravlenie' in request.GET:
+            for nap in profiles:
+
+                if request.GET['napravlenie'] == 'nap':
+                    applications = applications.filter(profile__name__icontains=u'nap.name')
+                    selectnapr = 'nap'
+            #if request.GET['napravlenie'] == '3':
+            #    applications = applications.filter(profile__name__icontains=u'друг')
+            #    selectnapr = '3'
+
+
+    if 'cancel' in request.GET:
+        return HttpResponseRedirect(reverse('staff:application_list'))        
+
+        
     number = request.GET.get('page','1')
     app_pages = Paginator(applications, 25)
     try:
@@ -180,7 +225,13 @@ def Application_list (request):
         current_page = app_pages.page(app_pages.num_pages)
     applications = current_page.object_list
     abiturients = [app.abiturient.id for app in applications]
-    docs = Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains='аттестат')|Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains='Диплом')
+#    if selectdoc == '1':
+#        docs = Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains='аттестат')
+#    if selectdoc == '2':
+#        docs = Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains='Диплом')
+    docs = Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains=u'аттестат')|Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains=u'Диплом')
+    if selectdoc != '0':
+        docs.filter(docType__id=selectdoc)
     apps_with_docs=[]
     for app in applications:
         doc = docs.get(abiturient__id = app.abiturient.id)
@@ -188,5 +239,24 @@ def Application_list (request):
     data={}
     data['applications'] = apps_with_docs
     data['select'] = select
-    data.update(csrf(request))
+    data['fname'] = fname
+    data['selectdoc'] = selectdoc
+    data['selectform'] = selectform
+    data['selectnapr'] = selectnapr
+    data['docType'] = AttrValue.objects.filter(attribute__name__icontains=u'тип док')
+    data['Profile'] = Profile.objects.all()
+    #data.update(csrf(request))
     return render(request,'staff\\application_list.html', data)
+
+def Application_review (request, application_id):
+    if request.method =='POST':
+        #save_application(request)
+        return HttpResponseRedirect(reverse('staff:application_list'))
+    docs = Docs.objects.all()
+    application = Application.objects.get(pk=application_id)
+    Data={}
+    Data['docs'] = docs
+    Data['application']=application
+    context = {'data':Data}
+    context.update(csrf(request))
+    return render(request,'staff\\application_review.html',context)
