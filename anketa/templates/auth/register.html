@@ -30,7 +30,32 @@
             $('#rootwizard').find('.pager .finish').hide();
         }
         
-    }});
+    },
+    'onNext': function(tab, navigation, index)
+    {
+    	//alert(str(index));
+    	if(index === 1)
+    	{
+    		$.ajax({
+    			url:"{% url 'auth:checkuser' %}",
+				method:"GET",
+				data:{'username':$('#username').val()},
+				dataProcess:true,
+				timeout:500,
+				success:function(data){
+					//console.log(data);
+					if(parseInt(data[0]['username']['result'])===0){
+						alert(data[0]['username']['error_msg']);
+						return false;
+					}
+				},
+				error:function(){
+					alert('Check Internet connnection!');
+				}
+    		});
+    	}
+    }
+	});
     $('#rootwizard .finish').click(function() {
         alert('Finished!, Starting over!');
         $('#rootwizard').find("a[href*='tab1']").trigger('click');

@@ -40,6 +40,14 @@ def checkEmail(request):
 	return json.dump()
 
 def checkUser(request):
+	result = [{'username':{'result':1, 'error_msg':''},'e-mail':{'result':1, 'error_msg':''}, 'pwd':{'result':1, 'error_msg':''}}]
 	name=request.GET.get('username','')
-	check = User.objects.filter(username=name)
-	return json.dump()
+	check = User.objects.filter(username=name).first()
+	if check is None:
+		result[0]['username']['result']=0
+		result[0]['username']['error_msg']='имя пользователя занято'
+	checkemail = None
+	if checkemail is None:
+		result[0]['e-mail']['result']=0
+		result[0]['e-mail']['error_msg']='e-mail занят! Выберете другой!'
+	return HttpResponse(json.dumps(result), content_type='application/json')
