@@ -37,7 +37,7 @@
     	if(index === 1)
     	{
     		$.ajax({
-    			url:"{% url 'auth:checkuser' %}",
+    			url:"{% url 'authapp:checkuser' %}",
 				method:"GET",
 				data:{'username':$('#username').val()},
 				dataProcess:true,
@@ -81,7 +81,7 @@
 			<div class="tab-pane" id="tab1">
 				<div class="container-fluid">
 					<div class="row">
-						<div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-5">
+						<div class="col-xs-12 col-sm-12 col-md-2 col-md-offset-5">
 							<p>
 								<label for="username">Имя пользователя</label>
 								<input type="text" class="form-control" name="username" id="username" placeholder="Имя пользователя">

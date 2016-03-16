@@ -1,5 +1,6 @@
-from django.shortcuts import render
+import json
 from django.http import HttpResponse,HttpResponseRedirect
+from django.shortcuts import render_to_response, render
 #from anketa.models import User
 from django.core.context_processors import csrf
 from django.contrib.auth import authenticate, login
@@ -43,7 +44,8 @@ def checkUser(request):
 	result = [{'username':{'result':1, 'error_msg':''},'e-mail':{'result':1, 'error_msg':''}, 'pwd':{'result':1, 'error_msg':''}}]
 	name=request.GET.get('username','')
 	check = User.objects.filter(username=name).first()
-	if check is None:
+	print(check)
+	if check is not  None:
 		result[0]['username']['result']=0
 		result[0]['username']['error_msg']='имя пользователя занято'
 	checkemail = None
