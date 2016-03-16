@@ -9,52 +9,57 @@
 <script src="{% static "anketa/js/jquery.bootstrap.wizard.js" %}"></script>
 <script src="{% static "anketa/js/prettify.js" %}"></script>
 <script src="{% static "anketa/js/bootstrap-typeahead.js" %}"></script>
+
 <script>
-    $(document).ready(function() {
-    $('#rootwizard').bootstrapWizard({onTabShow: function(tab, navigation, index) {
-        var $total = navigation.find('li').length;
-        var $current = index+1;
-        var $percent = ($current/$total) * 100;
-        $('#rootwizard').find('.bar').css({width:$percent+'%'});
-        
-        $('')
-        // If it's the last tab then hide the last button and show the finish instead
-        if($current >= $total) 
-        {
-            $('#rootwizard').find('.pager .next').hide();
-            $('#rootwizard').find('.pager .finish').show();
-            $('#rootwizard').find('.pager .finish').removeClass('disabled');
-        } else 
-        {
-            $('#rootwizard').find('.pager .next').show();
-            $('#rootwizard').find('.pager .finish').hide();
-        }
-        
-    },
-    'onNext': function(tab, navigation, index)
-    {
-    	//alert(str(index));
-    	if(index === 1)
-    	{
-    		$.ajax({
-    			url:"{% url 'authapp:checkuser' %}",
-				method:"GET",
-				data:{'username':$('#username').val()},
-				dataProcess:true,
-				timeout:500,
-				success:function(data){
-					//console.log(data);
-					if(parseInt(data[0]['username']['result'])===0){
-						alert(data[0]['username']['error_msg']);
-						return false;
+	$(document).ready(function() 
+	{
+	$('#rootwizard').bootstrapWizard(
+	{
+		onTabShow: function(tab, navigation, index) 
+		{
+			var $total = navigation.find('li').length;
+			var $current = index+1;
+			var $percent = ($current/$total) * 100;
+			document.getElementById("progress-bar").style.width=$percent+'%';
+			// If it's the last tab then hide the last button and show the finish instead
+			if($current >= $total) 
+			{
+				$('#rootwizard').find('.pager .next').hide();
+				$('#rootwizard').find('.pager .finish').show();
+				$('#rootwizard').find('.pager .finish').removeClass('disabled');
+			} else 
+			{
+				$('#rootwizard').find('.pager .next').show();
+				$('#rootwizard').find('.pager .finish').hide();
+			}
+		},
+		onTabClick: function(tab, navigation, index) 
+		{
+			return false;
+		},
+		'onNext': function(tab, navigation, index)
+		{
+			if(index === 1)
+			{
+				$.ajax({
+					url:"{% url 'authapp:checkuser' %}",
+					method:"GET",
+					data:{'username':$('#username').val()},
+					dataProcess:true,
+					timeout:500,
+					success:function(data){
+						//console.log(data);
+						if(parseInt(data[0]['username']['result'])===0){
+							alert(data[0]['username']['error_msg']);
+							return false;
+						}
+					},
+					error:function(){
+						alert('Check Internet connnection!');
 					}
-				},
-				error:function(){
-					alert('Check Internet connnection!');
-				}
-    		});
-    	}
-    }
+				});
+			}
+		}
 	});
     $('#rootwizard .finish').click(function() {
         alert('Finished!, Starting over!');
@@ -65,10 +70,10 @@
 {% endblock %}
 {% block content %}
 <form name="login_form" action="{%url 'create_person'%}" class="form-horizontal" role="form" method="post">
-	<div id="rootwizard">
+	<div id="rootwizard" class="col-md-8 col-md-offset-2">
 		<div class="navbar">
 			<div class="navbar-inner">
-				<div class="container">
+				<div class="container col-md-offset-2">
 					<ul>
 						<li><a href="#tab1" data-toggle="tab">Создание пользователя</a></li>
 						<li><a href="#tab2" data-toggle="tab">Личные данные</a></li>
@@ -76,6 +81,9 @@
 					</ul>
 				</div>
 			</div>
+		</div>
+		<div class="progress">
+			<div id="progress-bar" class="progress-bar progress-bar-striped active" role="progressbar" style=""></div>
 		</div>
 		<div class="tab-content">
 			<div class="tab-pane" id="tab1">
