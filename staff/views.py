@@ -11,7 +11,7 @@ from django.db import transaction
 
 from datetime import date
 from staff.models import Employee, Position
-from anketa.models import Department, Attribute, Application, Abiturient, Docs, AttrValue, Profile, Contacts, Address, Education_Prog , Privilegies, Exams, DepAchieves, Milit
+from anketa.models import Department, Attribute, Application, Abiturient, Docs, AttrValue, Profile, Contacts, Address, Education_Prog , Privilegies, Exams, DepAchieves, Milit, DocAttr
 from django.contrib.auth.models import User
 
 # Create your views here.
@@ -148,13 +148,13 @@ def Employee_Info(request):
 
 #@transaction.atomic
 #def jopa(request):
-    
-    
+
+
 def Application_list (request):
     applications = Application.objects.all()
     #employee = request.user.employee_set.get()
     #applications = Application.objects.select_related('Abiturient').filter(department__id = employee.department.id)
-    profiles = Profile.objects.all()   
+    profiles = Profile.objects.all()
     select = '1'
     selectform = '1'
     selectnapr = '0'
@@ -177,13 +177,13 @@ def Application_list (request):
                 applications = applications.filter(appState__value__icontains=u'экспортированный')
                 select = '4'
             elif request.GET['status'] =='5':
-                applications = applications.filter(appState__value__icontains=u'анулированный')   
+                applications = applications.filter(appState__value__icontains=u'анулированный')
                 select = '5'
 
         if 'fio' in request.GET and len(request.GET['fio'])>0:
             applications=applications.filter(abiturient__fullname__icontains=request.GET['fio'])
             fname = '1'
-            
+
         if 'forma' in request.GET:
             if request.GET['forma'] =='2':
                 applications = applications.filter(eduform__icontains=u'О')
@@ -215,9 +215,9 @@ def Application_list (request):
 
 
     if 'cancel' in request.GET:
-        return HttpResponseRedirect(reverse('staff:application_list'))        
+        return HttpResponseRedirect(reverse('staff:application_list'))
 
-        
+
     number = request.GET.get('page','1')
     app_pages = Paginator(applications, 25)
     try:
@@ -239,7 +239,7 @@ def Application_list (request):
     apps_with_docs=[]
     for app in applications:
         doc = docs.filter(abiturient__id = app.abiturient.id).first()
-        apps_with_docs.append({'app':app, 'doc':doc})   
+        apps_with_docs.append({'app':app, 'doc':doc})
     data={}
     data['applications'] = apps_with_docs
     data['select'] = select
@@ -268,7 +268,8 @@ def Application_review (request, application_id):
     Data['privilegies'] = Privilegies.objects.filter(pk=application_id)
     Data['depachieves'] = DepAchieves.objects.filter(pk=application_id)
     Data['milit'] = application.abiturient.milit_set.first()
-
+    Data['docattr'] = DocAttr.objects.filter(pk=application_id)
+    Data['achievements'] = Achievements.objects.filter(pk=application_id)
     context = {'data':Data}
     context.update(csrf(request))
     return render(request,'staff\\wizardform.html',context)
