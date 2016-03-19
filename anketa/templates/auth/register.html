@@ -11,78 +11,181 @@
 <script src="{% static "anketa/js/bootstrap-typeahead.js" %}"></script>
 
 <script>
-	$(document).ready(function() 
+	var usernameError=true;
+	var emailError=true;
+	var pwdError=true;
+	/*
+	............................................________ 
+	....................................,.-'"...................``~., 
+	.............................,.-"..................................."-., 
+	.........................,/...............................................":, 
+	.....................,?......................................................, 
+	.................../...........................................................,} 
+	................./......................................................,:`^`..} 
+	.............../...................................................,:"........./ 
+	..............?.....__.........................................:`.........../ 
+	............./__.(....."~-,_..............................,:`........../ 
+	.........../(_...."~,_........"~,_....................,:`........_/ 
+	..........{.._$;_......"=,_......."-,_.......,.-~-,},.~";/....} 
+	...........((.....*~_......."=-._......";,,./`..../"............../ 
+	...,,,___.`~,......"~.,....................`.....}............../ 
+	............(....`=-,,.......`........................(......;_,,-" 
+	............/.`~,......`-...................................../ 
+	.............`~.*-,.....................................|,./.....,__ 
+	,,_..........}.>-._...................................|..............`=~-, 
+	.....`=~-,__......`,................................. 
+	...................`=~-,,.,............................... 
+	................................`:,,...........................`..............__ 
+	.....................................`=-,...................,%`>--==`` 
+	........................................_..........._,-%.......` 
+	..................................., 
+	*/
+	$("#usernameField").focusout(function()
 	{
-	$('#rootwizard').bootstrapWizard(
+		if($("#username").val().length === 0)
+		{
+			$("#usernameField").attr("class","has-feedback col-xs-12 col-sm-12 col-md-4 col-md-offset-4");
+			$("#usernameIcon").attr("class","");
+			$("#usernameFieldDescr").html("");
+			return;
+		}
+		$.ajax(
+		{
+			url:"{% url 'authapp:checkUserValid' %}",
+			method:"GET",
+			data:{'username':$('#username').val()},
+			dataProcess:true,
+			timeout:500,
+			success:function(data)
+			{
+				if(parseInt(data['result'])===1)
+				{
+					$("#usernameField").attr("class","has-error has-feedback col-xs-12 col-sm-12 col-md-4 col-md-offset-4");
+					$("#usernameIcon").attr("class","glyphicon glyphicon-remove form-control-feedback");
+					$("#usernameFieldDescr").html(data['error_msg']);
+					//var htmlcode= "<p><label for=\"username\">Имя пользователя</label><input type=\"text\" class=\"form-control\" name=\"username\" id=\"username\" placeholder=\"Имя пользователя\"><span class=\"glyphicon glyphicon-remove form-control-feedback\" aria-hidden=\"true\"></span></p>";
+					//$("#usernameField").html(htmlcode);
+					$usernameError=true;
+				}
+				else
+				{
+					$("#usernameField").attr("class","has-success has-feedback col-xs-12 col-sm-12 col-md-4 col-md-offset-4");
+					$("#usernameIcon").attr("class","glyphicon glyphicon-ok form-control-feedback");
+					$("#usernameFieldDescr").html("");
+					$usernameError=false;
+				}
+				
+			},
+			error:function(){
+				alert('Check Internet connnection!');
+			}
+		});
+	});
+	$("#emailField").focusout(function()
 	{
-		onTabShow: function(tab, navigation, index) 
+		if($("#email").val().length === 0)
 		{
-			var $total = navigation.find('li').length;
-			var $current = index+1;
-			var $percent = ($current/$total) * 100;
-			document.getElementById("progress-bar").style.width=$percent+'%';
-			// If it's the last tab then hide the last button and show the finish instead
-			if($current >= $total) 
+			$("#emailField").attr("class","has-feedback col-xs-12 col-sm-12 col-md-4 col-md-offset-4");
+			$("#emailIcon").attr("class","");
+			$("#emailFieldDescr").html("");
+			return;
+		}
+		$.ajax(
+		{
+			url:"{% url 'authapp:checkEmailValid' %}",
+			method:"GET",
+			data:{'email':$('#email').val()},
+			dataProcess:true,
+			timeout:500,
+			success:function(data)
 			{
-				$('#rootwizard').find('.pager .next').hide();
-				$('#rootwizard').find('.pager .finish').show();
-				$('#rootwizard').find('.pager .finish').removeClass('disabled');
-			} else 
-			{
-				$('#rootwizard').find('.pager .next').show();
-				$('#rootwizard').find('.pager .finish').hide();
+				if(parseInt(data['result'])===1)
+				{
+					$("#emailField").attr("class","has-error has-feedback col-xs-12 col-sm-12 col-md-4 col-md-offset-4");
+					$("#emailIcon").attr("class","glyphicon glyphicon-remove form-control-feedback");
+					$("#emailFieldDescr").html(data['error_msg']);
+					//var htmlcode= "<p><label for=\"username\">Имя пользователя</label><input type=\"text\" class=\"form-control\" name=\"username\" id=\"username\" placeholder=\"Имя пользователя\"><span class=\"glyphicon glyphicon-remove form-control-feedback\" aria-hidden=\"true\"></span></p>";
+					//$("#usernameField").html(htmlcode);
+					$emailError=true;
+				}
+				else
+				{
+					$("#emailField").attr("class","has-success has-feedback col-xs-12 col-sm-12 col-md-4 col-md-offset-4");
+					$("#emailIcon").attr("class","glyphicon glyphicon-ok form-control-feedback");
+					$("#emailFieldDescr").html("");
+					$emailError=false;
+				}
+				
+			},
+			error:function(){
+				alert('Check Internet connnection!');
 			}
-		},
-		onTabClick: function(tab, navigation, index) 
+		});
+	});
+	$("#passwordField").focusout(function()
+	{
+		pwdError=true;
+		if($("#passwordverify").val().length===0 || $("#password").val().length===0)
 		{
-			return false;
-		},
-		onNext: function(tab, navigation, index)
-		{
-			var $hasError = Boolean(false);
-			if(index === 1)
-			{
-				$.ajax({
-					url:"{% url 'authapp:checkUserValid' %}",
-					method:"GET",
-					data:{'username':$('#username').val()},
-					dataProcess:true,
-					timeout:500,
-					success:function(data)
-					{
-						if(parseInt(data[0]['username']['result'])===0)
-						{
-							if(document.getElementById("usernameFielddescr"))
-								return;
-
-							document.getElementById("usernameField").className="has-error col-xs-12 col-sm-12 col-md-4 col-md-offset-4";
-							var div = document.createElement("div");
-							div.innerHTML="<span id=\"usernameFielddescr\" class=\"help-block\">You have an error, bitch</span>"
-							document.getElementById("usernameField").appendChild(div);
-							$hasError=true;
-						}
-						if(parseInt(data[0]['e-mail']['result'])===1)
-						{
-							$hasError=true;
-						}
-						if(parseInt(data[0]['pwd']['result'])===1)
-						{
-							$hasError=true;
-						}
-					},
-					error:function(){
-						alert('Check Internet connnection!');
-					}
-				});
-			}
-			
+			$("#passwordField").attr("class","has-feedback col-xs-12 col-sm-12 col-md-4 col-md-offset-4");
+			$("#passwordIcon").attr("class","");
+			$("#passwordFieldDescr").html("");
 			return false;
 		}
+		if($("#password").val().length!=0 && $("#passwordverify").val().length!=0)
+		{
+			if($("#password").val() === $("#passwordverify").val())
+			{
+				$("#passwordField").attr("class","has-success has-feedback col-xs-12 col-sm-12 col-md-4 col-md-offset-4");
+				$("#passwordIcon").attr("class","glyphicon glyphicon-ok form-control-feedback");
+				$("#passwordFieldDescr").html("");
+				pwdError=false;
+			}
+			else
+			{
+				$("#passwordField").attr("class","has-error has-feedback col-xs-12 col-sm-12 col-md-4 col-md-offset-4");
+				$("#passwordIcon").attr("class","glyphicon glyphicon-remove form-control-feedback");
+				$("#passwordFieldDescr").html("check");
+			}
+		}
 	});
-    $('#rootwizard .finish').click(function() {
-        //save data
-    });
-});
+	$(document).ready(function() 
+	{
+		$('#rootwizard').bootstrapWizard(
+		{
+			onTabShow: function(tab, navigation, index) 
+			{
+				var $total = navigation.find('li').length;
+				var $current = index+1;
+				var $percent = ($current/$total) * 100;
+				document.getElementById("progress-bar").style.width=$percent+'%';
+				// If it's the last tab then hide the last button and show the finish instead
+				if($current >= $total) 
+				{
+					$('#rootwizard').find('.pager .next').hide();
+					$('#rootwizard').find('.pager .finish').show();
+					$('#rootwizard').find('.pager .finish').removeClass('disabled');
+				} else 
+				{
+					$('#rootwizard').find('.pager .next').show();
+					$('#rootwizard').find('.pager .finish').hide();
+				}
+			},
+			onTabClick: function(tab, navigation, index) 
+			{
+				return false;
+			},
+			onNext: function(tab, navigation, index)
+			{
+				if($usernameError || $emailError)
+					return false;
+			}
+		});
+		$('#rootwizard .finish').click(function() 
+		{
+			//save data
+		});
+	});
 </script>
 {% endblock %}
 {% block content %}
@@ -109,7 +212,19 @@
 						<div class="col-xs-12 col-sm-12 col-md-4 col-md-offset-4" id ="usernameField">
 							<p>
 								<label for="username">Имя пользователя</label>
-								<input type="text" class="form-control" name="username" id="username" placeholder="Имя пользователя" aria-describedby="descr">
+								<input type="text" class="form-control" name="username" id="username" placeholder="Имя пользователя">
+								<span id="usernameIcon"></span>
+								<span id="usernameFieldDescr" class="help-block"></span>
+							</p>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-4 col-md-offset-4" id="emailField">
+							<p>
+								<label for="email">Ваша электронная почта</label>
+								<input type="text" class="form-control" name="email" id="email" placeholder="Электронная почта">
+								<span id="emailIcon"></span>
+								<span id="emailFieldDescr" class="help-block"></span>
 							</p>
 						</div>
 					</div>
@@ -122,20 +237,13 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-xs-12 col-sm-12 col-md-4 col-md-offset-4">
+						<div class="col-xs-12 col-sm-12 col-md-4 col-md-offset-4" id="passwordField">
 							<p>
 								<label for="passwordverify">Повторите пароль</label>
 								<input type="password" class="form-control" name="passwordverify" id="passwordverify" placeholder="Повторите пароль">
+								<span id="passwordIcon"></span>
+								<span id="passwordFieldDescr" class="help-block"></span>
 							</p>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-12 col-sm-12 col-md-4 col-md-offset-4">
-							<p>
-								<label for="email">Ваша электронная почта</label>
-								<input type="text" class="form-control" name="email" id="email" placeholder="Электронная почта">
-							</p>
-							
 						</div>
 					</div>
 				</div>
