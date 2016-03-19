@@ -37,21 +37,37 @@
 		{
 			return false;
 		},
-		'onNext': function(tab, navigation, index)
+		onNext: function(tab, navigation, index)
 		{
+			var $hasError = Boolean(false);
 			if(index === 1)
 			{
 				$.ajax({
-					url:"{% url 'authapp:checkuser' %}",
+					url:"{% url 'authapp:checkUserValid' %}",
 					method:"GET",
 					data:{'username':$('#username').val()},
 					dataProcess:true,
 					timeout:500,
-					success:function(data){
-						//console.log(data);
-						if(parseInt(data[0]['username']['result'])===0){
-							alert(data[0]['username']['error_msg']);
-							return false;
+					success:function(data)
+					{
+						if(parseInt(data[0]['username']['result'])===0)
+						{
+							if(document.getElementById("usernameFielddescr"))
+								return;
+
+							document.getElementById("usernameField").className="has-error col-xs-12 col-sm-12 col-md-4 col-md-offset-4";
+							var div = document.createElement("div");
+							div.innerHTML="<span id=\"usernameFielddescr\" class=\"help-block\">You have an error, bitch</span>"
+							document.getElementById("usernameField").appendChild(div);
+							$hasError=true;
+						}
+						if(parseInt(data[0]['e-mail']['result'])===1)
+						{
+							$hasError=true;
+						}
+						if(parseInt(data[0]['pwd']['result'])===1)
+						{
+							$hasError=true;
 						}
 					},
 					error:function(){
@@ -59,11 +75,12 @@
 					}
 				});
 			}
+			
+			return false;
 		}
 	});
     $('#rootwizard .finish').click(function() {
-        alert('Finished!, Starting over!');
-        $('#rootwizard').find("a[href*='tab1']").trigger('click');
+        //save data
     });
 });
 </script>
@@ -88,11 +105,11 @@
 		<div class="tab-content">
 			<div class="tab-pane" id="tab1">
 				<div class="container-fluid">
-					<div class="row">
-						<div class="col-xs-12 col-sm-12 col-md-4 col-md-offset-4">
+					<div class="row" >
+						<div class="col-xs-12 col-sm-12 col-md-4 col-md-offset-4" id ="usernameField">
 							<p>
 								<label for="username">Имя пользователя</label>
-								<input type="text" class="form-control" name="username" id="username" placeholder="Имя пользователя">
+								<input type="text" class="form-control" name="username" id="username" placeholder="Имя пользователя" aria-describedby="descr">
 							</p>
 						</div>
 					</div>
@@ -126,7 +143,7 @@
 			
 			<div class="tab-pane" id="tab2">
 				<div class="container-fluid">
-					<div class = "row">
+					<div class = "row" id="sNameField">
 						<div class="col-xs-12 col-sm-12 col-md-4 col-md-offset-4">
 							<p>
 								<label for="sname">Фамилия</label>
@@ -134,7 +151,7 @@
 							</p>
 						</div>
 					</div>
-					<div class="row">
+					<div class="row" id="nameField">
 						<div class="col-xs-12 col-sm-12 col-md-4 col-md-offset-4">
 							<p>
 								<label for="name">Имя</label>
@@ -142,7 +159,7 @@
 							</p>
 						</div>
 					</div>
-					<div class="row">
+					<div class="row" id="mNameField">
 						<div class="col-xs-12 col-sm-12 col-md-4 col-md-offset-4">
 							<p>
 								<label for="mname">Отчество</label>
@@ -159,10 +176,10 @@
 						</div>
 						<div class ="col-xs-3 col-sm-6 col-md-2">
 							<label for="sex">Пол</label>
-								<p>
-									<input type="radio" name = "sex" value="p1">Мужской
-									<input type="radio" name = "sex" value="p2">Женский
-								</p>
+							<p>
+								<input type="radio" name = "sex" value="p1">Мужской
+								<input type="radio" name = "sex" value="p2">Женский
+							</p>
 						</div>
 					</div>
 				</div>
