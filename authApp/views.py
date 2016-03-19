@@ -40,7 +40,32 @@ def checkPasswordsIdentity(request):
 def checkEmail(request):
 	return json.dump()
 
-def checkUser(request):
+def checkUserValid(request):
+	result = [{'username':{'result':0, 'error_msg':''},'e-mail':{'result':0, 'error_msg':''}, 'pwd':{'result':0, 'error_msg':''}}]
+	name=request.GET.get('username','')
+	check = User.objects.filter(username=name).first()
+
+	if check is not  None:
+		result[0]['username']['result']=1
+		result[0]['username']['error_msg']='имя пользователя занято'
+
+	checkemail = None
+	email=request.GET.get('email','')
+	checkemail=User.objects.filter(email=email).first()
+	if checkemail is not None:
+		result[0]['e-mail']['result']=1
+		result[0]['e-mail']['error_msg']='e-mail занят! Выберете другой!'
+
+	pwd=request.GET.get('password','')
+	pwdv=request.GET.get('passwordverify','')
+	if pwd != pwdv:
+		result[0]['pwd']['result']=1
+		result[0]['pwd']['error_msg']='Пароли не совпадают'
+
+	return HttpResponse(json.dumps(result), content_type='application/json')
+
+
+def checkPersonValid(request):
 	result = [{'username':{'result':1, 'error_msg':''},'e-mail':{'result':1, 'error_msg':''}, 'pwd':{'result':1, 'error_msg':''}}]
 	name=request.GET.get('username','')
 	check = User.objects.filter(username=name).first()
