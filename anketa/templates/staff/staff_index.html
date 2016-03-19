@@ -3,6 +3,11 @@
 {% block content %}
 	<form action="/auth/login/" method="post">
 		{% csrf_token %}
+		<div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">Авторизация</h3>
+                    </div>
+                    <div class="panel-body">            
         <div class="row">
             <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-2">
 		          <label for="username">Имя пользователя</label>
@@ -13,10 +18,12 @@
         <div class="row">
             <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-2">
 		          <label for="username"> Пароль</label>
-		          <input type="password" class="form-control" name="password" id="password" placeholder="Пароль">
+		          <input type="password" class="form-control" name="pwd" id="password" placeholder="Пароль">
             </div>
         </div>
 		</br>
+		</div>
+        </div>
 		{% if login_error %}
 			<label class="error">{{ login_error }}</label>
 		{% endif %}

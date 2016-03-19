@@ -29,14 +29,14 @@
           <th>Направление</th>
           <th>Сумма баллов</th>
           <th>Статус</th>
-          <th><button type="submit" class="btn btn-primary" name="cancel"> Сбросить фильтр</button></th>
+          <th>Выделить</th>
         </tr>
       </thead>
       <thead>
       <tr>
         <th st-sort="#"></th>
         <th st-sort="FIO">
-          <input name="fio" class="form-control" placeholder="{% if fname == '1' %}{% for item in applications %}{{item.app.abiturient.fullname}}{% endfor %}{% endif %}{% if fname == '0' %}Фамилия Имя Отчество {% endif %}"/>
+          <input name="fio" class="form-control" placeholder="Фамилия Имя Отчество" value="{% if not pool == '0' %}{{fname}}{% endif %}"/>
         </th>
         <th st-sort="Form">
           <select class="form-control" name="forma" placeholder="Форма Обучения">
@@ -45,65 +45,49 @@
                 <option {% if selectform == "3" %} selected {% endif %} value="3">Заочная</option>
           </select>
         </th>
-        <th st-sort="Date" width="8%">
-          <table>
-            <td>
-              <input type="date" name = "datedoc>" id ="datedoc>" value="2016-01-01" class="form-control">
-            </td>
-            <!--<td>
-              <input type="date" name = "datedoc<" id ="datedoc<" value="" class="form-control">
-            </td>-->
-          </table>                    
+        <th st-sort="Date" width="8%">          
+              <input type="date" name = "datedoc>" id ="datedoc>" value="2016-01-01" class="form-control">           
+              <input type="date" name = "datedoc<" id ="datedoc<" value="2018-01-01" class="form-control">
         </th>
-        <th st-sort="Doc_Type">
-          {{selectdoc}}
+        <th st-sort="Doc_Type">        
           <select class="form-control" name="doctype" placeholder="Тип документа">
             <option {% if selectdoc == "0" %} selected {% endif %} value="0">Все</option>
             {% for item in docType %}
             <option {% if selectdoc == item.id %} selected {% endif %} value="{{ item.id }}">{{item.value}}</option>
-            {% endfor %}
-            <option > 
+            {% endfor %}            
           </select>
         </th>
         <th st-sort="isCopy" width="10%">
           <select class="form-control" name="iscopy" placeholder="Копия/Оригинал">
-                <option {% if selectcopy == "1" %} selected {% endif %} value="1">Все</option>
-                <option {% if selectcopy == "2" %} selected {% endif %} value="2">Копия</option>
-                <option {% if selectcopy == "3" %} selected {% endif %} value="3">Оригинал</option>
-          </select>
-          
+                <option {% if selectcopy == "0" %} selected {% endif %} value="0">Все</option>
+                <option {% if selectcopy == "1" %} selected {% endif %} value="1">Копия</option>
+                <option {% if selectcopy == "2" %} selected {% endif %} value="2">Оригинал</option>
+          </select>          
         </th>
         <th st-sort="Napravlenie">
           <select class="form-control" name="napravlenie" placeholder="Направление">
             <option {% if selectnapr == "0" %} selected {% endif %} value="0">Все</option>            
             {% for item in Profile %}
-            <option {% if selectnapr == "{{ item }}" %} selected {% endif %} value="{{ item.id }}">{{item.name}}</option>
-            {% endfor %}
-            <option > 
+            <option {% if selectnapr == item.id %} selected {% endif %} value="{{item.id}}">{{item.name}}</option>
+            {% endfor %}           
           </select>         
         </th>
         <th st-sort="bali" width="8%">
-          <table>
-            <tbody>
-              <td>
                   <input name="balli>" class="form-control" placeholder=">"/>
-              </td>
-              <td>
                   <input name="balli<" class="form-control" placeholder="<"/>
-              </td>
-            </tbody>
-          </table>
         </th>
         <th st-sort="state">
           <select class="form-control" name="status">
-                <option {% if select == "1" %} selected {% endif %} value="1">Все</option>
-                <option {% if select == "2" %} selected {% endif %} value="2">поданные</option>
-                <option {% if select == "3" %} selected {% endif %} value="3">подтвержденные</option>
-                <option {% if select == "4" %} selected {% endif %} value="4">экспортированные</option>
-                <option {% if select == "5" %} selected {% endif %} value="5">анулированные</option>
+                <option {% if select == "0" %} selected {% endif %} value="0">Все</option>
+                {% for item in Application %}
+                <option {% if select == item.appState.id %} selected {% endif %} value="{{item.appState.id}}">{{item.appState.value}}</option>
+                {% endfor %}                
           </select>
         </th>
-        <th><button type="submit" class="btn btn-primary" name="apply">Применить фильтр</button></th>
+        <th>
+          <button type="submit" class="btn btn-primary" name="cancel" >Сбросить фильтр</button>
+          <button type="submit" class="btn btn-primary" name="apply" >Применить фильтр</button>
+        </th>
       </tr>
       </thead>
       <tbody>
