@@ -104,8 +104,6 @@
 					$("#emailField").attr("class","has-error has-feedback col-xs-12 col-sm-12 col-md-4 col-md-offset-4");
 					$("#emailIcon").attr("class","glyphicon glyphicon-remove form-control-feedback");
 					$("#emailFieldDescr").html(data['error_msg']);
-					//var htmlcode= "<p><label for=\"username\">Имя пользователя</label><input type=\"text\" class=\"form-control\" name=\"username\" id=\"username\" placeholder=\"Имя пользователя\"><span class=\"glyphicon glyphicon-remove form-control-feedback\" aria-hidden=\"true\"></span></p>";
-					//$("#usernameField").html(htmlcode);
 					$emailError=true;
 				}
 				else
@@ -177,8 +175,8 @@
 			},
 			onNext: function(tab, navigation, index)
 			{
-				if($usernameError || $emailError)
-					return false;
+				//if($usernameError || $emailError || $pwdError)
+					//return false;
 			}
 		});
 		$('#rootwizard .finish').click(function() 
