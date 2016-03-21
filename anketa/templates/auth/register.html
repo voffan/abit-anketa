@@ -244,6 +244,22 @@
 			mnameError=false;
 		}
 	});
+	$("#birthday").focusout(function()
+	{
+		dateError=true;
+		var dtRegex =/^\d{4}-\d{1,2}-\d{1,2}$/;
+		if(!dtRegex.test($("#birthday").val()) || $("#birthday").val().length===0)
+		{
+			SetIcon("birthday","error");
+			$("#birthdayField").attr("class","has-error has-feedback col-xs-3 col-sm-3 col-md-2 col-md-offset-4");
+		}
+		else
+		{
+			SetIcon("birthday","okay");
+			$("#birthdayField").attr("class","has-success has-feedback col-xs-3 col-sm-3 col-md-2 col-md-offset-4");
+			dateError=false;
+		}
+	});
 	$(document).ready(function() 
 	{
 		$('#rootwizard').bootstrapWizard(
@@ -382,18 +398,22 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-xs-3 col-sm-3 col-md-2 col-md-offset-4">
+						<div class="col-xs-3 col-sm-3 col-md-2 col-md-offset-4" id="birthdayField">
 							<p>
 								<label for="birthday">Дата рождения</label>
 								<input type="date" name = "birthday" id ="birthday" value="1997-01-01" class="form-control">
+								<span id="birthdayIcon"></span>
+								<span id="birthdayFieldDescr" class="help-block"></span>
 							</p>
 						</div>
-						<div class ="col-xs-3 col-sm-6 col-md-2">
+						<div class ="col-xs-3 col-sm-6 col-md-2" id="sexField">
 							<label for="sex">Пол</label>
 							<p>
 								<input type="radio" name = "sex" value="p1">Мужской
 								<input type="radio" name = "sex" value="p2">Женский
 							</p>
+							<span id="birthdayIcon"></span>
+							<span id="birthdayFieldDescr" class="help-block"></span>
 						</div>
 					</div>
 				</div>
