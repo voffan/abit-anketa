@@ -148,9 +148,8 @@
 		if($("#passwordVerify").val().length===0 || $("#password").val().length===0)
 		{
 			SetIcon("passwordVerify","");
-			return false;
 		}
-		if($("#password").val().length!=0 && $("#passwordVerify").val().length!=0)
+		else if($("#password").val().length!=0 && $("#passwordVerify").val().length!=0)
 		{
 			if($("#password").val() === $("#passwordverify").val())
 			{
@@ -160,7 +159,7 @@
 			else
 			{
 				SetIcon("passwordVerify","error");
-				$("#passwordVerifyFieldDescr").html("check");
+				$("#passwordVerifyFieldDescr").html("Passwords do not match.");
 			}
 		}
 	});
@@ -170,9 +169,8 @@
 		if($("#password").val().length===0)
 		{
 			SetIcon("password","");
-			return false;
 		}
-		if($("#password").val().length>=6)
+		else if($("#password").val().length>=6)
 		{
 			SetIcon("password","okay");
 			pwdError=false;
@@ -180,7 +178,7 @@
 		else
 		{
 			SetIcon("password","error");
-			$("#passwordFieldDescr").html("Minimum password length is 6");
+			$("#passwordFieldDescr").html("Minimum password length is 6.");
 		}
 	});
 	// second page
@@ -196,9 +194,8 @@
 		if($("#fName").val().length===0)
 		{
 			SetIcon("fName","");
-			return;
 		}
-		if(!symbolsValid.test($("#fName").val()))
+		else if(!symbolsValid.test($("#fName").val()))
 		{
 			SetIcon("fName","error");
 		}
@@ -213,10 +210,9 @@
 		snameError=true;
 		if($("#sName").val().length===0)
 		{
-			SetIcon("#sName","");
-			return;
+			SetIcon("sName","");
 		}
-		if(!symbolsValid.test($("#sName").val()))
+		else if(!symbolsValid.test($("#sName").val()))
 		{
 			SetIcon("sName","error");
 		}
@@ -288,22 +284,28 @@
 			},
 			onNext: function(tab, navigation, index)
 			{
-				if(index===0)
+				if(index===1)
 				{
 					//if($usernameError || $emailError || $pwdError || $pwdVerError)
 						//return false;
+				}
+				else if(index===2)
+				{
+					if((!$("#female").prop('checked') && !$("#male").prop('checked')) || $fnameError || $snameError || $mnameError || $dateError)
+						return false;
 				}
 			}
 		});
 		$('#rootwizard .finish').click(function() 
 		{
-			//save data
+			$("#login_form").submit();
 		});
 	});
 </script>
 {% endblock %}
 {% block content %}
-<form name="login_form" action="{%url 'create_person'%}" class="form-horizontal" role="form" method="post">
+<form name="login_form" id="login_form" action="{%url 'create_person'%}" class="form-horizontal" role="form" method="post">
+{% csrf_token %}
 	<div id="rootwizard" class="col-md-8 col-md-offset-2">
 		<div class="navbar">
 			<div class="navbar-inner">
@@ -406,14 +408,14 @@
 								<span id="birthdayFieldDescr" class="help-block"></span>
 							</p>
 						</div>
-						<div class ="col-xs-3 col-sm-6 col-md-2" id="sexField">
+						<div class ="col-xs-3 col-sm-6 col-md-2" id="sexField" >
 							<label for="sex">Пол</label>
 							<p>
-								<input type="radio" name = "sex" value="p1">Мужской
-								<input type="radio" name = "sex" value="p2">Женский
+								<input type="radio" name = "sex" id = "male" value="p1">Мужской
+								<input type="radio" name = "sex" id = "female" value="p2">Женский
 							</p>
-							<span id="birthdayIcon"></span>
-							<span id="birthdayFieldDescr" class="help-block"></span>
+							<span id="sexIcon"></span>
+							<span id="sexFieldDescr" class="help-block"></span>
 						</div>
 					</div>
 				</div>

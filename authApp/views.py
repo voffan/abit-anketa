@@ -14,7 +14,7 @@ def index(request):
 def login_user(request):
 	username = request.GET.get('username', '')
 	password = request.GET.get('password', '')
-	user = authenticate(username=username, password=pwd)
+	user = authenticate(username=username, password=password)
 	if user is not None:
 		login(request, user)
 	return user
@@ -46,11 +46,9 @@ def checkEmailValid(request):
 	return HttpResponse(json.dumps(result), content_type='application/json')
 
 def checkUserValid(request):
-	#result = [{'username':{'result':0, 'error_msg':''},'e-mail':{'result':0, 'error_msg':''}, 'pwd':{'result':0, 'error_msg':''}}]
 	result = {'result':0, 'error_msg':''}
 	name=request.GET.get('username','')
 	check = User.objects.filter(username=name).first()
-	print("result[result]")
 
 	if check is not  None:
 		result['result']=1

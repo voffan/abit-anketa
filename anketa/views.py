@@ -13,7 +13,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 
-from anketa.models import Person, Address, Attribute, AttrValue
+from anketa.models import Person, Address, Attribute, AttrValue, Abiturient
 
 class StartPage(TemplateView):
     template_name = 'anketa/start.html'
@@ -197,10 +197,17 @@ def SavePerson(request):
     person.save()
 
 def CreatePerson(request):
-    if request.method =='POST':
-        SavePerson(request)
-        return HttpResponseRedirect(reverse('application'))
-    data={}
-    context = {'data':data}
-    context.update(csrf(request))
-    return render(request,'/',context)
+	if request.method =='POST':
+		abit = Abiturient()
+		abit.user.user=request.POST.get('username','');
+		abit.user.password=request.POST.get('password','')
+		abit.fname=request.POST.get('fName','')
+		abit.sname=request.POST.get('sName','')
+		abit.mname=request.POST.get('mName','')
+		abit.sex=request.POST.get('sex','')
+		abit.birthdate=datetime.strptime(request.POST.get('birthday',''),'%Y-%m-%d')
+		return HttpResponseRedirect(reverse('application'))
+	data={}
+	context = {'data':data}
+	context.update(csrf(request))
+	return render(request,'/',context)
