@@ -14,6 +14,7 @@ from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 
 from anketa.models import Person, Address, Attribute, AttrValue, Abiturient
+from django.db import transaction
 
 class StartPage(TemplateView):
     template_name = 'anketa/start.html'
@@ -196,16 +197,23 @@ def SavePerson(request):
     #person.mother = get_object_or_404(AttrValue,pk=18) #foreign self can be null
     person.save()
 
+@transaction.atomic
+def Save_Abiturient(values):
+    abit = Abiturient()
+    abit.user = User()
+    abit.user.username=values.get('username','');
+    abit.user.set_password(values.get('password',''))
+    abit.user.save()
+    abit.fname=values.get('fName','')
+    abit.sname=values.get('sName','')
+    abit.mname=values.get('mName','')
+    abit.sex=values.get('sex','')
+    abit.birthdate=datetime.strptime(values.get('birthday',''),'%Y-%m-%d')
+    abit.save()
+
 def CreatePerson(request):
 	if request.method =='POST':
-		abit = Abiturient()
-		abit.user.user=request.POST.get('username','');
-		abit.user.password=request.POST.get('password','')
-		abit.fname=request.POST.get('fName','')
-		abit.sname=request.POST.get('sName','')
-		abit.mname=request.POST.get('mName','')
-		abit.sex=request.POST.get('sex','')
-		abit.birthdate=datetime.strptime(request.POST.get('birthday',''),'%Y-%m-%d')
+		Save_Abiturient(request.POST)
 		return HttpResponseRedirect(reverse('application'))
 	data={}
 	context = {'data':data}
