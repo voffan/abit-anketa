@@ -36,8 +36,8 @@ class AttrValue(models.Model):
         return self.attribute.name+' '+self.value
 
 class Person(models.Model):
-    lname = models.CharField(u'Фамилия', max_length=30)
-    nname = models.CharField(u'Имя', max_length=30)
+    sname = models.CharField(u'Фамилия', max_length=30)
+    fname = models.CharField(u'Имя', max_length=30)
     mname = models.CharField(u'Отчество', max_length=30)
     fullname = models.CharField(u'ФИО', max_length = 200, blank=True, null=True, db_index=True)
     sex = models.CharField(u'Пол', choices=Sex, max_length=1, default='М')
@@ -66,18 +66,18 @@ class Abiturient(Person):
     user = models.ForeignKey(User, verbose_name=u'Пользователь', db_index=True)
 
 class Application(models.Model):
-    department = models.ForeignKey('Department', verbose_name = u'Институт/факультет', db_index=True)
-    abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент', db_index=True)
-    date = models.DateField(u'Дата подачи', db_index=True)
-    number = models.IntegerField(u'Номер зааявления', max_length=10)
-    eduform = models.CharField(u'Форма обучения',choices=Eduform, default='О', max_length=10)
-    budget = models.BooleanField(u'В рамках контрольных цифр приёма', default=False)
-    withfee = models.BooleanField(u'по договорам об оказании платных обр. услуг', default=False)
-    profile = models.ForeignKey('Profile',verbose_name = u'Профиль')
-    appState = models.ForeignKey('AttrValue',verbose_name=u'Состояние заявления', db_index=True)
-    points = models.IntegerField(u'Кол-во баллов', db_index=True)  
-    def __str__(self):
-        return self.abiturient.fullname+' application#'+str(self.number)
+	department = models.ForeignKey('Department', verbose_name = u'Институт/факультет', db_index=True)
+	abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент', db_index=True)
+	date = models.DateField(u'Дата подачи', db_index=True)
+	number = models.IntegerField(u'Номер зааявления', max_length=10)
+	eduform = models.CharField(u'Форма обучения',choices=Eduform, default='О', max_length=10)
+	budget = models.BooleanField(u'В рамках контрольных цифр приёма', default=False)
+	withfee = models.BooleanField(u'по договорам об оказании платных обр. услуг', default=False)
+	profile = models.ForeignKey('Profile',verbose_name = u'Профиль')
+	appState = models.ForeignKey('AttrValue',verbose_name=u'Состояние заявления', db_index=True)
+	points = models.IntegerField(u'Кол-во баллов', db_index=True)  
+	def __str__(self):
+	    return self.abiturient.fullname+' application#'+str(self.number)
 
 class Address(models.Model):
     abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент')

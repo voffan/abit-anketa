@@ -11,82 +11,303 @@
 <script src="{% static "anketa/js/bootstrap-typeahead.js" %}"></script>
 
 <script>
-	$(document).ready(function() 
+	/*
+	............................................________ 
+	....................................,.-'"...................``~., 
+	.............................,.-"..................................."-., 
+	.........................,/...............................................":, 
+	.....................,?......................................................, 
+	.................../...........................................................,} 
+	................./......................................................,:`^`..} 
+	.............../...................................................,:"........./ 
+	..............?.....__.........................................:`.........../ 
+	............./__.(....."~-,_..............................,:`........../ 
+	.........../(_...."~,_........"~,_....................,:`........_/ 
+	..........{.._$;_......"=,_......."-,_.......,.-~-,},.~";/....} 
+	...........((.....*~_......."=-._......";,,./`..../"............../ 
+	...,,,___.`~,......"~.,....................`.....}............../ 
+	............(....`=-,,.......`........................(......;_,,-" 
+	............/.`~,......`-...................................../ 
+	.............`~.*-,.....................................|,./.....,__ 
+	,,_..........}.>-._...................................|..............`=~-, 
+	.....`=~-,__......`,................................. 
+	...................`=~-,,.,............................... 
+	................................`:,,...........................`..............__ 
+	.....................................`=-,...................,%`>--==`` 
+	........................................_..........._,-%.......` 
+	..................................., 
+	*/
+	// first page
+	var usernameError=true;
+	var emailError=true;
+	var pwdError=true;
+	var pwdVerError=true;
+	function SetIcon(field, status)
 	{
-	$('#rootwizard').bootstrapWizard(
-	{
-		onTabShow: function(tab, navigation, index) 
+		if(status==="okay")
 		{
-			var $total = navigation.find('li').length;
-			var $current = index+1;
-			var $percent = ($current/$total) * 100;
-			document.getElementById("progress-bar").style.width=$percent+'%';
-			// If it's the last tab then hide the last button and show the finish instead
-			if($current >= $total) 
-			{
-				$('#rootwizard').find('.pager .next').hide();
-				$('#rootwizard').find('.pager .finish').show();
-				$('#rootwizard').find('.pager .finish').removeClass('disabled');
-			} else 
-			{
-				$('#rootwizard').find('.pager .next').show();
-				$('#rootwizard').find('.pager .finish').hide();
-			}
-		},
-		onTabClick: function(tab, navigation, index) 
+			$("#"+field+"Field").attr("class","has-success has-feedback col-xs-12 col-sm-12 col-md-4 col-md-offset-4");
+			$("#"+field+"Icon").attr("class","glyphicon glyphicon-ok form-control-feedback");
+			$("#"+field+"FieldDescr").html("");
+		}
+		else if(status==="error")
 		{
-			return false;
-		},
-		onNext: function(tab, navigation, index)
-		{
-			var $hasError = Boolean(false);
-			if(index === 1)
-			{
-				$.ajax({
-					url:"{% url 'authapp:checkUserValid' %}",
-					method:"GET",
-					data:{'username':$('#username').val()},
-					dataProcess:true,
-					timeout:500,
-					success:function(data)
-					{
-						if(parseInt(data[0]['username']['result'])===0)
-						{
-							if(document.getElementById("usernameFielddescr"))
-								return;
+			$("#"+field+"Field").attr("class","has-error has-feedback col-xs-12 col-sm-12 col-md-4 col-md-offset-4");
+			$("#"+field+"Icon").attr("class","glyphicon glyphicon-remove form-control-feedback");
+			$("#"+field+"FieldDescr").html("Error");
 
-							document.getElementById("usernameField").className="has-error col-xs-12 col-sm-12 col-md-4 col-md-offset-4";
-							var div = document.createElement("div");
-							div.innerHTML="<span id=\"usernameFielddescr\" class=\"help-block\">You have an error, bitch</span>"
-							document.getElementById("usernameField").appendChild(div);
-							$hasError=true;
-						}
-						if(parseInt(data[0]['e-mail']['result'])===1)
-						{
-							$hasError=true;
-						}
-						if(parseInt(data[0]['pwd']['result'])===1)
-						{
-							$hasError=true;
-						}
-					},
-					error:function(){
-						alert('Check Internet connnection!');
-					}
-				});
+		}
+		else if(status==="")
+		{
+			$("#"+field+"Field").attr("class","has-feedback col-xs-12 col-sm-12 col-md-4 col-md-offset-4");
+			$("#"+field+"Icon").attr("class","");
+			$("#"+field+"FieldDescr").html("");
+		}
+		var string = "#"+field+"Field";
+		
+	}
+	$("#usernameField").focusout(function()
+	{
+		$usernameError=true;
+		if($("#username").val().length === 0)
+		{
+			SetIcon("username","");
+			return;
+		}
+		$.ajax(
+		{
+			url:"{% url 'authapp:checkUserValid' %}",
+			method:"GET",
+			data:{'username':$('#username').val()},
+			dataProcess:true,
+			timeout:500,
+			success:function(data)
+			{
+				if(parseInt(data['result'])===1)
+				{
+					SetIcon("username","error");
+					$("#usernameFieldDescr").html(data['error_msg']);
+				}
+				else
+				{
+					SetIcon("username","okay");
+					$usernameError=false;
+				}
+				
+			},
+			error:function(){
+				alert('Check Internet connnection!');
 			}
-			
-			return false;
+		});
+	});
+	$("#emailField").focusout(function()
+	{
+		$emailError=true;
+		if($("#email").val().length === 0)
+		{
+			SetIcon("email","");
+			return;
+		}
+		var emailReg = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+		if(!emailReg.test($("#email").val()))
+		{
+			SetIcon("email","error");
+			$("#emailFieldDescr").html("Incorrect e-mail format");
+			return;
+		}
+		$.ajax(
+		{
+			url:"{% url 'authapp:checkEmailValid' %}",
+			method:"GET",
+			data:{'email':$('#email').val()},
+			dataProcess:true,
+			timeout:500,
+			success:function(data)
+			{
+				if(parseInt(data['result'])===1)
+				{
+					SetIcon("email","error");
+					$("#emailFieldDescr").html(data['error_msg']);
+				}
+				else
+				{
+					SetIcon("email","okay");
+					$("#emailFieldDescr").html("");
+					$emailError=false;
+				}
+				
+			},
+			error:function(){
+				alert('Check Internet connnection!');
+			}
+		});
+	});
+	$("#passwordVerifyField").focusout(function()
+	{
+		pwdVerError=true;
+		if($("#passwordVerify").val().length===0 || $("#password").val().length===0)
+		{
+			SetIcon("passwordVerify","");
+		}
+		else if($("#password").val().length!=0 && $("#passwordVerify").val().length!=0)
+		{
+			if($("#password").val() === $("#passwordverify").val())
+			{
+				SetIcon("passwordVerify","okay");
+				pwdVerError=false;
+			}
+			else
+			{
+				SetIcon("passwordVerify","error");
+				$("#passwordVerifyFieldDescr").html("Passwords do not match.");
+			}
 		}
 	});
-    $('#rootwizard .finish').click(function() {
-        //save data
-    });
-});
+	$("#password").focusout(function()
+	{
+		pwdError=true;
+		if($("#password").val().length===0)
+		{
+			SetIcon("password","");
+		}
+		else if($("#password").val().length>=6)
+		{
+			SetIcon("password","okay");
+			pwdError=false;
+		}
+		else
+		{
+			SetIcon("password","error");
+			$("#passwordFieldDescr").html("Minimum password length is 6.");
+		}
+	});
+	// second page
+	var fnameError=true;
+	var snameError=true;
+	var mnameError=true;
+	var dateError=true;
+	var sexError=true;
+	var symbolsValid = /^[а-яА-ЯЁё]+$/;
+	$("#fName").focusout(function()
+	{
+		fnameError=true;
+		if($("#fName").val().length===0)
+		{
+			SetIcon("fName","");
+		}
+		else if(!symbolsValid.test($("#fName").val()))
+		{
+			SetIcon("fName","error");
+		}
+		else
+		{
+			SetIcon("fName","okay");
+			fnameError=false;
+		}
+	});
+	$("#sName").focusout(function()
+	{
+		snameError=true;
+		if($("#sName").val().length===0)
+		{
+			SetIcon("sName","");
+		}
+		else if(!symbolsValid.test($("#sName").val()))
+		{
+			SetIcon("sName","error");
+		}
+		else
+		{
+			SetIcon("sName","okay");
+			fnameError=false;
+		}
+	});
+	$("#mName").focusout(function()
+	{
+		mnameError=true;
+		if($("#mName").val().length===0)
+		{
+			SetIcon("mName","");
+			return;
+		}
+		if(!symbolsValid.test($("#mName").val()))
+		{
+			SetIcon("mName","error");
+		}
+		else
+		{
+			SetIcon("mName","okay");
+			mnameError=false;
+		}
+	});
+	$("#birthday").focusout(function()
+	{
+		dateError=true;
+		var dtRegex =/^\d{4}-\d{1,2}-\d{1,2}$/;
+		if(!dtRegex.test($("#birthday").val()) || $("#birthday").val().length===0)
+		{
+			SetIcon("birthday","error");
+			$("#birthdayField").attr("class","has-error has-feedback col-xs-3 col-sm-3 col-md-2 col-md-offset-4");
+		}
+		else
+		{
+			SetIcon("birthday","okay");
+			$("#birthdayField").attr("class","has-success has-feedback col-xs-3 col-sm-3 col-md-2 col-md-offset-4");
+			dateError=false;
+		}
+	});
+	$(document).ready(function() 
+	{
+		$('#rootwizard').bootstrapWizard(
+		{
+			onTabShow: function(tab, navigation, index) 
+			{
+				var $total = navigation.find('li').length;
+				var $current = index+1;
+				var $percent = ($current/$total) * 100;
+				document.getElementById("progress-bar").style.width=$percent+'%';
+				// If it's the last tab then hide the last button and show the finish instead
+				if($current >= $total) 
+				{
+					$('#rootwizard').find('.pager .next').hide();
+					$('#rootwizard').find('.pager .finish').show();
+					$('#rootwizard').find('.pager .finish').removeClass('disabled');
+				} else 
+				{
+					$('#rootwizard').find('.pager .next').show();
+					$('#rootwizard').find('.pager .finish').hide();
+				}
+			},
+			onTabClick: function(tab, navigation, index) 
+			{
+				return false;
+			},
+			onNext: function(tab, navigation, index)
+			{
+				if(index===1)
+				{
+					//if($usernameError || $emailError || $pwdError || $pwdVerError)
+						//return false;
+				}
+				else if(index===2)
+				{
+					/*
+					if((!$("#female").prop('checked') && !$("#male").prop('checked')) || $fnameError || $snameError || $mnameError || $dateError)
+						return false;
+					*/
+				}
+			}
+		});
+		$('#rootwizard .finish').click(function() 
+		{
+			$("#login_form").submit();
+		});
+	});
 </script>
 {% endblock %}
 {% block content %}
-<form name="login_form" action="{%url 'create_person'%}" class="form-horizontal" role="form" method="post">
+<form name="login_form" id="login_form" action="{%url 'create_person'%}" class="form-horizontal" role="form" method="post">
+{% csrf_token %}
 	<div id="rootwizard" class="col-md-8 col-md-offset-2">
 		<div class="navbar">
 			<div class="navbar-inner">
@@ -109,33 +330,40 @@
 						<div class="col-xs-12 col-sm-12 col-md-4 col-md-offset-4" id ="usernameField">
 							<p>
 								<label for="username">Имя пользователя</label>
-								<input type="text" class="form-control" name="username" id="username" placeholder="Имя пользователя" aria-describedby="descr">
+								<input type="text" class="form-control" name="username" id="username" placeholder="Имя пользователя">
+								<span id="usernameIcon"></span>
+								<span id="usernameFieldDescr" class="help-block"></span>
 							</p>
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-xs-12 col-sm-12 col-md-4 col-md-offset-4">
-							<p>
-								<label class="control-label" for="password">Пароль</label>
-								<input type="password" class="form-control" name="password" id="password" placeholder="Пароль">
-							</p>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-12 col-sm-12 col-md-4 col-md-offset-4">
-							<p>
-								<label for="passwordverify">Повторите пароль</label>
-								<input type="password" class="form-control" name="passwordverify" id="passwordverify" placeholder="Повторите пароль">
-							</p>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-12 col-sm-12 col-md-4 col-md-offset-4">
+						<div class="col-xs-12 col-sm-12 col-md-4 col-md-offset-4" id="emailField">
 							<p>
 								<label for="email">Ваша электронная почта</label>
 								<input type="text" class="form-control" name="email" id="email" placeholder="Электронная почта">
+								<span id="emailIcon"></span>
+								<span id="emailFieldDescr" class="help-block"></span>
 							</p>
-							
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-4 col-md-offset-4" id="passwordField">
+							<p>
+								<label class="control-label" for="password">Пароль</label>
+								<input type="password" class="form-control" name="password" id="password" placeholder="Пароль">
+								<span id="passwordIcon"></span>
+								<span id="passwordFieldDescr" class="help-block"></span>
+							</p>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-4 col-md-offset-4" id="passwordVerifyField">
+							<p>
+								<label for="passwordverify">Повторите пароль</label>
+								<input type="password" class="form-control" name="passwordVerify" id="passwordVerify" placeholder="Повторите пароль">
+								<span id="passwordVerifyIcon"></span>
+								<span id="passwordVerifyFieldDescr" class="help-block"></span>
+							</p>
 						</div>
 					</div>
 				</div>
@@ -143,43 +371,53 @@
 			
 			<div class="tab-pane" id="tab2">
 				<div class="container-fluid">
-					<div class = "row" id="sNameField">
-						<div class="col-xs-12 col-sm-12 col-md-4 col-md-offset-4">
+					<div class = "row">
+						<div class="col-xs-12 col-sm-12 col-md-4 col-md-offset-4" id="sNameField">
 							<p>
-								<label for="sname">Фамилия</label>
-								<input type = "text" name= "sname" id = "sname" class = "form-control" placeholder = "Иванов">
+								<label for="sName">Фамилия</label>
+								<input type = "text" name= "sName" id = "sName" class = "form-control" placeholder = "Иванов">
+								<span id="sNameIcon"></span>
+								<span id="sNameFieldDescr" class="help-block"></span>
 							</p>
 						</div>
 					</div>
-					<div class="row" id="nameField">
-						<div class="col-xs-12 col-sm-12 col-md-4 col-md-offset-4">
+					<div class="row" >
+						<div class="col-xs-12 col-sm-12 col-md-4 col-md-offset-4" id="fNameField">
 							<p>
-								<label for="name">Имя</label>
-								<input type = "text" name= "name" id = "name" class = "form-control" placeholder = "Иван">
+								<label for="fName">Имя</label>
+								<input type = "text" name= "fName" id = "fName" class = "form-control" placeholder = "Иван">
+								<span id="fNameIcon"></span>
+								<span id="fNameFieldDescr" class="help-block"></span>
 							</p>
 						</div>
 					</div>
-					<div class="row" id="mNameField">
-						<div class="col-xs-12 col-sm-12 col-md-4 col-md-offset-4">
+					<div class="row" >
+						<div class="col-xs-12 col-sm-12 col-md-4 col-md-offset-4" id="mNameField">
 							<p>
-								<label for="mname">Отчество</label>
-								<input type="text" name = "mname" id ="mname" class="form-control" placeholder="Иванович">
+								<label for="mName">Отчество</label>
+								<input type="text" name = "mName" id ="mName" class="form-control" placeholder="Иванович">
+								<span id="mNameIcon"></span>
+								<span id="mNameFieldDescr" class="help-block"></span>
 							</p>
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-xs-3 col-sm-3 col-md-2 col-md-offset-4">
+						<div class="col-xs-3 col-sm-3 col-md-2 col-md-offset-4" id="birthdayField">
 							<p>
 								<label for="birthday">Дата рождения</label>
 								<input type="date" name = "birthday" id ="birthday" value="1997-01-01" class="form-control">
+								<span id="birthdayIcon"></span>
+								<span id="birthdayFieldDescr" class="help-block"></span>
 							</p>
 						</div>
-						<div class ="col-xs-3 col-sm-6 col-md-2">
+						<div class ="col-xs-3 col-sm-6 col-md-2" id="sexField" >
 							<label for="sex">Пол</label>
 							<p>
-								<input type="radio" name = "sex" value="p1">Мужской
-								<input type="radio" name = "sex" value="p2">Женский
+								<input type="radio" name = "sex" id = "male" value="p1">Мужской
+								<input type="radio" name = "sex" id = "female" value="p2">Женский
 							</p>
+							<span id="sexIcon"></span>
+							<span id="sexFieldDescr" class="help-block"></span>
 						</div>
 					</div>
 				</div>
