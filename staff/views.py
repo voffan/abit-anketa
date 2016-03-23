@@ -161,7 +161,11 @@ def Application_list (request):
     selectdoc = '0'
     selectcopy = '0'
     fname = '0'
-    pool = '0'
+    bal1 = '0'
+    bal2 = '0'
+    dategt = '2016-01-01'
+    datelt = '0'     
+    filters={}
     if 'apply' in request.GET:
 
         if 'doctype' in request.GET and int(request.GET['doctype'])>0:
@@ -169,95 +173,106 @@ def Application_list (request):
                 docs = Docs.objects.select_related('Abiturient').filter(docType__id=selectdoc)
                 abiturients = [item.abiturient.id for item in docs]
                 applications = Application.objects.filter(abiturient__id__in=abiturients)
+                filters['doctype']=int(selectdoc)
 
         if 'iscopy' in request.GET:
             if request.GET['iscopy'] =='1':
                 selectcopy = '1'
                 docs = Docs.objects.select_related('Abiturient').filter(isCopy=0)
                 abiturients = [item.abiturient.id for item in docs]
-                applications = applications.filter(abiturient__id__in=abiturients)                
+                applications = applications.filter(abiturient__id__in=abiturients) 
+                filters['iscopy'] = selectcopy               
 
             elif request.GET['iscopy'] =='2':
                 selectcopy = '2'
                 docs = Docs.objects.select_related('Abiturient').filter(isCopy=1)
                 abiturients = [item.abiturient.id for item in docs]
-                applications = applications.filter(abiturient__id__in=abiturients)               
+                applications = applications.filter(abiturient__id__in=abiturients)
+                filters['iscopy'] = selectcopy                 
                
 
         if 'status' in request.GET and int(request.GET['status'])>0:
             select = request.GET['status']
             applications = applications.filter(appState__id=select)         
+            filters['status']= int(select)
 
         if 'fio' in request.GET and len(request.GET['fio'])>0:
-            applications=applications.filter(abiturient__fullname__icontains=request.GET['fio'])
             fname = request.GET['fio']
-            pool = '1'
+            applications=applications.filter(abiturient__fullname__icontains=fname)
+            filters['fio'] = fname            
 
         if 'forma' in request.GET:
             if request.GET['forma'] =='2':
                 applications = applications.filter(eduform__icontains=u'О')
                 selectform = '2'
+                filters['forma'] = selectform
             if request.GET['forma'] =='3':
                 applications = applications.filter(eduform__icontains=u'З')
                 selectform = '3'
+                filters['forma'] = selectform
 
 
         if 'balli>' in request.GET and len(request.GET['balli>'])>0:
-            applications = applications.filter(points__gt=request.GET['balli>'])
+            bal1 = request.GET['balli>']
+            applications = applications.filter(points__gt=bal1)
+            filters['bal1'] = bal1
+
         if 'balli<' in request.GET and len(request.GET['balli<'])>0:
-            applications = applications.filter(points__lt=request.GET['balli<'])
+            bal2 = request.GET['balli<']
+            applications = applications.filter(points__lt=bal2)
+            filters['bal2'] = bal2
 
         if 'datedoc>' in request.GET and len(request.GET['datedoc>'])>0:
-            applications = applications.filter(date__gt=request.GET['datedoc>'])
+            dategt = request.GET['datedoc>']
+            applications = applications.filter(date__gt=dategt)
+            filters['date1'] = dategt
+
         if 'datedoc<' in request.GET and len(request.GET['datedoc<'])>0:
-            applications = applications.filter(date__lt=request.GET['datedoc<'])
+            datelt = request.GET['datedoc<']
+            applications = applications.filter(date__lt=datelt)
+            filters['date2'] = datelt
 
 
         if 'napravlenie' in request.GET and int(request.GET['napravlenie'])>0:
                 selectnapr = request.GET['napravlenie']
                 applications = applications.filter(profile__id=selectnapr)
+                filters['naprav'] = int(selectnapr)
 
 
     if 'cancel' in request.GET:
         return HttpResponseRedirect(reverse('staff:application_list'))
 
 
-    number = request.GET.get('page','1')
-    app_pages = Paginator(applications, 25)
+    
+    app_pages = Paginator(applications, 2)
+
+    page = request.GET.get('page')
     try:
-        current_page = app_pages.page(number)
+        current_page = app_pages.page(page)
     except PageNotAnInteger:
         current_page = app_pages.page(1)
     except EmptyPage:
         current_page = app_pages.page(app_pages.num_pages)
+
     applications = current_page.object_list
+    filters['pages'] = current_page
     abiturients = [app.abiturient.id for app in applications]
-#    if selectdoc == '1':
-#        docs = Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains='аттестат')
-#    if selectdoc == '2':
-#        docs = Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains='Диплом')
+
+
     docs = Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains=u'аттестат')|Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains=u'Диплом')
-    #if int(selectdoc) != 0:
-     #   docs=docs.filter(docType__id=selectdoc)
+    
 
     apps_with_docs=[]
     for app in applications:
         doc = docs.filter(abiturient__id = app.abiturient.id).first()
         apps_with_docs.append({'app':app, 'doc':doc})
-    data={}
-    data['applications'] = apps_with_docs
-    data['select'] = int(select)
-    data['selectcopy'] = selectcopy
-    data['fname'] = fname
-    data['pool'] = pool
-    data['selectdoc'] = int(selectdoc)
-    data['selectform'] = selectform
-    data['selectnapr'] = int(selectnapr)
+    data={}       
+    data['applications'] = apps_with_docs    
     data['docType'] = AttrValue.objects.filter(attribute__name__icontains=u'тип док')
     data['Profile'] = Profile.objects.all()
     data['Docs'] = Docs.objects.all()
-    data['Application'] = Application.objects.all()
-    #data.update(csrf(request))
+    data['Application'] = AttrValue.objects.filter(attribute__name__icontains=u'статус за')#Application.objects.all()
+    data['filters'] = filters    
     return render(request,'staff\\application_list.html', data)
 
 def Application_review (request, application_id):

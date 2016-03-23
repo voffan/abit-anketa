@@ -3,6 +3,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+{% load staticfiles %}
 
 {% block head %}
   Заявления
@@ -36,51 +37,51 @@
       <tr>
         <th st-sort="#"></th>
         <th st-sort="FIO">
-          <input name="fio" class="form-control" placeholder="Фамилия Имя Отчество" value="{% if not pool == '0' %}{{fname}}{% endif %}"/>
+          <input name="fio" class="form-control" placeholder="Фамилия Имя Отчество" value="{{ filters.fio }}"/>
         </th>
         <th st-sort="Form">
           <select class="form-control" name="forma" placeholder="Форма Обучения">
-                <option {% if selectform == "1" %} selected {% endif %} value="1">Все</option>
-                <option {% if selectform == "2" %} selected {% endif %} value="2">Очная</option>
-                <option {% if selectform == "3" %} selected {% endif %} value="3">Заочная</option>
+                <option {% if filters.forma == "1" %} selected {% endif %} value="1">Все</option>
+                <option {% if filters.forma == "2" %} selected {% endif %} value="2">Очная</option>
+                <option {% if filters.forma == "3" %} selected {% endif %} value="3">Заочная</option>
           </select>
         </th>
         <th st-sort="Date" width="8%">          
-              <input type="date" name = "datedoc>" id ="datedoc>" value="2016-01-01" class="form-control">           
-              <input type="date" name = "datedoc<" id ="datedoc<" value="2018-01-01" class="form-control">
+              <input type="date" name = "datedoc>" id ="datedoc>" value="filters.date1" class="form-control">           
+              <input type="date" name = "datedoc<" id ="datedoc<" value="filters.date2" class="form-control">
         </th>
         <th st-sort="Doc_Type">        
           <select class="form-control" name="doctype" placeholder="Тип документа">
-            <option {% if selectdoc == "0" %} selected {% endif %} value="0">Все</option>
+            <option {% if filters.doctype == "0" %} selected {% endif %} value="0">Все</option>
             {% for item in docType %}
-            <option {% if selectdoc == item.id %} selected {% endif %} value="{{ item.id }}">{{item.value}}</option>
+            <option {% if filters.doctype == item.id %} selected {% endif %} value="{{ item.id }}">{{item.value}}</option>
             {% endfor %}            
           </select>
         </th>
         <th st-sort="isCopy" width="10%">
           <select class="form-control" name="iscopy" placeholder="Копия/Оригинал">
-                <option {% if selectcopy == "0" %} selected {% endif %} value="0">Все</option>
-                <option {% if selectcopy == "1" %} selected {% endif %} value="1">Копия</option>
-                <option {% if selectcopy == "2" %} selected {% endif %} value="2">Оригинал</option>
+                <option {% if filters.iscopy == "0" %} selected {% endif %} value="0">Все</option>
+                <option {% if filters.iscopy == "1" %} selected {% endif %} value="1">Копия</option>
+                <option {% if filters.iscopy == "2" %} selected {% endif %} value="2">Оригинал</option>
           </select>          
         </th>
         <th st-sort="Napravlenie">
           <select class="form-control" name="napravlenie" placeholder="Направление">
-            <option {% if selectnapr == "0" %} selected {% endif %} value="0">Все</option>            
+            <option {% if filters.naprav == "0" %} selected {% endif %} value="0">Все</option>            
             {% for item in Profile %}
-            <option {% if selectnapr == item.id %} selected {% endif %} value="{{item.id}}">{{item.name}}</option>
+            <option {% if filters.naprav == item.id %} selected {% endif %} value="{{item.id}}">{{item.name}}</option>
             {% endfor %}           
           </select>         
         </th>
         <th st-sort="bali" width="8%">
-                  <input name="balli>" class="form-control" placeholder=">"/>
-                  <input name="balli<" class="form-control" placeholder="<"/>
+                  <input name="balli>" class="form-control" placeholder=">" value="{{ filters.bal1 }}"/>
+                  <input name="balli<" class="form-control" placeholder="<" value="{{ filters.bal2 }}"/>
         </th>
         <th st-sort="state">
           <select class="form-control" name="status">
-                <option {% if select == "0" %} selected {% endif %} value="0">Все</option>
+                <option {% if filters.status == "0" %} selected {% endif %} value="0">Все</option>
                 {% for item in Application %}
-                <option {% if select == item.appState.id %} selected {% endif %} value="{{item.appState.id}}">{{item.appState.value}}</option>
+                <option {% if filters.status == item.id %} selected {% endif %} value="{{item.id}}">{{item.value}}</option>
                 {% endfor %}                
           </select>
         </th>
@@ -93,35 +94,49 @@
       <tbody>
       {% for item in applications %}
       <tr ng-repeat="row in displayedCollection">
-        <td>{{ forloop.counter }}</td>
-        <td><a href="{% url 'staff:application_review' item.app.id %}">{{ item.app.abiturient.fullname }}</a></td>
-        <td>{% if item.app.eduform == 'О'%}Очная{% endif %}{% if not item.app.eduform == 'О'%}Заочная{%endif%}</td>
-        <td>{{ item.app.date }}</td>
-        <td>{{ item.doc.docType.value }}</td>
-        <td>{% if item.doc.isCopy %} Оригинал {% endif %}{% if not item.doc.isCopy %} Копия {% endif %}</td>
-        <td>{{ item.app.profile }}</td>
-        <td>{{ item.app.points }}</td>
-        <td>{{ item.app.appState.value }}</td>
-        <th><div class="checkbox"><input type="checkbox" name="selected"></div></th>
+        <td class="rowl">{{ forloop.counter }}</td>
+        <td class="rowl"><a href="{% url 'staff:application_review' item.app.id %}">{{ item.app.abiturient.fullname }}</a></td>
+        <td class="rowl">{% if item.app.eduform == 'О'%}Очная{% endif %}{% if not item.app.eduform == 'О'%}Заочная{%endif%}</td>
+        <td class="rowl">{{ item.app.date }}</td>
+        <td class="rowl">{{ item.doc.docType.value }}</td>
+        <td class="rowl">{% if item.doc.isCopy %} Оригинал {% endif %}{% if not item.doc.isCopy %} Копия {% endif %}</td>
+        <td class="rowl">{{ item.app.profile }}</td>
+        <td class="rowl">{{ item.app.points }}</td>
+        <td class="rowl">{{ item.app.appState.value }}</td>
+        <td class="rowl"><div class="checkbox"><input type="checkbox" name="selected"/></div></td>
       </tr>
       {% endfor %}
       </tbody>
-    </table>
-    <nav>
-  <ul class="pagination">
-    <li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-    <li class="active"  ><a href="#">1 <span class="sr-only">(current)</span></a></li>
-    <li class="disabled"><a href="#">2 <span class="sr-only">(current)</span></a></li>
-    <li class="disabled"><a href="#">3 <span class="sr-only">(current)</span></a></li>
-    <li class="disabled"><a href="#">4 <span class="sr-only">(current)</span></a></li>
-    <li class="disabled"><a href="#">5 <span class="sr-only">(current)</span></a></li>
-    <li class="disabled"><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
-  </ul>
-</nav>
+    </table>  
+  
+  <div class="row">
+        <div class="large-3 large-offset-5 columns">
+            <ul class="pagination">
+                {% if filters.pages.has_previous %}
+                    <li class="arrow"><a href="/application_list/page/{{ filters.pages.previous_page_number }}/">&laquo;</a></li>
+                {% else %}
+                    <li class="arrow unavailable"><a href="">&laquo;</a></li>
+                {% endif %}
+                {% for page in filters.pages.paginator.page_range %}
+                    {% if page == number %}
+                        <li class="current"><a href="/application_list/page/{{ page }}/">{{ page }}</a></li>
+                    {% else %}
+                        <li><a href="/application_list/page/{{ page }}/">{{ page }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if filters.pages.has_next %}
+                    <li class="arrow"><a href="/application_list/page/{{ filters.pages.next_page_number }}/">&raquo;</a></li>
+                {% else %}
+                    <li class="arrow unavailable"><a href="">&raquo;</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
   </form>
 {% endblock %}
 
-{% block scripts %}
-  <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js"></script>
-  <script src="https://cdn.rawgit.com/esvit/ng-table/v1.0.0/dist/ng-table.js"></script>
+{% block scripts %} 
+ 
 {% endblock %}
+
