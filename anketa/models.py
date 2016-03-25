@@ -47,10 +47,10 @@ class Person(models.Model):
 
     def save(self, *args, **kwargs):
         s=''
-        if len(self.lname)>0:
-            s+=self.lname
-        if len(self.nname)>0:
-            s+=' '+self.nname
+        if len(self.sname)>0:
+            s+=self.sname
+        if len(self.fname)>0:
+            s+=' '+self.fname
         if len(self.mname)>0:
             s+=' '+self.mname
         self.fullname = s
