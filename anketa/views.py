@@ -214,3 +214,17 @@ def CreatePerson(request):
 	context = {'data':data}
 	context.update(csrf(request))
 	return render(request,'/',context)
+
+def CheckCaptcha(values):
+    return True
+
+def CreatePerson(request):
+	if request.method =='POST':
+		if(CheckCaptcha(request.POST)):
+            try:
+                Save_Abiturient(request.POST)
+            except Exception as e:
+                return HttpResponseRedirect(reverse('application'))
+            return HttpResponseRedirect(reverse('application'))
+        else:
+            return HttpResponseRedirect(reverse('application'))
