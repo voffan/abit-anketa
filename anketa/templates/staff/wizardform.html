@@ -4,12 +4,16 @@
 
 {% block additionalcss %}
 <link href="{% static "anketa/css/prettify.css" %}" rel="stylesheet">
+<link href="{% static "anketa/select2-3.5.4/select2.css" %}" rel="stylesheet">
+<link href="{% static "anketa/select2-3.5.4/select2-bootstrap.css" %}" rel="stylesheet">
 {% endblock %}
 
 {% block scripts %}
 <script src="{% static "anketa/js/jquery.bootstrap.wizard.js" %}"></script>
-<script src="{% static "anketa/js/prettify.js" %}"></script>
 <script src="{% static "anketa/js/bootstrap-typeahead.js" %}"></script>
+<script src="{% static "anketa/select2-3.5.4/select2.min.js" %}"></script>
+<script src="{% static "anketa/js/prettify.js" %}"></script>
+<script src="{% static "anketa/select2-3.5.4/select2_locale_ru.js" %}"></script>
 <script>
     function GetRegionID(){
         if($("#district").val().length === 0)
@@ -17,28 +21,31 @@
         return $("#iddistrict").val();
     }
     $(document).ready(function() {
-    $('#rootwizard').bootstrapWizard({onTabShow: function(tab, navigation, index) {
-        var $total = navigation.find('li').length;
-        var $current = index+1;
-        var $percent = ($current/$total) * 100;
-        $('#rootwizard').find('.bar').css({width:$percent+'%'});
+        $('#rootwizard').bootstrapWizard({onTabShow: function(tab, navigation, index) {
+            var $total = navigation.find('li').length;
+            var $current = index+1;
+            var $percent = ($current/$total) * 100;
+            $('#rootwizard').find('.bar').css({width:$percent+'%'});
 
-        // If it's the last tab then hide the last button and show the finish instead
-        if($current >= $total) {
-            $('#rootwizard').find('.pager .next').hide();
-            $('#rootwizard').find('.pager .finish').show();
-            $('#rootwizard').find('.pager .finish').removeClass('disabled');
-        } else {
-            $('#rootwizard').find('.pager .next').show();
-            $('#rootwizard').find('.pager .finish').hide();
-        }
+            // If it's the last tab then hide the last button and show the finish instead
+            if($current >= $total) {
+                $('#rootwizard').find('.pager .next').hide();
+                $('#rootwizard').find('.pager .finish').show();
+                $('#rootwizard').find('.pager .finish').removeClass('disabled');
+            } else {
+                $('#rootwizard').find('.pager .next').show();
+                $('#rootwizard').find('.pager .finish').hide();
+            }
 
-    }});
-    $('#rootwizard .finish').click(function() {
-        alert('Finished!, Starting over!');
-        $('#rootwizard').find("a[href*='tab1']").trigger('click');
+        }});
+        $('#rootwizard .finish').click(function() {
+            alert('Finished!, Starting over!');
+            $('#rootwizard').find("a[href*='tab1']").trigger('click');
+        });
+        $('#nationality').select2({
+            language:"ru"
+        });
     });
-});
 </script>
 <script>
     $("#territory").typeahead(
@@ -470,7 +477,7 @@
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
                             <label for="sname">Фамилия</label>
-                            <input type = "text" name= "sname" id = "sname" class = "form-control" placeholder = "Иванов" value="{{data.application.abiturient.lname}}">
+                            <input type = "text" name= "sname" id = "sname" class = "form-control" placeholder = "Иванов" value="{{data.application.abiturient.sname}}">
                         </p>
                     </div>
                 </div>
@@ -478,7 +485,7 @@
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
                             <label for="name">Имя</label>
-                            <input type = "text" name= "name" id = "name" class = "form-control" placeholder = "Иван" value="{{data.application.abiturient.nname}}">
+                            <input type = "text" name= "name" id = "name" class = "form-control" placeholder = "Иван" value="{{data.application.abiturient.fname}}">
                         </p>
                     </div>
                 </div>
@@ -497,12 +504,12 @@
                             <input type="date" name = "birthday" id ="birthday" value="1997-01-01" class="form-control" value="{{data.application.abiturient.birthdate}}">
                         </p>
                     </div>
-                    <div class ="col-xs-3 col-sm-6 col-md-6">
+                    <div class ="col-xs-3 col-sm-6 col-md-6"  >
                         <label for="sex">Пол</label>
-                            <p>
-                                <input type="radio" name = "hostel" value="p1">Мужской
-                                <input type="radio" name = "hostel" value="p2">Женский
-                            </p>
+                        <p>
+                            <input type="radio" name = "hostel" value="p1"{% if data.application.abiturient.sex == 'М' %} checked {% endif %}>Мужской
+                            <input type="radio" name = "hostel" value="p2"{% if data.application.abiturient.sex == 'Ж' %} checked {% endif %}>Женский
+                        </p>
                     </div>
                 </div>
                 <div class="row">
@@ -517,13 +524,20 @@
                     <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-3">
                         <p>
                             <label for="nation">Национальность(по желанию)</label>
-                            <input id ="nation" name="nation" class="form-control" placeholder="Саха" value="{{data.application.abiturient.nationality}}">
+                            <select id="nationality" name = "nationality" class="form-control">
+                               {% for item in data.nationality %}
+                               <option value="{{ item.id }}">{{ item.value }}</option>
+                               {% endfor %}
+                            </select>
+                            <!--input id ="nationality" name="nationality" class="form-control" placeholder="Саха" value="{{item.application.abiturient.nationality}}"-->
                         </p>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <p>
-                            <label for="citizenship">Гражданство</label>
-                            <input id="citizenship" name="citizenship" class="form-control" placeholder="РФ"  value="{{data.application.abiturient.citizenship}}"/>
+ /                           <label for="citizenship">Гражданство</label>
+                            {% for item in abiturient %}
+                            <input id="citizenship" name="citizenship" class="form-control" placeholder="РФ"  value="{{item.application.abiturient.citizenship}}"/>
+                            {% endfor %}
                         </p>
                     </div>
                 </div>
@@ -531,13 +545,13 @@
                     <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-3">
                         <p>
                             <label for="phone">Контактный телефон</label>
-                            <input type="tel" name = "phone" id ="phone" class="form-control" placeholder="Телефон в формате 8-ххх-ххххххх или 8-хххх-хххххх" pattern="(8-[0-9]{3}-[0-9]{7})|(8-[0-9]{4}-[0-9]{6})" value="{{data.contacts.value}}">
+                            <input type="tel" name = "phone" id ="phone" class="form-control" placeholder="Телефон в формате 8-ххх-ххххххх или 8-хххх-хххххх" pattern="(8-[0-9]{3}-[0-9]{7})|(8-[0-9]{4}-[0-9]{6})" value="{{data.contacts.contact_type.value}}">
                         </p>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <p>
                             <label for="inila">СНИЛС</label>
-                            <input id="inila" name="inila" class="form-control" placeholder="123-456-789-00" value="{{data.docattr.value}}" />
+                            <input id="inila" name="inila" class="form-control" placeholder="123-456-789-00" {% if data.docs.doctype == "СНИЛС"%} value="СНИЛС"  {% endif %}>  />
                         </p>
                     </div>
                 </div>
@@ -609,10 +623,10 @@
                         <p>
                             <label for="prevedu">Предыдущие образование</label>
                             <p>
-                                <input type = "radio" name= "prevedu" id = "prevedu"  value = "soo">СОО
-                                <input type = "radio" name= "prevedu" id = "prevedu"  value = "npo">НПО
-                                <input type = "radio" name= "prevedu" id = "prevedu"  value = "spo">СПО
-                                <input type = "radio" name= "prevedu" id = "prevedu"  value = "vpo">ВПО
+                                <input type = "radio" name= "prevedu" value="soo"{% if data.docs.doctype == "diplom" %} checked {% endif %}>СОО 
+                                <input type = "radio" name= "prevedu" value="npo"{% if data.docs.doctype == "attestat" %} checked {% endif %}>НПО 
+                                <input type = "radio" name= "prevedu" value="spo"{% if data.docs.doctype == "3"  %} checked {% endif %}>СПО 
+                                <input type = "radio" name= "prevedu" value="vpo"{% if data.docs.doctype == "4" %} checked {% endif %}>ВПО
                             </p>
                         </p>
                     </div>
@@ -621,11 +635,11 @@
                     <div class="row">
                             <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-3">
                                 <label for="datejoining">Дата поступления</label>
-                                <input type="date" name = "datejoining" id ="datejoining" class="form-control" value="2004-01-09" value="">
+                                <input type="date" name = "datejoining" id ="datejoining" class="form-control" value="2004-01-09" >
                             </div>
                             <div class="col-xs-3 col-sm-3 col-md-3">
                                 <label for="dateexiting">Дата окончания</label>
-                                <input type="date" name = "dateexiting" id ="dateexiting" class="form-control" value="2015-01-06" value="">
+                                <input type="date" name = "dateexiting" id ="dateexiting" class="form-control" value="2015-01-06" >
                             </div>
                     </div>
                 </p>
@@ -652,7 +666,7 @@
                         </div>
                         <div class="col-xs-3 col-sm-3 col-md-3">
                             <label for="adrsindex">Индекс</label>
-                            <input type = "text" name="adrsindex" id="adrsindex" class="form-control" placeholder="677000" value="{{data.docs.zipcode}}">
+                            <input type = "text" name="adrsindex" id="adrsindex" class="form-control" placeholder="677000" {% if data.docs.zipcode != "" %} value="{{data.docs.zipcode}}" {% endif %}  {% if data.docs.zipcode == "" %} value="677000" {% endif %}> 
                         </div>
                      </p>
                 </div>
@@ -660,7 +674,7 @@
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
                             <label for="territory">Область</label>
-                            <input id="territory" class="form-control" placeholder="Республика Саха (Якутия)" value="{{уточнить}}">
+                            <input id="territory" class="form-control" placeholder="Республика Саха (Якутия)" value="{{Kladr.views.get_region}}">
                             <input name = "idterritory" id="idterritory" hidden>
                         </p>
                     </div>
@@ -669,7 +683,7 @@
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
                             <label for="district">Район/улус</label>
-                            <input id="district" class="form-control" placeholder="" value="{{уточнить}}">
+                            <input id="district" class="form-control" placeholder="" value="{{Kladr.views.get_region}}">
                             <input name = "iddistrict" id="iddistrict" hidden>
                         </p>
                     </div>
@@ -678,7 +692,7 @@
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
                             <label for="city">Город/село</label>
-                            <input name="city" id="city" class="form-control" placeholder="Якутск" value="{{уточнить}}">
+                            <input name="city" id="city" class="form-control" placeholder="Якутск" value="{{Kladr.views.get_region}}">
                             <input name="idcity" id="idcity" hidden>
                         </p>
                     </div>
@@ -712,8 +726,8 @@
                         <p>
                             <label for="option1">Адрес прописки совпадает с адресом факт. места жительства</label>
                             <br>
-                            <input type="radio" name = "option1" value="a11">Нет
-                            <input type="radio" name = "option1" value="a12">Да
+                            <input type = "radio" name= "option1" value="a11"{% if not data.application.address.adrs_type_same  %} checked {% endif %}>Нет
+                            <input type = "radio" name= "option1" value="a12"{% if data.application.address.adrs_type_same  %} checked {% endif %}>Да
                         </p>
                     </div>
                 </div>
@@ -737,8 +751,8 @@
                         <p>
                             <label for="option2">Прошу допустить меня к участию в конкурсе</label>
                             <br>
-                            <input type="radio" name="option2" value="a21">на место в рамках контр.цифр приема
-                            <input type="radio" name="option2" value="a22">на место по договорам об оказании платных обр.услуг
+                            <input type = "radio" name= "option2" value="a21"{% if not data.application.budget  %} checked {% endif %}>на место в рамках контр.цифр приема
+                            <input type = "radio" name= "option2" value="a22"{% if data.application.withfee  %} checked {% endif %}>на место по договорам об оказании платных обр.услуг
                         </p>
                     </div>
                 </div>
@@ -772,16 +786,16 @@
                     <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-3">
                         <p>
                             <label for="option4">Форма обучения</label><br>
-                            <input type="radio" name="option4" value="a41">Очная
-                            <input type="radio" name="option4" value="a42">Заочная
+                            <input type = "radio" name= "option4" value="a41"{% if data.application.eduform == 'О' %} checked {% endif %}>Очная
+                            <input type = "radio" name= "option4" value="a42"{% if data.application.eduform == 'З' %} checked {% endif %}>Заочная
                         </p>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <p>
                             <label for="option8">Приоритетность поступления</label><br>
-                            <input type="radio" name="option8" value="a41">Высокий
-                            <input type="radio" name="option8" value="a42">Средний
-                            <input type="radio" name="option8" value="a43">Низкий
+                            <input type = "radio" name= "option8" value="a41"{% if data.application == '' %} checked {% endif %}>Высокий
+                            <input type = "radio" name= "option8" value="a42"{% if data.application == '' %} checked {% endif %}>Средний
+                            <input type = "radio" name= "option8" value="a43"{% if data.application == '' %} checked {% endif %}>Низкий
                         </p>
                     </div>
                 </div>
@@ -872,8 +886,8 @@
                         <p>
                            <b>Прошу создать специальные условия при сдаче вступ. исп-й в связи с ограниченными возможностями здоровья</b>
                             <br>
-                            <input type="radio" name="option5" value="a51">Нет
-                            <input type="radio" name="option5" value="a52">Да
+                            <input type = "radio" name= "option8" value="a51"{% if not data.privilegies.category %} checked {% endif %}>Нет
+                            <input type = "radio" name= "option8" value="a52"{% if data.privilegies.category %} checked {% endif %}>Да
                         </p>
                     </div>
                 </div>
@@ -905,8 +919,8 @@
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <label for="persach">Имеются ли достижения?</label>
                         <p>
-                            <input type="radio" name = "persach" value="a1">Нет
-                            <input type="radio" name = "persach" value="a2">Да
+                            <input type = "radio" name= "persach" value="a1"{% if not data.DepAchieves.profile  %} checked {% endif %}>Нет
+                            <input type = "radio" name= "persach" value="a2"{% if data.DepAchieves.profile %} checked {% endif %}>Да
                         </p>
                     </div>
                 </div>
@@ -923,7 +937,7 @@
                         </div>
                         <div class="col-xs-2 col-sm-2 col-md-2">
                             <label for="numbofpoints[1]">Причисляемый балл</label>
-                            <input name="numbofpoints[1]" id="numbofpoints[1]" class="form-control" placeholder="+100" value="">
+                            <input name="numbofpoints[1]" id="numbofpoints[1]" class="form-control" placeholder="+100" value="{{data.depachieves.points}}">
                         </div>
                         <br>
                         <a style="" onclick="return deleteFieldPersach(this)" href="#"><span class="glyphicon glyphicon-minus"></span></a>
@@ -939,7 +953,7 @@
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
                             <label for="flang">Изучаемый иностранный язык</label>
-                            <input name="flang" id="flang" class="form-control" placeholder="Английский" value="{{data.application.abiturient.foreign_lang.value}}">
+                            <input name="flang" id="flang" class="form-control" placeholder="Английский" value="{{data.abiturient.foreign_lang}}">
                         </p>
                     </div>
                 </div>
@@ -947,8 +961,8 @@
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <label for="hostel">Нуждаетесь ли в общежитие?</label>
                         <p>
-                            <input type="radio" name = "hostel" value="a1">Нет
-                            <input type="radio" name = "hostel" value="a2">Да
+                            <input type = "radio" name= "hostel" value="a1"{% if not data.abiturient.hostel %} checked {% endif %}>Нет
+                            <input type = "radio" name= "hostel" value="a2"{% if data.abiturient.hostel %} checked {% endif %}>Да
                         </p>
                     </div>
                 </div>
@@ -956,9 +970,11 @@
                     <div class="row">
                             <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                                 <label for="option6">Являетесь ли вы военнообязанным?</label>
-                                <p>
-                                    <input type="radio" name="option6" value="a61">Невоеннообязанный
-                                    <input type="radio" name="option6" value="a62">Военнообязанный
+                                <p> 
+
+                                    <input type = "radio" name= "option6" value="a61"{% if not data.milit.liableForMilit %} checked {% endif %}>Невоеннообязанный
+                                    <input type = "radio" name= "option6" value="a62"{% if data.milit.liableForMilit %} checked {% endif %}>Военнообязанный
+                                    
                                 </p>
                             </div>
                     </div>
@@ -968,8 +984,8 @@
                             <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                                 <label for="option7">Служили в армии?</label>
                                 <p>
-                                    <input type="radio" name="option7" value="a61">Нет
-                                    <input type="radio" name="option7" value="a61">Да
+                                    <input type = "radio" name= "option7" value="a61"{% if data.milit.isServed %} checked {% endif %}>Нет
+                                    <input type = "radio" name= "option7" value="a62"{% if data.milit.isServed %} checked {% endif %}>Да
                                 </p>
                             </div>
                     </div>
@@ -978,11 +994,11 @@
                     <div class="row">
                             <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-3">
                                 <label for="yeararmy">Год увольнения из рядов РА</label>
-                                <input type="text" name="yeararmy" id="yeararmy" class="form-control" placeholder="2014" value="{{ data.milit.yearDismissial }}">
+                                <input type="text" name="yeararmy" id="yeararmy" class="form-control" placeholder="2014" value="{{ data.milit.yeardismissial }}">
                             </div>
                             <div class="col-xs-3 col-sm-3 col-md-3">
                                 <label for="rank">Воинское звание</label>
-                                <input name="rank" id="rank" class="form-control" placeholder="капитан">
+                                <input name="rank" id="rank" class="form-control" placeholder="капитан" value="{{ data.milit.rank }}" >
                             </div>
                             <p><button type="submit" class="btn btn-default" name="save">Сохранить</button></p>
 

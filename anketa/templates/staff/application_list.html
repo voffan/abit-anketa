@@ -1,8 +1,5 @@
-<!DOCTYPE html>
 {% extends 'staff\base.html' %}
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+
 {% load staticfiles %}
 
 {% block head %}
@@ -47,8 +44,8 @@
           </select>
         </th>
         <th st-sort="Date" width="8%">          
-              <input type="date" name = "datedoc>" id ="datedoc>" value="filters.date1" class="form-control">           
-              <input type="date" name = "datedoc<" id ="datedoc<" value="filters.date2" class="form-control">
+              <input type="date" name = "datedoc1" id ="datedoc>" value="{{filters.datedoc1}}" class="form-control">           
+              <input type="date" name = "datedoc2" id ="datedoc<" value="{{filters.datedoc2}}" class="form-control">
         </th>
         <th st-sort="Doc_Type">        
           <select class="form-control" name="doctype" placeholder="Тип документа">
@@ -74,8 +71,8 @@
           </select>         
         </th>
         <th st-sort="bali" width="8%">
-                  <input name="balli>" class="form-control" placeholder=">" value="{{ filters.bal1 }}"/>
-                  <input name="balli<" class="form-control" placeholder="<" value="{{ filters.bal2 }}"/>
+                  <input name="balli1" class="form-control" placeholder=">" value="{{ filters.balli1 }}"/>
+                  <input name="balli2" class="form-control" placeholder="<" value="{{ filters.balli2 }}"/>
         </th>
         <th st-sort="state">
           <select class="form-control" name="status">
@@ -107,32 +104,32 @@
       </tr>
       {% endfor %}
       </tbody>
-    </table>  
+    </table> 
   
   <div class="row">
         <div class="large-3 large-offset-5 columns">
             <ul class="pagination">
-                {% if filters.pages.has_previous %}
-                    <li class="arrow"><a href="/application_list/page/{{ filters.pages.previous_page_number }}/">&laquo;</a></li>
+                {% if pages.has_previous %}
+                    <li class="arrow"><a href="{% url 'staff:application_list' %}?page={{ pages.previous_page_number }}{% for key,value in filters.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">&laquo;</a></li>
                 {% else %}
-                    <li class="arrow unavailable"><a href="">&laquo;</a></li>
+                    <li class="arrow disabled"><a href="">&laquo;</a></li>
                 {% endif %}
-                {% for page in filters.pages.paginator.page_range %}
-                    {% if page == number %}
-                        <li class="current"><a href="/application_list/page/{{ page }}/">{{ page }}</a></li>
+                {% for page in pages.paginator.page_range %}
+                    {% if page == pages.number %}
+                        <li class="active"><a href="{% url 'staff:application_list' %}?page={{ page }}{% for key,value in filters.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">{{ page }}</a></li>
                     {% else %}
-                        <li><a href="/application_list/page/{{ page }}/">{{ page }}</a></li>
+                        <li><a href="{% url 'staff:application_list' %}?page={{ page }}{% for key,value in filters.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">{{ page }}</a></li>
                     {% endif %}
                 {% endfor %}
-                {% if filters.pages.has_next %}
-                    <li class="arrow"><a href="/application_list/page/{{ filters.pages.next_page_number }}/">&raquo;</a></li>
+                {% if pages.has_next %}
+                    <li class="arrow"><a href="{% url 'staff:application_list' %}?page={{ pages.next_page_number }}{% for key,value in filters.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">&raquo;</a></li>
                 {% else %}
-                    <li class="arrow unavailable"><a href="">&raquo;</a></li>
+                    <li class="arrow disabled"><a href="">&raquo;</a></li>
                 {% endif %}
             </ul>
         </div>
-    </div>
-
+    </div>  
+       
   </form>
 {% endblock %}
 

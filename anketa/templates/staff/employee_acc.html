@@ -10,45 +10,142 @@
 </form>
 {% endblock %}
 
+{% load staticfiles %}
+
+{% block scripts %}
+{% endblock %}
 
 
 
 {% block content %}
-{% load staticfiles %}
-
-<form action="{% url 'staff:employee_add' %}" class="form-horizontal" role="form" method="post">
+<form action="{% url 'staff:employee_acc' %}" class="form-horizontal" role="form" method="post">
     {% csrf_token %}
-  <div class="form-group">
-    <label for="username" class="col-sm-2 control-label">Пользователь:</label>
-      <div class="col-sm-9">      
-      <input type="text" class="form-control" name = "username" id="username" placeholder="Имя пользователя" value = "{{ data.user.username }}">
-      <!--select class="form-control">Пользователь</select-->
-    </div>
-      <!--button type="submit" class="btn btn-default"><a href="/admin/" class="add-another" id="add_id_user" onclick="return showAddAnotherPopup(this);"> <img src="/abit-anketa/static/admin/img/icon_addlink.gif" width="10" height="10" alt="Добавить еще"></a></button-->
-  </div>
-  <div class="form-group">
-    <label for="e-mail" class="col-sm-2 control-label">E-mail</label>
-    <div class="col-sm-9">      
-      <input type="text" class="form-control" name = "email" id="email" placeholder="user@yandex.ru" value="{{ data.user.email }}">
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="password" class="col-sm-2 control-label">Пароль:</label>
-    <div class="col-sm-9">      
-      <input type="password" class="form-control" name = "password" id="password" placeholder="пароль">
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="confirm" class="col-sm-2 control-label">Подтвердите пароль:</label>
-    <div class="col-sm-9">      
-      <input type="password" class="form-control" name = "confirm" id="confirm" placeholder="Подтверждение пароля">
-    </div>
-  </div> 
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="#tab1" data-toggle="tab">Профиль</a></li>
+    <li><a href="#tab2" data-toggle="tab">Личные данные</a></li>
+    <li><a href="#tab3" data-toggle="tab">Подразделение</a></li>
+  </ul>   
 
-  <div class="form-group">
-    <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" class="btn btn-default" name="save">Сохранить</button>
+<div class="tab-content">
+  <div class="tab-pane fade in active" id="tab1">
+    <div class = "container-fluid">
+    <div class="row">  
+    <div class="form-group col-lg-3 col-md-3">
+      <label for="username" class="control-label">Пользователь:</label>
+        <div class="">      
+          <input type="text" class="form-control" name = "username" id="username" placeholder="Имя пользователя" value = "{{ data.user.username }}"disabled>     
+      </div>
     </div>
   </div>
+  <div class="row">
+    <div class="form-group col-lg-3 col-md-3">
+      <label for="e-mail" class="control-label">E-mail</label>
+      <div class="">      
+        <input type="text" class="form-control" name = "email" id="email" placeholder="user@yandex.ru" value="{{ data.user.email }}">
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-lg-3 col-md-3">
+      <label for="password" class="control-label">Пароль:</label>
+      <div class="">      
+        <input type="password" class="form-control" name = "password" id="password" placeholder="пароль">
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-lg-3 col-md-3">
+      <label for="confirm" class="control-label">Подтвердите пароль:</label>
+      <div class="">      
+        <input type="password" class="form-control" name = "confirm" id="confirm" placeholder="Подтверждение пароля">
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-lg-3 col-md-3">
+      <% if flash[:error] %>
+      <div class="alert alert-danger alert-dismissable">        
+        <strong>Holy guacamole!</strong> Best check yo self, you're not looking too good.
+        <%= flash[:error] %>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-lg-3 col-md-3">
+      <% if flash[:notice] %>
+      <div class="alert alert-success alert-dismissable">        
+        <strong>Well done!</strong> You successfully read this important alert message.
+        <%= flash[:notice] %>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+  <!--  -->
+  
+  <div class="tab-pane fade" id="tab2">
+    <div class = "container-fluid">
+    <div class="row"> 
+    <div class="form-group col-lg-3 col-md-3">
+    <label for="inputPassword3" class="control-label">Фамилия:</label>
+    <div class="">
+      <input type="Фамилия" class="form-control" name = "fname" id="fname" placeholder="Фамилия" value="{{ data.employee.first_name }}">
+    </div>
+  </div>
+  </div>
+  <div class="row">  
+    <div class="form-group col-lg-3 col-md-3">
+    <label for="inputPassword3" class="control-label">Имя:</label>
+    <div class="">
+      <input type="Имя" class="form-control" name="mname" id="mname" placeholder="Имя" value="{{ data.employee.mid_name }}">
+    </div>
+  </div>
+  </div>
+  <div class="row">  
+    <div class="form-group col-lg-3 col-md-3">
+    <label for="inputPassword3" class="control-label">Отчество:</label>
+    <div class="">
+      <input type="Отчество" class="form-control" name="lname" id="lname" placeholder="Отчество" value="{{ data.employee.last_name }}">
+    </div>
+  </div>
+</div>
+<div class="row"> 
+    <div class="form-group col-lg-3 col-md-3">
+    <label for="inputPassword3" class="control-label">Должность:</label>
+    <div class="">
+      <select class="form-control" name="position" id = "position" placeholder="должность">
+        {% for dep in data.positions %}
+            <option value="{{ dep.id }}">{{ dep.name }}</option>
+        {% endfor %}      
+      </select>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+  <div class="tab-pane fade" id="tab3">
+    <div class = "container-fluid">
+      <div class="row">    
+        <div class="form-group col-lg-3 col-md-3">
+          <label for="inputPassword3" class="control-label">Подразделение:</label>
+          <div class="">
+            <select class="form-control" name="department" id = "department" placeholder="Выберете подразделение">
+              {% for dep in data.departments %}
+                  <option value="{{ dep.id }}">{{ dep.name }}</option>
+              {% endfor %}      
+            </select>
+          </div>      
+        </div>
+      </div>  
+    </div>
+  </div>
+<div class="form-group">
+  <div class="col-sm-offset-2 col-sm-10">
+    <button type="submit" class="btn btn-default" name="save">Сохранить</button>
+  </div>
+</div>
+
+ 
 </form>
+
 {% endblock %}

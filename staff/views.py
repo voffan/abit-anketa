@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import transaction
+from django import template
 
 from datetime import date
 from staff.models import Employee, Position
@@ -15,6 +16,7 @@ from anketa.models import Department, Attribute, Application, Abiturient, Docs, 
 from django.contrib.auth.models import User
 
 # Create your views here.
+register = template.Library()
 
 def index(request):
     n = 'Anufriev'
@@ -61,27 +63,34 @@ def Employee_list(request):
     context.update(csrf(request))
     return render(request,'staff\employee_manage.html',  context)
 
+@transaction.atomic
+def Add_Employee(values):
+    empl_id = values.get('user-id','')
+    if len(empl_id)>0:
+        employee = Employee.objects.get(pk=empl_id)
+        user = employee.user
+        user.email = values.get('email','')
+        user.save()
+    else:
+        user = User.objects.create_user(values['username'], values['email'],values['password'])
+        employee = Employee()
+        employee.user = user
+    dep = Department.objects.get(pk=values['department'])
+    posit = Position.objects.get(pk=values['position'])
+    employee.department = dep
+    employee.first_name = values.get('fname','')
+    employee.last_name = values.get('lname','')
+    employee.mid_name = values.get('mname','')
+    employee.uniemployee = 0
+    employee.position = posit
+    employee.save()
+
 def AddEmployee(request):
     if request.method == 'POST':
-        empl_id = request.POST.get('user-id','')
-        if len(empl_id)>0:
-            employee = Employee.objects.get(pk=empl_id)
-            user = employee.user
-            user.email = request.POST.get('email','')
-            user.save()
-        else:
-            user = User.objects.create_user(request.POST['username'], request.POST['email'],request.POST['password'])
-            employee = Employee()
-            employee.user = user
-        dep = Department.objects.get(pk=request.POST['department'])
-        posit = Position.objects.get(pk=request.POST['position'])
-        employee.department = dep
-        employee.first_name = request.POST.get('fname','')
-        employee.last_name = request.POST.get('lname','')
-        employee.middle_name = request.POST.get('mname','')
-        employee.uniemployee = 0
-        employee.position = posit
-        employee.save()
+        try:
+            Add_Employee(request.POST)
+        except Exception as e:
+            raise e
         return HttpResponseRedirect(reverse('staff:employee_list'))
 
     positions = Position.objects.all()
@@ -107,47 +116,68 @@ def EditEmployee(request, employee_id):
 
 @login_required(login_url='/login/')
 def Employee_Useraccount(request):
-    #user = employee.user
-    #user.email = request.POST.get('email','')
+    departments = Department.objects.all()   
     user = request.user
-    data={}
-    data['user']=user
-    context = {'data':data}
+    employee = user.employee_set.get()
+    positions = Position.objects.all()
+    alert = 0
+
+    if request.method == 'POST':        
+        user = request.user
+        user.email = request.POST.get('email','') 
+        user.set_password(request.POST['password'])
+        password1 = request.POST['password']        
+        user.check_password(request.POST['confirm'])
+        password2 = request.POST['confirm']
+        if password1 == password2:
+            alert = 1
+            user.save()
+            return HttpResponseRedirect(reverse('staff:employee_acc'))
+        
+        dep = Department.objects.get(pk=request.POST['department'])
+        posit = Position.objects.get(pk=request.POST['position'])
+        employee.first_name = request.POST.get('fname','')
+        employee.last_name = request.POST.get('lname','')
+        employee.mid_name = request.POST.get('mname','')      
+        employee.position = posit 
+        employee.department = dep 
+
+        employee.save()  
+    
+    
+    Data={}
+    Data['alert'] = alert
+    Data['departments'] = departments
+    Data['employee']=employee
+    Data['user']=user
+    Data['positions']=positions
+
+    context = {'data':Data}
     context.update(csrf(request))
     return render(request,'staff\employee_acc.html',context)
 
-def Employee_Personals(request):
-    user = request.user
-    employee = user.employee_set.get()
-    data = {'employee':employee}
-    #employee.first_name = request.POST.get('fname','')
-    #employee.last_name = request.POST.get('lname','')
-    #employee.middle_name = request.POST.get('mname','')
-    #employee.fullname = request.POST.get('fullname','')
-    context = {'data':data}
-    context.update(csrf(request))
-    return render(request, 'staff\employee_personals.html',context)
+
+def Employee_Personals(request):       
+    
+     return render(request, 'staff\employee_acc.html')
+
 
 def Employee_Changepwd(request):
     if request.method == 'POST':
         #только если подтверждение совпадает с паролем
         user = request.user
-        user.change_pwd(request.POST['pwd'])
+        user.change_pwd(request.POST['password'])
         user.save()
         return HttpResponseRedirect(reverse('staff:employee_acc'))
-    return render(request, 'staff\employee_changepwd.html')
+    return render(request, 'staff\employee_acc.html')
 
 def Employee_Info(request):
-    #employee.position = request.POST.get('position','')
-    departments = Department.objects.all()
-    Data={}
-    Data['departments'] = departments
+    
+    
     context = {'data':Data}
     context.update(csrf(request))
-    return render(request, 'staff\employee_info.html',context)
+    return render(request, 'staff\employee_acc.html',context)
 
-#@transaction.atomic
-#def jopa(request):
 
 
 def Application_list (request):
@@ -165,7 +195,8 @@ def Application_list (request):
     bal2 = '0'
     dategt = '2016-01-01'
     datelt = '0'     
-    filters={}
+    filters={'apply':''}
+
     if 'apply' in request.GET:
 
         if 'doctype' in request.GET and int(request.GET['doctype'])>0:
@@ -173,7 +204,7 @@ def Application_list (request):
                 docs = Docs.objects.select_related('Abiturient').filter(docType__id=selectdoc)
                 abiturients = [item.abiturient.id for item in docs]
                 applications = Application.objects.filter(abiturient__id__in=abiturients)
-                filters['doctype']=int(selectdoc)
+                filters['doctype']=int(selectdoc)                     
 
         if 'iscopy' in request.GET:
             if request.GET['iscopy'] =='1':
@@ -212,25 +243,25 @@ def Application_list (request):
                 filters['forma'] = selectform
 
 
-        if 'balli>' in request.GET and len(request.GET['balli>'])>0:
-            bal1 = request.GET['balli>']
+        if 'balli1' in request.GET and len(request.GET['balli1'])>0:
+            bal1 = request.GET['balli1']
             applications = applications.filter(points__gt=bal1)
-            filters['bal1'] = bal1
+            filters['balli1'] = bal1            
 
-        if 'balli<' in request.GET and len(request.GET['balli<'])>0:
-            bal2 = request.GET['balli<']
+        if 'balli2' in request.GET and len(request.GET['balli2'])>0:
+            bal2 = request.GET['balli2']
             applications = applications.filter(points__lt=bal2)
-            filters['bal2'] = bal2
+            filters['balli2'] = bal2
 
-        if 'datedoc>' in request.GET and len(request.GET['datedoc>'])>0:
-            dategt = request.GET['datedoc>']
+        if 'datedoc1' in request.GET and len(request.GET['datedoc1'])>0:
+            dategt = request.GET['datedoc1']
             applications = applications.filter(date__gt=dategt)
-            filters['date1'] = dategt
+            filters['datedoc1'] = dategt
 
-        if 'datedoc<' in request.GET and len(request.GET['datedoc<'])>0:
-            datelt = request.GET['datedoc<']
+        if 'datedoc2' in request.GET and len(request.GET['datedoc2'])>0:
+            datelt = request.GET['datedoc2']
             applications = applications.filter(date__lt=datelt)
-            filters['date2'] = datelt
+            filters['datedoc2'] = datelt
 
 
         if 'napravlenie' in request.GET and int(request.GET['napravlenie'])>0:
@@ -250,12 +281,12 @@ def Application_list (request):
     try:
         current_page = app_pages.page(page)
     except PageNotAnInteger:
-        current_page = app_pages.page(1)
+        current_page = app_pages.page(1)        
     except EmptyPage:
-        current_page = app_pages.page(app_pages.num_pages)
+        current_page = app_pages.page(app_pages.num_pages)        
 
     applications = current_page.object_list
-    filters['pages'] = current_page
+    
     abiturients = [app.abiturient.id for app in applications]
 
 
@@ -266,18 +297,21 @@ def Application_list (request):
     for app in applications:
         doc = docs.filter(abiturient__id = app.abiturient.id).first()
         apps_with_docs.append({'app':app, 'doc':doc})
-    data={}       
+    
+    
+    data={}
     data['applications'] = apps_with_docs    
     data['docType'] = AttrValue.objects.filter(attribute__name__icontains=u'тип док')
     data['Profile'] = Profile.objects.all()
     data['Docs'] = Docs.objects.all()
-    data['Application'] = AttrValue.objects.filter(attribute__name__icontains=u'статус за')#Application.objects.all()
+    data['Application'] = AttrValue.objects.filter(attribute__name__icontains=u'статус за')
+    data['pages'] = current_page    
     data['filters'] = filters    
     return render(request,'staff\\application_list.html', data)
 
+
 def Application_review (request, application_id):
     if request.method =='POST':
-        #save_application(request)
         return HttpResponseRedirect(reverse('staff:application_list'))
     docs = Docs.objects.all()
     application = Application.objects.select_related('Abiturient').get(pk=application_id)
@@ -292,7 +326,8 @@ def Application_review (request, application_id):
     Data['depachieves'] = DepAchieves.objects.filter(pk=application_id)
     Data['milit'] = application.abiturient.milit_set.first()
     Data['docattr'] = DocAttr.objects.filter(pk=application_id)
-    Data['achievements'] = Achievements.objects.filter(pk=application_id)    
+    Data['achievements'] = Achievements.objects.filter(pk=application_id) 
+    Data['nationality'] = AttrValue.objects.filter(attribute__name__icontains = u'национальность')   
     context = {'data':Data}
     context.update(csrf(request))
     return render(request,'staff\\wizardform.html',context)

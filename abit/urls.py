@@ -27,7 +27,7 @@ urlpatterns = patterns('',
     url(r'^flang/$', Flang, name = 'flang'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^staff/', include('staff.urls',namespace = 'staff')),
-    url(r'^captcha/', include('captcha.urls')),
+    #url(r'^captcha/', include('captcha.urls')),
     url(r'^auth/', include('authApp.urls', namespace = 'authapp'))
 
 )
