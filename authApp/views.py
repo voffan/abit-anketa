@@ -6,6 +6,7 @@ from django.core.context_processors import csrf
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 
+
 # Create your views here.
 
 def index(request):
@@ -55,3 +56,17 @@ def checkUserValid(request):
 		result['error_msg']='имя пользователя занято'
 
 	return HttpResponse(json.dumps(result), content_type='application/json')
+
+def rpHash(person): 
+	hash = 5381 
+	value = person.upper() 
+	for caracter in value: 
+		hash = (( np.left_shift(hash, 5) + hash) + ord(caracter)) 
+	hash = np.int32(hash) 
+
+def CaptchaCheck(request):
+	result = {'result':0, 'error_msg':''}
+	if rpHash(request.form['realPerson']) != request.form['realPersonHash']:
+		result['result']=1;
+		result['error_msg']="Неправильная капча!"
+	return HttpResponse(json.dumps(result),content_type='application/json')

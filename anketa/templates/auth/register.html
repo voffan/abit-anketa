@@ -4,12 +4,14 @@
 
 {% block additionalcss %}
 <link href="{% static "anketa/css/prettify.css" %}" rel="stylesheet">
+<link href="{% static "anketa/css/jquery.realperson.css" %}" rel="stylesheet">
 {% endblock %}
 {% block scripts %}
 <script src="{% static "anketa/js/jquery.bootstrap.wizard.js" %}"></script>
 <script src="{% static "anketa/js/prettify.js" %}"></script>
 <script src="{% static "anketa/js/bootstrap-typeahead.js" %}"></script>
-
+<script src="{% static "anketa/js/jquery.plugin.js" %}"></script>
+<script src="{% static "anketa/js/jquery.realperson.js" %}"></script>
 <script>
 	/*
 	............................................________ 
@@ -38,10 +40,10 @@
 	..................................., 
 	*/
 	// first page
-	var usernameError=true;
-	var emailError=true;
-	var pwdError=true;
-	var pwdVerError=true;
+	var $usernameError=true;
+	var $emailError=true;
+	var $pwdError=true;
+	var $pwdVerError=true;
 	function SetIcon(field, status)
 	{
 		if(status==="okay")
@@ -144,17 +146,17 @@
 	});
 	$("#passwordVerifyField").focusout(function()
 	{
-		pwdVerError=true;
+		$pwdVerError=true;
 		if($("#passwordVerify").val().length===0 || $("#password").val().length===0)
 		{
 			SetIcon("passwordVerify","");
 		}
 		else if($("#password").val().length!=0 && $("#passwordVerify").val().length!=0)
 		{
-			if($("#password").val() === $("#passwordverify").val())
+			if($("#password").val() === $("#passwordVerify").val())
 			{
 				SetIcon("passwordVerify","okay");
-				pwdVerError=false;
+				$pwdVerError=false;
 			}
 			else
 			{
@@ -165,7 +167,7 @@
 	});
 	$("#password").focusout(function()
 	{
-		pwdError=true;
+		$pwdError=true;
 		if($("#password").val().length===0)
 		{
 			SetIcon("password","");
@@ -173,7 +175,7 @@
 		else if($("#password").val().length>=6)
 		{
 			SetIcon("password","okay");
-			pwdError=false;
+			$pwdError=false;
 		}
 		else
 		{
@@ -182,15 +184,15 @@
 		}
 	});
 	// second page
-	var fnameError=true;
-	var snameError=true;
-	var mnameError=true;
-	var dateError=true;
-	var sexError=true;
+	var $fnameError=true;
+	var $snameError=true;
+	var $mnameError=true;
+	var $dateError=false;
+	var $sexError=true;
 	var symbolsValid = /^[а-яА-ЯЁё]+$/;
 	$("#fName").focusout(function()
 	{
-		fnameError=true;
+		$fnameError=true;
 		if($("#fName").val().length===0)
 		{
 			SetIcon("fName","");
@@ -202,12 +204,12 @@
 		else
 		{
 			SetIcon("fName","okay");
-			fnameError=false;
+			$fnameError=false;
 		}
 	});
 	$("#sName").focusout(function()
 	{
-		snameError=true;
+		$snameError=true;
 		if($("#sName").val().length===0)
 		{
 			SetIcon("sName","");
@@ -219,12 +221,12 @@
 		else
 		{
 			SetIcon("sName","okay");
-			fnameError=false;
+			$snameError=false;
 		}
 	});
 	$("#mName").focusout(function()
 	{
-		mnameError=true;
+		$mnameError=true;
 		if($("#mName").val().length===0)
 		{
 			SetIcon("mName","");
@@ -237,12 +239,12 @@
 		else
 		{
 			SetIcon("mName","okay");
-			mnameError=false;
+			$mnameError=false;
 		}
 	});
 	$("#birthday").focusout(function()
 	{
-		dateError=true;
+		$dateError=true;
 		var dtRegex =/^\d{4}-\d{1,2}-\d{1,2}$/;
 		if(!dtRegex.test($("#birthday").val()) || $("#birthday").val().length===0)
 		{
@@ -253,9 +255,18 @@
 		{
 			SetIcon("birthday","okay");
 			$("#birthdayField").attr("class","has-success has-feedback col-xs-3 col-sm-3 col-md-2 col-md-offset-4");
-			dateError=false;
+			$dateError=false;
 		}
 	});
+	// captcha
+	$(function() 
+	{
+		$('#captcha').realperson(
+			{
+				regenerate: 'ЭЭЭЭЭЭЭЭЭХ'
+			});
+	});
+
 	$(document).ready(function() 
 	{
 		$('#rootwizard').bootstrapWizard(
@@ -286,15 +297,21 @@
 			{
 				if(index===1)
 				{
-					//if($usernameError || $emailError || $pwdError || $pwdVerError)
-						//return false;
+					/*
+					if($usernameError || $emailError || $pwdError || $pwdVerError)
+						return false;
+					*/
 				}
 				else if(index===2)
 				{
-					/*
-					if((!$("#female").prop('checked') && !$("#male").prop('checked')) || $fnameError || $snameError || $mnameError || $dateError)
+					if($("#female").prop('checked'))
+						$("#sexvalue").val("Ж");
+					else if($("#male").prop('checked'))
+						$("#sexvalue").val("М");
+					else
 						return false;
-					*/
+					if($fnameError || $snameError || $mnameError || $dateError)
+						return false;
 				}
 			}
 		});
@@ -415,6 +432,7 @@
 							<p>
 								<input type="radio" name = "sex" id = "male" value="p1">Мужской
 								<input type="radio" name = "sex" id = "female" value="p2">Женский
+								<input type="hidden" id="sexvalue">
 							</p>
 							<span id="sexIcon"></span>
 							<span id="sexFieldDescr" class="help-block"></span>
@@ -424,7 +442,14 @@
 			</div>
 			<div class="tab-pane" id="tab3">
 				<div class="container-fluid">
-					3
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-4 col-md-offset-4" id="captchaField">
+							<p>
+								<label for="captcha">ЭЭЭЭЭЭХ</label>
+								<input type="text" id="captcha" name="captcha">
+							</p>
+						</div>
+					</div>
 				</div>
 			</div>
 			<ul class="pager wizard">
