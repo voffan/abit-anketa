@@ -71,14 +71,14 @@ def Streets(request):
     return HttpResponse(json.dumps(result), content_type="application/json")
 
 def Citizenship(request):
-    trry = AttrValue.objects.filter(attribute__id = 9)
+    trry = AttrValue.objects.filter(attribute__name__icontains = u'гражданство')
     part = request.GET.get('query','')
     if len(part)>0:
         trry = trry.filter(value__icontains = part)
     trry = trry.values('id', 'value')
     result = []
     for item in trry:
-        result.append(item)
+        result.append({'id':item.id, 'text':item.value})
     return HttpResponse(json.dumps(result), content_type="application/json")
 
 def Nation(request):

@@ -45,6 +45,29 @@
         $('#nationality').select2({
             language:"ru"
         });
+        $('#citizenship').select2({
+            language:"ru",
+            minimumInputLength: 1,
+            ajax:{
+                url:{% url 'citizenship' %},
+                dataType: 'json',
+                delay: 250,
+                data:function(params){
+                    return{
+                        query: params, // search term
+                    };
+                },
+                processResults: function (data, page) {
+                    // parse the results into the format expected by Select2.
+                    // since we are using custom formatting functions we do not need to
+                    // alter the remote JSON data
+                    return {
+                      results: data,
+                    };
+                },
+                cache: true
+            }
+        });
     });
 </script>
 <script>
@@ -534,10 +557,8 @@
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <p>
- /                           <label for="citizenship">Гражданство</label>
-                            {% for item in abiturient %}
-                            <input id="citizenship" name="citizenship" class="form-control" placeholder="РФ"  value="{{item.application.abiturient.citizenship}}"/>
-                            {% endfor %}
+                            <label for="citizenship">Гражданство</label>
+                            <input id="citizenship" name="citizenship" class="form-control" placeholder="РФ" hidden/>
                         </p>
                     </div>
                 </div>

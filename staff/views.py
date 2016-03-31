@@ -114,6 +114,21 @@ def EditEmployee(request, employee_id):
     context.update(csrf(request))
     return render(request,'staff\employee_add.html',context)
 
+@transaction.atomic
+def save_user_profile(user, values):
+    user.email = request.POST.get('email','') 
+    password2 = request.POST['confirm']
+    password1 = request.POST['password']        
+    if password1 == password2 and len(password1) > 0:
+        user.set_password(request.POST['password'])
+    else:
+        raise Exception(u'Пароль и подтверждение не совпадают!!')
+    user.save()
+    employee.first_name = request.POST.get('fname','')
+    employee.last_name = request.POST.get('lname','')
+    employee.mid_name = request.POST.get('mname','')
+    employee.save()
+
 @login_required(login_url='/login/')
 def Employee_Useraccount(request):
     departments = Department.objects.all()   
@@ -121,64 +136,26 @@ def Employee_Useraccount(request):
     employee = user.employee_set.get()
     positions = Position.objects.all()
     alert = 0
-
-    if request.method == 'POST':        
-        user = request.user
-        user.email = request.POST.get('email','') 
-        user.set_password(request.POST['password'])
-        password1 = request.POST['password']        
-        user.check_password(request.POST['confirm'])
-        password2 = request.POST['confirm']
-        if password1 == password2:
-            alert = 1
-            user.save()
-            return HttpResponseRedirect(reverse('staff:employee_acc'))
-        
-        dep = Department.objects.get(pk=request.POST['department'])
-        posit = Position.objects.get(pk=request.POST['position'])
-        employee.first_name = request.POST.get('fname','')
-        employee.last_name = request.POST.get('lname','')
-        employee.mid_name = request.POST.get('mname','')      
-        employee.position = posit 
-        employee.department = dep 
-
-        employee.save()  
-    
-    
+    error_message = ''
+    if request.method == 'POST':
+        try:
+            save_user_profile(request.user, request.POST)
+        except Exception as e:
+            error_message = str(e)
     Data={}
     Data['alert'] = alert
     Data['departments'] = departments
     Data['employee']=employee
     Data['user']=user
     Data['positions']=positions
+    if len(error_message) > 0:
+        Data['error_message'] = error_message
+    else:
+        Data['success_message'] = u'Успешно изменено'
 
     context = {'data':Data}
     context.update(csrf(request))
     return render(request,'staff\employee_acc.html',context)
-
-
-def Employee_Personals(request):       
-    
-     return render(request, 'staff\employee_acc.html')
-
-
-def Employee_Changepwd(request):
-    if request.method == 'POST':
-        #только если подтверждение совпадает с паролем
-        user = request.user
-        user.change_pwd(request.POST['password'])
-        user.save()
-        return HttpResponseRedirect(reverse('staff:employee_acc'))
-    return render(request, 'staff\employee_acc.html')
-
-def Employee_Info(request):
-    
-    
-    context = {'data':Data}
-    context.update(csrf(request))
-    return render(request, 'staff\employee_acc.html',context)
-
-
 
 def Application_list (request):
     applications = Application.objects.all()

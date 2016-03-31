@@ -29,7 +29,21 @@
 <div class="tab-content">
   <div class="tab-pane fade in active" id="tab1">
     <div class = "container-fluid">
-    <div class="row">  
+    <div class="row">
+      {% fi data.error_message %}
+      <div class="col-xs-12 col-sm-12 col-md-3">
+        <div class="alert alert-danger alert-dismissable" role="alert">        
+          <strong>Ошибка!</strong> {{ data.error_message }}
+        </div>
+      </div>
+      {% endif %}
+      {% fi data.success_message %}
+      <div class="col-xs-12 col-sm-12 col-md-3">
+        <div class="alert alert-success alert-dismissable" role="alert">        
+          {{ data.success_message }}
+        </div>
+      </div>
+      {% endif %}
     <div class="form-group col-lg-3 col-md-3">
       <label for="username" class="control-label">Пользователь:</label>
         <div class="">      
