@@ -1,0 +1,220 @@
+{% extends 'staff\base.html' %}
+
+{% block head %}
+  Справочники
+{% endblock %}
+
+{% block additionalcss %}
+  <link rel="stylesheet" href="https://cdn.rawgit.com/esvit/ng-table/v1.0.0/dist/ng-table.min.css">
+{% endblock %}
+
+{% block leftmenu %}
+{% endblock %}
+
+{% block content %}
+<form action=""  method="POST">
+  {% csrf_token %}
+  <table width="100%">
+    <tr>
+    <td width="50%" valign="top">
+      <div class="col-xs-12 col-sm-10">
+        <div class="panel panel-default">
+          <div class="panel-heading">Тип атрибута</div>
+            <div class="panel-body">
+              <select class="form-control" name="attrtype1" id = "attrtype1">
+                {% for item in attrtype %}
+                  <option value="{{ item.id }}">{{ item.name }}</option>
+                {% endfor %}      
+              </select>
+              <p></p>
+              <label class="control-label">Новый тип:</label>
+              <input type="text" class="form-control" name = "attrtype" id="attrtype" placeholder="тип атрибута" value ="">
+              <p></p>
+              <button type="submit" class="btn btn-default" name="save1">Сохранить</button>
+            </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">Атрибут</div>
+            <div class="panel-body">          
+              <select class="form-control" name="attribute1" id = "attribute1">
+                {% for item in attribute %}
+                  <option value="{{ item.id }}">{{ item.type.name }} {{ item.name }}</option>
+                {% endfor %}      
+              </select>
+              <p></p>
+              <label class="control-label">Новый атрибут:</label>
+              <input type="text" class="form-control" name = "attribute" id="attribute" placeholder="Атрибут" value ="">
+              <p></p>
+              <button type="submit" class="btn btn-default" name="save2">Сохранить</button>
+              
+            </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">Значение атрибута</div>
+            <div class="panel-body">
+              <!--
+              <label class="control-label">Список:</label>
+              <select class="form-control" name="attrvalue1" id = "attrvalue1" >
+                {% for item in attrvalue %}
+                  {% if item.attribute_id == '' %}
+                  <option value="{{ item.id }}">{{ item.value }}</option>
+                  {% endif %}
+                {% endfor %}      
+              </select>
+              -->   
+              
+              <input type="text" class="form-control" name = "attrvalue" id="attrvalue" placeholder="Значение атрибута" value ="">
+              <p></p>
+              <button type="submit" class="btn btn-default" name="save3">Сохранить</button>          
+            </div>
+        </div>
+      </div>
+    </td>
+
+    <td width="50%"  valign="top"> 
+      <div class="col-xs-12 col-sm-10">       
+        <div class="panel panel-default">
+          <!-- Default panel contents -->
+          <div class="panel-heading">Таблица</div>
+          <div class="panel-body">
+            <p>Список значений атрпибутов</p>
+          </div>
+
+          <!-- Table -->
+          
+            <table class="table table-striped table-bordered table-hover ">
+                    <thead> 
+                            <tr>
+                                <th width="3%">#</th>
+                                <th width="3%">id</th>
+                                <th>value</th>
+                                <th>parent_id</th>
+                                <th width="7%">attribute_id</th>
+                            </tr>
+                    </thead>
+                    <tbody>
+                            {% for item in attrvalue %}
+                            <tr>
+                              <td>{{ forloop.counter }}</td>
+                              <td>{{ item.id }}</a></td>
+                              <td>{{ item.attribute.type.name }} {{ item.attribute.name }} {{ item.value }}</td>
+                              <td>{{ item.parent_id }}</td>
+                              <td>{{ item.attribute_id }}</td>
+                            </tr>
+                            {% endfor %}
+                    </tbody>
+            </table>          
+        </div>
+      </div>
+    </td>
+  </tr>
+
+
+  </table>
+  <!--
+  <div class="form-group">
+    <label for="department" class="col-sm-2 control-label">Институт/факультет</label>
+    <div class="col-sm-9">
+      <select class="form-control" name="department" id = "department" placeholder="Выберете подразделение">
+        {% for dep in data.departments %}
+            <option value="{{ dep.id }}">{{ dep.name }}</option>
+        {% endfor %}      
+      </select>      
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="username" class="col-sm-2 control-label">Фамилия Имя Отчество</label>
+    <div class="col-sm-9">
+      <input type="text" class="form-control" name = "fio" id="fio" placeholder="Фамилия Имя Отчество" value ="{{ data.application.abiturient.fullname }}"  >
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="numb" class="col-sm-2 control-label">Номер заявления</label>
+    <div class="col-sm-9">
+      <input type="text" class="form-control" name = "numb" id="numb" placeholder="Номер заявления" value ="{{ data.application.number }}"  >
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="Form" class="col-sm-2 control-label">Форма Обучения</label>
+    <div class="col-sm-9">
+      <input type="text" class="form-control" name = "Form" id="Form" placeholder="Очная/Заочная" value="{{ data.application.eduform }}" >
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="budget" class="col-sm-2 control-label">В рамках контрольных цифр приёма</label>
+    <div class="col-sm-9">
+      <div class="checkbox"><input type="checkbox" class="form-control" name = "budget" id="budget" value="{{ data.application.budget }}" >
+        </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="whithfee" class="col-sm-2 control-label">по договорам об оказании платных обр. услуг</label>
+    <div class="col-sm-9">
+      <div class="checkbox"><input type="checkbox" class="form-control" name = "whithfee" id="whithfee" value="{{ data.application.whithfee }}" >
+        </div>
+    </div>
+  </div>
+ <div class="form-group">
+    <label for="Date" class="col-sm-2 control-label">Дата Подачи Документов</label>
+    <div class="col-sm-9">
+      <input type="text" class="form-control" name = "Date" id="Date" placeholder="01.01.2016"  value="{{ data.application.date }}"  >
+    </div>
+  </div>
+<div class="form-group">
+    <label for="Doc_Type" class="col-sm-2 control-label">Документ</label>
+    <div class="col-sm-9">
+      <select class="form-control" name="Doc_Type" id = "Doc_Type" placeholder="Аттестат/Диплом">
+        {% for doc in data.docs %}
+            <option value="{{ cod.id }}">{{ doc.name }}</option>
+        {% endfor %}      
+      </select>      
+    </div>
+</div>
+<div class="form-group">
+    <label for="isCopy" class="col-sm-2 control-label">Копия/Оригинал</label>
+    <div class="col-sm-9">
+      <div class="checkbox"><input type="checkbox" class="form-control" name = "isCopy" id="isCopy" value="{{ data.docs.isCopy }}" >
+    </div>
+  </div>
+
+<div class="form-group">
+   <label for="Napravlenie" class="col-sm-2 control-label">Профиль</label>
+    <div class="col-sm-9">
+      <select class="form-control" name="Napravlenie" id = "Napravlenie" placeholder="Выберете Профиль">
+        {% for prof in data.profs %}
+            <option value="{{ prof.id }}">{{ profs.name }}</option>
+        {% endfor %}      
+      </select>      
+    </div>
+  </div>
+<div class="form-group">
+    <label for="bali" class="col-sm-2 control-label">Баллы</label>
+    <div class="col-sm-9">
+      <input type="text" class="form-control" name = "bali" id="bali" placeholder="Баллы"  value="{{ data.application.points }}"  >
+    </div>
+  </div>
+<div class="form-group">
+   <label for="state" class="col-sm-2 control-label">Статус заявления</label>
+    <div class="col-sm-9">
+      <select class="form-control" name="state" id = "state" placeholder="Выберете статус заявления">
+        {% for stat in data.stats %}
+            <option value="{{ stat.id }}">{{ stat. }}</option>
+        {% endfor %}      
+      </select>      
+    </div>
+  </div>
+
+
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-primary" name="save">Сохранить</button>
+    </div>
+  </div>
+-->
+</form>
+{% endblock %}
+
+{% block scripts %}
+  <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js"></script>
+  <script src="https://cdn.rawgit.com/esvit/ng-table/v1.0.0/dist/ng-table.js"></script>
+{% endblock %}
