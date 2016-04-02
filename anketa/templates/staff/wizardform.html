@@ -238,31 +238,6 @@
             }
         }
     });
-    $("#citizenship").typeahead(
-    {
-        onSelect: function(item)
-        {
-            $("#idcitizenship").val(item.value);
-        },
-    ajax:
-        {
-            url:"{% url 'citizenship' %}",
-            displayField: 'value',
-            valueField:'id',
-            method:'get',
-            triggerLength: 1,
-            preDispatch: function(query)
-            {
-                return{
-                        'query':query,
-                      }
-            },
-            preProcess: function(data)
-            {
-                return data;
-            }
-        }
-    });
     $("#nation").typeahead(
     {
         onSelect: function(item)
@@ -647,7 +622,7 @@
                             <label for="doctype">Вид документа, удостоверяющего личность</label>
                             <select id="doctype" name = "doctype" class="form-control">
                                {% for item in data.docType %}
-                                    <option value="{{ item.id }}">{{ item.value }}</option>
+                                    <option value="{{ item.id }}" {% if item.id === data.docs.id %}selected{% endif %}>{{ item.value }}</option>
                                {% endfor %}
                             </select>                 
                             
