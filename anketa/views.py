@@ -91,6 +91,17 @@ def Nation(request):
     for item in trry:
         result.append(item)
     return HttpResponse(json.dumps(result), content_type="application/json")
+    
+def DocType(request):
+    trry = AttrValue.objects.filter(attribute__id = 20)
+    part = request.GET.get('query','')
+    if len(part)>0:
+        trry = trry.filter(value__icontains = part)
+    trry = trry.values('id', 'value')
+    result = []
+    for item in trry:
+        result.append(item)
+    return HttpResponse(json.dumps(result), content_type="application/json")
 
 def DocIssuer(request):
     trry = AttrValue.objects.filter(attribute__id = 11)

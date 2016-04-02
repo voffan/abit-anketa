@@ -3,7 +3,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
 
-from anketa.views import StartPage, StartApp, Streets, Territory, District, City, Citizenship, Nation, DocIssuer, PrevEduName, Institute, EduProg, EduProf, Privilegies, Rank, Flang, CreatePerson
+from anketa.views import StartPage, StartApp, Streets, Territory, District, City, Citizenship, Nation, DocIssuer, PrevEduName, Institute, EduProg, EduProf, Privilegies, Rank, Flang, CreatePerson, DocType
 
 from anketa.views2 import *
 
@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     url(r'^streets/$', Streets, name='streets'),
     url(r'^citizenship/$', Citizenship, name = 'citizenship'),
     url(r'^nation/$', Nation, name = 'nation'),
+    url(r'^doctype/$', DocType, name = 'doctype'),
     url(r'^docissuer/$', DocIssuer, name = 'docissuer'),
     url(r'^preveduname/$', PrevEduName, name = 'preveduname'),
     url(r'^institute/$', Institute, name = 'institute'),
@@ -25,7 +26,8 @@ urlpatterns = patterns('',
     url(r'^create_person/$', CreatePerson, name="create_person"),
     url(r'^rank/$', Rank, name = 'rank'),
     url(r'^flang/$', Flang, name = 'flang'),
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', include(admin.site.urls)),s
+    url(r'^flang/$', Flang, name = 'flang'),
     url(r'^staff/', include('staff.urls',namespace = 'staff')),
     #url(r'^captcha/', include('captcha.urls')),
     url(r'^auth/', include('authApp.urls', namespace = 'authapp'))

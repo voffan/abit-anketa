@@ -290,6 +290,7 @@ def Application_review (request, application_id):
         return HttpResponseRedirect(reverse('staff:application_list'))
     docs = Docs.objects.all()
     application = Application.objects.select_related('Abiturient').get(pk=application_id)
+    applications = Application.objects.filter(abiturient__id__in=abiturients)
     Data={}
     Data['docs'] = docs
     Data['application']=application
@@ -303,6 +304,12 @@ def Application_review (request, application_id):
     Data['docattr'] = DocAttr.objects.filter(pk=application_id)
     Data['achievements'] = Achievements.objects.filter(pk=application_id) 
     Data['nationality'] = AttrValue.objects.filter(attribute__name__icontains = u'национальность')   
+    data['doctype'] = AttrValue.objects.filter(attribute__name__icontains=u'тип документа')
+    data['docissuer'] = AttrValue.objects.filter(attribute__name__icontains=u'Орган выдавший документ')
+    data['foreign_lang'] = AttrValue.objects.filter(attribute__name__icontains=u'Изучаемый иностранный язык')
+    data['rank'] = AttrValue.objects.filter(attribute__name__icontains=u'Воинское звание')
+    
+    
     context = {'data':Data}
     context.update(csrf(request))
     return render(request,'staff\\wizardform.html',context)
