@@ -42,14 +42,75 @@
             alert('Finished!, Starting over!');
             $('#rootwizard').find("a[href*='tab1']").trigger('click');
         });
+       
+        $('#rank').select2({
+            language:"ru"
+        });
+         $('#doctype').select2({
+            language:"ru"
+        });
         $('#nationality').select2({
             language:"ru"
         });
+         $('#flang').select2({
+            language:"ru"
+        });
+        
         $('#citizenship').select2({
             language:"ru",
             minimumInputLength: 1,
             ajax:{
                 url:{% url 'citizenship' %},
+                dataType: 'json',
+                delay: 250,
+                data:function(params){
+                    return{
+                        query: params, // search term
+                    };
+                },
+                processResults: function (data, page) {
+                    // parse the results into the format expected by Select2.
+                    // since we are using custom formatting functions we do not need to
+                    // alter the remote JSON data
+                    return {
+                      results: data,
+                    };
+                },
+                cache: true
+            }
+        });
+
+        
+        });
+        
+         $('#preveduname').select2({
+            language:"ru",
+            minimumInputLength: 1,
+            ajax:{
+                url:{% url 'preveduname' %},
+                dataType: 'json',
+                delay: 250,
+                data:function(params){
+                    return{
+                        query: params, // search term
+                    };
+                },
+                processResults: function (data, page) {
+                    // parse the results into the format expected by Select2.
+                    // since we are using custom formatting functions we do not need to
+                    // alter the remote JSON data
+                    return {
+                      results: data,
+                    };
+                },
+                cache: true
+            }
+        });
+        $('#docissuer').select2({
+            language:"ru",
+            minimumInputLength: 1,
+            ajax:{
+                url:{% url 'docissuer' %},
                 dataType: 'json',
                 delay: 250,
                 data:function(params){
@@ -584,11 +645,12 @@
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
                             <label for="doctype">Вид документа, удостоверяющего личность</label>
-                            <select name="doctype" id="doctype" size="1" class="form-control">
-                                <option value="passport">паспорт</option>
-                                <option value="zagran">загранпаспорт</option>
-                                <option value="svid">свидительство о рождении</option>
-                            </select>
+                            <select id="doctype" name = "doctype" class="form-control">
+                               {% for item in data.docType %}
+                                    <option value="{{ item.id }}">{{ item.value }}</option>
+                               {% endfor %}
+                            </select>                 
+                            
                         </p>
                     </div>
                 </div>
@@ -611,8 +673,9 @@
                 <div class = "row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
-                            <label for="docissuer">Кем выдан</label>
-                            <input name= "docissuer" id = "docissuer" class = "form-control" placeholder = "Отделом УФМС по Российской Федерации, г. Якутск" value="{{data.docs.docIssuer}}">
+                            <label for="docissuer">Кем выдан</label>                                            
+                            <input id="docissuer" name="docissuer" class="form-control" placeholder="СВФУ им. Аммосова" hidden/> 
+                            
                         </p>
                     </div>
                 </div>
@@ -667,8 +730,8 @@
                 <div class = "row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
-                            <label for="preveduname">Название учебного заведения</label>
-                            <input name= "preveduname" id = "preveduname" class = "form-control" placeholder = "МОУ СОШ № 1, г. Якутск" value="{{data.docs.docIssuer}}">
+                            <label for="preveduname">Название учебного заведения</label>                                            
+                            <input id="preveduname" name="preveduname" class="form-control" placeholder="СВФУ им. Аммосова" hidden/>     
                         </p>
                     </div>
                 </div>
@@ -974,7 +1037,11 @@
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
                             <label for="flang">Изучаемый иностранный язык</label>
-                            <input name="flang" id="flang" class="form-control" placeholder="Английский" value="{{data.abiturient.foreign_lang}}">
+                            <select name="flang" id="flang"  class="form-control">
+                            {% for item in data.foreign_lang %}
+                                <option name= "flang" id = "flang" class = "form-control" value="{{ item.id }}">{{ item.value }}</option>
+                            {% endlfor %} 
+                            </select>
                         </p>
                     </div>
                 </div>
@@ -1019,7 +1086,11 @@
                             </div>
                             <div class="col-xs-3 col-sm-3 col-md-3">
                                 <label for="rank">Воинское звание</label>
-                                <input name="rank" id="rank" class="form-control" placeholder="капитан" value="{{ data.milit.rank }}" >
+                                <select name="rank" id="rank"  class="form-control">                               
+                                    {% for item in data.rank %}
+                                    <option name= "rank" id = "rank" class = "form-control" value="{{ item.id }}">{{ item.value }}</option>
+                                    {% endlfor %} 
+                                </select>
                             </div>
                             <p><button type="submit" class="btn btn-default" name="save">Сохранить</button></p>
 
