@@ -12,7 +12,7 @@ from django import template
 
 from datetime import date
 from staff.models import Employee, Position
-from anketa.models import Department, Attribute, Application, Abiturient, Docs, AttrValue, Profile, Contacts, Address, Education_Prog , Privilegies, Exams, DepAchieves, Milit, DocAttr, Achievements
+from anketa.models import Department, Attribute, AttrType, Application, Abiturient, Docs, AttrValue, Profile, Contacts, Address, Education_Prog , Privilegies, Exams, DepAchieves, Milit, DocAttr, Achievements
 from django.contrib.auth.models import User
 
 # Create your views here.
@@ -116,17 +116,17 @@ def EditEmployee(request, employee_id):
 
 @transaction.atomic
 def save_user_profile(user, values):
-    user.email = request.POST.get('email','') 
-    password2 = request.POST['confirm']
-    password1 = request.POST['password']        
+    user.email = values.get('email','') 
+    password2 = values['confirm']
+    password1 = values['password']        
     if password1 == password2 and len(password1) > 0:
-        user.set_password(request.POST['password'])
+        user.set_password(values['password'])
+        user.save()
     else:
-        raise Exception(u'Пароль и подтверждение не совпадают!!')
-    user.save()
-    employee.first_name = request.POST.get('fname','')
-    employee.last_name = request.POST.get('lname','')
-    employee.mid_name = request.POST.get('mname','')
+        raise Exception(u'Пароль и подтверждение не совпадают!!')    
+    employee.first_name = values.get('fname','')
+    employee.last_name = values.get('lname','')
+    employee.mid_name = values.get('mname','')
     employee.save()
 
 @login_required(login_url='/login/')
@@ -134,8 +134,7 @@ def Employee_Useraccount(request):
     departments = Department.objects.all()   
     user = request.user
     employee = user.employee_set.get()
-    positions = Position.objects.all()
-    alert = 0
+    positions = Position.objects.all()    
     error_message = ''
     if request.method == 'POST':
         try:
@@ -143,7 +142,6 @@ def Employee_Useraccount(request):
         except Exception as e:
             error_message = str(e)
     Data={}
-    Data['alert'] = alert
     Data['departments'] = departments
     Data['employee']=employee
     Data['user']=user
@@ -315,3 +313,35 @@ def Application_review (request, application_id):
     context = {'data':Data}
     context.update(csrf(request))
     return render(request,'staff\\wizardform.html',context)
+
+def Catalogs(request):
+    if request.method == 'POST':
+        if 'save1' in request.POST and len(request.POST['attrtype'])>0:
+            attr_type = AttrType(name=request.POST['attrtype'])
+            attr_type.save()
+            return HttpResponseRedirect(reverse('staff:catalogs'))
+
+        if 'save2' in request.POST and len(request.POST['attribute'])>0:
+            attri_bute = Attribute(name=request.POST['attribute'],type_id=request.POST['attrtype1'])
+            attri_bute.save()
+            attribute1 = attri_bute.id
+            return HttpResponseRedirect(reverse('staff:catalogs'))
+
+        if 'save3' in request.POST and len(request.POST['attrvalue'])>0:
+            attr_value = AttrValue(value=request.POST['attrvalue'],attribute_id=request.POST['attribute1'])
+            attr_value.save()
+            return HttpResponseRedirect(reverse('staff:catalogs'))
+
+
+    Data={}
+    attrvalue = AttrValue.objects.all()
+    attrtype = AttrType.objects.all()
+    attribute = Attribute.objects.all()
+    Data['attribute'] = attribute
+    Data['attrvalue'] = attrvalue
+    Data['attrtype'] = attrtype
+    context = {'data':Data}
+    context.update(csrf(request))
+
+    
+    return render(request,'staff\catalogs.html', Data)
