@@ -45,7 +45,8 @@
 </script>
 {% endblock %}
 {% block content %}
-<form name="login_form" action="{%url 'authapp:login'%}" class="form-horizontal" role="form" method="get">
+<form name="login_form" action="{%url 'authapp:login'%}" class="form-horizontal" role="form" method="post">
+	{% csrf_token %}
 	<div class="row">
 		<div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-5">
 			<label for="username">Имя пользователя</label>
@@ -85,4 +86,4 @@
 		</div>
 	</div>
 </form>
-{% endblock%}
+{% endblock %}

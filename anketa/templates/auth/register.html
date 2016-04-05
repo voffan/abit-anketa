@@ -95,7 +95,6 @@
 					SetIcon("username","okay");
 					$usernameError=false;
 				}
-				
 			},
 			error:function(){
 				alert('Check Internet connnection!');
@@ -295,12 +294,11 @@
 			},
 			onNext: function(tab, navigation, index)
 			{
+				return true;
 				if(index===1)
 				{
-					/*
 					if($usernameError || $emailError || $pwdError || $pwdVerError)
 						return false;
-					*/
 				}
 				else if(index===2)
 				{
@@ -447,6 +445,9 @@
 							<p>
 								<label for="captcha">ЭЭЭЭЭЭХ</label>
 								<input type="text" id="captcha" name="captcha">
+								{% if captcha_error %}
+									Опоп.
+								{% endif %}
 							</p>
 						</div>
 					</div>
@@ -460,4 +461,4 @@
 		</div>
 	</div>
 </form>
-{% endblock%}
+{% endblock %}

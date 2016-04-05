@@ -1,0 +1,123 @@
+{% extends "anketa/base.html" %}
+{% load staticfiles %}
+
+
+{% block additionalcss %}
+<link href="{% static "anketa/css/prettify.css" %}" rel="stylesheet">
+<link href="{% static "anketa/css/jquery.realperson.css" %}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<div class="container">
+	<div class="row row-offcanvas row-offcanvas-left">
+		<!-- sidebar -->
+		<div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
+			<div class="panel panel-info">
+				<div class="panel-heading">Меню</div>
+				<div class="panel-body">
+					<ul class="nav nav-pills nav-stacked">
+						<li class="active"><a href="#">Личный кабинет</a></li>
+						<li><a href="#">Личные данные</a></li>
+						<li><a href="#">Заявления</a></li>
+						<li><a href="#">Учетная запись</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!-- main area -->
+		<div class="col-md-9 col-xs-12 col-sm-12">
+			<div class="row">
+				<div class="col-xs-6 col-sm-6 col-md-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">Личные данные</h3>
+						</div>
+						<div class="panel-body">
+							<div class="form-group has-success has-feedback">
+								<input type="button" class="form-control" id="personData" aria-describedby="personDataStatus" value = "Личные данные" disabled>
+								<span id = "personDataIcon"class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+								<span id="personDataStatus" class="sr-only"></span>
+							</div>
+							<div class="form-group has-warning has-feedback">
+								<input type="button" class="form-control" id="documents" aria-describedby="documentsStatus" value = "Документы">
+								<span id= "documentsIconclass" class="glyphicon glyphicon-warning-sign form-control-feedback" aria-hidden="true"></span>
+								<span id="documentsStatus" class="sr-only"></span>
+							</div>
+							<div class="form-group has-error has-feedback">
+								<input type="button" class="form-control" id="contacts" aria-describedby="contactsStatus" value ="Контакты">
+								<span id="contactsIcon"class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+								<span id="contactsStatus" class="sr-only"></span>
+							</div>
+							<div class="form-group has-success has-feedback">
+								<input type="button" class="form-control" id="personParents" aria-describedby="personParentsStatus" value = "Родители" disabled>
+								<span id ="personParentsIcon"class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+								<span id="personParentsStatus" class="sr-only"></span>
+							</div>
+							<div class="form-group has-success has-feedback">
+								<input type="button" class="form-control" id="achs" aria-describedby="achsStatus" value = "Достижения/льготы" disabled>
+								<span id="achsIcon" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+								<span id="achsStatus" class="sr-only"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-6 col-sm-6 col-md-6">
+					<div class="panel panel-info">
+						<div class="panel-heading">
+							<h3 class="panel-title">Инструкция</h3>
+						</div>
+						<div class="panel-body">
+						ну, тут короче какой-то текст.
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12 col-xs-12 col-sm-12">
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h3 class="panel-title">Заявления</h3>
+						</div>
+						<div class="panel-body">
+							<table class="table">
+								<thead>
+									<tr>
+										<th>Институт/факультет</th>
+										<th>Направление/специальность</th>
+										<th>Профиль</th>
+										<th>Статус</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr class="success">
+										<td>ИМИ</td>
+										<td>ИВТ</td>
+										<td>-</td>
+										<td>Экспортировано</td>
+									</tr>
+									<tr class="danger">
+										<td>ИМИ</td>
+										<td>ПМ</td>
+										<td>-</td>
+										<td>Аннулировано</td>
+									</tr>
+									<tr class="info">
+										<td>ИМИ</td>
+										<td>ФИИТ</td>
+										<td>-</td>
+										<td>Подано</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div> <!-- off canvas -->
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{% static "anketa/js/jquery.bootstrap.wizard.js" %}"></script>
+<script src="{% static "anketa/js/prettify.js" %}"></script>
+<script src="{% static "anketa/js/bootstrap-typeahead.js" %}"></script>
+{% endblock %}

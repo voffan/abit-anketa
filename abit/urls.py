@@ -3,12 +3,11 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
 
-from anketa.views import StartPage, StartApp, Streets, Territory, District, City, Citizenship, Nation, DocIssuer, PrevEduName, Institute, EduProg, EduProf, Privilegies, Rank, Flang, CreatePerson, DocType
-
-from anketa.views2 import *
+from anketa.views import StartPage, StartApp, Streets, Territory, District, City, Citizenship, Nation, DocIssuer, PrevEduName, Institute, EduProg, EduProf, Privilegies, Rank, Flang, CreatePerson, DocType, Profile
 
 urlpatterns = patterns('',
     url(r'^$', StartPage.as_view()),
+    url(r'^profile/$', Profile, name='profile'),
     url(r'^application/$', StartApp, name = 'application'),
     url(r'^territory/$', Territory, name = 'territory'),
     url(r'^district/$', District, name = 'district'),
