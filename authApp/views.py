@@ -1,10 +1,11 @@
 import json
 from django.http import HttpResponse,HttpResponseRedirect
-from django.shortcuts import render_to_response, render
+from django.shortcuts import render_to_response, render, redirect
 #from anketa.models import User
 from django.core.context_processors import csrf
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+from django.template import RequestContext
 
 
 # Create your views here.
@@ -13,24 +14,27 @@ def index(request):
 	return render (request, 'auth/auth.html')
 
 def login_user(request):
-	username = request.GET.get('username', '')
-	password = request.GET.get('password', '')
-	user = authenticate(username=username, password=password)
-	if user is not None:
-		login(request, user)
-	return user
+	if request.POST:
+		username = request.POST.get('username', '')
+		password = request.POST.get('password', '')
+		user = authenticate(username=username, password=password)
+		if user is not None:
+			login(request, user)
+		return user
 
 def login_web(request):
+	args = {}
+	args.update(csrf(request))
 	user = login_user(request)
 	if user is not None:
 		abiturient=user.abiturient_set.first()
 		if abiturient is None:
-			return HttpResponseRedirect('/staff')
+			return redirect('/staff')
 		else:
-			return HttpResponseRedirect('/application')
+			return redirect('/application')
 	else:
 		args={'login_error':'Пользователь не найден'}
-		return render(request, 'auth/auth.html', args)
+		return render(request,'auth/auth.html', args)
 
 def register_index(request):
 	return render(request, 'auth/register.html')
@@ -43,7 +47,7 @@ def checkEmailValid(request):
 	if check is not None:
 		result['result']=1
 		result['error_msg']='e-mail занят! Выберете другой'
-
+	
 	return HttpResponse(json.dumps(result), content_type='application/json')
 
 def checkUserValid(request):
@@ -56,17 +60,3 @@ def checkUserValid(request):
 		result['error_msg']='имя пользователя занято'
 
 	return HttpResponse(json.dumps(result), content_type='application/json')
-
-def rpHash(person): 
-	hash = 5381 
-	value = person.upper() 
-	for caracter in value: 
-		hash = (( np.left_shift(hash, 5) + hash) + ord(caracter)) 
-	hash = np.int32(hash) 
-
-def CaptchaCheck(request):
-	result = {'result':0, 'error_msg':''}
-	if rpHash(request.form['realPerson']) != request.form['realPersonHash']:
-		result['result']=1;
-		result['error_msg']="Неправильная капча!"
-	return HttpResponse(json.dumps(result),content_type='application/json')
