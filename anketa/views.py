@@ -73,6 +73,7 @@ def Streets(request):
 def Citizenship(request):
     trry = AttrValue.objects.filter(attribute__name__icontains = u'гражданство')
     part = request.GET.get('query','')
+    testData = {id:"citizenship", text:"citizenship"};
     if len(part)>0:
         trry = trry.filter(value__icontains = part)
     trry = trry.values('id', 'value')
@@ -106,6 +107,7 @@ def DocType(request):
 def DocIssuer(request):
     trry = AttrValue.objects.filter(attribute__id = 11)
     part = request.GET.get('query','')
+    testData = {id:"docissuer", text:"docissuer"}
     if len(part)>0:
         trry = trry.filter(value__icontains = part)
     trry = trry.values('id', 'value')
@@ -117,6 +119,7 @@ def DocIssuer(request):
 def PrevEduName(request):
     trry = AttrValue.objects.filter(attribute__id = 12)
     part = request.GET.get('query','')
+    testData = {id:"preveduname", text:"preveduname"};
     if len(part)>0:
         trry = trry.filter(value__icontains = part)
     trry = trry.values('id', 'value')
@@ -124,6 +127,7 @@ def PrevEduName(request):
     for item in trry:
         result.append(item)
     return HttpResponse(json.dumps(result), content_type="application/json")
+
 
 def Institute(request):
     trry = AttrValue.objects.filter(attribute__id = 13)

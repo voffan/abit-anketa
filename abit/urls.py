@@ -26,7 +26,7 @@ urlpatterns = patterns('',
     url(r'^create_person/$', CreatePerson, name="create_person"),
     url(r'^rank/$', Rank, name = 'rank'),
     url(r'^flang/$', Flang, name = 'flang'),
-    url(r'^admin/', include(admin.site.urls)),s
+    url(r'^admin/', include(admin.site.urls)),
     url(r'^flang/$', Flang, name = 'flang'),
     url(r'^staff/', include('staff.urls',namespace = 'staff')),
     #url(r'^captcha/', include('captcha.urls')),

@@ -38,11 +38,9 @@
             }
 
         }});
-        $('#rootwizard .finish').click(function() {
-            alert('Finished!, Starting over!');
-            $('#rootwizard').find("a[href*='tab1']").trigger('click');
-        });
        
+        
+      
         $('#rank').select2({
             language:"ru"
         });
@@ -59,6 +57,8 @@
         $('#citizenship').select2({
             language:"ru",
             minimumInputLength: 1,
+            
+          
             ajax:{
                 url:{% url 'citizenship' %},
                 dataType: 'json',
@@ -129,318 +129,6 @@
                 cache: true
             }
         });
-    });
-</script>
-<script>
-    $("#territory").typeahead(
-    {
-        onSelect: function(item)
-        {
-            $("#idterritory").val(item.value);
-        },
-    ajax:
-        {
-            url:"{% url 'territory' %}",
-            displayField: 'value',
-            valueField:'id',
-            method:'get',
-            triggerLength: 1,
-            preDispatch: function(query)
-            {
-                return{
-                        'query':query
-                      }
-            },
-            preProcess: function(data)
-            {
-                return data;
-            }
-        }
-
-    });
-    $("#district").typeahead(
-    {
-        onSelect: function(item)
-        {
-            $("#iddistrict").val(item.value);
-        },
-    ajax:
-        {
-            url:"{% url 'district' %}",
-            displayField: 'value',
-            valueField:'id',
-            method:'get',
-            triggerLength: 1,
-            preDispatch: function(query)
-            {
-                return{
-                        'query':query,
-                        'id':$("#idterritory").val()
-                      }
-            },
-            preProcess: function(data)
-            {
-                return data;
-            }
-        }
-
-    });
-    $("#city").typeahead(
-    {
-        onSelect: function(item)
-        {
-            $("#idcity").val(item.value);
-        },
-    ajax:
-        {
-            url:"{% url 'city' %}",
-            displayField: 'value',
-            valueField:'id',
-            method:'get',
-            triggerLength: 1,
-            preDispatch: function(query)
-            {
-                return{
-                        'query':query,
-                        'id':GetRegionID()
-                      }
-            },
-            preProcess: function(data)
-            {
-                return data;
-            }
-        }
-
-    });
-    $("#streets").typeahead(
-    {
-        onSelect: function(item)
-        {
-            $("#idstreets").val(item.value);
-        },
-    ajax:
-        {
-            url:"{% url 'streets' %}",
-            displayField: 'value',
-            valueField:'id',
-            method:'get',
-            triggerLength: 1,
-            preDispatch: function(query)
-            {
-                return{
-                        'query':query,
-                        'id':$("#idcity").val()
-                      }
-            },
-            preProcess: function(data)
-            {
-                return data;
-            }
-        }
-    });
-    $("#nation").typeahead(
-    {
-        onSelect: function(item)
-        {
-            $("#idnation").val(item.value);
-        },
-    ajax:
-        {
-            url:"{% url 'nation' %}",
-            displayField: 'value',
-            valueField:'id',
-            method:'get',
-            triggerLength: 1,
-            preDispatch: function(query)
-            {
-                return{
-                        'query':query,
-                      }
-            },
-            preProcess: function(data)
-            {
-                return data;
-            }
-        }
-    });
-    $("#docissuer").typeahead(
-    {
-        onSelect: function(item)
-        {
-            $("#iddocissuer").val(item.value);
-        },
-    ajax:
-        {
-            url:"{% url 'docissuer' %}",
-            displayField: 'value',
-            valueField:'id',
-            method:'get',
-            triggerLength: 1,
-            preDispatch: function(query)
-            {
-                return{
-                        'query':query,
-                      }
-            },
-            preProcess: function(data)
-            {
-                return data;
-            }
-        }
-    });
-    $("#preveduname").typeahead(
-    {
-        onSelect: function(item)
-        {
-            $("#idpreveduname").val(item.value);
-        },
-    ajax:
-        {
-            url:"{% url 'preveduname' %}",
-            displayField: 'value',
-            valueField:'id',
-            method:'get',
-            triggerLength: 1,
-            preDispatch: function(query)
-            {
-                return{
-                        'query':query,
-                      }
-            },
-            preProcess: function(data)
-            {
-                return data;
-            }
-        }
-    });
-    $("#inst").typeahead(
-    {
-        onSelect: function(item)
-        {
-            $("#idinst").val(item.value);
-        },
-    ajax:
-        {
-            url:"{% url 'institute' %}",
-            displayField: 'value',
-            valueField:'id',
-            method:'get',
-            triggerLength: 1,
-            preDispatch: function(query)
-            {
-                return{
-                        'query':query,
-                      }
-            },
-            preProcess: function(data)
-            {
-                return data;
-            }
-        }
-    });
-    $("#eduprog").typeahead(
-    {
-        onSelect: function(item)
-        {
-            $("#ideduprog").val(item.value);
-        },
-    ajax:
-        {
-            url:"{% url 'eduprog' %}",
-            displayField: 'value',
-            valueField:'id',
-            method:'get',
-            triggerLength: 1,
-            preDispatch: function(query)
-            {
-                return{
-                        'query':query,
-                        'id':$("#idinst").val()
-                      }
-            },
-            preProcess: function(data)
-            {
-                return data;
-            }
-        }
-    });
-    $("#eduprof").typeahead(
-    {
-        onSelect: function(item)
-        {
-            $("#ideduprof").val(item.value);
-        },
-    ajax:
-        {
-            url:"{% url 'eduprof' %}",
-            displayField: 'value',
-            valueField:'id',
-            method:'get',
-            triggerLength: 1,
-            preDispatch: function(query)
-            {
-                return{
-                        'query':query,
-                        'id':$("#ideduprog").val()
-                      }
-            },
-            preProcess: function(data)
-            {
-                return data;
-            }
-        }
-    });
-    $("#rank").typeahead(
-    {
-        onSelect: function(item)
-        {
-            $("#idrank").val(item.value);
-        },
-    ajax:
-        {
-            url:"{% url 'rank' %}",
-            displayField: 'value',
-            valueField:'id',
-            method:'get',
-            triggerLength: 1,
-            preDispatch: function(query)
-            {
-                return{
-                        'query':query,
-                        'id':$("#idrank").val()
-                      }
-            },
-            preProcess: function(data)
-            {
-                return data;
-            }
-        }
-    });
-    $("#flang").typeahead(
-    {
-        onSelect: function(item)
-        {
-            $("#idflang").val(item.value);
-        },
-    ajax:
-        {
-            url:"{% url 'flang' %}",
-            displayField: 'value',
-            valueField:'id',
-            method:'get',
-            triggerLength: 1,
-            preDispatch: function(query)
-            {
-                return{
-                        'query':query,
-                        'id':$("#idflang").val()
-                      }
-            },
-            preProcess: function(data)
-            {
-                return data;
-            }
-        }
     });
 </script>
 <script>
@@ -622,7 +310,7 @@
                             <label for="doctype">Вид документа, удостоверяющего личность</label>
                             <select id="doctype" name = "doctype" class="form-control">
                                {% for item in data.docType %}
-                                    <option value="{{ item.id }}" {% if item.id === data.docs.id %}selected{% endif %}>{{ item.value }}</option>
+                                    <option value="{{ item.id }}">{{ item.value }}</option>
                                {% endfor %}
                             </select>                 
                             
@@ -644,6 +332,11 @@
                             <input type = "date" name = "datedoc" id = "datedoc" value="2011-01-01" class = "form-control" placeholder="" value="{{data.docs.issueDate}}">
                         </div>
                     </div>
+                    {% for item in attrvalue %}
+                    {% if item.attribute_id == '' %}
+                    <option value="{{ item.id }}">{{ item.value }}</option>
+                    {% endif %}
+                    {% endfor %}
                 </p>
                 <div class = "row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
@@ -682,10 +375,10 @@
                         <p>
                             <label for="prevedu">Предыдущие образование</label>
                             <p>
-                                <input type = "radio" name= "prevedu" value="soo"{% if data.docs.doctype == "diplom" %} checked {% endif %}>СОО 
-                                <input type = "radio" name= "prevedu" value="npo"{% if data.docs.doctype == "attestat" %} checked {% endif %}>НПО 
-                                <input type = "radio" name= "prevedu" value="spo"{% if data.docs.doctype == "3"  %} checked {% endif %}>СПО 
-                                <input type = "radio" name= "prevedu" value="vpo"{% if data.docs.doctype == "4" %} checked {% endif %}>ВПО
+                                <input type = "radio" name= "prevedu" value="soo"{% if data.docs.doctype.attribute_id == "soo" %} checked {% endif %}>СОО 
+                                <input type = "radio" name= "prevedu" value="npo"{% if data.docs.doctype.attribute_id == "npo" %} checked {% endif %}>НПО 
+                                <input type = "radio" name= "prevedu" value="spo"{% if data.docs.doctype.attribute_id == "spo" %} checked {% endif %}>СПО 
+                                <input type = "radio" name= "prevedu" value="vpo"{% if data.docs.doctype.attribute_id == "vpo" %} checked {% endif %}>ВПО
                             </p>
                         </p>
                     </div>
@@ -694,11 +387,11 @@
                     <div class="row">
                             <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-3">
                                 <label for="datejoining">Дата поступления</label>
-                                <input type="date" name = "datejoining" id ="datejoining" class="form-control" value="2004-01-09" >
+                                <input type="date" name = "datejoining" id ="datejoining" class="form-control"  {% if data.docs.doctype.attribute_id == "datejoining" %} checked {% endif %}>{{data.docs.attribute}}
                             </div>
                             <div class="col-xs-3 col-sm-3 col-md-3">
                                 <label for="dateexiting">Дата окончания</label>
-                                <input type="date" name = "dateexiting" id ="dateexiting" class="form-control" value="2015-01-06" >
+                                <input type="date" name = "dateexiting" id ="dateexiting" class="form-control"  {% if data.docs.doctype.attribute_id == "dateexiting" %} checked {% endif %}>{{data.docs.attribute}}
                             </div>
                     </div>
                 </p>
@@ -743,7 +436,7 @@
                         <p>
                             <label for="district">Район/улус</label>
                             <input id="district" class="form-control" placeholder="" value="{{Kladr.views.get_region}}">
-                            <input name = "iddistrict" id="iddistrict" hidden>
+                            <input name = "iddistrict" id="iddistrict" hidden/>
                         </p>
                     </div>
                 </div>
@@ -752,7 +445,7 @@
                         <p>
                             <label for="city">Город/село</label>
                             <input name="city" id="city" class="form-control" placeholder="Якутск" value="{{Kladr.views.get_region}}">
-                            <input name="idcity" id="idcity" hidden>
+                            <input name="idcity" id="idcity" hidden/>
                         </p>
                     </div>
                 </div>
