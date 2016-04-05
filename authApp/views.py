@@ -31,7 +31,7 @@ def login_web(request):
 		if abiturient is None:
 			return redirect('/staff')
 		else:
-			return redirect('/application')
+			return redirect('/profile')
 	else:
 		args={'login_error':'Пользователь не найден'}
 		return render(request,'auth/auth.html', args)
