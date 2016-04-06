@@ -64,7 +64,7 @@ class Abiturient(Person):
     foreign_lang = models.ForeignKey('AttrValue', verbose_name=u'Изучаемый иностранный язык',related_name='Foreign', null=True, blank=True)
     token = models.CharField(u'Token',max_length=100, db_index = True, null=True, blank=True)
     user = models.ForeignKey(User, verbose_name=u'Пользователь', db_index=True)
-    #info_progress=models.CharField(u'Progress',max_length=20,null=True,blank=True)
+    info_progress=models.CharField(u'Progress',max_length=20,null=True,blank=True)
 
 class Application(models.Model):
 	department = models.ForeignKey('Department', verbose_name = u'Институт/факультет', db_index=True)
