@@ -1,16 +1,16 @@
 import json
+import numpy as np 
 
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
 from django.forms.formsets import formset_factory
 from django.utils import timezone
-from django.shortcuts import get_object_or_404
 from datetime import datetime
 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 
-from django.shortcuts import render_to_response, render
+from django.shortcuts import render_to_response, render,get_object_or_404
 from django.template import RequestContext
 
 from anketa.models import Person, Address, Attribute, AttrValue, Abiturient
@@ -21,7 +21,10 @@ class StartPage(TemplateView):
     template_name = 'anketa/start.html'
 
 def StartApp(request):
-    return render(request, 'anketa/wizardform.html')
+	return render(request, 'anketa/wizardform.html')
+
+def Profile(request):
+	return render(request, 'anketa/profile.html')
 
 def Territory(request):
     trry = AttrValue.objects.filter(attribute__id = 5)
@@ -73,6 +76,7 @@ def Streets(request):
 def Citizenship(request):
     trry = AttrValue.objects.filter(attribute__name__icontains = u'гражданство')
     part = request.GET.get('query','')
+    testData = {id:"citizenship", text:"citizenship"};
     if len(part)>0:
         trry = trry.filter(value__icontains = part)
     trry = trry.values('id', 'value')
@@ -106,6 +110,7 @@ def DocType(request):
 def DocIssuer(request):
     trry = AttrValue.objects.filter(attribute__id = 11)
     part = request.GET.get('query','')
+    testData = {id:"docissuer", text:"docissuer"}
     if len(part)>0:
         trry = trry.filter(value__icontains = part)
     trry = trry.values('id', 'value')
@@ -117,6 +122,7 @@ def DocIssuer(request):
 def PrevEduName(request):
     trry = AttrValue.objects.filter(attribute__id = 12)
     part = request.GET.get('query','')
+    testData = {id:"preveduname", text:"preveduname"};
     if len(part)>0:
         trry = trry.filter(value__icontains = part)
     trry = trry.values('id', 'value')
@@ -124,6 +130,7 @@ def PrevEduName(request):
     for item in trry:
         result.append(item)
     return HttpResponse(json.dumps(result), content_type="application/json")
+
 
 def Institute(request):
     trry = AttrValue.objects.filter(attribute__id = 13)
@@ -226,16 +233,24 @@ def CreatePerson(request):
 	context.update(csrf(request))
 	return render(request,'/',context)
 
-def CheckCaptcha(values):
-    return True
+def rpHash(person):
+	hash = 5381 
+	value = person.upper() 
+	print (value)
+	for caracter in value: 
+		hash = (( np.left_shift(hash, 5) + hash) + ord(caracter)) 
+	hash = np.int32(hash)
+	print (hash)
+    return hash
 
 def CreatePerson(request):
 	if request.method =='POST':
-		if(CheckCaptcha(request.POST)):
+		if (rpHash(request.POST.get('realPerson','')) == request.POST.get('realPersonHash','')):
 			try:
 				Save_Abiturient(request.POST)
 			except Exception as e:
-				return HttpResponseRedirect(reverse('application'))
-			return HttpResponseRedirect(reverse('application'))
+				return HttpResponseRedirect(reverse('profile'))
+			return HttpResponseRedirect(reverse('profile'))
 		else:
-			return HttpResponseRedirect(reverse('application'))
+			args={'captcha':'Неправильная капча'}
+			return render(request, 'auth/register.html', args)
