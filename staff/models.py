@@ -35,5 +35,5 @@ class Contacts(models.Model):
     contact_type = models.ForeignKey(AttrValue, verbose_name=u'Тип контакта')
     value = models.CharField(u'Контакт', max_length = 150, db_index=True)
     def __str__(self):
-        return self.employee.fullname+' '+value
+        return self.employee.fullname+' '+self.value
         

@@ -11,7 +11,7 @@ from django.db import transaction
 from django import template
 
 from datetime import date
-from staff.models import Employee, Position
+from staff.models import Employee, Position, Contacts as ContactsStaff
 from anketa.models import Department, Attribute, AttrType, Application, Abiturient, Docs, AttrValue, Profile, Contacts, Address, Education_Prog , Privilegies, Exams, DepAchieves, Milit, DocAttr, Achievements
 from django.contrib.auth.models import User
 
@@ -114,6 +114,14 @@ def EditEmployee(request, employee_id):
     context.update(csrf(request))
     return render(request,'staff\employee_add.html',context)
 
+def AddContact(employee, contacts):
+    for item in contacts:
+        contact = ContactsStaff()
+        contact.employee = employee
+        contact.contact_type = AttrValue.objects.get(pk=item['id'])
+        contact.value = item['value']
+        contact.save()
+
 @transaction.atomic
 def save_user_profile(user, values):
     user.email = values.get('email','') 
@@ -121,35 +129,39 @@ def save_user_profile(user, values):
     password1 = values['password']        
     if password1 == password2 and len(password1) > 0:
         user.set_password(values['password'])
-        user.save()
-    else:
-        raise Exception(u'Пароль и подтверждение не совпадают!!')    
+    elif len(password1) > 0:
+        raise Exception(u'Пароль и подтверждение не совпадают!!')
+    user.save()  
+    employee = user.employee_set.get() 
     employee.first_name = values.get('fname','')
     employee.last_name = values.get('lname','')
     employee.mid_name = values.get('mname','')
+    AddContact(employee,[{'id':AttrValue.objects.get(attribute__name__icontains=u'контакт', value__icontains=values.get('contacts_type')).id,'value':values.get('contacts','')}])
     employee.save()
 
 @login_required(login_url='/login/')
-def Employee_Useraccount(request):
-    departments = Department.objects.all()   
+def Employee_Useraccount(request):  
     user = request.user
-    employee = user.employee_set.get()
-    positions = Position.objects.all()    
+    contacts = ContactsStaff.objects.all()    
     error_message = ''
+    Data={}
     if request.method == 'POST':
         try:
+            #сохранить старые значения user и employee
+            sid = transaction.savepoint()
             save_user_profile(request.user, request.POST)
+            Data['success_message'] = u'Успешно изменено'
         except Exception as e:
             error_message = str(e)
-    Data={}
-    Data['departments'] = departments
-    Data['employee']=employee
+            transaction.savepoint_rollback(sid)
+            #восстановить старые значения
+    
+    Data['contacts']=contacts
+    Data['contact_type']=AttrValue.objects.filter(attribute__name__icontains=u'контакт')
+    Data['employee']=user.employee_set.get() 
     Data['user']=user
-    Data['positions']=positions
     if len(error_message) > 0:
         Data['error_message'] = error_message
-    else:
-        Data['success_message'] = u'Успешно изменено'
 
     context = {'data':Data}
     context.update(csrf(request))
@@ -315,6 +327,10 @@ def Application_review (request, application_id):
     return render(request,'staff\\wizardform.html',context)
 
 def Catalogs(request):
+    attrvaluefilter = AttrValue.objects.all()
+    attribute = Attribute.objects.all()
+    attrtypefilter ='0'
+    attributefilter = '0'
     if request.method == 'POST':
         if 'save1' in request.POST and len(request.POST['attrtype'])>0:
             attr_type = AttrType(name=request.POST['attrtype'])
@@ -324,7 +340,6 @@ def Catalogs(request):
         if 'save2' in request.POST and len(request.POST['attribute'])>0:
             attri_bute = Attribute(name=request.POST['attribute'],type_id=request.POST['attrtype1'])
             attri_bute.save()
-            attribute1 = attri_bute.id
             return HttpResponseRedirect(reverse('staff:catalogs'))
 
         if 'save3' in request.POST and len(request.POST['attrvalue'])>0:
@@ -332,11 +347,34 @@ def Catalogs(request):
             attr_value.save()
             return HttpResponseRedirect(reverse('staff:catalogs'))
 
+        if 'deleteatt' in request.POST:
+            attri_bute = Attribute(id=request.POST['attribute1'])
+            attri_bute.delete()
+            return HttpResponseRedirect(reverse('staff:catalogs'))
 
-    Data={}
+        if 'deletetype' in request.POST:
+            attr_type = AttrType(id=request.POST['attrtype1'])
+            attr_type.delete()
+            return HttpResponseRedirect(reverse('staff:catalogs'))
+
+        if 'save4' in request.POST:
+            if 'attrtypefilter' in request.POST and int(request.POST.get('attrtypefilter'))>0:
+                attrtypefilter = request.POST.get('attrtypefilter')          
+                attrvaluefilter = attrvaluefilter.filter(attribute__type__id=attrtypefilter)                
+                attribute = attribute.filter(type__id__in=attrtypefilter)
+            
+            if 'attributefilter' in request.POST and int(request.POST.get('attributefilter'))>0:
+                attributefilter = request.POST.get('attributefilter')
+                attrvaluefilter = attrvaluefilter.filter(attribute__id=attributefilter)
+                
+    Data={}    
+    attribute1 = Attribute.objects.all()    
     attrvalue = AttrValue.objects.all()
-    attrtype = AttrType.objects.all()
-    attribute = Attribute.objects.all()
+    attrtype = AttrType.objects.all()    
+    Data['attributefilter'] = int(attributefilter)
+    Data['attrtypefilter'] = int(attrtypefilter)
+    Data['attrvaluefilter'] = attrvaluefilter
+    Data['attribute1'] = attribute1
     Data['attribute'] = attribute
     Data['attrvalue'] = attrvalue
     Data['attrtype'] = attrtype
@@ -344,4 +382,4 @@ def Catalogs(request):
     context.update(csrf(request))
 
     
-    return render(request,'staff\catalogs.html', Data)
+    return render(request,'staff\catalogs.html', context)
