@@ -241,6 +241,7 @@ def rpHash(person):
 		hash = (( np.left_shift(hash, 5) + hash) + ord(caracter)) 
 	hash = np.int32(hash)
 	print (hash)
+    return hash
 
 def CreatePerson(request):
 	if request.method =='POST':

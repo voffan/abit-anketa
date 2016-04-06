@@ -11,7 +11,9 @@ from django.template import RequestContext
 # Create your views here.
 
 def index(request):
-	return render (request, 'auth/auth.html')
+	args={}
+	args.update(csrf(request))
+	return render (request, 'auth/auth.html',args)
 
 def login_user(request):
 	if request.POST:
@@ -24,7 +26,6 @@ def login_user(request):
 
 def login_web(request):
 	args = {}
-	args.update(csrf(request))
 	user = login_user(request)
 	if user is not None:
 		abiturient=user.abiturient_set.first()
@@ -34,6 +35,7 @@ def login_web(request):
 			return redirect('/profile')
 	else:
 		args={'login_error':'Пользователь не найден'}
+		args.update(csrf(request))
 		return render(request,'auth/auth.html', args)
 
 def register_index(request):
