@@ -24,7 +24,8 @@ def StartApp(request):
 	return render(request, 'anketa/wizardform.html')
 
 def Profile(request):
-	return render(request, 'anketa/profile.html')
+    args={'currentpage':1}
+    return render(request, 'anketa/profile.html', args)
 
 def Territory(request):
     trry = AttrValue.objects.filter(attribute__id = 5)
@@ -234,13 +235,13 @@ def CreatePerson(request):
 	return render(request,'/',context)
 
 def rpHash(person):
-	hash = 5381 
-	value = person.upper() 
-	print (value)
-	for caracter in value: 
-		hash = (( np.left_shift(hash, 5) + hash) + ord(caracter)) 
-	hash = np.int32(hash)
-	print (hash)
+    hash = 5381 
+    value = person.upper() 
+    print (value)
+    for caracter in value: 
+        hash = (( np.left_shift(hash, 5) + hash) + ord(caracter)) 
+    hash = np.int32(hash)
+	#print (hash)
     return hash
 
 def CreatePerson(request):
