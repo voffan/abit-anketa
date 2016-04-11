@@ -6,7 +6,6 @@
 {% load staticfiles %}
 
 {% block additionalcss %}
-  <link rel="stylesheet" href="https://cdn.rawgit.com/esvit/ng-table/v1.0.0/dist/ng-table.min.css">
   <link href="{% static 'anketa/select2-3.5.4/select2.css' %}" rel="stylesheet">
   <link href="{% static 'anketa/select2-3.5.4/select2-bootstrap.css' %}" rel="stylesheet">
   <link href="{% static 'anketa/css/prettify.css' %}" rel="stylesheet">
@@ -15,13 +14,9 @@
 
 
 {% block scripts %}
-  <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js"></script>
-  <script src="https://cdn.rawgit.com/esvit/ng-table/v1.0.0/dist/ng-table.js"></script>
   <script src="{% static "anketa/select2-3.5.4/select2.min.js" %}"></script>
   <script src="{% static "anketa/js/prettify.js" %}"></script>
   <script src="{% static "anketa/select2-3.5.4/select2_locale_ru.js" %}"></script>
-  <script src="{% static "anketa/js/jquery.bootstrap.wizard.js" %}"></script>
-  <script src="{% static "anketa/js/bootstrap-typeahead.js" %}"></script>
 
   <script>
       $(document).ready(function(){
@@ -30,7 +25,7 @@
             language:"ru",
             minimumInputLength: 1,
             ajax:{
-              url:{% url 'staff:catalogs' %},
+              url:"{% url 'staff:get_attrs' %}",
               dataType: 'json',
               delay: 250,
               data:function(params){
@@ -56,114 +51,51 @@
 
 {% block content %}
 <form action=""  method="POST">
-  {% csrf_token %}
-  <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-2">
-    <ul class="nav nav-tabs">
-      <li class="active"><a href="#tab1" data-toggle="tab" role="button">Список значений атрибутов</a></li>
-      <li><a href="#tab2" data-toggle="tab" role="button">Добавить\удалить атрибут</a></li>
-    </ul>
-  </div>
-  <div class="tab-content">
-    <div class="tab-pane fade" id="tab2">
+  {% csrf_token %}  
       <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-2">
         <div class="panel panel-default">
-          <div class="panel-heading">Тип атрибута</div>
+          <div class="panel-heading">Список Атрибутов</div>
             <div class="panel-body">
-              <select class="form-control" name="attrtype1" id = "attrtype1">
-                {% for item in data.attrtype %}
-                  <option value="{{ item.id }}">{{ item.name }}</option>
-                {% endfor %}      
-              </select>
+              <input type = "text" class="form-control" name = "attribute1" id = "attribute1" hidden>              
               <p></p>
-              <label class="control-label">Новый тип:</label>
-              <input type="text" class="form-control" name = "attrtype" id="attrtype" placeholder="тип атрибута" value ="">
+              <table>
+                <td>
+                  <button type="submit" class="btn btn-default" name="filter">Применить фильтр</button>
+                </td>
+                <td>
+                  <button type="submit" class="btn btn-default" name="reset">Сбросить фильтр</button>
+                </td>
+              </table>
               <p></p>
-              <button type="submit" class="btn btn-default" name="save1">Сохранить</button>
-              <button type="submit" class="btn btn-danger" name="deletetype">Удалить</button>
-            </div>
-        </div>
-        <div class="panel panel-default">
-          <div class="panel-heading">Атрибут</div>
-            <div class="panel-body">          
-              <select class="form-control" name="attribute1" id = "attribute1">
-                {% for item in data.attribute1 %}
-                  <option value="{{ item.id }}">{{ item.type.name }} {{ item.name }}</option>
-                {% endfor %}      
-              </select>
-              <p></p>
-              <label class="control-label">Новый атрибут:</label>
-              <input type="text" class="form-control" name = "attribute" id="attribute" placeholder="Атрибут" value ="">
-              <p></p>
-              <button type="submit" class="btn btn-default" name="save2">Сохранить</button>
-              <button type="submit" class="btn btn-danger" name="deleteatt">Удалить</button>
-              
-            </div>
-        </div>
-        <div class="panel panel-default">
-          <div class="panel-heading">Значение атрибута</div>
-            <div class="panel-body">              
-              <input type="text" class="form-control" name = "attrvalue" id="attrvalue" placeholder="Значение атрибута" value ="">
-              <p></p>
-              <button type="submit" class="btn btn-default" name="save3">Сохранить</button>          
-            </div>
-        </div>
-      </div>
-    </div>
-    
-
-    <div class="tab-pane fade in active" id="tab1">
-      <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-2">       
-        <div class="panel panel-default">
-          <!-- Default panel contents -->
-          <div class="panel-heading">Таблица</div>
-          <div class="panel-body">
-            <p>
-              <select class="form-control" name="attrtypefilter" id = "attrtypefilter" >
-                <option {% if data.attrtypefilter == "0" %} selected {% endif %} value="0">Все</option>
-                {% for item in data.attrtype %}
-                  <option {% if data.attrtypefilter == item.id %} selected {% endif %} value="{{ item.id }}">{{ item.name }}</option>
-                {% endfor %}      
-              </select>
-            </p>
-            <p>
-              <select class="form-control" name="attributefilter" id = "attributefilter" >
-                <option {% if data.attributefilter == "0" %} selected {% endif %} value="0">Все</option>
-                {% for item in data.attribute %}
-                  <option {% if data.attributefilter == item.id %} selected {% endif %} value="{{ item.id }}">{{ item.name }}</option>                  
-                {% endfor %}      
-              </select>
-            </p>
-            <p>
-              <button type="submit" class="btn btn-default" name="save4">Show</button>
-            </p>            
-          </div>
-
-          <!-- Table -->
-          
-            <table class="table table-striped table-bordered table-hover ">
+              <table class="table table-striped table-bordered table-hover ">
                     <thead> 
                             <tr>
                                 <th width="3%">#</th>
-                                <th>value</th>
-                                <th>parent_id</th>
-                                <th width="7%">attribute_id</th>
+                                <th>name</th>
+                                <th>type</th>
+                                <th width="7%">detail</th>
                             </tr>
                     </thead>
                     <tbody>
-                            {% for item in data.attrvaluefilter %}
+                            {% for item in data.attribute %}
                             <tr>
                               <td>{{ forloop.counter }}</td>
-                              <td>{{ item.attribute.type.name }} {{ item.attribute.name }} {{ item.value }}</td>
-                              <td>{{ item.parent_id }}</td>
-                              <td>{{ item.attribute_id }}</td>
+                              <td><a href="#" onClick="window.open('{% url 'staff:catalogs_details' item.id %}','{{item.name}}','width=500,height=600')">{{ item.name }}</a>
+                              </td>
+                              <td>{{ item.type.name }}</td>
+                              <td>
+                                <!--<button type="submit" class="btn btn-info" name="{{item.id}}">>></button-->
+                                <a href="#" onClick="window.open('{% url 'staff:catalogs_attrvalue' item.id %}','{{item.name}}','width=800,height=900')" class="btn btn-info" role="button" name="{{ item.id }}">>></a>
+                              </td>
                             </tr>
                             {% endfor %}
                     </tbody>
-            </table>          
-        </div>
+            </table>
+            <!--<button type="submit" class="btn btn-default" name="add">добавить</button>-->
+            <a href="#" onClick="window.open('{% url 'staff:catalogs_attribute_add' %}','add','width=650,height=400')" class="btn btn-default" role="button" name="add">Добавить</a>
+            <button type="submit" class="btn btn-danger" name="delete">Удалить</button> 
+            </div>
+        </div>       
       </div>
-    </div>
-  </div>
-
 </form>
 {% endblock %}

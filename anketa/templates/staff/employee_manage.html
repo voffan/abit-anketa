@@ -25,7 +25,7 @@
                               <td><a href="{% url 'staff:employee_edit' employee.id %}">{{ employee.fullname }}</a></td>
                               <td>{{ employee.department.name }}</td>
                               <td>{{ employee.position }}</td>
-                              <td><div class="checkbox"><input type="checkbox" name="selected" value="{{ employee.id }}"></div></td>
+                              <td><input type="checkbox" name="selected" value="{{ employee.id }}"></td>
                             </tr>
                             {% endfor %}
                     </tbody>
