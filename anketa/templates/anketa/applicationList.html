@@ -4,16 +4,18 @@
 	var $currentRow=0;
 	function PopUp(rownumber)
 	{
-		if($("#applicationBlank").attr('class')=="panel panel-primary" && $currentRow==rownumber)
+		if($currentRow==rownumber && $("#applicationBlank").attr('class')=="panel panel-primary")
 		{
+			$("#edit"+$currentRow).html("Редактировать");
 			$("#applicationBlank").attr('class','panel panel-primary hidden');
 		}
 		else
 		{
+			$("#edit"+$currentRow).html("Редактировать");
 			$currentRow=rownumber;
+			$("#edit"+$currentRow).html("Закрыть");
 			$("#applicationBlank").attr('class','panel panel-primary');
 		}
-		
 	}
 	$("#edit1").click(function()
 		{
