@@ -1,93 +1,132 @@
 {% extends 'anketa/profile.html' %}
-
+{% block scripts %}
+<script>
+	var $currentRow=0;
+	function PopUp(rownumber)
+	{
+		if($("#applicationBlank").attr('class')=="panel panel-primary" && $currentRow==rownumber)
+		{
+			$("#applicationBlank").attr('class','panel panel-primary hidden');
+		}
+		else
+		{
+			$currentRow=rownumber;
+			$("#applicationBlank").attr('class','panel panel-primary');
+		}
+		
+	}
+	$("#edit1").click(function()
+		{
+			PopUp(1);
+		});
+	
+	$("#edit2").click(function()
+		{
+			PopUp(2);
+		});
+	
+	$("#edit3").click(function()
+		{
+			PopUp(3)
+		});
+</script>
+{% endblock %}
 {% block container %}
-<div class="col-md-9 col-xs-12 col-sm-12">
-			<div class="row">
-				<div class="col-xs-6 col-sm-6 col-md-6">
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<h3 class="panel-title">Личные данные</h3>
-						</div>
-						<div class="panel-body">
-							<div class="form-group has-success has-feedback">
-								<input type="button" class="form-control" id="personData" aria-describedby="personDataStatus" value = "Личные данные" disabled>
-								<span id = "personDataIcon"class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
-								<span id="personDataStatus" class="sr-only"></span>
-							</div>
-							<div class="form-group has-warning has-feedback">
-								<input type="button" class="form-control" id="documents" aria-describedby="documentsStatus" value = "Документы">
-								<span id= "documentsIconclass" class="glyphicon glyphicon-warning-sign form-control-feedback" aria-hidden="true"></span>
-								<span id="documentsStatus" class="sr-only"></span>
-							</div>
-							<div class="form-group has-error has-feedback">
-								<input type="button" class="form-control" id="contacts" aria-describedby="contactsStatus" value ="Контакты">
-								<span id="contactsIcon"class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
-								<span id="contactsStatus" class="sr-only"></span>
-							</div>
-							<div class="form-group has-success has-feedback">
-								<input type="button" class="form-control" id="personParents" aria-describedby="personParentsStatus" value = "Родители" disabled>
-								<span id ="personParentsIcon"class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
-								<span id="personParentsStatus" class="sr-only"></span>
-							</div>
-							<div class="form-group has-success has-feedback">
-								<input type="button" class="form-control" id="achs" aria-describedby="achsStatus" value = "Достижения/льготы" disabled>
-								<span id="achsIcon" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
-								<span id="achsStatus" class="sr-only"></span>
-							</div>
-						</div>
+<form name="applications" action="" class="form-horizontal" role="form" method="post">
+	<div class="col-md-9 col-xs-10 col-sm-8">
+		<div class="row">
+			<div class="col-md-12 col-xs-10 col-sm-8">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">Список заявлений</h3>
 					</div>
-				</div>
-				<div class="col-xs-6 col-sm-6 col-md-6">
-					<div class="panel panel-info">
-						<div class="panel-heading">
-							<h3 class="panel-title">ОпОп</h3>
-						</div>
-						<div class="panel-body">
-						ну, тут короче какой-то текст.
-						</div>
+					<div class="panel-body">
+						<table class="table">
+							<thead>
+								<tr>
+									<th>Институт/факультет</th>
+									<th>Направление/специальность</th>
+									<th>Профиль</th>
+									<th>Статус</th>
+									<th>Действие</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="success">
+									<td>ИМИ</td>
+									<td>ИВТ</td>
+									<td>-</td>
+									<td>Экспортировано</td>
+									<td><button class="btn btn-default btn-sm" id="edit1" type="button">Редактировать</button></td>
+								</tr>
+								<tr class="danger">
+									<td>ИМИ</td>
+									<td>ПМ</td>
+									<td>-</td>
+									<td>Аннулировано</td>
+									<td><button class="btn btn-default btn-sm" id="edit2" type="button">Редактировать</button></td>
+								</tr>
+								<tr class="info">
+									<td>ИМИ</td>
+									<td>ФИИТ</td>
+									<td>-</td>
+									<td>Подано</td>
+									<td><button class="btn btn-default btn-sm" id="edit3" type="button">Редактировать</button></td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-md-12 col-xs-12 col-sm-12">
-					<div class="panel panel-primary">
-						<div class="panel-heading">
-							<h3 class="panel-title">Заявления</h3>
+		</div>
+		<div class="row">
+		<div class="col-md-12 col-xs-10 col-sm-8">
+				<div class="panel panel-primary hidden" id="applicationBlank" name="applicationBlank">
+					<div class="panel-heading">
+						<h3 class="panel-title">Заявление</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-11 col-xs-8 col-sm-8">
+								<label for="">Институт/факультет</label>
+								<input type="text" class="form-control" placeholder="ИМИ">
+							</div>
 						</div>
-						<div class="panel-body">
-							<table class="table">
-								<thead>
-									<tr>
-										<th>Институт/факультет</th>
-										<th>Направление/специальность</th>
-										<th>Профиль</th>
-										<th>Статус</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr class="success">
-										<td>ИМИ</td>
-										<td>ИВТ</td>
-										<td>-</td>
-										<td>Экспортировано</td>
-									</tr>
-									<tr class="danger">
-										<td>ИМИ</td>
-										<td>ПМ</td>
-										<td>-</td>
-										<td>Аннулировано</td>
-									</tr>
-									<tr class="info">
-										<td>ИМИ</td>
-										<td>ФИИТ</td>
-										<td>-</td>
-										<td>Подано</td>
-									</tr>
-								</tbody>
-							</table>
+						<div class="row">
+							<div class="col-md-11 col-xs-8 col-sm-8">
+								<label for="">Направление/специальность</label>
+								<input type="text" class="form-control" placeholder="ИВТ">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-11 col-xs-8 col-sm-8">
+								<label for="">Профиль</label>
+								<input type="text" class="form-control" placeholder="-">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-11 col-xs-8 col-sm-8">
+								<label for="">Приоритетность поступления</label>
+								<input type="text" class="form-control" placeholder="Средний">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-11 col-xs-8 col-sm-8">
+								<label for="">Форма обучения</label>
+								<input type="text" class="form-control" placeholder="Очная">
+							</div>
+						</div>
+						</br>
+						<div class="row">
+							<div class="col-md-11 col-xs-8 col-sm-8">
+								<button type="button" class="btn btn-danger pull-right">Удалить</button>
+								<button type="button" class="btn btn-success pull-right">Сохранить</button>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
+</form>
 {% endblock %}
