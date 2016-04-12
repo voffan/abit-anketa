@@ -33,7 +33,7 @@ def PersonData(request):
 
 def Applications(request):
 	args={'currentpage':3}
-	return render(request,'anketa/applications.html',args)
+	return render(request,'anketa/applicationList.html',args)
 
 def Account(request):
 	args={'currentpage':4}

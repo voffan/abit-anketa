@@ -5,57 +5,19 @@
 <script src="{% static "anketa/js/jquery.bootstrap.wizard.js" %}"></script>
 <script src="{% static "anketa/js/prettify.js" %}"></script>
 <script src="{% static "anketa/js/bootstrap-typeahead.js" %}"></script>
-<script>
-	$(document).ready(function() 
-	{
-		var $validator = $("#login_form").validate
-		({
-			rules: 
-			{
-				username: 
-				{
-					required: true,
-					minlength: 1
-				},
-				password: 
-				{
-					required: true,
-					minlength: 6
-				}
-			}
-		});
-			$('#rootwizard').bootstrapWizard
-			({
-				'tabClass': 'nav nav-pills',
-				'onNext': function(tab, navigation, index) 
-				{
-					var $valid = $("#login_form").valid();
-					if(!$valid) 
-					{
-						$validator.focusInvalid();
-						return false;
-					}
-					else
-					{
-						window.location.replace("login");
-					}
-				}
-			});	
-	});
-</script>
 {% endblock %}
 {% block content %}
 <form name="login_form" action="{%url 'authapp:login'%}" class="form-horizontal" role="form" method="post">
 	{% csrf_token %}
 	<div class="row">
-		<div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-5">
+		<div class="col-xs-5 col-sm-4 col-md-2 col-xs-offset-4 col-md-offset-5">
 			<label for="username">Имя пользователя</label>
 			<input type="text" class="form-control" name="username" id="username" placeholder="Имя пользователя" required>
 		</div>
 	</div>
 	</br>
 	<div class="row">
-		<div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-5">
+		<div class="col-xs-5 col-sm-4 col-md-2 col-xs-offset-4 col-md-offset-5">
 			<label for="password">Пароль</label>
 			<input type="password" class="form-control" name="password" id="password" placeholder="Пароль" required>
 		</div>
@@ -71,7 +33,7 @@
 	-->
 	{% if login_error %}
 		<div class="row">
-			<div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-5">
+			<div class="col-xs-5 col-sm-4 col-md-2 col-md-offset-5 col-xs-offset-4">
 				<div class="alert alert-danger" role="alert">
 					<label class="error">{{ login_error }}</label>
 				</div>
@@ -79,7 +41,7 @@
 		</div>
 	{% endif %}
 	<div class="row">
-		<div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-5">
+		<div class="col-xs-5 col-sm-4 col-md-2 col-md-offset-5 col-xs-offset-4">
 			<p align=left>
 				<button class="btn btn-primary btn-block" type="submit" value="Voiti">Войти</button>
 			</p>

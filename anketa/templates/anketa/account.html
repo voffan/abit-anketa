@@ -1,93 +1,63 @@
 {% extends 'anketa/profile.html' %}
 
 {% block container %}
-<div class="col-md-9 col-xs-12 col-sm-12">
-			<div class="row">
-				<div class="col-xs-6 col-sm-6 col-md-6">
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<h3 class="panel-title">Личные данные</h3>
-						</div>
-						<div class="panel-body">
-							<div class="form-group has-success has-feedback">
-								<input type="button" class="form-control" id="personData" aria-describedby="personDataStatus" value = "Личные данные" disabled>
-								<span id = "personDataIcon"class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
-								<span id="personDataStatus" class="sr-only"></span>
-							</div>
-							<div class="form-group has-warning has-feedback">
-								<input type="button" class="form-control" id="documents" aria-describedby="documentsStatus" value = "Документы">
-								<span id= "documentsIconclass" class="glyphicon glyphicon-warning-sign form-control-feedback" aria-hidden="true"></span>
-								<span id="documentsStatus" class="sr-only"></span>
-							</div>
-							<div class="form-group has-error has-feedback">
-								<input type="button" class="form-control" id="contacts" aria-describedby="contactsStatus" value ="Контакты">
-								<span id="contactsIcon"class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
-								<span id="contactsStatus" class="sr-only"></span>
-							</div>
-							<div class="form-group has-success has-feedback">
-								<input type="button" class="form-control" id="personParents" aria-describedby="personParentsStatus" value = "Родители" disabled>
-								<span id ="personParentsIcon"class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
-								<span id="personParentsStatus" class="sr-only"></span>
-							</div>
-							<div class="form-group has-success has-feedback">
-								<input type="button" class="form-control" id="achs" aria-describedby="achsStatus" value = "Достижения/льготы" disabled>
-								<span id="achsIcon" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
-								<span id="achsStatus" class="sr-only"></span>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-xs-6 col-sm-6 col-md-6">
-					<div class="panel panel-info">
-						<div class="panel-heading">
-							<h3 class="panel-title">ОпОп</h3>
-						</div>
-						<div class="panel-body">
-						ну, тут короче какой-то текст.
-						</div>
-					</div>
-				</div>
+<form name="login_form" action="" class="form-horizontal" role="form" method="post">
+	<div class="col-md-9 col-xs-10 col-sm-8">
+		<div class="row">
+			<div class="col-xs-8 col-sm-12 col-md-8">
+				<h4>Почта</h4>
+				<hr>
 			</div>
-			<div class="row">
-				<div class="col-md-12 col-xs-12 col-sm-12">
-					<div class="panel panel-primary">
-						<div class="panel-heading">
-							<h3 class="panel-title">Заявления</h3>
-						</div>
-						<div class="panel-body">
-							<table class="table">
-								<thead>
-									<tr>
-										<th>Институт/факультет</th>
-										<th>Направление/специальность</th>
-										<th>Профиль</th>
-										<th>Статус</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr class="success">
-										<td>ИМИ</td>
-										<td>ИВТ</td>
-										<td>-</td>
-										<td>Экспортировано</td>
-									</tr>
-									<tr class="danger">
-										<td>ИМИ</td>
-										<td>ПМ</td>
-										<td>-</td>
-										<td>Аннулировано</td>
-									</tr>
-									<tr class="info">
-										<td>ИМИ</td>
-										<td>ФИИТ</td>
-										<td>-</td>
-										<td>Подано</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-8">
+				<label class="col-sm-6 col-md-4 col-xs-3 control-label" for="email">Ваш e-mail</label>
+				<div class="col-sm-10 col-md-8 col-xs-10">
+					<input type="text" class="form-control" id="email" name="email" placeholder="тут ваш эмэйл на">
 				</div>
 			</div>
 		</div>
+		</br>
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-8">
+				<h4>Смена пароля</h4>
+				<hr>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-8">
+					<label class="col-sm-6 col-md-4 col-xs-3 control-label" for="passwordCurrent">Текущий пароль</label>
+					<div class="col-sm-10 col-md-8 col-xs-10">
+						<input type="password" class="form-control" id="passwordCurrent" name="passwordCurrent">
+					</div>
+			</div>
+		</div>
+		<p>
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-8">
+					<label class="col-sm-6 col-md-4 col-xs-3 control-label" for="passwordNew">Новый пароль</label>
+					<div class="col-sm-10 col-md-8 col-xs-10">
+						<input type="password" class="form-control" id="passwordNew" name="passwordNew">
+					</div>
+				</div>
+			</div>
+		</p>
+		<p>
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-8">
+					<label class="col-sm-6 col-md-4 col-xs-3 control-label" for="passwordNewVerify">Повторите пароль</label>
+					<div class="col-sm-10 col-md-8 col-xs-10">
+						<input type="password" class="form-control" id="passwordNewVerify" name="passwordNewVerify">
+					</div>
+				</div>
+			</div>
+		</p>
+		</br>
+		<div class="row">
+			<div class="col-xs-10 col-sm-10 col-md-4 col-md-offset-3">
+				<button class="btn btn-primary btn-block" type="submit">Сохранить</button>
+			</div>
+		</div>
+	</div>
+</form>
 {% endblock %}
