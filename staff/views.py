@@ -316,9 +316,21 @@ def Application_review (request, application_id):
 		level = dipl.docattr_set.filter(attr__name__icontains = u'Уровень').first()
 		if level.value == u'НПО':
 			Data['level'] = 2
-		
+
+	adrtype = application.abiturient.address_set.filter(dadrs_type__value__icontains=u'Тип адреса').first()	
+	rank = application.abiturient.milit_set.filter(rank__value__icontains=u'Воинское звание').first()
+	snils = application.abiturient.docs_set.filter(docType__value__icontains=u'СНИЛС').first()
+	foreign_lang = application.abiturient_set.filter(attribute__value__icontains=u'Изучаемый иностранный язык').first()
+	docissuer = application.abiturient.docs_set.filter(docIssuer__name__icontains=u'Орган выдавший документ').first()
+	nationality = application.abiturient_set.filter(attribute__name__icontains=u'национальность').first()
+	doctype = application.abiturient.docs_set_set.filter(attribute__name__icontains=u'тип документа').first()
 	Data={}
+	Data['docissuer'] = docissuer
+	Data['adrtype'] = adrtype
+	Data['foreign_lang'] = foreign_lang
 	Data['passp'] = passp
+	Data['rank'] = rank
+	Data['snils'] = snils
 	Data['attestat'] = attestat
 	Data['dipl'] = dipl
 	Data['application']=application
@@ -331,12 +343,6 @@ def Application_review (request, application_id):
 	Data['milit'] = application.abiturient.milit_set.first()
 	Data['docattr'] = DocAttr.objects.filter(pk=application_id)
 	Data['achievements'] = Achievements.objects.filter(pk=application_id) 
-	Data['nationality'] = AttrValue.objects.filter(attribute__name__icontains = u'национальность')   
-	Data['doctype'] = AttrValue.objects.filter(attribute__name__icontains=u'тип документа')
-	Data['docissuer'] = AttrValue.objects.filter(attribute__name__icontains=u'Орган выдавший документ')
-	Data['foreign_lang'] = AttrValue.objects.filter(attribute__name__icontains=u'Изучаемый иностранный язык')
-	Data['rank'] = AttrValue.objects.filter(attribute__name__icontains=u'Воинское звание')
-	
 	
 	context = {'data':Data}
 	context.update(csrf(request))
