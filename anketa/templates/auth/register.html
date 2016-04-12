@@ -262,7 +262,7 @@
 	{
 		$('#captcha').realperson(
 			{
-				regenerate: 'ЭЭЭЭЭЭЭЭЭХ'
+				regenerate: 'ЭЭЭЭЭЭЭЭЭХ',
 			});
 	});
 
@@ -302,12 +302,6 @@
 				}
 				else if(index===2)
 				{
-					if($("#female").prop('checked'))
-						$("#sexvalue").val("Ж");
-					else if($("#male").prop('checked'))
-						$("#sexvalue").val("М");
-					else
-						return false;
 					if($fnameError || $snameError || $mnameError || $dateError)
 						return false;
 				}
@@ -315,7 +309,33 @@
 		});
 		$('#rootwizard .finish').click(function() 
 		{
-			$("#login_form").submit();
+			$('#rootwizard .finish').val('Подождите...').attr('disabled','disabled');
+			$("#captchaHash").val($('#captcha').realperson('getHash'));
+			$.ajax(
+			{
+				url:$("#login_form").attr('action'),
+				type:$("#login_form").attr('method'),
+				data:$("#login_form").serialize(),
+				dataProcess:true,
+				timeout:500,
+				success:function(data)
+				{
+					if(parseInt(data['result'])===0)
+					{
+						alert("scucess!");
+						window.location.replace({% url 'profile' %});
+					}
+					else
+					{
+						alert(data['error_msg']);
+						$('#rootwizard .finish').val('Завершить').attr('enabled','enabled');
+					}
+				},
+				error:function(){
+					alert('Check Internet connnection!');
+					$('#rootwizard .finish').val('Завершить').attr('enabled','enabled');
+				}
+			});
 		});
 	});
 </script>
@@ -428,9 +448,9 @@
 						<div class ="col-xs-3 col-sm-6 col-md-2" id="sexField" >
 							<label for="sex">Пол</label>
 							<p>
-								<input type="radio" name = "sex" id = "male" value="p1">Мужской
-								<input type="radio" name = "sex" id = "female" value="p2">Женский
-								<input type="hidden" id="sexvalue">
+								<input type="radio" name = "sex" id = "sex" value="p1" checked>Мужской
+								<input type="radio" name = "sex" id = "sex" value="p2">Женский
+								
 							</p>
 							<span id="sexIcon"></span>
 							<span id="sexFieldDescr" class="help-block"></span>
@@ -445,9 +465,7 @@
 							<p>
 								<label for="captcha">ЭЭЭЭЭЭХ</label>
 								<input type="text" id="captcha" name="captcha">
-								{% if captcha_error %}
-									Опоп.
-								{% endif %}
+								<input type="hidden" id="captchaHash" name="captchaHash">
 							</p>
 						</div>
 					</div>
