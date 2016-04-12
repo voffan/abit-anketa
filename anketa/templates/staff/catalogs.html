@@ -1,48 +1,70 @@
 {% extends 'staff\base.html' %}
 
 {% block head %}
-  Справочники
+	Справочники
 {% endblock %}
 {% load staticfiles %}
 
 {% block additionalcss %}
-  <link href="{% static 'anketa/select2-3.5.4/select2.css' %}" rel="stylesheet">
-  <link href="{% static 'anketa/select2-3.5.4/select2-bootstrap.css' %}" rel="stylesheet">
-  <link href="{% static 'anketa/css/prettify.css' %}" rel="stylesheet">
+	<link href="{% static 'anketa/select2-3.5.4/select2.css' %}" rel="stylesheet">
+	<link href="{% static 'anketa/select2-3.5.4/select2-bootstrap.css' %}" rel="stylesheet">
+	<link href="{% static 'anketa/css/prettify.css' %}" rel="stylesheet">
 {% endblock %}
 
 
 
 {% block scripts %}
-  <script src="{% static "anketa/select2-3.5.4/select2.min.js" %}"></script>
-  <script src="{% static "anketa/js/prettify.js" %}"></script>
-  <script src="{% static "anketa/select2-3.5.4/select2_locale_ru.js" %}"></script>
+	<script src="{% static "anketa/select2-3.5.4/select2.min.js" %}"></script>
+	<script src="{% static "anketa/js/prettify.js" %}"></script>
+	<script src="{% static "anketa/select2-3.5.4/select2_locale_ru.js" %}"></script>
 
-  <script>
-      $(document).ready(function(){
-          $('#attribute1').select2({
-            placeholder: "Select an option",
-            language:"ru",
-            minimumInputLength: 1,
-            ajax:{
-              url:"{% url 'staff:get_attrs' %}",
-              dataType: 'json',
-              delay: 250,
-              data:function(params){
-                return{
-                  query: params,
-                };
-              },
-              processResults: function(data, page){
-                return {
-                  results: data,
-                };
-              },
-              cache: true
-            }
-          });
-      });
-  </script>
+	<script>
+		$(document).ready(function(){
+			$('#attribute1').select2({
+			placeholder: "Выбрать атрибут",
+			language:"ru",
+			minimumInputLength: 1,
+			ajax:{
+				url:"{% url 'staff:get_attrs' %}",
+				dataType: 'json',
+				delay: 250,
+				data:function(params){
+				return{
+					query: params,
+				};
+				},
+				processResults: function(data, page){
+				return {
+					results: data,
+				};
+				},
+				cache: true
+			}
+			});
+
+			$('#attrtype').select2({
+			placeholder: "Выбрать тип атрибута",
+			language:"ru",
+			minimumInputLength: 1,
+			ajax:{
+				url:"{% url 'staff:get_attrtype' %}",
+				dataType: 'json',
+				delay: 250,
+				data:function(params){
+				return{
+					query: params,
+				};
+				},
+				processResults: function(data, page){
+				return {
+					results: data,
+				};
+				},
+				cache: true
+			}			
+			});
+		});
+	</script>
 {% endblock %}
 
 
@@ -51,51 +73,55 @@
 
 {% block content %}
 <form action=""  method="POST">
-  {% csrf_token %}  
-      <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-2">
-        <div class="panel panel-default">
-          <div class="panel-heading">Список Атрибутов</div>
-            <div class="panel-body">
-              <input type = "text" class="form-control" name = "attribute1" id = "attribute1" hidden>              
-              <p></p>
-              <table>
-                <td>
-                  <button type="submit" class="btn btn-default" name="filter">Применить фильтр</button>
-                </td>
-                <td>
-                  <button type="submit" class="btn btn-default" name="reset">Сбросить фильтр</button>
-                </td>
-              </table>
-              <p></p>
-              <table class="table table-striped table-bordered table-hover ">
-                    <thead> 
-                            <tr>
-                                <th width="3%">#</th>
-                                <th>name</th>
-                                <th>type</th>
-                                <th width="7%">detail</th>
-                            </tr>
-                    </thead>
-                    <tbody>
-                            {% for item in data.attribute %}
-                            <tr>
-                              <td>{{ forloop.counter }}</td>
-                              <td><a href="#" onClick="window.open('{% url 'staff:catalogs_details' item.id %}','{{item.name}}','width=500,height=600')">{{ item.name }}</a>
-                              </td>
-                              <td>{{ item.type.name }}</td>
-                              <td>
-                                <!--<button type="submit" class="btn btn-info" name="{{item.id}}">>></button-->
-                                <a href="#" onClick="window.open('{% url 'staff:catalogs_attrvalue' item.id %}','{{item.name}}','width=800,height=900')" class="btn btn-info" role="button" name="{{ item.id }}">>></a>
-                              </td>
-                            </tr>
-                            {% endfor %}
-                    </tbody>
-            </table>
-            <!--<button type="submit" class="btn btn-default" name="add">добавить</button>-->
-            <a href="#" onClick="window.open('{% url 'staff:catalogs_attribute_add' %}','add','width=650,height=400')" class="btn btn-default" role="button" name="add">Добавить</a>
-            <button type="submit" class="btn btn-danger" name="delete">Удалить</button> 
-            </div>
-        </div>       
-      </div>
+	{% csrf_token %}  
+		<div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-2">
+		<div class="panel panel-default">
+			<div class="panel-heading">Список Атрибутов</div>
+			<div class="panel-body">
+				<input type = "text" class="form-control" name = "attribute1" id = "attribute1" hidden>
+				<p></p>					
+				<input type = "text" class="form-control" name = "attrtype" id = "attrtype" hidden>
+				<p></p>
+				<table>
+				<td>
+					<button type="submit" class="btn btn-default" name="filter">Применить фильтр</button>
+				</td>
+				<td>
+					<button type="submit" class="btn btn-default" name="reset">Сбросить фильтр</button><!--dasdasdasdasda-->
+				</td>
+				</table>
+				<p></p>
+				<table class="table table table-bordered table-hover ">
+					<thead> 
+							<tr>
+								<th width="3%">#</th>
+								<th>name</th>
+								<th>type</th>
+								<th width="2%">v</th>
+								<th width="7%">detail</th>
+							</tr>
+					</thead>
+					<tbody>
+							{% for item in data.attribute %}
+							<tr>
+								<td>{{ forloop.counter }}</td>
+								<td><a href="#" onClick="window.open('{% url 'staff:catalogs_details' item.id %}','{{item.name}}','width=500,height=600')">{{ item.name }}</a>
+								</td>
+								<td>{{ item.type.name }}</td>
+								<td><input type="checkbox" name="selected" value="{{ item.id }}"></td>
+								<td>
+								<!--<button type="submit" class="btn btn-info" name="{{item.id}}">>></button-->
+								<a href="#" onClick="window.open('{% url 'staff:catalogs_attrvalue' item.id %}','{{item.name}}','width=800,height=900')" class="btn btn-info" role="button" name="{{ item.id }}">>></a>
+								</td>
+							</tr>
+							{% endfor %}
+					</tbody>
+			</table>
+			<!--<button type="submit" class="btn btn-default" name="add">добавить</button>-->
+			<a href="#" onClick="window.open('{% url 'staff:catalogs_attribute_add' %}','add','width=650,height=400')" class="btn btn-default" role="button" name="add">Добавить</a>
+			<button type="submit" class="btn btn-danger" name="delete">Удалить</button> 
+			</div>
+		</div>       
+		</div>
 </form>
 {% endblock %}
