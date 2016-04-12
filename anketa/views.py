@@ -240,16 +240,6 @@ def Save_Abiturient(values):
 	abit.birthdate=datetime.strptime(values.get('birthday',''),'%Y-%m-%d')
 	abit.save()
 
-"""
-def CreatePerson(request):
-	if request.method =='POST':
-		Save_Abiturient(request.POST)
-		return HttpResponseRedirect(reverse('application'))
-	data={}
-	context = {'data':data}
-	context.update(csrf(request))
-	return render(request,'/',context)
-"""
 def rpHash(person):
 	hash = 5381 
 	value = person.upper() 
