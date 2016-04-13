@@ -294,7 +294,7 @@
 			},
 			onNext: function(tab, navigation, index)
 			{
-				return true;
+				//return true;
 				if(index===1)
 				{
 					if($usernameError || $emailError || $pwdError || $pwdVerError)
@@ -448,8 +448,8 @@
 						<div class ="col-xs-3 col-sm-6 col-md-2" id="sexField" >
 							<label for="sex">Пол</label>
 							<p>
-								<input type="radio" name = "sex" id = "sex" value="p1" checked>Мужской
-								<input type="radio" name = "sex" id = "sex" value="p2">Женский
+								<input type="radio" name = "sex" id = "male" value="p1" checked>Мужской
+								<input type="radio" name = "sex" id = "female" value="p2">Женский
 								
 							</p>
 							<span id="sexIcon"></span>

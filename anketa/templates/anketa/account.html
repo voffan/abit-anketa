@@ -2,6 +2,7 @@
 
 {% block container %}
 <form name="account" action="" class="form-horizontal" role="form" method="post">
+	{% csrf_token %}
 	<div class="col-md-9 col-xs-10 col-sm-8">
 		<div class="row">
 			<div class="col-xs-8 col-sm-12 col-md-8">
@@ -13,7 +14,7 @@
 			<div class="col-xs-12 col-sm-12 col-md-8">
 				<label class="col-sm-6 col-md-4 col-xs-3 control-label" for="email">Ваш e-mail</label>
 				<div class="col-sm-10 col-md-8 col-xs-10">
-					<input type="text" class="form-control" id="email" name="email" placeholder="тут ваш эмэйл на">
+					<input type="text" class="form-control" id="email" name="email" placeholder="тут ваш эмэйл на" value="{{ e-mail }}">
 				</div>
 			</div>
 		</div>

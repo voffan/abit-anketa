@@ -35,8 +35,11 @@ def Applications(request):
 	args={'currentpage':3}
 	return render(request,'anketa/applicationList.html',args)
 
+#@login_required(url='/login')
 def Account(request):
 	args={'currentpage':4}
+	args['e-mail'] = request.user.email
+	args.update(csrf(request))
 	return render(request,'anketa/account.html',args)
 
 def Territory(request):
@@ -252,13 +255,13 @@ def rpHash(person):
 def CreatePerson(request):
 	result = {'result':0, 'error_msg':''}
 	if request.method =='POST':
-		#print(request.POST)
+		print(request.POST)
 		if (rpHash(request.POST.get('captcha','')) == int(request.POST.get('captchaHash',''))):
 			try:
 				Save_Abiturient(request.POST)
 			except Exception as e:
 				result['result']=1
-				result['error_msg']="Что-то пошло не так."
+				result['error_msg']=str(e)#"Что-то пошло не так."
 		else:
 			result['result']=1
 			result['error_msg']="Неправильно введена капча!"

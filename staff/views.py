@@ -143,7 +143,7 @@ def save_user_profile(user, values):
 @login_required(login_url='/login/')
 def Employee_Useraccount(request):
 	user = request.user
-	contacts = ContactsStaff.objects.all()
+	contacts = user.employee_set.get().contacts_set.all()
 	error_message = ''
 	Data={}
 	if request.method == 'POST':
@@ -302,6 +302,7 @@ def Application_review (request, application_id):
 		return HttpResponseRedirect(reverse('staff:application_list'))
 	application = Application.objects.select_related('Abiturient').get(pk=application_id)
 	passp = application.abiturient.docs_set.filter(docType__value__icontains=u'паспорт').first()
+	snils = application.abiturient.docs_set.filter(docType__value__icontains=u'СНИЛС').first()
 	if passp is None:
 		passp = application.abiturient.docs_set.filter(docType__value__icontains=u'загран').first()
 	if passp is None:
@@ -313,18 +314,19 @@ def Application_review (request, application_id):
 		Data['level'] = 1
 	else:
 		dipl = application.abiturient.docs_set.filter(docType__value__icontains=u'диплом').first()
-		level = dipl.docattr_set.filter(attr__name__icontains = u'Уровень').first()
-		if level.value == u'НПО':
+		level = dipl.docattr_set.filter(attr__value__icontains = u'Уровень').first()
+		if level is not None and level.value == u'НПО':
 			Data['level'] = 2
 
-	adrtype = application.abiturient.address_set.filter(dadrs_type__value__icontains=u'Тип адреса').first()	
-	rank = application.abiturient.milit_set.filter(rank__value__icontains=u'Воинское звание').first()
-	snils = application.abiturient.docs_set.filter(docType__value__icontains=u'СНИЛС').first()
-	foreign_lang = application.abiturient_set.filter(attribute__value__icontains=u'Изучаемый иностранный язык').first()
-	docissuer = application.abiturient.docs_set.filter(docIssuer__name__icontains=u'Орган выдавший документ').first()
-	nationality = application.abiturient_set.filter(attribute__name__icontains=u'национальность').first()
-	doctype = application.abiturient.docs_set_set.filter(attribute__name__icontains=u'тип документа').first()
+	adrtype = AttrValue.objects.filter(attribute__name__icontains=u'Тип адреса')
+	rank = AttrValue.objects.filter(attribute__name__icontains=u'Воинское звание')
+	
+	foreign_lang = AttrValue.objects.filter(attribute__name__icontains=u'иностранный язык')
+	docissuer = AttrValue.objects.filter(attribute__name__icontains=u'Орган выдавший документ')
+	nationality = AttrValue.objects.filter(attribute__name__icontains=u'национальность')
+	doctype = AttrValue.objects.filter(attribute__name__icontains=u'тип документа')
 	Data={}
+	Data['docType'] = doctype
 	Data['docissuer'] = docissuer
 	Data['adrtype'] = adrtype
 	Data['foreign_lang'] = foreign_lang
