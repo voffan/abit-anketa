@@ -113,7 +113,7 @@
 		if(!emailReg.test($("#email").val()))
 		{
 			SetIcon("email","error");
-			$("#emailFieldDescr").html("Incorrect e-mail format");
+			$("#emailFieldDescr").html("Неправильный формат электронной почты");
 			return;
 		}
 		$.ajax(
@@ -160,7 +160,7 @@
 			else
 			{
 				SetIcon("passwordVerify","error");
-				$("#passwordVerifyFieldDescr").html("Passwords do not match.");
+				$("#passwordVerifyFieldDescr").html("Указанные пароли не совпадают");
 			}
 		}
 	});
@@ -179,7 +179,7 @@
 		else
 		{
 			SetIcon("password","error");
-			$("#passwordFieldDescr").html("Minimum password length is 6.");
+			$("#passwordFieldDescr").html("Минимальная длина пароля 6 символов.");
 		}
 	});
 	// second page
@@ -199,6 +199,7 @@
 		else if(!symbolsValid.test($("#fName").val()))
 		{
 			SetIcon("fName","error");
+			$("#fNameFieldDescr").html("Пиши на русском, падла!")
 		}
 		else
 		{
@@ -216,6 +217,7 @@
 		else if(!symbolsValid.test($("#sName").val()))
 		{
 			SetIcon("sName","error");
+			$("#sNameFieldDescr").html("Пиши на русском, падла!")
 		}
 		else
 		{
@@ -234,6 +236,7 @@
 		if(!symbolsValid.test($("#mName").val()))
 		{
 			SetIcon("mName","error");
+			$("#mNameFieldDescr").html("Пиши на русском, падла!")
 		}
 		else
 		{
@@ -248,12 +251,13 @@
 		if(!dtRegex.test($("#birthday").val()) || $("#birthday").val().length===0)
 		{
 			SetIcon("birthday","error");
-			$("#birthdayField").attr("class","has-error has-feedback col-xs-3 col-sm-3 col-md-2 col-md-offset-4");
+			$("#birthdayField").attr("class","has-error has-feedback col-xs-3 col-sm-3 col-md-3 col-md-offset-4");
+			$("#birthdayFieldDescr").html("Пожалуйста, выберите дату рождения");
 		}
 		else
 		{
 			SetIcon("birthday","okay");
-			$("#birthdayField").attr("class","has-success has-feedback col-xs-3 col-sm-3 col-md-2 col-md-offset-4");
+			$("#birthdayField").attr("class","has-success has-feedback col-xs-3 col-sm-3 col-md-3 col-md-offset-4");
 			$dateError=false;
 		}
 	});
@@ -262,7 +266,7 @@
 	{
 		$('#captcha').realperson(
 			{
-				regenerate: 'ЭЭЭЭЭЭЭЭЭХ',
+				regenerate: 'Чтобы обновить captcha нажмите на неё',
 			});
 	});
 
@@ -322,7 +326,6 @@
 				{
 					if(parseInt(data['result'])===0)
 					{
-						alert("scucess!");
 						window.location.replace({% url 'profile' %});
 					}
 					else
@@ -437,7 +440,7 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-xs-3 col-sm-3 col-md-2 col-md-offset-4" id="birthdayField">
+						<div class="col-xs-12 col-sm-12 col-md-3 col-md-offset-4" id="birthdayField">
 							<p>
 								<label for="birthday">Дата рождения</label>
 								<input type="date" name = "birthday" id ="birthday" value="1997-01-01" class="form-control">
@@ -463,7 +466,6 @@
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-4 col-md-offset-4" id="captchaField">
 							<p>
-								<label for="captcha">ЭЭЭЭЭЭХ</label>
 								<input type="text" id="captcha" name="captcha">
 								<input type="hidden" id="captchaHash" name="captchaHash">
 							</p>

@@ -6,7 +6,7 @@ admin.autodiscover()
 from anketa.views import StartPage, StartApp, Streets, Territory, District, City, Citizenship, Nation, DocIssuer, PrevEduName, Institute, EduProg, EduProf, Privilegies, Rank, Flang, CreatePerson, DocType, Profile, Applications, PersonData, Account
 
 urlpatterns = patterns('',
-    url(r'^$', StartPage.as_view()),
+    url(r'^$', StartPage.as_view(),name ='startpage'),
     url(r'^profile/$', Profile, name='profile'),
     url(r'^applicationList/$', Applications, name='applicationList'),
     url(r'^persondata/$', PersonData, name='persondata'),

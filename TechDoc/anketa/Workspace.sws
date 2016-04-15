@@ -7,7 +7,8 @@
 		<Model Expanded="Yes" ID="{6518BBA5-4FE1-4C1A-AE8E-6EFD492E3DAA}" Loaded="No" Name="UML Class Diagram_1" Type="{18112060-1A4B-11D1-83D9-444553540000}" URL="Anketa.oom"/>
 		<Model Expanded="Yes" ID="{96B3F6D2-E9D0-482D-BFA3-1425CE29566A}" Loaded="No" Name="Use Cases Definition_2" Type="{18112060-1A4B-11D1-83D9-444553540000}" URL="60Jlb_Auth_1.oom"/>
 		<Model Expanded="Yes" ID="{C7236900-196A-449B-B90B-BF4BE7C2E27D}" Loaded="No" Name="Use Cases Definition_1" Type="{18112060-1A4B-11D1-83D9-444553540000}" URL="60Jlb_Profile.oom"/>
-		<Model Expanded="Yes" ID="{96B3F6D2-E9D0-482D-BFA3-1425CE29566A}" Name="Use Cases Definition_2" Selected="Yes" Type="{18112060-1A4B-11D1-83D9-444553540000}" URL="60Jlb_Auth.oom"/>
+		<Model Expanded="Yes" ID="{96B3F6D2-E9D0-482D-BFA3-1425CE29566A}" Loaded="No" Name="Use Cases Definition_2" Type="{18112060-1A4B-11D1-83D9-444553540000}" URL="60Jlb_Auth.oom"/>
+		<Model Expanded="Yes" ID="{6518BBA5-4FE1-4C1A-AE8E-6EFD492E3DAA}" Name="UML Class Diagram_1" Selected="Yes" Type="{18112060-1A4B-11D1-83D9-444553540000}" URL="../Диаграмма классов.oom"/>
 	</Local>
 	<BrowserModule Name="Repository"/>
 </Workspace>
