@@ -7,7 +7,7 @@ Sex = (
 	(u'М',u'Мужской'),
 	(u'Ж',u'Женский'),
 	)
-Eduform = (
+EduForm = (
 	(u'О',u'Очное'),
 	(u'З',u'Заочное')
 	)
@@ -71,7 +71,7 @@ class Application(models.Model):
 	abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент', db_index=True)
 	date = models.DateField(u'Дата подачи', db_index=True)
 	number = models.IntegerField(u'Номер зааявления', max_length=10)
-	eduform = models.CharField(u'Форма обучения',choices=Eduform, default='О', max_length=10)
+	eduform = models.CharField(u'Форма обучения',choices=EduForm, default='О', max_length=10)
 	budget = models.BooleanField(u'В рамках контрольных цифр приёма', default=False)
 	withfee = models.BooleanField(u'по договорам об оказании платных обр. услуг', default=False)
 	profile = models.ForeignKey('Profile',verbose_name = u'Профиль')

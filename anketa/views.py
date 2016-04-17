@@ -8,6 +8,7 @@ from django.utils import timezone
 from datetime import datetime
 
 from django.core.urlresolvers import reverse
+from django.core.context_processors import csrf
 from django.http import HttpResponse, HttpResponseRedirect
 
 from django.shortcuts import render_to_response, render,get_object_or_404
@@ -16,6 +17,7 @@ from django.template import RequestContext
 from anketa.models import Person, Address, Attribute, AttrValue, Abiturient
 from django.contrib.auth.models import User
 from django.db import transaction
+from django.contrib.auth.decorators import login_required
 
 class StartPage(TemplateView):
 	template_name = 'anketa/start.html'
@@ -23,22 +25,29 @@ class StartPage(TemplateView):
 def StartApp(request):
 	return render(request, 'anketa/wizardform.html')
 
+@login_required(login_url='authapp:index')
 def Profile(request):
 	args={'currentpage':1}
+	args['fname']=request.user
+	args['sname']=request.user
+	args['mname']=request.user
+	args.update(csrf(request))
 	return render(request, 'anketa/profile.html', args)
 
+@login_required(login_url='/login')
 def PersonData(request):
 	args={'currentpage':2}
 	return render(request,'anketa/persondata.html',args)
 
+@login_required(login_url='/login')
 def Applications(request):
 	args={'currentpage':3}
 	return render(request,'anketa/applicationList.html',args)
 
-#@login_required(url='/login')
+@login_required(login_url='/login')
 def Account(request):
 	args={'currentpage':4}
-	args['e-mail'] = request.user.email
+	args['email'] = request.user.email
 	args.update(csrf(request))
 	return render(request,'anketa/account.html',args)
 
