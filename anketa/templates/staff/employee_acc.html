@@ -145,6 +145,13 @@
             </tr>
           {% endfor %}
         </table>
+        <label class="control-label">Новый контакт:</label>
+        <select class="form-control" name="contacts_type">
+          {% for item in data.contact_type %}
+            <option value="{{ item.value }}">{{ item.value }}</option>
+          {% endfor %}      
+        </select>
+        <input type="text" class="form-control" name = "contacts" placeholder="Значение:" > 
       </div>
     </div>
   </div>
@@ -154,14 +161,7 @@
 <div class = "container-fluid">
   <div class="form-group">
     <p></p>
-    <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-2">
-      <label class="control-label">Новый контакт:</label>
-        <select class="form-control" name="contacts_type">
-          {% for item in data.contact_type %}
-            <option value="{{ item.value }}">{{ item.value }}</option>
-          {% endfor %}      
-        </select>
-        <input type="text" class="form-control" name = "contacts" placeholder="Значение:" >   
+    <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-2">        
       <button type="submit" class="btn btn-default" name="save">Сохранить</button>
     </div>
   </div>

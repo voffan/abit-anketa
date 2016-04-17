@@ -41,28 +41,6 @@
 				cache: true
 			}
 			});
-
-			$('#attrtype').select2({
-			placeholder: "Выбрать тип атрибута",
-			language:"ru",
-			minimumInputLength: 1,
-			ajax:{
-				url:"{% url 'staff:get_attrtype' %}",
-				dataType: 'json',
-				delay: 250,
-				data:function(params){
-				return{
-					query: params,
-				};
-				},
-				processResults: function(data, page){
-				return {
-					results: data,
-				};
-				},
-				cache: true
-			}			
-			});
 		});
 	</script>
 {% endblock %}
@@ -74,13 +52,11 @@
 {% block content %}
 <form action=""  method="POST">
 	{% csrf_token %}  
-		<div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-2">
+		<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
 		<div class="panel panel-default">
 			<div class="panel-heading">Список Атрибутов</div>
 			<div class="panel-body">
 				<input type = "text" class="form-control" name = "attribute1" id = "attribute1" hidden>
-				<p></p>					
-				<input type = "text" class="form-control" name = "attrtype" id = "attrtype" hidden>
 				<p></p>
 				<table>
 				<td>
@@ -95,10 +71,9 @@
 					<thead> 
 							<tr>
 								<th width="3%">#</th>
-								<th>name</th>
-								<th>type</th>
+								<th>Имя атрибута</th>
 								<th width="2%">v</th>
-								<th width="7%">detail</th>
+								<th width="5%">Детали</th>
 							</tr>
 					</thead>
 					<tbody>
@@ -107,11 +82,10 @@
 								<td>{{ forloop.counter }}</td>
 								<td><a href="#" onClick="window.open('{% url 'staff:catalogs_details' item.id %}','{{item.name}}','width=500,height=600')">{{ item.name }}</a>
 								</td>
-								<td>{{ item.type.name }}</td>
 								<td><input type="checkbox" name="selected" value="{{ item.id }}"></td>
 								<td>
 								<!--<button type="submit" class="btn btn-info" name="{{item.id}}">>></button-->
-								<a href="#" onClick="window.open('{% url 'staff:catalogs_attrvalue' item.id %}','{{item.name}}','width=800,height=900')" class="btn btn-info" role="button" name="{{ item.id }}">>></a>
+								<a href="{% url 'staff:catalogs_attrvalue' item.id %}" class="btn btn-info" role="button" name="{{ item.id }}">>></a>
 								</td>
 							</tr>
 							{% endfor %}
