@@ -357,8 +357,6 @@ def Catalogs(request):
 		if 'filter' in request.POST:
 			if len(request.POST.get('attribute1'))>0:
 				attribute = attribute.filter(id=request.POST['attribute1'])
-			if len(request.POST.get('attrtype'))>0:
-				attribute = attribute.filter(type_id=request.POST['attrtype'])
 		if 'reset' in request.POST:
 			return HttpResponseRedirect(reverse('staff:catalogs'))
 
@@ -398,7 +396,7 @@ def Catalogs_details(request, attribute_id):
 	context.update(csrf(request))
 	return render(request, 'staff\\catalogs_detail.html', context)
 
-def Catalogs_attrtype_add(request):
+def Catalogs_attrtype_add(request):	
 	if request.method == 'POST':
 		if 'save' in request.POST and len(request.POST['attrtype'])>0:
 			attr_type = AttrType(name=request.POST['attrtype'])
@@ -408,13 +406,16 @@ def Catalogs_attrtype_add(request):
 
 def Catalogs_attrvalue_add(request, attribute_id):
 	attri_bute = Attribute.objects.get(pk=attribute_id)
-	if request.method == 'POST':
-		if 'save' in request.POST and len(request.POST['attrtype'])>0:            
-			attr_value = AttrValue(value=request.POST['attrtype'], attribute_id=attribute_id)
-			attr_value.save()
-			#return HttpResponseRedirect(reverse('staff:catalogs_attrtype_add'))
+	close = '0'
+	#if request.method == 'POST':
+	if 'save' in request.POST and len(request.POST['attrtype'])>0:            
+		attr_value = AttrValue(value=request.POST['attrtype'], attribute_id=attribute_id)
+		attr_value.save()
+		close = '1'
+		#return HttpResponseRedirect(reverse('staff:catalogs_attrvalue_add', attribute_id))
 	Data={}
 	Data['title'] = '1'
+	Data['close'] = close
 	Data['attribute']=attri_bute
 	context = {'data':Data}
 	context.update(csrf(request))
@@ -454,16 +455,6 @@ def Catalogs_attrvalue(request, attribute_id):
 def Get_Attrs(request):
 	result=[]
 	attrs=Attribute.objects.all()
-	part = request.GET.get('query','')
-	if len(part) > 0:
-		attrs = attrs.filter(name__icontains = part)
-	for item in attrs:
-		result.append({'id':item.id, 'text':item.name})
-	return HttpResponse(json.dumps(result), content_type="application/json")
-
-def Get_Attrtype(request):
-	result=[]
-	attrs=AttrType.objects.all()
 	part = request.GET.get('query','')
 	if len(part) > 0:
 		attrs = attrs.filter(name__icontains = part)

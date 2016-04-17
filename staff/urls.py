@@ -23,6 +23,4 @@ urlpatterns = patterns('',
 	url(r'^catalogs_attribute_add/',views.Catalogs_attribute_add, name = 'catalogs_attribute_add'),
 	url(r'^application_review/(?P<application_id>\d+)',views.Application_review, name = 'application_review'),
 	url(r'get_attrs/',views.Get_Attrs,name='get_attrs'),
-	url(r'get_attrtype/',views.Get_Attrtype,name='get_attrtype'),
-
 					)

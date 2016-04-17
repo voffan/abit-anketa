@@ -1,10 +1,28 @@
-{% extends 'staff/catalogs_base.html' %}
+{% extends 'staff/base.html' %}
 
-{% block title %}
+{% block head %}
 	Значения атрибута "{{ data.attribute.name }}"
 {% endblock %}
+<script>
+function showAddAnotherPopup(triggeringLink) {
+    var name = triggeringLink.id.replace(/^add_/, '');
+    name = id_to_windowname(name);
+    href = triggeringLink.href
+    if (href.indexOf('?') == -1) {
+        href += '?_popup=1';
+    } else {
+        href  += '&_popup=1';
+    }
+    var win = window.open(href, name, 'height=500,width=800,resizable=yes,scrollbars=yes');
+    win.focus();
+    return false;
+}
+</script>
 
 {% block content %}
+<form action="" method="post">
+{% csrf_token %} 
+<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
 	<div class="panel panel-default">
 	    <div class="panel-heading">Список значений</div>
 	        <div class="panel-body">
@@ -29,8 +47,11 @@
             	</table>
 	            <!--<button type="submit" class="btn btn-default" name="add">Добавить</button>-->
 	            <a href="#" onClick="window.open('{% url 'staff:catalogs_attrvalue_add' data.attribute.id %}','add','width=650,height=350')" class="btn btn-default" role="button" name="add">Добавить</a>
+
 	            <button type="submit" class="btn btn-danger" name="delete">Удалить</button>
 	        </div>
 	</div>
+</div>
+</form>
 {% endblock %}                      
 	       

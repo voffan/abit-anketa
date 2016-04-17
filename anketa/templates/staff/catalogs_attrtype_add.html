@@ -10,18 +10,58 @@
 {% endblock %}
 
 {% block content %}
-  <div class="panel panel-default">
-    <div class="panel-heading">
-    	{% if data.title == '1' %}
+  <div class="panel panel-default" >
+	<div class="panel-heading">
+		{% if data.title == '1' %}
 			Новое значение атрибута
-		{% else %}
+		  {% else %}
 			Новый тип атрибута
-		{% endif %}
+		  {% endif %}
 	</div>
-      <div class="panel-body">
-        <input type="text" class="form-control" name = "attrtype" id="attrtype" placeholder="{% if data.title == '1' %}значение атрибута{% else %}тип атрибута{% endif %}" value ="">
-        <p></p>
-        <button type="submit" class="btn btn-default" name="save">Сохранить</button>
-      </div>
+	  <div class="panel-body" {% if data.close == '1' %} onmousemove="opener.location.reload (true), window.close()"{% endif %}>
+		<input type="text" class="form-control" name = "attrtype" id="attrtype" placeholder="{% if data.title == '1' %}значение атрибута{% else %}тип атрибута{% endif %}" value ="">
+		<p></p>
+		<div onClick="f()">
+		<button type="submit" class="btn btn-default" name="save" >Сохранить</button>
+		</div>
+		
+		
+		<!--магия 
+		{% if data.close == '1' %} onmousemove="window.close()"{% endif %}
+
+
+		{% if data.close == '1' %} onmousemove="opener.location.reload (true), window.close()"{% endif %}
+
+		<script>
+		  zakroisya.onmousemove = function() {
+			window.close();
+		  };
+		</script>		
+		
+		<script type='text/javascript'>
+		function f()
+		{
+			setTimeout(
+				function() {
+					window.close();},
+			250);
+		};
+
+		</script>
+		-->
+		
+		<script type='text/javascript'>
+		function f()
+		{
+			setTimeout(
+				function() {
+					opener.location.reload (true);
+					window.close();},
+			250);
+		};
+
+		</script>
+			
+	  </div>
   </div>
 {% endblock %}
