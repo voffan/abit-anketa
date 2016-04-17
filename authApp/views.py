@@ -62,3 +62,7 @@ def checkUserValid(request):
 		result['error_msg']='имя пользователя занято'
 
 	return HttpResponse(json.dumps(result), content_type='application/json')
+
+def checkPassword(request):
+	result={'result':0,'error_msg':''}
+	

@@ -15,6 +15,7 @@ from django.shortcuts import render_to_response, render,get_object_or_404
 from django.template import RequestContext
 
 from anketa.models import Person, Address, Attribute, AttrValue, Abiturient
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.db import transaction
 from django.contrib.auth.decorators import login_required
@@ -245,10 +246,7 @@ def Save_Abiturient(values):
 	abit.fname=values.get('fName','')
 	abit.sname=values.get('sName','')
 	abit.mname=values.get('mName','')
-	if values.get('sex','')=="p1":
-		abit.sex="М"
-	else:
-		abit.sex="Ж"
+	abit.sex=values.get('sex','')
 	abit.birthdate=datetime.strptime(values.get('birthday',''),'%Y-%m-%d')
 	abit.save()
 
@@ -258,16 +256,17 @@ def rpHash(person):
 	for caracter in value: 
 		hash = (( np.left_shift(hash, 5) + hash) + ord(caracter)) 
 	hash = np.int32(hash)
-	#print (hash)
 	return hash
 
 def CreatePerson(request):
 	result = {'result':0, 'error_msg':''}
 	if request.method =='POST':
-		print(request.POST)
 		if (rpHash(request.POST.get('captcha','')) == int(request.POST.get('captchaHash',''))):
 			try:
 				Save_Abiturient(request.POST)
+				username = request.POST.get('username', '')
+				password = request.POST.get('password', '')
+				user = authenticate(username=username, password=password)
 			except Exception as e:
 				result['result']=1
 				result['error_msg']=str(e)#"Что-то пошло не так."
