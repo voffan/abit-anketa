@@ -1,36 +1,45 @@
 {% extends 'anketa/profile.html' %}
 {% block scripts %}
 <script>
-	var $currentRow=0;
-	function PopUp(rownumber)
+	var $currentRow=null;
+	var $rowscount=3;
+	function PopUp(row)
 	{
-		if($currentRow==rownumber && $("#applicationBlank").attr('class')=="panel panel-primary")
+		if($($currentRow).attr('id')==$(row).attr('id') && $("#applicationBlank").attr('class')=="panel panel-primary")
 		{
-			$("#edit"+$currentRow).html("Редактировать");
+			$(row).html("Редактировать");
 			$("#applicationBlank").attr('class','panel panel-primary hidden');
 		}
 		else
 		{
-			$("#edit"+$currentRow).html("Редактировать");
-			$currentRow=rownumber;
-			$("#edit"+$currentRow).html("Закрыть");
+			$($currentRow).html("Редактировать");
+			$currentRow=$(row);
+			$(row).html("Закрыть");
 			$("#applicationBlank").attr('class','panel panel-primary');
 		}
-	}
-	$("#edit1").click(function()
+	};
+	$(".btn").click(function()
+	{
+		if($(this).attr('id')!="add" && $(this).attr('id')!="save" && $(this).attr('id')!="del")
+			PopUp($(this));
+	});
+	$("#add").click(function()
+	{
+		if($("#applicationBlank").attr('class')=="panel panel-primary")
 		{
-			PopUp(1);
-		});
-	
-	$("#edit2").click(function()
+			$("#applicationBlank").attr('class','panel panel-primary hidden');
+		}
+		else
 		{
-			PopUp(2);
-		});
-	
-	$("#edit3").click(function()
-		{
-			PopUp(3)
-		});
+			$("#applicationBlank").attr('class','panel panel-primary');
+		}
+	});
+	$("#save").click(function()
+	{
+		$rowscount++;
+		$("#tablebody").append("<tr class='info'><td>"+ $("#department").val() + "</td> <td>"+ $("#eduname").val() + "</td> <td>"+ $("#eduprof").val() + "</td> <td>Подано</td> <td><button class='btn btn-default btn-sm' id='row"+$rowscount+"' type='button'>Редактировать</button></td></tr>");
+		$("#applicationBlank").attr('class','panel panel-primary hidden');
+	})
 </script>
 {% endblock %}
 {% block container %}
@@ -40,49 +49,54 @@
 			<div class="col-md-12 col-xs-10 col-sm-8">
 				<div class="panel panel-primary">
 					<div class="panel-heading">
-						<h3 class="panel-title">Список заявлений</h3>
+						<h3 class="panel-title">Ваши заявления</h3>
 					</div>
 					<div class="panel-body">
-						<table class="table">
-							<thead>
-								<tr>
-									<th>Институт/факультет</th>
-									<th>Направление/специальность</th>
-									<th>Профиль</th>
-									<th>Статус</th>
-									<th>Действие</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr class="success">
-									<td>ИМИ</td>
-									<td>ИВТ</td>
-									<td>-</td>
-									<td>Экспортировано</td>
-									<td><button class="btn btn-default btn-sm" id="edit1" type="button">Редактировать</button></td>
-								</tr>
-								<tr class="danger">
-									<td>ИМИ</td>
-									<td>ПМ</td>
-									<td>-</td>
-									<td>Аннулировано</td>
-									<td><button class="btn btn-default btn-sm" id="edit2" type="button">Редактировать</button></td>
-								</tr>
-								<tr class="info">
-									<td>ИМИ</td>
-									<td>ФИИТ</td>
-									<td>-</td>
-									<td>Подано</td>
-									<td><button class="btn btn-default btn-sm" id="edit3" type="button">Редактировать</button></td>
-								</tr>
-							</tbody>
-						</table>
+						<div class="row">
+							<table class="table" id="table">
+								<thead id="tablehead">
+									<tr>
+										<th>Институт/факультет</th>
+										<th>Направление/специальность</th>
+										<th>Профиль</th>
+										<th>Статус</th>
+										<th>Действие</th>
+									</tr>
+								</thead>
+								<tbody id="tablebody">
+									<tr class="success">
+										<td>ИМИ</td>
+										<td>ИВТ</td>
+										<td>-</td>
+										<td>Экспортировано</td>
+										<td><button class="btn btn-default btn-sm" id="row1" type="button">Редактировать</button></td>
+									</tr>
+									<tr class="danger" >
+										<td>ИМИ</td>
+										<td>ПМ</td>
+										<td>-</td>
+										<td>Аннулировано</td>
+										<td><button class="btn btn-default btn-sm" id="row2"  type="button">Редактировать</button></td>
+									</tr>
+									<tr class="info">
+										<td>ИМИ</td>
+										<td>ФИИТ</td>
+										<td>-</td>
+										<td>Подано</td>
+										<td><button class="btn btn-default btn-sm"  id="row3" type="button">Редактировать</button></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="row">
+							<button class="btn btn-primary btn-block" type="button" id="add">Добавить</button>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="row">
-		<div class="col-md-12 col-xs-10 col-sm-8">
+			<div class="col-md-12 col-xs-10 col-sm-8">
 				<div class="panel panel-primary hidden" id="applicationBlank" name="applicationBlank">
 					<div class="panel-heading">
 						<h3 class="panel-title">Заявление</h3>
@@ -90,41 +104,47 @@
 					<div class="panel-body">
 						<div class="row">
 							<div class="col-md-11 col-xs-8 col-sm-8">
-								<label for="">Институт/факультет</label>
-								<input type="text" class="form-control" placeholder="ИМИ">
+								<label for="department">Институт/факультет</label>
+								<input type="text" class="form-control" id="department" placeholder="ИМИ">
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-11 col-xs-8 col-sm-8">
-								<label for="">Направление/специальность</label>
-								<input type="text" class="form-control" placeholder="ИВТ">
+								<label for="eduname">Направление/специальность</label>
+								<input type="text" class="form-control" id="eduname" placeholder="ИВТ">
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-11 col-xs-8 col-sm-8">
-								<label for="">Профиль</label>
-								<input type="text" class="form-control" placeholder="-">
+								<label for="eduprof">Профиль</label>
+								<input type="text" class="form-control" id="eduprof" placeholder="-">
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-11 col-xs-8 col-sm-8">
-								<label for="">Приоритетность поступления</label>
-								<input type="text" class="form-control" placeholder="Средний">
+								<label for="eduprior">Приоритетность поступления</label>
+								<input type="text" class="form-control" id="eduprior" placeholder="Средний">
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-11 col-xs-8 col-sm-8">
-								<label for="">Форма обучения</label>
-								<input type="text" class="form-control" placeholder="Очная">
+								<label for="eduform">Форма обучения</label>
+								<input type="text" class="form-control" id="eduform" placeholder="Очная">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-11 col-xs-8 col-sm-8">
+								<label for="edulevel">Уровень обучения </label>
+								<input type="text" class="form-control" id="edulevel" placeholder="Бакалавриат">
 							</div>
 						</div>
 						</br>
 						<div class="row">
 							<div class="col-md-9 col-xs-8 col-sm-8">
-								<button type="button" class="btn btn-danger pull-right">Удалить</button>
+								<button type="button" class="btn btn-danger pull-right" id="del">Удалить</button>
 							</div>
 							<div class="col-md-2 col-xs-8 col-sm-8">
-								<button type="button" class="btn btn-success pull-right">Сохранить</button>
+								<button type="button" class="btn btn-success pull-right" id="save">Сохранить</button>
 							</div>
 						</div>
 					</div>
