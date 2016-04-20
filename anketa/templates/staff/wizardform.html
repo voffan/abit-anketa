@@ -15,20 +15,22 @@
 <script src="{% static "anketa/js/prettify.js" %}"></script>
 <script src="{% static "anketa/select2-3.5.4/select2_locale_ru.js" %}"></script>
 <script>
-   $("#Mujik").focusout(function()
-    {
-        if($("#option7").val()=="a61")
-        {
-            $("#Mujik20" ).hide();       
-        }
-    }
-    );   
-
     function GetRegionID(){
         if($("#district").val().length === 0)
             return $("#idterritory").val();
         return $("#iddistrict").val();
     }
+    $("#Mujik").focusout(function()
+    {
+        if($("#option7").val()=="a61")
+        {
+            $("#Mujik20" ).hide();
+        }
+        else
+        {
+            $("#Mujik20" ).hide();
+        }
+    });
     $(document).ready(function() {
         $('#rootwizard').bootstrapWizard({onTabShow: function(tab, navigation, index) {
             var $total = navigation.find('li').length;
@@ -758,8 +760,8 @@
                                 <label for="option7">Служили в армии?</label>
                                 <form >
                                     <p>
-                                        <input type = "radio" name= "option7" id="pacan" value="a62"{% if data.milit.isServed %} checked {% endif %}>Да
-                                        <input type = "radio" name= "option7" id="nepacan" value="a61"{% if not data.milit.isServed %} checked {% endif %}>Нет
+                                        <input type = "radio" name= "option7" value="a62"{% if data.milit.isServed %} checked {% endif %}>Да
+                                        <input type = "radio" name= "option7" value="a61"{% if not data.milit.isServed %} checked {% endif %}>Нет
                                         
                                     </p>
                                 </form>
@@ -767,21 +769,20 @@
                     </div>
                 </p>
                 <p >
-                    <div class="row" id="Mujik20"  >
-                            <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-3">
-                                <label for="yeararmy">Год увольнения из рядов РА</label>
-                                <input type="text" name="yeararmy" id="yeararmy" class="form-control" placeholder="2014" value="{{ data.milit.yeardismissial }}">
-                            </div>
-                            <div class="col-xs-3 col-sm-3 col-md-3">
-                                <label for="rank">Воинское звание</label>
-                                <select name="rank" id="rank"  class="form-control">                  
-                                    {% for item in data.rank %}
-                                        <option name= "rank" id = "rank" class = "form-control" value="{{ item.id }}">{{ item.value }}</option>
-                                    {% endfor %} 
-                                </select>
-                            </div>
-                            </br>
-                            
+                    <div class="row" id="Mujik20">
+                        <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-3">
+                            <label for="yeararmy">Год увольнения из рядов РА</label>
+                            <input type="text" name="yeararmy" id="yeararmy" class="form-control" placeholder="2014" value="{{ data.milit.yeardismissial }}">
+                        </div>
+                        <div class="col-xs-3 col-sm-3 col-md-3">
+                            <label for="rank">Воинское звание</label>
+                            <select name="rank" id="rank"  class="form-control">                  
+                                {% for item in data.rank %}
+                                    <option name= "rank" id = "rank" class = "form-control" value="{{ item.id }}">{{ item.value }}</option>
+                                {% endfor %} 
+                            </select>
+                        </div>
+                        </br>
                     </div>
                 </p>
                 
