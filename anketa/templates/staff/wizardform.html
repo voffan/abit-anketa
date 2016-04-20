@@ -15,8 +15,7 @@
 <script src="{% static "anketa/js/prettify.js" %}"></script>
 <script src="{% static "anketa/select2-3.5.4/select2_locale_ru.js" %}"></script>
 <script>
-   
-    $("#Mujik").focusout(function()
+   $("#Mujik").focusout(function()
     {
         if($("#option7").val()=="a61")
         {
@@ -759,8 +758,8 @@
                                 <label for="option7">Служили в армии?</label>
                                 <form >
                                     <p>
-                                        <input type = "radio" name= "option7" value="a62"{% if data.milit.isServed %} checked {% endif %}>Да
-                                        <input type = "radio" name= "option7" value="a61"{% if not data.milit.isServed %} checked {% endif %}>Нет
+                                        <input type = "radio" name= "option7" id="pacan" value="a62"{% if data.milit.isServed %} checked {% endif %}>Да
+                                        <input type = "radio" name= "option7" id="nepacan" value="a61"{% if not data.milit.isServed %} checked {% endif %}>Нет
                                         
                                     </p>
                                 </form>
