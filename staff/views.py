@@ -301,15 +301,18 @@ def Application_review (request, application_id):
 	if request.method =='POST':
 		return HttpResponseRedirect(reverse('staff:application_list'))
 	application = Application.objects.select_related('Abiturient').get(pk=application_id)
-	passp = application.abiturient.docs_set.filter(docType__value__icontains=u'паспорт').first()
+	#passp = AttrValue.objects.filter(attribute__id = 6)
+	
 	snils = application.abiturient.docs_set.filter(docType__value__icontains=u'СНИЛС').first()
+	passp = application.abiturient.docs_set.filter(docType__value__icontains=u'Паспорт').first()
 	if passp is None:
-		passp = application.abiturient.docs_set.filter(docType__value__icontains=u'загран').first()
+		passp = application.abiturient.docs_set.filter(docType__value__icontains=u'Загран').first()
 	if passp is None:
-		passp = application.abiturient.docs_set.filter(docType__value__icontains=u'водит').first()
+		passp = application.abiturient.docs_set.filter(docType__value__icontains=u'Водит').first()
 	if passp is None:
-		passp = application.abiturient.docs_set.filter(docType__value__icontains=u'военн').first()
-	attestat = application.abiturient.docs_set.filter(docType__value__icontains=u'аттестат').first()
+		passp = application.abiturient.docs_set.filter(docType__value__icontains=u'Военн').first()
+	
+	attestat = application.abiturient.docs_set.filter(docType__value__icontains=u'Аттестат').first()
 	if attestat is not None:
 		Data['level'] = 1
 	else:
@@ -317,6 +320,11 @@ def Application_review (request, application_id):
 		level = dipl.docattr_set.filter(attr__value__icontains = u'Уровень').first()
 		if level is not None and level.value == u'НПО':
 			Data['level'] = 2
+		if level is not None and level.value == u'СПО':
+			Data['level'] = 3
+		if level is not None and level.value == u'ВПО':
+			Data['level'] = 4
+		
 
 	adrtype = AttrValue.objects.filter(attribute__name__icontains=u'Тип адреса')
 	rank = AttrValue.objects.filter(attribute__name__icontains=u'Воинское звание')
@@ -348,6 +356,7 @@ def Application_review (request, application_id):
 	
 	context = {'data':Data}
 	context.update(csrf(request))
+	
 	return render(request,'staff\\wizardform.html',context)
 
 def Catalogs(request):
