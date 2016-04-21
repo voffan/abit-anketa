@@ -1,5 +1,14 @@
 {% extends 'anketa/profile.html' %}
+{% load staticfiles %}
+{% block additionalcss %}
+<link href="{% static "anketa/css/prettify.css" %}" rel="stylesheet">
+<link href="{% static "anketa/select2-3.5.4/select2.css" %}" rel="stylesheet">
+<link href="{% static "anketa/select2-3.5.4/select2-bootstrap.css" %}" rel="stylesheet">
+{% endblock %}
 {% block scripts %}
+<script src="{% static "anketa/select2-3.5.4/select2.min.js" %}"></script>
+<script src="{% static "anketa/js/prettify.js" %}"></script>
+<script src="{% static "anketa/select2-3.5.4/select2_locale_ru.js" %}"></script>
 <script>
 	var $currentRow=null;
 	var $rowscount=3;
@@ -39,7 +48,10 @@
 		$rowscount++;
 		$("#tablebody").append("<tr class='info'><td>"+ $("#department").val() + "</td> <td>"+ $("#eduname").val() + "</td> <td>"+ $("#eduprof").val() + "</td> <td>Подано</td> <td><button class='btn btn-default btn-sm' id='row"+$rowscount+"' type='button'>Редактировать</button></td></tr>");
 		$("#applicationBlank").attr('class','panel panel-primary hidden');
-	})
+	});
+	$("#department").select2({
+		language:"ru"
+	});
 </script>
 {% endblock %}
 {% block container %}
@@ -105,7 +117,9 @@
 						<div class="row">
 							<div class="col-md-11 col-xs-8 col-sm-8">
 								<label for="department">Институт/факультет</label>
-								<input type="text" class="form-control" id="department" placeholder="ИМИ">
+								<select id="department" name="department" class="form-control">
+									<option value="">jopa
+								</select>
 							</div>
 						</div>
 						<div class="row">
@@ -129,13 +143,17 @@
 						<div class="row">
 							<div class="col-md-11 col-xs-8 col-sm-8">
 								<label for="eduform">Форма обучения</label>
-								<input type="text" class="form-control" id="eduform" placeholder="Очная">
+								<select id="eduform" name="eduform" class="form-control">
+									<option value="hey">hey
+								</select>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-11 col-xs-8 col-sm-8">
 								<label for="edulevel">Уровень обучения </label>
-								<input type="text" class="form-control" id="edulevel" placeholder="Бакалавриат">
+								<select id="edulevel" name="eduelevel" class="form-control">
+									<option value="hey">hey
+								</select>
 							</div>
 						</div>
 						</br>
