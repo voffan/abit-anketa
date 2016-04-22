@@ -15,7 +15,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, render,get_object_or_404
 from django.template import RequestContext
 
-from anketa.models import Person, Address, Attribute, AttrValue, Abiturient
+from anketa.models import Person, Address, Attribute, AttrValue, Abiturient, Department
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -161,14 +161,14 @@ def PrevEduName(request):
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def Institute(request):
-	institute = AttrValue.objects.filter(attribute__name__icontains = u'Институт/факультет')
-	part = request.GET.get('query','')
-	if len(part)>0:
-		institute = institute.filter(value__icontains = part)
-	institute = institute.values('id', 'value')
+	print(request.GET)
+	institute = Department.objects.filter(name__icontains = request.GET.get('query',''))
+	print (institute)
+	institute = institute.values('id', 'name')
+	eduprog=institute.education_prog_set.all()
 	result = []
 	for item in institute:
-		result.append({'id':item['id'], 'text':item['value']})
+		result.append({'id':item['id'], 'text':item['name']})
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def EduName(request):
