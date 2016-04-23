@@ -165,7 +165,7 @@ def Institute(request):
 	institute = Department.objects.filter(name__icontains = request.GET.get('query',''))
 	print (institute)
 	institute = institute.values('id', 'name')
-	eduprog=institute.education_prog_set.all()
+	#eduprog=institute.education_prog_set.all()
 	result = []
 	for item in institute:
 		result.append({'id':item['id'], 'text':item['name']})

@@ -298,7 +298,6 @@ def Application_list (request):
 
 
 def Application_review (request, application_id):
-	Data={}
 	if request.method =='POST':
 		return HttpResponseRedirect(reverse('staff:application_list'))
 	application = Application.objects.select_related('Abiturient').get(pk=application_id)
@@ -311,31 +310,21 @@ def Application_review (request, application_id):
 	if passp is None:
 		passp = application.abiturient.docs_set.filter(docType__value__icontains=u'Водит').first()
 	if passp is None:
-<<<<<<< HEAD
-		passp = application.abiturient.docs_set.filter(docType__value__icontains=u'военн').first()
-	edu_doc = application.abiturient.docs_set.filter(docType__value__icontains=u'аттестат').first()
-	if edu_doc is not None:
-=======
 		passp = application.abiturient.docs_set.filter(docType__value__icontains=u'Военн').first()
 	
 	attestat = application.abiturient.docs_set.filter(docType__value__icontains=u'Аттестат').first()
 	if attestat is not None:
->>>>>>> fb28289f09f608bbdabf1a7cff1630397527b116
 		Data['level'] = 1
 	else:
-		edu_doc = application.abiturient.docs_set.filter(docType__value__icontains=u'диплом').first()
-		level = edu_doc.docattr_set.filter(attr__value__icontains = u'Уровень').first()
+		dipl = application.abiturient.docs_set.filter(docType__value__icontains=u'диплом').first()
+		level = dipl.docattr_set.filter(attr__value__icontains = u'Уровень').first()
 		if level is not None and level.value == u'НПО':
 			Data['level'] = 2
-<<<<<<< HEAD
-			#продолжить 
-=======
 		if level is not None and level.value == u'СПО':
 			Data['level'] = 3
 		if level is not None and level.value == u'ВПО':
 			Data['level'] = 4
 		
->>>>>>> fb28289f09f608bbdabf1a7cff1630397527b116
 
 	adrtype = AttrValue.objects.filter(attribute__name__icontains=u'Тип адреса')
 	rank = AttrValue.objects.filter(attribute__name__icontains=u'Воинское звание')
@@ -344,6 +333,7 @@ def Application_review (request, application_id):
 	docissuer = AttrValue.objects.filter(attribute__name__icontains=u'Орган выдавший документ')
 	nationality = AttrValue.objects.filter(attribute__name__icontains=u'национальность')
 	doctype = AttrValue.objects.filter(attribute__name__icontains=u'тип документа')
+	Data={}
 	Data['docType'] = doctype
 	Data['docissuer'] = docissuer
 	Data['adrtype'] = adrtype
@@ -351,7 +341,8 @@ def Application_review (request, application_id):
 	Data['passp'] = passp
 	Data['rank'] = rank
 	Data['snils'] = snils
-	Data['edu_doc'] = edu_doc
+	Data['attestat'] = attestat
+	Data['dipl'] = dipl
 	Data['application']=application
 	Data['contacts'] = Contacts.objects.filter(pk=application_id)
 	Data['address'] = Address.objects.filter(pk=application_id)
@@ -483,7 +474,7 @@ def Catalogs_attrvalue(request, attribute_id):
 		attrvalue_dels(request.POST)
 
 	if 'save' in request.POST and len(request.POST['attr_value'])>0:
-		attrvalue_add(request.attribute, request.POST)		#ne rabotaet<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<		
+		attrvalue_add(attribute, request.POST)		#ne rabotaet<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<		
 	
 	Data={}
 	Data['attrvalue'] = attrvalue

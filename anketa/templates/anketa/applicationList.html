@@ -28,8 +28,9 @@
 			$("#applicationBlank").attr('class','panel panel-primary');
 		}
 	};
-	$(".btn").on("click", function()
+	$(document).on("click","button[id*='row']", function()
 	{
+		alert('123');
 		if($(this).attr('id')!="add" && $(this).attr('id')!="save" && $(this).attr('id')!="del")
 			PopUp($(this));
 	});
