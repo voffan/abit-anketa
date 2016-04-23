@@ -17,19 +17,11 @@
 		<div class="panel-heading">Атрибут</div>
 			<div class="panel-body">
 				<label class="control-label">Тип атрибута:</label>
-				<table>
-					<td width="95%">
-						<select class="form-control" name="attrtype" id = "attrtype">
-							{% for item in data.attrtype %}
-							<option value="{{item.id}}">{{ item.name }}</option>
-							{% endfor %}      
-						</select>
-					</td>
-					<td>
-						<!--<button type="submit" class="btn btn-success" name="add">+</button-->
-						<a href="#" onClick="window.open('{% url 'staff:catalogs_attrtype_add' %}','{{item.name}}','width=500,height=300')" class="btn btn-success" role="button" name="add">+</a>
-					</td>
-				</table>
+					<select class="form-control" name="attrtype" id = "attrtype">
+						{% for item in data.attrtype %}
+						<option value="{{item.id}}">{{ item.name }}</option>
+						{% endfor %}      
+					</select>				
 				<p></p>
 				<label class="control-label">Название:</label>
 				<input type="text" class="form-control" name = "attr_name" id="attr_name" value ="{{ data.attribute.name }}">
@@ -37,5 +29,5 @@
 				<button type="submit" class="btn btn-default" name="save">Сохранить</button>
 			</div>
 	</div>
-{% endblock %}                      
+{% endblock %}
 	            

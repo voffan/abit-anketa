@@ -41,7 +41,32 @@
 				cache: true
 			}
 			});
-		});
+
+			$('#attr_add').on('hide.bs.modal',function(event){
+			var button = $(event.relatedTarget)
+			//var name = $(button).prop('id');
+			//if(name === "Save"){
+				$('#attr_add_form').submit();
+			//}
+			});
+
+			$('#attr_detail').on('hide.bs.modal',function(event){
+			var button = $(event.relatedTarget)
+			//var name = $(button).prop('id');
+			//if(name === "Save"){
+				$('#attr_details_form').submit();
+			//}
+			});
+			$('#attr_detail').on('loaded.bs.modal',function(event){
+			//var button = $(event.relatedTarget)
+			//var name = $('#attr_ibute_id').prop('value');
+			//	alert(name);
+			//if(name === "Save"){
+				//$('#attr_details_form').submit();
+			//}
+			});			
+		});	
+		
 	</script>
 {% endblock %}
 
@@ -50,23 +75,92 @@
 {% endblock %}
 
 {% block content %}
-<form action=""  method="POST">
-	{% csrf_token %}  
+
+<!-- Modal addtibute detail -->
+<div class="modal fade" id="attr_detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    	<form action="" method="POST" id="attr_details_form">
+      	{% csrf_token %}
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">{{ data.attribute.name }}</h4>
+      </div>
+      <div class="modal-body">
+      		{% csrf_token %}						
+			  	<label class="control-label">Тип атрибута:</label>
+					<select class="form-control" name="attrtype" id = "attrtype">
+						{% for item in data.attrtype %}
+							<option value="{{item.id}}">{{ item.name }}</option>
+						{% endfor %}      
+					</select>				
+					<p></p>
+					<label class="control-label">Название:</label>
+					<input type="text" class="form-control" name = "attr_name" id="attr_name" value ="{{ data.attribute.name }}">
+					<p></p>								
+	  </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" name="Close">Закрыть</button>
+        <button type="submit" class="btn btn-primary" name="save">Сохранить</button>
+      </div>
+  		</form>
+    </div>
+  </div>
+</div>			
+
+
+<!-- Modal attribute add-->
+<div class="modal fade" id="attr_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    	<form action="" method="POST" id="attr_add_form">
+      	{% csrf_token %}
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Добавить новый атрибут</h4>
+      </div>
+      <div class="modal-body">
+				<label class="control-label">Тип атрибута:</label>
+					<select class="form-control" name="attrtype" id = "attrtype">
+						{% for item in data.attrtype %}
+						<option value="{{item.id}}">{{ item.name }}</option>
+						{% endfor %}      
+					</select>
+				<p></p>
+				<label class="control-label">Название:</label>
+				<input type="text" class="form-control" name = "attr_name" id="attr_name" value ="{{ data.attribute.name }}">
+				<p></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" name="close">Закрыть</button>
+        <button type="submit" class="btn btn-primary" name="save">Сохранить</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+				
+<!--Фильтр по наименованию атрибута-->
 		<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
 		<div class="panel panel-default">
 			<div class="panel-heading">Список Атрибутов</div>
 			<div class="panel-body">
-				<input type = "text" class="form-control" name = "attribute1" id = "attribute1" hidden>
+				<form action=""  method="POST">
+					{% csrf_token %}  
+					<input type = "text" class="form-control" name = "attribute1" id = "attribute1" hidden/>
+					<p></p>
+					<table>
+					<td>
+						<button type="submit" class="btn btn-default" name="filter">Применить фильтр</button>
+					</td>
+					<td>
+						<button type="submit" class="btn btn-default" name="reset">Сбросить фильтр</button><!--dasdasdasdasda-->
+					</td>
+					</table>
+				</form>
 				<p></p>
-				<table>
-				<td>
-					<button type="submit" class="btn btn-default" name="filter">Применить фильтр</button>
-				</td>
-				<td>
-					<button type="submit" class="btn btn-default" name="reset">Сбросить фильтр</button><!--dasdasdasdasda-->
-				</td>
-				</table>
-				<p></p>
+				<form action=""  method="POST">
+				{% csrf_token %} 
 				<table class="table table table-bordered table-hover ">
 					<thead> 
 							<tr>
@@ -80,7 +174,7 @@
 							{% for item in data.attribute %}
 							<tr>
 								<td>{{ forloop.counter }}</td>
-								<td><a href="#" onClick="window.open('{% url 'staff:catalogs_details' item.id %}','{{item.name}}','width=500,height=600')">{{ item.name }}</a>
+								<td><a href="#attr_detail" name="attr_ibute_id" value="{{ item.id }}" data-toggle="modal">{{ item.name }}</a>
 								</td>
 								<td><input type="checkbox" name="selected" value="{{ item.id }}"></td>
 								<td>
@@ -92,10 +186,12 @@
 					</tbody>
 			</table>
 			<!--<button type="submit" class="btn btn-default" name="add">добавить</button>-->
-			<a href="#" onClick="window.open('{% url 'staff:catalogs_attribute_add' %}','add','width=650,height=400')" class="btn btn-default" role="button" name="add">Добавить</a>
-			<button type="submit" class="btn btn-danger" name="delete">Удалить</button> 
+			
+			<button type="button" class="btn btn-primary btn-ng" data-toggle="modal" data-target="#attr_add">Добавить</button>
+			<button type="submit" class="btn btn-danger" name="delete">Удалить</button>
+			</form>					 
 			</div>
 		</div>       
 		</div>
-</form>
+
 {% endblock %}
