@@ -15,7 +15,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, render,get_object_or_404
 from django.template import RequestContext
 
-from anketa.models import Person, Address, Attribute, AttrValue, Abiturient
+from anketa.models import Person, Address, Attribute, AttrValue, Abiturient, Department
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -44,6 +44,8 @@ def PersonData(request):
 @login_required(login_url='/login')
 def Applications(request):
 	args={'currentpage':3}
+	department=AttrValue.objects.filter(attribute__name__icontains=u'Институт/факультет')
+	args['department']=department
 	return render(request,'anketa/applicationList.html',args)
 
 @login_required(login_url='/login')
@@ -103,13 +105,13 @@ def Streets(request):
 def Citizenship(request):
 	trry = AttrValue.objects.filter(attribute__name__icontains = u'гражданство')
 	part = request.GET.get('query','')
-	testData = {id:"citizenship", text:"citizenship"};
+	#testData = {id:"citizenship", text:"citizenship"}
 	if len(part)>0:
 		trry = trry.filter(value__icontains = part)
 	trry = trry.values('id', 'value')
 	result = []
 	for item in trry:
-		result.append({'id':item.id, 'text':item.value})
+		result.append({'id':item['id'], 'text':item['value']})
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def Nation(request):
@@ -158,39 +160,38 @@ def PrevEduName(request):
 		result.append(item)
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
-
 def Institute(request):
-	trry = AttrValue.objects.filter(attribute__id = 13)
-	part = request.GET.get('query','')
-	if len(part)>0:
-		trry = trry.filter(value__icontains = part)
-	trry = trry.values('id', 'value')
+	print(request.GET)
+	institute = Department.objects.filter(name__icontains = request.GET.get('query',''))
+	print (institute)
+	institute = institute.values('id', 'name')
+	eduprog=institute.education_prog_set.all()
 	result = []
-	for item in trry:
-		result.append(item)
+	for item in institute:
+		result.append({'id':item['id'], 'text':item['name']})
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
-def EduProg(request):
-	cty = AttrValue.objects.filter(attribute__id = 14)
+def EduName(request):
+	eduname=AttrValue.objects.filter(attribute__name__icontains=u'Направление/специальность')
 	part = request.GET.get('query','')
-	depart = request.GET.get('id', '')
+	institute = request.GET.get('id','')
 	if len(part)>0:
-		cty = cty.filter(value__icontains = part, parent__id = depart)
-	cty = cty.values('id', 'value')
+		eduname = eduname.filter(value__icontains=part, parent__id = institute)
+	eduname = eduname.values('id','value')
 	result = []
-	for item in cty:
-		result.append({'id':item['id'],'value':item['value']})
+	for item in eduname:
+		result.append({'id':item['id'], 'text':item['value']})
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def EduProf(request):
-	cty = AttrValue.objects.filter(attribute__id = 15)
+	eduprof = AttrValue.objects.filter(attribute__id = 15)
 	part = request.GET.get('query','')
-	prog = request.GET.get('id', '')
+	eduname = request.GET.get('id', '')
 	if len(part)>0:
-		cty = cty.filter(value__icontains = part, parent__id = prog)
-	cty = cty.values('id', 'value')
+		eduprof = eduprof.filter(value__icontains = part, parent__id = eduname)
+	eduprof = eduprof.values('id', 'value')
 	result = []
-	for item in cty:
+	for item in eduprof:
 		result.append({'id':item['id'],'value':item['value']})
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
@@ -268,6 +269,8 @@ def CreatePerson(request):
 				username = request.POST.get('username', '')
 				password = request.POST.get('password', '')
 				user = authenticate(username=username, password=password)
+				if user is not None:
+					login(request, user)
 			except Exception as e:
 				result['result']=1
 				result['error_msg']=str(e)#"Что-то пошло не так."
