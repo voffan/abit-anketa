@@ -312,37 +312,39 @@ def Application_review (request, application_id):
 	if passp is None:
 		passp = application.abiturient.docs_set.filter(docType__value__icontains=u'Военн').first()
 	
-	attestat = application.abiturient.docs_set.filter(docType__value__icontains=u'Аттестат').first()
-	if attestat is not None:
+	edu_doc = application.abiturient.docs_set.filter(docType__value__icontains=u'Аттестат').first()
+	if edu_doc is not None:
 		Data['level'] = 1
 	else:
-		dipl = application.abiturient.docs_set.filter(docType__value__icontains=u'диплом').first()
-		level = dipl.docattr_set.filter(attr__value__icontains = u'Уровень').first()
+		edu_doc = application.abiturient.docs_set.filter(docType__value__icontains=u'диплом').first()
+		level = edu_doc.docattr_set.filter(attr__value__icontains = u'Уровень').first()
 		if level is not None and level.value == u'НПО':
 			Data['level'] = 2
 		if level is not None and level.value == u'СПО':
 			Data['level'] = 3
 		if level is not None and level.value == u'ВПО':
 			Data['level'] = 4
-		
 
 	adrtype = AttrValue.objects.filter(attribute__name__icontains=u'Тип адреса')
 	rank = AttrValue.objects.filter(attribute__name__icontains=u'Воинское звание')
-	
+	snils = application.abiturient.docs_set.filter(docType__value__icontains=u'СНИЛС').first()
 	foreign_lang = AttrValue.objects.filter(attribute__name__icontains=u'иностранный язык')
 	docissuer = AttrValue.objects.filter(attribute__name__icontains=u'Орган выдавший документ')
 	nationality = AttrValue.objects.filter(attribute__name__icontains=u'национальность')
-	doctype = AttrValue.objects.filter(attribute__name__icontains=u'тип документа')
+	doctype = AttrValue.objects.exclude(value__icontains=u'диплом').exclude(value__icontains=u'аттест').exclude(value__icontains=u'СНИЛС').filter(attribute__name__icontains=u'тип документа')
+	edudoctype = AttrValue.objects.filter(value__icontains=u'диплом')|AttrValue.objects.filter(value__icontains=u'аттестат')
 	Data={}
+	
+	Data['edudocType'] = edudoctype
 	Data['docType'] = doctype
 	Data['docissuer'] = docissuer
 	Data['adrtype'] = adrtype
+	Data['snils'] = snils
 	Data['foreign_lang'] = foreign_lang
 	Data['passp'] = passp
 	Data['rank'] = rank
 	Data['snils'] = snils
-	Data['attestat'] = attestat
-	Data['dipl'] = dipl
+	Data['edud'] = edu_doc
 	Data['application']=application
 	Data['contacts'] = Contacts.objects.filter(pk=application_id)
 	Data['address'] = Address.objects.filter(pk=application_id)
@@ -356,7 +358,6 @@ def Application_review (request, application_id):
 	
 	context = {'data':Data}
 	context.update(csrf(request))
-	
 	return render(request,'staff\\wizardform.html',context)
 
 def Catalogs(request):
