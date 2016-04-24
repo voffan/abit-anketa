@@ -67,6 +67,10 @@
 			$rowscount++;
 			$("#tablebody").append("<tr class='info'><td>"+ $("#department").val() + "</td> <td>"+ $("#eduname").val() + "</td> <td>"+ $("#eduprof").val() + "</td> <td>Подано</td> <td><button class='btn btn-default btn-sm' id='row"+$rowscount+"' type='button'>Редактировать</button></td></tr>");
 		}
+		else
+		{
+			$($currentRow).html("Редактировать");
+		}
 		$("#applicationBlank").attr('class','panel panel-primary hidden');
 	});
 	$("#department").select2({
@@ -219,13 +223,13 @@
 						<div class="row">
 							<div class="col-md-11 col-xs-8 col-sm-8">
 								<label for="department">Институт/факультет</label>
-								<input type="hidden" class="form-control" id="department" placeholder="Институт математики и информатики">
+								<input type="hidden" class="form-control" id="department" name="department" placeholder="Институт математики и информатики">
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-11 col-xs-8 col-sm-8">
 								<label for="eduname">Направление/специальность</label>
-								<input type="text" class="form-control" id="eduname" placeholder="ИВТ" disabled>
+								<input type="text" class="form-control" name="eduname" id="eduname" placeholder="ИВТ" disabled>
 							</div>
 						</div>
 						<div class="row">
@@ -247,7 +251,7 @@
 						<div class="row">
 							<div class="col-md-11 col-xs-8 col-sm-8">
 								<label for="edulevel">Уровень обучения</label>
-								<select id="edulevel" name="eduelevel" class="form-control" disabled>
+								<select id="edulevel" name="edulevel" class="form-control" disabled>
 									<option value="hey">hey
 								</select>
 							</div>

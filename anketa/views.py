@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 import json
-import numpy as np 
+import numpy as np
+import datetime
 
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
 from django.forms.formsets import formset_factory
 from django.utils import timezone
-from datetime import datetime
+
 
 from django.core.urlresolvers import reverse
 from django.core.context_processors import csrf
@@ -28,7 +29,7 @@ def StartApp(request):
 	return render(request, 'anketa/wizardform.html')
 
 @login_required(login_url='authapp:index')
-def Profile(request):
+def PersonProfile(request):
 	args={'currentpage':1}
 	args['fname']=request.user
 	args['sname']=request.user
@@ -171,7 +172,6 @@ def Institute(request):
 def EduName(request):
 	institute = Department.objects.get(pk = request.GET.get('id',''))
 	eduname=institute.education_prog_set.filter(name__icontains=request.GET.get('query',''))
-	print(eduname)
 	eduname=eduname.values('id','name')
 	result = []
 	for item in eduname:
@@ -181,7 +181,6 @@ def EduName(request):
 def EduProf(request):
 	eduname = Education_Prog.objects.get(pk = request.GET.get('id',''))
 	eduprof = eduname.profile_set.filter(name__icontains=request.GET.get('query',''))
-	print(eduprof)
 	eduprof = eduprof.values('id', 'name')
 	result = []
 	for item in eduprof:
@@ -223,7 +222,7 @@ def Flang(request):
 
 def SavePerson(request):
 	person = Person()
-	person.birthdate = datetime.strptime(request.POST.get('birthday',''),'%Y-%m-%d')
+	person.birthdate = datetime.datetime.strftime(request.POST.get('birthday',''),'%Y-%m-%d')
 	person.bithplace = request.POST.get('birthplace','')
 	person.nationality = get_object_or_404(AttrValue,pk=10)
 	person.citizenship = get_object_or_404(AttrValue,pk=9) #foreign attrval
@@ -238,24 +237,17 @@ def SaveApplication(request):
 	print(request.POST)
 	if request.method == 'POST':
 		application = Application()
-		depart = Department()
-		univer = University()
-		univer.name ="Свфу"
-		depart.university = univer
-		depart.name=request.POST.get('department','')
-		eduprog = Education_Prog()
-		eduprog.department=depart
-		eduprog.qualification = "1"
-		eduprog.name=request.POST.get('eduname','')
-		prof = Profile()
-		prof.edu_prog = eduprog
-		prof.name="кокококококоококококококок"
-		application.department = depart
-		application.date = datetime.strptime(datetime.datetime.now(), '%Y-%m-%d')
+		application.department = Department.objects.get(pk = request.POST.get('department',''))
+		#application.profile = Profile.objects.get(pk = request.POST.get('eduprof',''))
+		#print(application.profile)
+		application.date = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d')
 		application.eduform = "Очная"
 		application.budget = True
 		application.withfee = False
-		application.appState = "Чек"
+		kaketomenyabesit = AttrValue.objects.filter(attribute__name__icontains=u'Статус заявления').get(value__icontains=u'Поданный')
+		#kaketomenyabesit=kaketomenyabesit.get(value__icontains=u'Поданный')
+		print(kaketomenyabesit.value)
+		application.appState = kaketomenyabesit
 		application.points =100
 		application.save()
 	return HttpResponse(json.dumps(result), content_type="application/json")
