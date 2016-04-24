@@ -11,8 +11,8 @@
     {% load staticfiles %}
     <link href="{% static 'anketa/css/bootstrap.css' %}" rel="stylesheet">
     <link href="{% static 'anketa/select2-3.5.4/select2.css' %}" rel="stylesheet">
-	<link href="{% static 'anketa/select2-3.5.4/select2-bootstrap.css' %}" rel="stylesheet">
-	<link href="{% static 'anketa/css/prettify.css' %}" rel="stylesheet">
+	  <link href="{% static 'anketa/select2-3.5.4/select2-bootstrap.css' %}" rel="stylesheet">
+	  <link href="{% static 'anketa/css/prettify.css' %}" rel="stylesheet">
     
       
   </head>
@@ -42,12 +42,20 @@
 	    </div>
 	</form>
 
+    <div class="container-fluid">              
+        <div  class="col-lg-12 col-md-12 col-sm-12 col-xs-12">          
+          {% block content2 %}               
+          {% endblock %}
+        </div>          
+    </div>
+
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="{% static 'anketa/js/jquery-1.11.0.min.js' %}"></script>
+    <script src= "{% static 'anketa/js/jquery-1.11.0.min.js' %}"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src= "{% static 'anketa/js/bootstrap.js' %}"></script>    
-  	<script src="{% static "anketa/select2-3.5.4/select2.min.js" %}"></script>
-  	<script src="{% static "anketa/js/prettify.js" %}"></script>
-  	<script src="{% static "anketa/select2-3.5.4/select2_locale_ru.js" %}"></script> 
+    <script src= "{% static 'anketa/js/bootstrap.js' %}"></script>
+
+  	<script src= "{% static 'anketa/select2-3.5.4/select2.min.js' %}"></script>
+  	<script src= "{% static 'anketa/js/prettify.js' %}"></script>
+  	<script src= "{% static 'anketa/select2-3.5.4/select2_locale_ru.js' %}"></script> 
   </body>
 </html>

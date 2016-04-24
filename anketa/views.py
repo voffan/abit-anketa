@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 import json
-import numpy as np 
+import numpy as np
+import datetime
 
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
 from django.forms.formsets import formset_factory
 from django.utils import timezone
-from datetime import datetime
+
 
 from django.core.urlresolvers import reverse
 from django.core.context_processors import csrf
@@ -15,7 +16,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, render,get_object_or_404
 from django.template import RequestContext
 
-from anketa.models import Person, Address, Attribute, AttrValue, Abiturient
+from anketa.models import Person, Address, Attribute, AttrValue, Abiturient, Department, Education_Prog, Profile, Application
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -28,7 +29,7 @@ def StartApp(request):
 	return render(request, 'anketa/wizardform.html')
 
 @login_required(login_url='authapp:index')
-def Profile(request):
+def PersonProfile(request):
 	args={'currentpage':1}
 	args['fname']=request.user
 	args['sname']=request.user
@@ -44,6 +45,8 @@ def PersonData(request):
 @login_required(login_url='/login')
 def Applications(request):
 	args={'currentpage':3}
+	department=AttrValue.objects.filter(attribute__name__icontains=u'Институт/факультет')
+	args['department']=department
 	return render(request,'anketa/applicationList.html',args)
 
 @login_required(login_url='/login')
@@ -160,40 +163,30 @@ def PrevEduName(request):
 		result.append({'id':item.id, 'text':item.value})
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
-
 def Institute(request):
-	trry = AttrValue.objects.filter(attribute__id = 13)
-	part = request.GET.get('query','')
-	if len(part)>0:
-		trry = trry.filter(value__icontains = part)
-	trry = trry.values('id', 'value')
+	institute = Department.objects.filter(name__icontains = request.GET.get('query',''))
+	institute = institute.values('id', 'name')
 	result = []
-	for item in trry:
-		result.append(item)
+	for item in institute:
+		result.append({'id':item['id'], 'text':item['name']})
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
-def EduProg(request):
-	cty = AttrValue.objects.filter(attribute__id = 14)
-	part = request.GET.get('query','')
-	depart = request.GET.get('id', '')
-	if len(part)>0:
-		cty = cty.filter(value__icontains = part, parent__id = depart)
-	cty = cty.values('id', 'value')
+def EduName(request):
+	institute = Department.objects.get(pk = request.GET.get('id',''))
+	eduname=institute.education_prog_set.filter(name__icontains=request.GET.get('query',''))
+	eduname=eduname.values('id','name')
 	result = []
-	for item in cty:
-		result.append({'id':item['id'],'value':item['value']})
+	for item in eduname:
+		result.append({'id':item['id'], 'text':item['name']})
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def EduProf(request):
-	cty = AttrValue.objects.filter(attribute__id = 15)
-	part = request.GET.get('query','')
-	prog = request.GET.get('id', '')
-	if len(part)>0:
-		cty = cty.filter(value__icontains = part, parent__id = prog)
-	cty = cty.values('id', 'value')
+	eduname = Education_Prog.objects.get(pk = request.GET.get('id',''))
+	eduprof = eduname.profile_set.filter(name__icontains=request.GET.get('query',''))
+	eduprof = eduprof.values('id', 'name')
 	result = []
-	for item in cty:
-		result.append({'id':item['id'],'value':item['value']})
+	for item in eduprof:
+		result.append({'id':item['id'],'text':item['name']})
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def Privilegies(request):
@@ -231,7 +224,7 @@ def Flang(request):
 
 def SavePerson(request):
 	person = Person()
-	person.birthdate = datetime.strptime(request.POST.get('birthday',''),'%Y-%m-%d')
+	person.birthdate = datetime.datetime.strftime(request.POST.get('birthday',''),'%Y-%m-%d')
 	person.bithplace = request.POST.get('birthplace','')
 	person.nationality = get_object_or_404(AttrValue,pk=10)
 	person.citizenship = get_object_or_404(AttrValue,pk=9) #foreign attrval
@@ -240,6 +233,26 @@ def SavePerson(request):
 	#person.father = get_object_or_404(AttrValue,pk=18) #foreign self can be null
 	#person.mother = get_object_or_404(AttrValue,pk=18) #foreign self can be null
 	person.save()
+
+def SaveApplication(request):
+	result = {'result':0, 'error_msg':''}
+	print(request.POST)
+	if request.method == 'POST':
+		application = Application()
+		application.department = Department.objects.get(pk = request.POST.get('department',''))
+		#application.profile = Profile.objects.get(pk = request.POST.get('eduprof',''))
+		#print(application.profile)
+		application.date = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d')
+		application.eduform = "Очная"
+		application.budget = True
+		application.withfee = False
+		kaketomenyabesit = AttrValue.objects.filter(attribute__name__icontains=u'Статус заявления').get(value__icontains=u'Поданный')
+		#kaketomenyabesit=kaketomenyabesit.get(value__icontains=u'Поданный')
+		print(kaketomenyabesit.value)
+		application.appState = kaketomenyabesit
+		application.points =100
+		application.save()
+	return HttpResponse(json.dumps(result), content_type="application/json")
 
 @transaction.atomic
 def Save_Abiturient(values):

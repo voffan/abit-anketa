@@ -360,8 +360,30 @@ def Application_review (request, application_id):
 	context.update(csrf(request))
 	return render(request,'staff\\wizardform.html',context)
 
+def attribute_dels(values):
+	dels = values.getlist('selected')
+	for item in dels:
+		attri_bute = Attribute.objects.filter(id=item)
+		attri_bute.delete()
+
+def attrvalue_dels(values):
+	dels = values.getlist('selected')
+	for item in dels:
+		attr_value = AttrValue.objects.filter(id=item)
+		attr_value.delete()
+
+def attribute_add(values):
+	attri_bute = Attribute(name=values['attr_name'],type_id=values['attrtype'])
+	attri_bute.save()
+
+def attrvalue_add(attribute, values):
+	attr_value_add = AttrValue(value=values['attr_value'], attribute_id=attribute.id)
+	attr_value_add.save()
+
 def Catalogs(request):
 	attribute = Attribute.objects.all()
+	Data={}
+	#attributeid = Attribute.objects.get(request.POST.get('attr_ibute_id'))
 	if request.method == 'POST':
 
 		if 'filter' in request.POST:
@@ -370,12 +392,13 @@ def Catalogs(request):
 		if 'reset' in request.POST:
 			return HttpResponseRedirect(reverse('staff:catalogs'))
 
-		if 'delete' in request.POST:
-			if 'selected' in request.POST:
-				attri_bute = Attribute.objects.filter(id=request.POST.get('selected'))
-				attri_bute.delete()
+	if 'delete' in request.POST:		
+		attribute_dels(request.POST)
 
-	Data={}    
+	if 'save' in request.POST and len(request.POST['attr_name'])>0:
+		attribute_add(request.POST)
+
+	    
 	attribute1 = Attribute.objects.all()    
 	attrvalue = AttrValue.objects.all()
 	attrtype = AttrType.objects.all()
@@ -394,25 +417,25 @@ def Catalogs_details(request, attribute_id):
 	attribute = Attribute.objects.get(pk=attribute_id)
 	attrtype = AttrType.objects.all()
 	Data={}
-	if request.method == 'POST':
-		if 'save' in request.POST and len(request.POST['attr_name'])>0:
-			attri_bute = Attribute.objects.get(pk=attribute_id)
-			attri_bute.name = request.POST['attr_name']
-			attri_bute.type_id = request.POST['attrtype']
-			attri_bute.save()
+	#if request.method == 'POST':
+	if 'save' in request.POST and len(request.POST['attr_name'])>0:
+		attri_bute = Attribute.objects.get(pk=attribute_id)
+		attri_bute.name = request.POST['attr_name']
+		attri_bute.type_id = request.POST['attrtype']
+		attri_bute.save()
 	Data['attribute'] = attribute
 	Data['attrtype'] = attrtype
 	context = {'data':Data}
 	context.update(csrf(request))
 	return render(request, 'staff\\catalogs_detail.html', context)
 
-def Catalogs_attrtype_add(request):	
+"""def Catalogs_attrtype_add(request):	
 	if request.method == 'POST':
 		if 'save' in request.POST and len(request.POST['attrtype'])>0:
 			attr_type = AttrType(name=request.POST['attrtype'])
 			attr_type.save()
 			#return HttpResponseRedirect(reverse('staff:catalogs_attrtype_add'))
-	return render(request, 'staff\\catalogs_attrtype_add.html')
+	return render(request, 'staff\\catalogs_attrtype_add.html')"""
 
 def Catalogs_attrvalue_add(request, attribute_id):
 	attri_bute = Attribute.objects.get(pk=attribute_id)
@@ -431,26 +454,28 @@ def Catalogs_attrvalue_add(request, attribute_id):
 	context.update(csrf(request))
 	return render(request, 'staff\\catalogs_attrtype_add.html',context)
 
-def Catalogs_attribute_add(request):
-	if request.method == 'POST':
-		if 'save' in request.POST and len(request.POST['attr_name'])>0:
-			attri_bute = Attribute(name=request.POST['attr_name'], type_id=request.POST['attrtype'])
-			attri_bute.save()
-			return HttpResponseRedirect(reverse('staff:catalogs_attribute_add'))
+"""def Catalogs_attribute_add(request):
+	#if request.method == 'POST':
+	if 'save' in request.POST and len(request.POST['attr_name'])>0:
+		attri_bute = Attribute(name=request.POST['attr_name'], type_id=request.POST['attrtype'])
+		attri_bute.save()
+		return HttpResponseRedirect(reverse('staff:catalogs_attribute_add'))
 	Data={}
 	Data['title'] = '1'
 	Data['attrtype'] = AttrType.objects.all()
 	context = {'data':Data}
 	context.update(csrf(request))
 	return render(request, 'staff\\catalogs_detail.html',context)
+	"""
 	
 def Catalogs_attrvalue(request, attribute_id):    
 	attribute = Attribute.objects.get(pk=attribute_id)
 	attrvalue = AttrValue.objects.filter(attribute__id=attribute_id)
 	if 'delete' in request.POST:
-		if 'selected' in request.POST:
-			attr_value = AttrValue.objects.filter(id=request.POST.get('selected'))
-			attr_value.delete()
+		attrvalue_dels(request.POST)
+
+	if 'save' in request.POST and len(request.POST['attr_value'])>0:
+		attrvalue_add(attribute, request.POST)		#ne rabotaet<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<		
 	
 	Data={}
 	Data['attrvalue'] = attrvalue
