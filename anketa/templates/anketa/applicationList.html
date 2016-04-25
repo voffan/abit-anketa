@@ -27,7 +27,7 @@
 			$("#applicationBlank").attr('class','panel panel-primary');
 		}
 	};
-	$(".btn").click(function()
+	$(".btn").on('click',function()
 	{
 		if($(this).attr('id')!="add" && $(this).attr('id')!="save" && $(this).attr('id')!="del")
 			PopUp($(this));
@@ -45,11 +45,15 @@
 	});
 	$("#save").click(function()
 	{
+		$.ajax({});
 		$rowscount++;
 		$("#tablebody").append("<tr class='info'><td>"+ $("#department").val() + "</td> <td>"+ $("#eduname").val() + "</td> <td>"+ $("#eduprof").val() + "</td> <td>Подано</td> <td><button class='btn btn-default btn-sm' id='row"+$rowscount+"' type='button'>Редактировать</button></td></tr>");
 		$("#applicationBlank").attr('class','panel panel-primary hidden');
 	});
 	$("#department").select2({
+		ajax:{
+			url:
+		},
 		language:"ru"
 	});
 </script>
@@ -117,9 +121,10 @@
 						<div class="row">
 							<div class="col-md-11 col-xs-8 col-sm-8">
 								<label for="department">Институт/факультет</label>
-								<select id="department" name="department" class="form-control">
+								<input type="text" class="form-control" name="department" id="department" hidden>
+								<!--select id="department" name="department" class="form-control">
 									<option value="">jopa
-								</select>
+								</select-->
 							</div>
 						</div>
 						<div class="row">
