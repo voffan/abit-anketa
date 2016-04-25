@@ -74,7 +74,7 @@ class Application(models.Model):
 	eduform = models.CharField(u'Форма обучения',choices=EduForm, default='О', max_length=10)
 	budget = models.BooleanField(u'В рамках контрольных цифр приёма', default=False)
 	withfee = models.BooleanField(u'по договорам об оказании платных обр. услуг', default=False)
-	edu_prog = models.ForeignKey('Education_Prog',verbose_name = u'Направление', null = True, blank=True, db_index=True)		#убрать после sync
+	edu_prog = models.ForeignKey('Education_Prog_Form',verbose_name = u'Направление', null = True, blank=True, db_index=True)		#убрать после sync
 	appState = models.ForeignKey('AttrValue',verbose_name=u'Состояние заявления', db_index=True)
 	points = models.IntegerField(u'Кол-во баллов', db_index=True)  
 	def __str__(self):
@@ -139,6 +139,10 @@ class Education_Prog(models.Model):
 	name=models.CharField(u'Направление/специальность', max_length=200, db_index=True)
 	def __str__(self):
 		return self.name
+
+class Education_Prog_Form(models.Model):
+	edu_prog = models.ForeignKey(Education_Prog, verbose_name = u'Направление подготовки', db_index = True)
+	eduform = models.CharField(u'Форма обучения',choices=EduForm, default='О', max_length=10)
 
 class Profile(models.Model):
 	edu_prog=models.ForeignKey('Education_Prog')
