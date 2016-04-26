@@ -16,7 +16,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, render,get_object_or_404
 from django.template import RequestContext
 
-from anketa.models import Person, Address, Attribute, AttrValue, Abiturient, Department, Education_Prog, Profile, Application
+from anketa.models import Person, Address, Attribute, AttrValue, Abiturient, Department, Education_Prog, Profile, Application, Education_Prog_Form
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -105,7 +105,6 @@ def Streets(request):
 	trry = AttrValue.objects.filter(attribute__name__icontains=u'тип докумета')
 	part = request.GET.get('query','')
 	#testData = {id:"docissuer", text:"docissuer"}
-	
 
 def Citizenship(request):
 	trry = AttrValue.objects.filter(attribute__name__icontains = u'гражданство')
@@ -189,6 +188,20 @@ def EduProf(request):
 		result.append({'id':item['id'],'text':item['name']})
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
+def EduProfForm(request):
+	eduname = Education_Prog.objects.get(pk = request.GET.get('id',''))
+	#eduprof = eduname.education_prog_form_set.filter(edu_prog__name__icontains=request.GET.get('query',''))
+	eduprof = eduname.education_prog_form_set.all()
+	eduprof = eduprof.values('id', 'eduform')
+	result = []
+	for item in eduprof:
+		if item['eduform']=="О":
+			item['eduform']="Очное"
+		if item['eduform']=="З":
+			item['eduform']="Заочное"
+		result.append({'id':item['id'],'text':item['eduform']})
+	return HttpResponse(json.dumps(result), content_type="application/json")
+
 def Privilegies(request):
 	trry = AttrValue.objects.filter(attribute__id = 16)
 	part = request.GET.get('query','')
@@ -263,7 +276,7 @@ def Save_Abiturient(values):
 	abit.sname=values.get('sName','')
 	abit.mname=values.get('mName','')
 	abit.sex=values.get('sex','')
-	abit.birthdate=datetime.strptime(values.get('birthday',''),'%Y-%m-%d')
+	abit.birthdate=datetime.datetime.strptime(values.get('birthday',''),'%Y-%m-%d')
 	abit.save()
 
 def rpHash(person):

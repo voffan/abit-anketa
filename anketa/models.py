@@ -76,13 +76,9 @@ class Application(models.Model):
 	withfee = models.BooleanField(u'по договорам об оказании платных обр. услуг', default=False)
 	edu_prog = models.ForeignKey('Education_Prog_Form',verbose_name = u'Направление', null = True, blank=True, db_index=True)		#убрать после sync
 	appState = models.ForeignKey('AttrValue',verbose_name=u'Состояние заявления', db_index=True)
-	points = models.IntegerField(u'Кол-во баллов', db_index=True)  
+	points = models.IntegerField(u'Кол-во баллов', db_index=True)
 	def __str__(self):
 		return self.abiturient.fullname+' application#'+str(self.number)
-
-class ApplicationProfiles(models.Model):
-	application = models.ForeignKey(Application, verbose_name=u'Заявление', db_index = True)
-	profile = models.ForeignKey(Profile, verbose_name=u'Профиль направления')
 
 class Address(models.Model):
 	abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент')
@@ -143,6 +139,8 @@ class Education_Prog(models.Model):
 class Education_Prog_Form(models.Model):
 	edu_prog = models.ForeignKey(Education_Prog, verbose_name = u'Направление подготовки', db_index = True)
 	eduform = models.CharField(u'Форма обучения',choices=EduForm, default='О', max_length=10)
+	def __str__(self):
+		return self.edu_prog.name+' '+ self.eduform
 
 class Profile(models.Model):
 	edu_prog=models.ForeignKey('Education_Prog')
@@ -151,6 +149,10 @@ class Profile(models.Model):
 	year=models.IntegerField(u'Год')
 	def __str__(self):
 		return self.name
+
+class ApplicationProfiles(models.Model):
+	application = models.ForeignKey(Application, verbose_name=u'Заявление', db_index = True)
+	profile = models.ForeignKey(Profile, verbose_name=u'Профиль направления')
 
 class NeedDocuments(models.Model):
 	docType = models.ForeignKey('AttrValue', verbose_name=u'Тип документа', related_name='DocType_need')
