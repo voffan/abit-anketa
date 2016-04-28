@@ -82,7 +82,7 @@ class Application(models.Model):
 
 class ApplicationProfiles(models.Model):
 	application = models.ForeignKey(Application, verbose_name=u'Заявление', db_index = True)
-	profile = models.ForeignKey(Profile, verbose_name=u'Профиль направления')
+	profile = models.ForeignKey('Profile', verbose_name=u'Профиль направления')
 
 class Address(models.Model):
 	abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент')

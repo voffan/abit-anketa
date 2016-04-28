@@ -312,6 +312,7 @@ def Application_review (request, application_id):
 	if passp is None:
 		passp = application.abiturient.docs_set.filter(docType__value__icontains=u'Военн').first()
 	
+	Data={}
 	edu_doc = application.abiturient.docs_set.filter(docType__value__icontains=u'Аттестат').first()
 	if edu_doc is not None:
 		Data['level'] = 1
@@ -333,7 +334,6 @@ def Application_review (request, application_id):
 	nationality = AttrValue.objects.filter(attribute__name__icontains=u'национальность')
 	doctype = AttrValue.objects.exclude(value__icontains=u'диплом').exclude(value__icontains=u'аттест').exclude(value__icontains=u'СНИЛС').filter(attribute__name__icontains=u'тип документа')
 	edudoctype = AttrValue.objects.filter(value__icontains=u'диплом')|AttrValue.objects.filter(value__icontains=u'аттестат')
-	Data={}
 	
 	Data['edudocType'] = edudoctype
 	Data['docType'] = doctype

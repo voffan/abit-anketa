@@ -6,24 +6,24 @@
 <link href="{% static "anketa/css/prettify.css" %}" rel="stylesheet">
 <link href="{% static "anketa/select2-3.5.4/select2.css" %}" rel="stylesheet">
 <link href="{% static "anketa/select2-3.5.4/select2-bootstrap.css" %}" rel="stylesheet">
-<link href="{% static "anketa/css/bootstrap.datepicker3.min.css" %}" rel="stylesheet">
+<link href="{% static "anketa/css/bootstrap-datetimepicker.min.css" %}" rel="stylesheet">
 <!--link href="//cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
 <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script-->
 
 {% endblock %}
 
 {% block scripts %}
+<script src="{% static "anketa/js/select2-3.5.4/select2.min.js" %}"></script>
 <script src="{% static "anketa/js/moment.min.js" %}"></script>
 <script src="{% static "anketa/js/ru.js" %}"></script>
 <!--script src="{% static "anketa/bootstrap-datepicker.js" %}"></script-->
-<script src="{% static "anketa/bootstrap-datepicker.min.js" %}"></script>
+<script src="{% static "anketa/js/bootstrap-datetimepicker.min.js" %}"></script>
 <!--script src="{% static "anketa/pickadate/js/picker.js" %}"></script>
 <script src="{% static "anketa/pickadate/js/picker.date.js" %}"></script>
 <script src="{% static "anketa/pickadate/js/legacy.js" %}"></script-->
 <!--script src="{% static "anketa/js/bootstrap.datepicker.min.js" %}"></script-->
 <script src="{% static "anketa/js/jquery.bootstrap.wizard.js" %}"></script>
 <!--script src="{% static "anketa/js/bootstrap-typeahead.js" %}"></script-->
-<script src="{% static "anketa/select2-3.5.4/select2.min.js" %}"></script>
 <script src="{% static "anketa/js/prettify.js" %}"></script>
 
 <!--script src="{% static "anketa/pickadate/js/ru.js" %}"></script-->
@@ -49,20 +49,6 @@
             return $("#idterritory").val();
         return $("#iddistrict").val();
     }
-<<<<<<< HEAD
-    $("#Mujik").focusout(function()
-    {
-        if($("#option7").val()=="a61")
-        {
-            $("#Mujik20" ).hide();
-        }
-        else
-        {
-            $("#Mujik20" ).show();
-        }
-    });
-=======
->>>>>>> fb28289f09f608bbdabf1a7cff1630397527b116
     $(document).ready(function() {
         $('#rootwizard').bootstrapWizard({onTabShow: function(tab, navigation, index) {
             var $total = navigation.find('li').length;
@@ -372,9 +358,7 @@
                             <label for="numberdoc">Номер</label>
                             <input type = "text" name = "numberdoc" id = "numberdoc" class = "form-control" placeholder="123456" value="{{data.passp.number}}">
                         </div>
-                        <div class="container">
-                            <div class="row">
-                                <div class='col-sm-6'>
+                                <div class="col-xs-2 col-sm-2 col-md-2">
                                     <label for="numberdoc">Дата выдачи</label>
                                     <div class="form-group">
                                         <div class='input-group date' id='docdate'>
@@ -392,8 +376,6 @@
                                         });
                                     });
                                 </script-->
-                            </div>
-                        </div>                
                     </div>
                 </p>
                 
@@ -452,19 +434,18 @@
                         </p>
                     </div>
                 </div>
-               
                     <div class="row">
                         <p>
                             <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-3">
-                                <label for="dateexiting">Дата поступления</label>
+                                <label for="numberdoc">Дата выдачи</label>
                                 <div class="form-group">
-                                        <div class='input-group date' id='docdate'>
-                                            <input type='text' data-provide="datepicker" class="form-control" >
-                                            <span class="input-group-addon">
-                                                <span class="glyphicon glyphicon-calendar"></span>
-                                            </span>
-                                        </div>
+                                    <div class='input-group date' id='docdate'>
+                                        <input type='text' class="form-control" />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
                                     </div>
+                                </div>
                             </div>
                             <div class="col-xs-3 col-sm-3 col-md-3">
                                 <label for="dateexiting">Дата окончания</label>
@@ -477,10 +458,8 @@
                                     </div>
                                 </div>
                             </div>
-                             
-
+                        </p>
                     </div>
-              
                 <div class = "row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
