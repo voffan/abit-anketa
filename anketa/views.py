@@ -45,8 +45,9 @@ def PersonData(request):
 @login_required(login_url='/login')
 def Applications(request):
 	args={'currentpage':3}
-	department=AttrValue.objects.filter(attribute__name__icontains=u'Институт/факультет')
-	args['department']=department
+	applications=Application.objects.filter(abiturient__user=request.user)
+	args['applications']=applications
+	print(args)
 	return render(request,'anketa/applicationList.html',args)
 
 @login_required(login_url='/login')
@@ -173,10 +174,10 @@ def Institute(request):
 def EduName(request):
 	institute = Department.objects.get(pk = request.GET.get('id',''))
 	eduname=institute.education_prog_set.filter(name__icontains=request.GET.get('query',''))
-	eduname=eduname.values('id','name')
+	eduname=eduname.values('id','name', 'qualification__value')
 	result = []
 	for item in eduname:
-		result.append({'id':item['id'], 'text':item['name']})
+		result.append({'id':item['id'], 'text':item['name'] + ' ' + item['qualification__value']})
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def EduProf(request):
@@ -192,14 +193,18 @@ def EduProfForm(request):
 	eduname = Education_Prog.objects.get(pk = request.GET.get('id',''))
 	#eduprof = eduname.education_prog_form_set.filter(edu_prog__name__icontains=request.GET.get('query',''))
 	eduprof = eduname.education_prog_form_set.all()
+	#print(eduprof)
 	eduprof = eduprof.values('id', 'eduform')
+	#print(eduprof)
 	result = []
 	for item in eduprof:
+		"""
 		if item['eduform']=="О":
 			item['eduform']="Очное"
 		if item['eduform']=="З":
 			item['eduform']="Заочное"
-		result.append({'id':item['id'],'text':item['eduform']})
+		"""
+		result.append({'id':item['id'],'text':item['eduform'][0]})
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def Privilegies(request):
@@ -249,19 +254,18 @@ def SavePerson(request):
 
 def SaveApplication(request):
 	result = {'result':0, 'error_msg':''}
-	print(request.POST)
+	#print(request.POST)
 	if request.method == 'POST':
 		application = Application()
+		application.abiturient=Abiturient.objects.get(user=request.user)
 		application.department = Department.objects.get(pk = request.POST.get('department',''))
-		#application.profile = Profile.objects.get(pk = request.POST.get('eduprof',''))
-		#print(application.profile)
+		application.edu_prog=Education_Prog_Form.objects.get(pk=request.POST.get('eduform',''))
 		application.date = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d')
-		application.eduform = "Очная"
+		application.eduform = "О"
 		application.budget = True
 		application.withfee = False
-		kaketomenyabesit = AttrValue.objects.filter(attribute__name__icontains=u'Статус заявления').get(value__icontains=u'Поданный')
-		#kaketomenyabesit=kaketomenyabesit.get(value__icontains=u'Поданный')
-		print(kaketomenyabesit.value)
+		kaketomenyabesit = AttrValue.objects.filter(attribute__name__icontains=u'Статус заявления').filter(value__icontains=u'Поданный').get(value__icontains=u'Подан')
+		#print(kaketomenyabesit.value)
 		application.appState = kaketomenyabesit
 		application.points =100
 		application.save()

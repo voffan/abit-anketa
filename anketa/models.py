@@ -134,7 +134,7 @@ class Education_Prog(models.Model):
 	qualification=models.ForeignKey('AttrValue', verbose_name=u'Квалификация', db_index=True)
 	name=models.CharField(u'Направление/специальность', max_length=200, db_index=True)
 	def __str__(self):
-		return self.name
+		return self.name + ' ' + self.qualification.value
 
 class Education_Prog_Form(models.Model):
 	edu_prog = models.ForeignKey(Education_Prog, verbose_name = u'Направление подготовки', db_index = True)
