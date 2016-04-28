@@ -80,6 +80,13 @@ class Application(models.Model):
 	def __str__(self):
 		return self.abiturient.fullname+' application#'+str(self.number)
 
+<<<<<<< HEAD
+class ApplicationProfiles(models.Model):
+	application = models.ForeignKey(Application, verbose_name=u'Заявление', db_index = True)
+	profile = models.ForeignKey('Profile', verbose_name=u'Профиль направления')
+
+=======
+>>>>>>> f2d113d85251fe180091a488934a99ff7574cdf6
 class Address(models.Model):
 	abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент')
 	adrs_type = models.ForeignKey('AttrValue', verbose_name=u'Тип адреса', related_name='Adrs_type')
