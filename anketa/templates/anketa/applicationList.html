@@ -13,6 +13,7 @@
 <script>
 	var $currentRow=null;
 	var $rowscount=3;
+	var $selectedprog="";
 	function PopUp(row)
 	{
 		if($($currentRow).attr('id')==$(row).attr('id') && $("#applicationBlank").attr('class')=="panel panel-primary")
@@ -22,13 +23,26 @@
 		}
 		else
 		{
+			var id=parseInt($(row).attr('id').slice('-1'));
 			$($currentRow).html("Редактировать");
 			$currentRow=$(row);
 			$(row).html("Закрыть");
 			$("#applicationBlank").attr('class','panel panel-primary');
+			{% for item in applications %}
+				{% if item.id == 8 %}
+					$("#eduname").select2('enable');
+					$("#eduprof").select2('enable');
+					$("#eduprior").select2('enable');
+					$("#eduform").select2('enable');
+					$("#department").select2('val',"{{ item.department }}");
+					$("#eduprof").select2('val',"123");
+					$("#eduprior").select2('val',"123");
+					$("#eduform").select2('val',"123");
+				{% endif %}
+			{% endfor %}
 		}
 	};
-	$(document).on("click","button[id*='row']", function()
+	$(document).on("click","button[id*='application']", function()
 	{
 		PopUp($(this));
 	});
@@ -55,27 +69,25 @@
 			timeout:500,
 			success:function(data)
 			{
-				alert("jopa");
+				if($currentRow==null)
+				{
+					$rowscount++;
+					$("#tablebody").append("<tr class='info'><td>"+ $("#department").val() + "</td> <td>"+ $("#eduname").val() + "</td> <td>"+ $("#eduprof").val() + "</td> <td>Подано</td> <td><button class='btn btn-default btn-sm' id='row"+$rowscount+"' type='button'>Редактировать</button></td></tr>");
+				}
+				else
+				{
+					$($currentRow).html("Редактировать");
+				}
+				$("#applicationBlank").attr('class','panel panel-primary hidden');
 			},
 			error:function()
 			{
 				alert("der'mishe");
 			}
 		});
-		if($currentRow==null)
-		{
-			$rowscount++;
-			$("#tablebody").append("<tr class='info'><td>"+ $("#department").val() + "</td> <td>"+ $("#eduname").val() + "</td> <td>"+ $("#eduprof").val() + "</td> <td>Подано</td> <td><button class='btn btn-default btn-sm' id='row"+$rowscount+"' type='button'>Редактировать</button></td></tr>");
-		}
-		else
-		{
-			$($currentRow).html("Редактировать");
-		}
-		$("#applicationBlank").attr('class','panel panel-primary hidden');
 	});
 	$("#department").select2({
 		language:"ru",
-		minimumInputLength: 1,
 		ajax:{
 			url:{% url 'institute' %},
 			dataType:'json',
@@ -117,7 +129,7 @@
 	});
 	$('#eduprof').select2({
 		language:"ru",
-		/*
+		multiple:true,
 		ajax:{
 			url:{% url 'eduprof' %},
 			dataType:'json',
@@ -135,25 +147,48 @@
 				};
 			},
 			cache:true
-		},
-		*/
-	});
-	$("#eduprior").select2({
-		language:"ru"
-	});
-	$("#edulevel").select2({
-		language:"ru"
+		}
 	});
 	$("#eduform").select2({
+		language:"ru",
+		ajax:{
+			url:{% url 'eduform' %},
+			dataType:'json',
+			delay:250,
+			data:function(params){
+				return{
+					query:params,
+					id:$("#eduname").select2('data').id
+				};
+			},
+			processResults:function(data,page)
+			{
+				return{
+					results:data
+				};
+			},
+			cache:true
+		}
+	});
+	$("#eduprior").select2({
 		language:"ru"
 	});
 	$('#department').on("select2-selecting", function(e) {
 		$("#eduname").select2('enable');
 	});
 	$('#eduname').on("select2-selecting", function(e) {
+		if($('#eduname').val())
+		{
+			if($selectedprog!=$('#eduname').select2('data').text)
+			{
+				$("#eduprof").select2('val',"");
+				$("#eduprior").select2('val',"");
+				$("#eduform").select2('val',"");
+				//обнулить дерьмище
+			}
+		}
 		$("#eduprof").select2('enable');
 		$("#eduprior").select2('enable');
-		$("#edulevel").select2('enable');
 		$("#eduform").select2('enable');
 		//открыть дерьмище
 	});
@@ -174,35 +209,23 @@
 							<table class="table" id="table">
 								<thead id="tablehead">
 									<tr>
+										<th>Номер</th>
 										<th>Институт/факультет</th>
 										<th>Направление/специальность</th>
-										<th>Профиль</th>
 										<th>Статус</th>
 										<th>Действие</th>
 									</tr>
 								</thead>
 								<tbody id="tablebody">
-									<tr class="success">
-										<td>ИМИ</td>
-										<td>ИВТ</td>
-										<td>-</td>
-										<td>Экспортировано</td>
-										<td><button class="btn btn-default btn-sm" id="row1" type="button">Редактировать</button></td>
+								{% for item in applications %}
+									<tr {% if item.appState.value == "Поданный" %} class="success" {% else %} class="info" {% endif %}>
+										<td>{{item.id}}</td>
+										<td>{{item.department}}</td>
+										<td>{{item.edu_prog.edu_prog}}</td>
+										<td>{{item.appState.value}}</td>
+										<td><button class="btn btn-default btn-sm" id="application{{item.id}}" type="button">Редактировать</button></td>
 									</tr>
-									<tr class="danger" >
-										<td>ИМИ</td>
-										<td>ПМ</td>
-										<td>-</td>
-										<td>Аннулировано</td>
-										<td><button class="btn btn-default btn-sm" id="row2"  type="button">Редактировать</button></td>
-									</tr>
-									<tr class="info">
-										<td>ИМИ</td>
-										<td>ФИИТ</td>
-										<td>-</td>
-										<td>Подано</td>
-										<td><button class="btn btn-default btn-sm"  id="row3" type="button">Редактировать</button></td>
-									</tr>
+								{% endfor %}
 								</tbody>
 							</table>
 						</div>
@@ -229,31 +252,19 @@
 						<div class="row">
 							<div class="col-md-11 col-xs-8 col-sm-8">
 								<label for="eduname">Направление/специальность</label>
-								<input type="text" class="form-control" name="eduname" id="eduname" placeholder="ИВТ" disabled>
+								<input type="hidden" class="form-control" name="eduname" id="eduname" placeholder="ИВТ" disabled>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-11 col-xs-8 col-sm-8">
 								<label for="eduprof">Профиль</label>
-								<select multiple id="eduprof" name="eduprof" class="form-control" disabled>
-									<option value="hey">hey
-								</select>
+								<input type="hidden" id="eduprof" name="eduprof" class="form-control" disabled>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-11 col-xs-8 col-sm-8">
 								<label for="eduform">Форма обучения</label>
-								<select id="eduform" name="eduform" class="form-control" disabled>
-									<option value="hey">hey
-								</select>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-11 col-xs-8 col-sm-8">
-								<label for="edulevel">Уровень обучения</label>
-								<select id="edulevel" name="edulevel" class="form-control" disabled>
-									<option value="hey">hey
-								</select>
+								<input type="hidden" id="eduform" name="eduform" class="form-control" disabled>
 							</div>
 						</div>
 						<div class="row">
