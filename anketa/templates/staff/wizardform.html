@@ -30,7 +30,9 @@
     });
    
     $('#docde').datetimepicker({
-       locale: 'ru'
+        format:'DD.MM.YYYY',
+       locale: 'ru',
+       defaultDate:'{{data.passp.issueDate|date:"Y-m-d"}}'
     });
 
     $('#udaten').datetimepicker({
@@ -51,8 +53,7 @@
         {
             $("#Mujik20" ).hide();       
         }
-    }
-    );   
+    });   
     
 
     function GetRegionID(){
@@ -99,10 +100,10 @@
         });
         
         
-    $('.datepicker').pickadate({
+    /*$('.datepicker').pickadate({
         weekdaysShort: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
         showMonthsShort: true
-    });
+    });*/
         $('#preveduname').select2({
             language:"ru",
             minimumInputLength: 1,
