@@ -63,7 +63,7 @@ class Person(models.Model):
 		super(Person, self).save(*args, **kwargs)
 
 class Abiturient(Person):
-	bithplace = models.CharField(u'Место рождения', max_length=100, null=True, blank=True)
+	bithplace = models.CharField(u'Место рождения', max_length=100, null=True, blank=True) # добавить r
 	hostel = models.NullBooleanField(u'Требуется общежитие',default=False)
 	nationality = models.ForeignKey(AttrValue,verbose_name=u'Национальность(по желанию)', limit_choices_to={'attribute__name':u'Национальность'}, db_index = True, blank = True, null = True, related_name='Nationality')
 	citizenship = models.ForeignKey(AttrValue,verbose_name=u'Гражданство', db_index = True,related_name='Citizenship', null=True, blank=True)
@@ -83,7 +83,7 @@ class Application(models.Model):
 	edu_prog = models.ForeignKey('Education_Prog_Form',verbose_name = u'Направление', null = True, blank=True, db_index=True)		#убрать после sync
 	appState = models.ForeignKey('AttrValue',verbose_name=u'Состояние заявления', db_index=True)
 	points = models.IntegerField(u'Кол-во баллов', db_index=True)
-	#priority = models.CharField(u'Приоритет',choices=AppPrior, default='В', max_length=10, null= True, blank = True) #Убрать null, blank
+	priority = models.CharField(u'Приоритет',choices=AppPrior, default='В', max_length=10, null= True, blank = True) #Убрать null, blank
 	def __str__(self):
 		return self.abiturient.fullname+' application#'+str(self.id)
 
