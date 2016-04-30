@@ -16,7 +16,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, render,get_object_or_404
 from django.template import RequestContext
 
-from anketa.models import Person, Address, Attribute, AttrValue, Abiturient, Department, Education_Prog, Profile, Application, Education_Prog_Form, EduForm
+from anketa.models import Person, Address, Attribute, AttrValue, Abiturient, Department, Education_Prog, Profile, Application, Education_Prog_Form, EduForm, ApplicationProfiles
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -31,31 +31,67 @@ def StartApp(request):
 @login_required(login_url='authapp:index')
 def PersonProfile(request):
 	args={'currentpage':1}
-	args['fname']=request.user
-	args['sname']=request.user
-	args['mname']=request.user
 	args.update(csrf(request))
 	return render(request, 'anketa/profile.html', args)
 
-@login_required(login_url='/login')
+@login_required(login_url='authapp:index')
 def PersonData(request):
 	args={'currentpage':2}
+	person=Abiturient.objects.get(user=request.user)
+	args['fname']=person.fname
+	args['sname']=person.sname
+	args['mname']=person.mname
+	args['birthdate']=person.birthdate
+	args['sex']=person.sex
+	print(person.nationality)
+	if person.nationality is not None:
+		nation = AttrValue.objects.filter(value__icontains=person.nationality.value).first()
+		if nation is not None:
+			args['nationality']=nation.value
+			args['nationality_id']=nation.id
+	if person.citizenship is not None:
+		citizenship = AttrValue.objects.filter(value__icontains=person.citizenship.value).first()
+		if citizenship is not None:
+			args['citizenship']=citizenship.value
+			args['citizenship_id']=citizenship.id
+	print(args)
+	args.update(csrf(request))
 	return render(request,'anketa/persondata.html',args)
 
-@login_required(login_url='/login')
+@login_required(login_url='authapp:index')
 def Applications(request):
 	args={'currentpage':3}
 	applications=Application.objects.filter(abiturient__user=request.user)
 	args['applications']=applications
-	print(args)
 	return render(request,'anketa/applicationList.html',args)
 
-@login_required(login_url='/login')
+@login_required(login_url='authapp:index')
 def Account(request):
 	args={'currentpage':4}
 	args['email'] = request.user.email
 	args.update(csrf(request))
 	return render(request,'anketa/account.html',args)
+
+def GetSelectedApplication(request):
+	result={}
+	application =Application.objects.get(pk = request.GET.get('id',''))
+	app_profiles = ApplicationProfiles.objects.filter(application = application)
+	result['department_id']=application.department.id
+	result['department_name']=application.department.name
+	result['edu_prog_id']=application.edu_prog.edu_prog.id
+	result['edu_prog_name']=application.edu_prog.edu_prog.name+' ' + application.edu_prog.edu_prog.qualification.value
+	result['edu_prog_eduform_id']=application.edu_prog.id
+	result['edu_prog_eduform_name']=[x[1] for x in EduForm if x[0] == application.edu_prog.eduform][0]
+	result['profiles_count']=len(app_profiles)
+	profiles=[]
+	count=0
+	for item in app_profiles:
+		count=count+1
+		profiles.append({'id':item.profile.id,'profile':item.profile.name})
+	result['profiles']=profiles
+	result['profiles_len']=len(profiles)
+	#print(result['profiles'])
+	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def Territory(request):
 	trry = AttrValue.objects.filter(attribute__id = 5)
@@ -189,21 +225,12 @@ def EduProf(request):
 
 def EduProfForm(request):
 	eduname = Education_Prog.objects.get(pk = request.GET.get('id',''))
-	#eduprof = eduname.education_prog_form_set.filter(edu_prog__name__icontains=request.GET.get('query',''))
 	eduprof = eduname.education_prog_form_set.all()
-	#print(eduprof)
 	eduprof = eduprof.values('id', 'eduform')
-	#print(eduprof)
 	result = []
-	eduprof['eduform'] = [x[1] for x in EduForm if x[0] == eduprof['eduform']][0]
 	for item in eduprof:
-		"""
-		if item['eduform']=="О":
-			item['eduform']="Очное"
-		if item['eduform']=="З":
-			item['eduform']="Заочное"
-		"""
-		result.append({'id':item['id'],'text':item['eduform'][0]})
+		item['eduform'] = [x[1] for x in EduForm if x[0] == item['eduform']][0]
+		result.append({'id':item['id'],'text':item['eduform']})
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def Privilegies(request):
@@ -225,7 +252,7 @@ def Rank(request):
 	trry = trry.values('id', 'value')
 	result = []
 	for item in trry:
-		result.append(item)
+		result.append({'id':item['id'], 'text':item['value']})
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def Flang(request):
@@ -236,7 +263,38 @@ def Flang(request):
 	trry = trry.values('id', 'value')
 	result = []
 	for item in trry:
-		result.append(item)
+		result.append({'id':item['id'], 'text':item['value']})
+	return HttpResponse(json.dumps(result), content_type="application/json")
+
+def AddDataToPerson(request):
+	result="jopa"
+	#print(request.POST)
+	if request.method == 'POST':
+		page=int(request.POST.get('currentPage',''))
+		abit=Abiturient.objects.get(user=request.user)
+		if page==1: #Личные данные
+			abit.sname=request.POST.get('sname','')
+			abit.fname=request.POST.get('name','')
+			abit.mname=request.POST.get('mname','')
+			abit.birthdate=datetime.datetime.strptime(request.POST.get('birthday',''),'%d/%m/%Y').strftime('%Y-%m-%d')
+			print(abit.birthdate)
+			abit.bithplace=request.POST.get('birthplace','')
+			abit.nationality=AttrValue.objects.get(pk=request.POST.get('nation',''))
+			abit.citizenship=AttrValue.objects.get(pk=request.POST.get('citizenship',''))
+		"""
+		if(page==2:
+
+		if(page==3):
+
+		if(page==4):
+
+		if(page==5):
+
+		if(page==6):
+
+		if(page==7):
+		"""
+		abit.save()
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def SavePerson(request):
@@ -255,19 +313,36 @@ def SaveApplication(request):
 	result = {'result':0, 'error_msg':''}
 	print(request.POST)
 	if request.method == 'POST':
-		application = Application()
+		if(int(request.POST.get('facepalm',''))>0):
+			application=Application.objects.get(pk=request.POST.get('facepalm'))
+			ApplicationProfiles.objects.filter(application=application).delete()
+		else:
+			application = Application()
 		application.abiturient=Abiturient.objects.get(user=request.user)
 		application.department = Department.objects.get(pk = request.POST.get('department',''))
-		application.edu_prog=Education_Prog_Form.objects.get(pk=request.POST.get('eduform',''))
 		application.date = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d')
-		application.eduform = "О"
+		application.edu_prog=Education_Prog_Form.objects.get(pk=request.POST.get('eduform',''))
+		application.eduform = application.edu_prog.eduform
 		application.budget = True
 		application.withfee = False
-		kaketomenyabesit = AttrValue.objects.filter(attribute__name__icontains=u'Статус заявления').filter(value__icontains=u'Поданный').get(value__icontains=u'Подан')
-		#print(kaketomenyabesit.value)
+		kaketomenyabesit = AttrValue.objects.filter(attribute__name__icontains=u'Статус заявления').filter(value__icontains=u'Подано').get(value__icontains=u'Подан')
+		print(kaketomenyabesit.value)
 		application.appState = kaketomenyabesit
 		application.points =100
 		application.save()
+		if (len(request.POST.get('eduprof'))>0):
+			profs=request.POST.get('eduprof','').split(',')
+			for item in profs:
+				appProf = ApplicationProfiles()
+				appProf.application=application
+				appProf.profile=Profile.objects.get(pk=item)
+				appProf.save()
+	return HttpResponse(json.dumps(result), content_type="application/json")
+
+def DeleteApplication(request):
+	result = {'result':0, 'error_msg':''}
+	if request.method == 'GET':
+		Application.objects.get(pk=request.GET.get('id')).delete()
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 @transaction.atomic

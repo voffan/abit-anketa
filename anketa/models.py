@@ -12,6 +12,11 @@ EduForm = (
 	(u'З',u'Заочное'),
 	(u'ОЗ',u'Очно-заочное')
 	)
+AppPrior = (
+	(u'В',u'Высокий'),
+	(u'С',u'Средний'),
+	(u'Н',u'Низкий')
+	)
 
 class Relation(models.Model):
 	person=models.ForeignKey('Person',verbose_name=u'Родственник', related_name="RelationPerson") # ??????
@@ -72,19 +77,15 @@ class Application(models.Model):
 	abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент', db_index=True)
 	date = models.DateField(u'Дата подачи', db_index=True)
 	number = models.IntegerField(u'Номер зааявления', max_length=10, null=True, blank=True)										#номер в журнале в приемной комиссии
-	eduform = models.CharField(u'Форма обучения',choices=EduForm, default='О', max_length=10)
+	eduform = models.CharField(u'Форма обучения',choices=EduForm, default='О', max_length=10) #стереть нахрен
 	budget = models.BooleanField(u'В рамках контрольных цифр приёма', default=False)
 	withfee = models.BooleanField(u'по договорам об оказании платных обр. услуг', default=False)
 	edu_prog = models.ForeignKey('Education_Prog_Form',verbose_name = u'Направление', null = True, blank=True, db_index=True)		#убрать после sync
 	appState = models.ForeignKey('AttrValue',verbose_name=u'Состояние заявления', db_index=True)
 	points = models.IntegerField(u'Кол-во баллов', db_index=True)
+	#priority = models.CharField(u'Приоритет',choices=AppPrior, default='В', max_length=10, null= True, blank = True) #Убрать null, blank
 	def __str__(self):
-		return self.abiturient.fullname+' application#'+str(self.number)
-
-
-class ApplicationProfiles(models.Model):
-	application = models.ForeignKey(Application, verbose_name=u'Заявление', db_index = True)
-	profile = models.ForeignKey('Profile', verbose_name=u'Профиль направления')
+		return self.abiturient.fullname+' application#'+str(self.id)
 
 class Address(models.Model):
 	abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент')
@@ -159,6 +160,8 @@ class Profile(models.Model):
 class ApplicationProfiles(models.Model):
 	application = models.ForeignKey(Application, verbose_name=u'Заявление', db_index = True)
 	profile = models.ForeignKey(Profile, verbose_name=u'Профиль направления')
+	def __str__(self):
+		return self.application.abiturient.fullname + ' ' +self.profile.name
 
 class NeedDocuments(models.Model):
 	docType = models.ForeignKey('AttrValue', verbose_name=u'Тип документа', related_name='DocType_need')

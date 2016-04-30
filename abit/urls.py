@@ -3,7 +3,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
 
-from anketa.views import StartPage, StartApp, Streets, Territory, District, City, Citizenship, Nation, DocIssuer, PrevEduName, Institute, EduProf, Privilegies, Rank, Flang, CreatePerson, DocType, PersonProfile, Applications, PersonData, Account,EduName, SaveApplication, EduProfForm
+from anketa.views import StartPage, StartApp, Streets, Territory, District, City, Citizenship, Nation, DocIssuer, PrevEduName, Institute, EduProf, Privilegies, Rank, Flang, CreatePerson, DocType, PersonProfile, Applications, PersonData, Account,EduName, SaveApplication, EduProfForm, GetSelectedApplication,DeleteApplication,AddDataToPerson
 
 
 urlpatterns = patterns('',
@@ -28,7 +28,10 @@ urlpatterns = patterns('',
     url(r'^eduform/$', EduProfForm, name='eduform'),
     url(r'^privilegies/$', Privilegies, name = 'privilegies'),
     url(r'^create_person/$', CreatePerson, name="create_person"),
+    url(r'^add_data_to_person/$',AddDataToPerson,name="add_data_to_person"),
     url(r'^save_application/$',SaveApplication,name="save_application"),
+    url(r'^del_application/$',DeleteApplication,name="del_application"),
+    url(r'^getapplication/$', GetSelectedApplication,name="getapplication"),
     url(r'^rank/$', Rank, name = 'rank'),
     url(r'^flang/$', Flang, name = 'flang'),
     url(r'^admin/', include(admin.site.urls)),
