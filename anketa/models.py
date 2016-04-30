@@ -9,7 +9,8 @@ Sex = (
 	)
 EduForm = (
 	(u'О',u'Очное'),
-	(u'З',u'Заочное')
+	(u'З',u'Заочное'),
+	(u'ОЗ',u'Очно-заочное')
 	)
 
 class Relation(models.Model):

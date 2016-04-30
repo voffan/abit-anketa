@@ -16,7 +16,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, render,get_object_or_404
 from django.template import RequestContext
 
-from anketa.models import Person, Address, Attribute, AttrValue, Abiturient, Department, Education_Prog, Profile, Application, Education_Prog_Form
+from anketa.models import Person, Address, Attribute, AttrValue, Abiturient, Department, Education_Prog, Profile, Application, Education_Prog_Form, EduForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -197,6 +197,7 @@ def EduProfForm(request):
 	eduprof = eduprof.values('id', 'eduform')
 	#print(eduprof)
 	result = []
+	eduprof['eduform'] = [x[1] for x in EduForm if x[0] == eduprof['eduform']][0]
 	for item in eduprof:
 		"""
 		if item['eduform']=="О":
