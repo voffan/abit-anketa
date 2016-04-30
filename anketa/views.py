@@ -252,7 +252,7 @@ def SavePerson(request):
 
 def SaveApplication(request):
 	result = {'result':0, 'error_msg':''}
-	#print(request.POST)
+	print(request.POST)
 	if request.method == 'POST':
 		application = Application()
 		application.abiturient=Abiturient.objects.get(user=request.user)

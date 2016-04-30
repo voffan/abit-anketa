@@ -34,10 +34,11 @@
 					$("#eduprof").select2('enable');
 					$("#eduprior").select2('enable');
 					$("#eduform").select2('enable');
-					$("#department").select2('val',"{{ item.department }}");
-					$("#eduprof").select2('val',"123");
-					$("#eduprior").select2('val',"123");
-					$("#eduform").select2('val',"123");
+					$("#department").select2('data',{id: {{item.department.id}}, text:"{{ item.department.name }}"});
+					$("#eduname").select2('data',{id: {{item.edu_prog.edu_prog.id}}, text:"{{ item.edu_prog.edu_prog.name }}"});
+					//$("#eduform").select2('data',{id: {{item.edu_prog.eduform.id}}, text:"{{ item.edu_prog.eduform}}"});
+					//$("#eduprior").select2('data',{id: {{item.department.id}}, text:"{{ item.department.name }}"});
+					//$("#eduform").select2('data',{id: {{item.department.id}}, text:"{{ item.department.name }}"});
 				{% endif %}
 			{% endfor %}
 		}
