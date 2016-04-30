@@ -9,7 +9,8 @@ Sex = (
 	)
 EduForm = (
 	(u'О',u'Очное'),
-	(u'З',u'Заочное')
+	(u'З',u'Заочное'),
+	(u'ОЗ',u'Очно-заочное')
 	)
 
 class Relation(models.Model):
@@ -79,6 +80,11 @@ class Application(models.Model):
 	points = models.IntegerField(u'Кол-во баллов', db_index=True)
 	def __str__(self):
 		return self.abiturient.fullname+' application#'+str(self.number)
+
+
+class ApplicationProfiles(models.Model):
+	application = models.ForeignKey(Application, verbose_name=u'Заявление', db_index = True)
+	profile = models.ForeignKey('Profile', verbose_name=u'Профиль направления')
 
 class Address(models.Model):
 	abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент')
