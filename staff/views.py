@@ -330,7 +330,7 @@ def Application_review (request, application_id):
 	rank = AttrValue.objects.filter(attribute__name__icontains=u'Воинское звание')
 	snils = application.abiturient.docs_set.filter(docType__value__icontains=u'СНИЛС').first()
 	foreign_lang = AttrValue.objects.filter(attribute__name__icontains=u'иностранный язык')
-	docissuer = AttrValue.objects.filter(attribute__name__icontains=u'Орган выдавший документ')
+	docissuer = AttrValue.objects.filter(attribute__name__icontains=u'выдавший ')
 	nationality = AttrValue.objects.filter(attribute__name__icontains=u'национальность')
 	doctype = AttrValue.objects.exclude(value__icontains=u'диплом').exclude(value__icontains=u'аттест').exclude(value__icontains=u'СНИЛС').filter(attribute__name__icontains=u'тип документа')
 	edudoctype = AttrValue.objects.filter(value__icontains=u'диплом')|AttrValue.objects.filter(value__icontains=u'аттестат')
@@ -355,7 +355,7 @@ def Application_review (request, application_id):
 	Data['milit'] = application.abiturient.milit_set.first()
 	Data['docattr'] = DocAttr.objects.filter(pk=application_id)
 	Data['achievements'] = Achievements.objects.filter(pk=application_id) 
-	
+	print(docissuer)
 	context = {'data':Data}
 	context.update(csrf(request))
 	return render(request,'staff\\wizardform.html',context)

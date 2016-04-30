@@ -105,12 +105,10 @@ def Streets(request):
 	return HttpResponse(json.dumps(result), content_type="application/json")
 	trry = AttrValue.objects.filter(attribute__name__icontains=u'тип докумета')
 	part = request.GET.get('query','')
-	#testData = {id:"docissuer", text:"docissuer"}
 
 def Citizenship(request):
 	trry = AttrValue.objects.filter(attribute__name__icontains = u'гражданство')
 	part = request.GET.get('query','')
-	#testData = {id:"citizenship", text:"citizenship"}
 	if len(part)>0:
 		trry = trry.filter(value__icontains = part)
 	trry = trry.values('id', 'value')
@@ -122,18 +120,17 @@ def Citizenship(request):
 def Nation(request):
 	trry = AttrValue.objects.filter(attribute__name__icontains=u'национальность')
 	part = request.GET.get('query','')
-	#testData = {id:"docissuer", text:"docissuer"}
 	if len(part)>0:
 		trry = trry.filter(value__icontains = part)
+	trry = trry.values('id', 'value')
 	result = []
 	for item in trry:
-		result.append({'id':item.id, 'text':item.value})
+		result.append({'id':item['id'], 'text':item['value']})
 	return HttpResponse(json.dumps(result), content_type="application/json")
 	
 def DocType(request):
 	trry = AttrValue.objects.filter(attribute__name__icontains=u'тип докумета')
 	part = request.GET.get('query','')
-	#testData = {id:"docissuer", text:"docissuer"}
 	if len(part)>0:
 		trry = trry.filter(value__icontains = part)
 	result = []
@@ -144,23 +141,24 @@ def DocType(request):
 def DocIssuer(request):
 	trry = AttrValue.objects.filter(attribute__name__icontains=u'выдавший')
 	part = request.GET.get('query','')
-	#testData = {id:"docissuer", text:"docissuer"}
 	if len(part)>0:
 		trry = trry.filter(value__icontains = part)
+	trry = trry.values('id', 'value')
 	result = []
 	for item in trry:
-		result.append({'id':item.id, 'text':item.value})
+		result.append({'id':item['id'], 'text':item['value']})
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def PrevEduName(request):
 	trry = AttrValue.objects.filter(attribute__name__icontains=u'выдавший')
 	part = request.GET.get('query','')
-	#testData = {id:"docissuer", text:"docissuer"}
+	
 	if len(part)>0:
 		trry = trry.filter(value__icontains = part)
+	trry = trry.values('id', 'value')
 	result = []
 	for item in trry:
-		result.append({'id':item.id, 'text':item.value})
+		result.append({'id':item['id'], 'text':item['value']})
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def Institute(request):
@@ -208,7 +206,7 @@ def EduProfForm(request):
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def Privilegies(request):
-	trry = AttrValue.objects.filter(attribute__id = 16)
+	trry = AttrValue.objects.filter(attribute__name__icontains=u'выдавший')
 	part = request.GET.get('query','')
 	if len(part)>0:
 		trry = trry.filter(value__icontains = part)
@@ -219,7 +217,7 @@ def Privilegies(request):
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def Rank(request):
-	trry = AttrValue.objects.filter(attribute__id = 17)
+	trry = AttrValue.objects.filter(attribute__name__icontains=u'Воинское')
 	part = request.GET.get('query','')
 	if len(part)>0:
 		trry = trry.filter(value__icontains = part)
@@ -230,7 +228,7 @@ def Rank(request):
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def Flang(request):
-	trry = AttrValue.objects.filter(attribute__id = 18)
+	trry = AttrValue.objects.filter(attribute__name__icontains=u'Изучаемый') 
 	part = request.GET.get('query','')
 	if len(part)>0:
 		trry = trry.filter(value__icontains = part)

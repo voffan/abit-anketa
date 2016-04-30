@@ -4,38 +4,48 @@
 
 {% block additionalcss %}
 <link href="{% static "anketa/css/prettify.css" %}" rel="stylesheet">
+
+<link href="{% static "anketa/css/bootstrap-datetimepicker.min.css" %}" rel="stylesheet">
 <link href="{% static "anketa/select2-3.5.4/select2.css" %}" rel="stylesheet">
 <link href="{% static "anketa/select2-3.5.4/select2-bootstrap.css" %}" rel="stylesheet">
-<link href="{% static "anketa/css/bootstrap-datetimepicker.min.css" %}" rel="stylesheet">
-<!--link href="//cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
-<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script-->
 
 {% endblock %}
 
 {% block scripts %}
-<script src="{% static "anketa/js/select2-3.5.4/select2.min.js" %}"></script>
+
 <script src="{% static "anketa/js/moment.min.js" %}"></script>
 <script src="{% static "anketa/js/ru.js" %}"></script>
-<!--script src="{% static "anketa/bootstrap-datepicker.js" %}"></script-->
 <script src="{% static "anketa/js/bootstrap-datetimepicker.min.js" %}"></script>
-<!--script src="{% static "anketa/pickadate/js/picker.js" %}"></script>
-<script src="{% static "anketa/pickadate/js/picker.date.js" %}"></script>
-<script src="{% static "anketa/pickadate/js/legacy.js" %}"></script-->
-<!--script src="{% static "anketa/js/bootstrap.datepicker.min.js" %}"></script-->
 <script src="{% static "anketa/js/jquery.bootstrap.wizard.js" %}"></script>
-<!--script src="{% static "anketa/js/bootstrap-typeahead.js" %}"></script-->
 <script src="{% static "anketa/js/prettify.js" %}"></script>
+<script src="{% static "anketa/select2-3.5.4/select2.min.js" %}"></script>
+<script src="{% static "anketa/select2-3.5.4/ru.js" %}"></script>
 
-<!--script src="{% static "anketa/pickadate/js/ru.js" %}"></script-->
-<script src="{% static "anketa/select2-3.5.4/select2_locale_ru.js" %}"></script>
 
 
 
 <script>
-   $('#docdate').datetimepicker({
+    $('#birthday').datetimepicker({
        locale: 'ru'
-   });
-   $("#Mujik").focusout(function()
+    });
+   
+    $('#docde').datetimepicker({
+       locale: 'ru'
+    });
+
+    $('#udaten').datetimepicker({
+       locale: 'ru'
+    });
+   
+    $('#udateo').datetimepicker({
+       locale: 'ru'
+    });
+    $('#bdate').datetimepicker({
+       locale: 'ru'
+    });
+   
+    
+    $("#Mujik").focusout(function()
     {
         if($("id").id()=="a61")
         {
@@ -44,6 +54,7 @@
     }
     );   
     
+
     function GetRegionID(){
         if($("#district").val().length === 0)
             return $("#idterritory").val();
@@ -67,18 +78,19 @@
             }
 
         }});
-       
-              
+                     
         $('#rank').select2({
             language:"ru"
         });
-          $('#edudoctype').select2({
+        
+        $('#edudoctype').select2({
             language:"ru"
         });
         
-         $('#doctype').select2({
+        $('#doctype').select2({
             language:"ru"
         });
+        
         $('#nationality').select2({
             language:"ru"
         });
@@ -86,46 +98,11 @@
             language:"ru"
         });
         
-        $('#citizenship').select2({
-            language:"ru",
-            minimumInputLength: 1,
-            
-          
-            ajax:{
-                url:{% url 'citizenship' %},
-                dataType: 'json',
-                delay: 250,
-                data:function(params){
-                    return{
-                        query: params, // search term
-                    };
-                },
-                processResults: function (data, page) {
-                    // parse the results into the format expected by Select2.
-                    // since we are using custom formatting functions we do not need to
-                    // alter the remote JSON data
-                    return {
-                      results: data,
-                    };
-                },
-                cache: true
-            }
-        });
-
         
-        //});
-
-    $('#sandbox-container input').datepicker({
-        format: "dd/mm/yyyy",
-        startDate: "25/10/1994",
-        todayBtn: true,
-        language: "ru"
-    });
     $('.datepicker').pickadate({
         weekdaysShort: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
         showMonthsShort: true
     });
-    
         $('#preveduname').select2({
             language:"ru",
             minimumInputLength: 1,
@@ -149,11 +126,35 @@
                 cache: true
             }
         });
+
         $('#docissuer').select2({
             language:"ru",
             minimumInputLength: 1,
             ajax:{
                 url:{% url 'docissuer' %},
+                dataType: 'json',
+                delay: 250,
+                data:function(params){
+                    return{
+                        query: params, // search term
+                    };
+                },
+                processResults: function (data, page) {
+                    // parse the results into the format expected by Select2.
+                    // since we are using custom formatting functions we do not need to
+                    // alter the remote JSON data
+                    return {
+                      results: data,
+                    };
+                },
+                cache: true
+            }
+        });
+        $('#citizenship').select2({
+            language:"ru",
+            minimumInputLength: 1,
+            ajax:{
+                url:{% url 'citizenship' %},
                 dataType: 'json',
                 delay: 250,
                 data:function(params){
@@ -283,7 +284,7 @@
                 <div class="row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
-                            <label for="mname">Отчество</label>
+                            <label for="mname ">Отчество</label>
                             <input type="text" name = "mname" id ="mname" class="form-control" placeholder="Иванович" value="{{data.application.abiturient.mname}}">
                         </p>
                     </div>
@@ -291,8 +292,17 @@
                 <div class="row">
                     <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-3">
                         <p>
-                            <label for="birthday">Дата рождения</label>
-                            <input type="date" name = "birthday" id ="birthday" value="1997-01-01" class="form-control" value="{{data.application.abiturient.birthdate}}">
+                            <div >
+                                <label for="numberdoc">Дата рождения</label>
+                                <div class="form-group">
+                                    <div class='input-group date' id='birthday'>
+                                        <input type='text' class="form-control" />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
                         </p>
                     </div>
                     <div class ="col-xs-3 col-sm-6 col-md-6"  >
@@ -341,7 +351,7 @@
                             <label for="doctype">Вид документа, удостоверяющего личность</label>
                             <select id="doctype" name = "doctype" class="form-control">
                                {% for item in data.docType %}
-                                    <option value="{{ item.id }}" {% if item.id == data.passp.docType.id %}selected{% endif %} >{{ item.value }}</option>
+                                    <option value="{{ item.id }}" {% if item.id == data.passp.doctype.id %}selected{% endif %} >{{ item.value }}</option>
                                {% endfor %}
                             </select>
                         </p>
@@ -361,7 +371,7 @@
                                 <div class="col-xs-2 col-sm-2 col-md-2">
                                     <label for="numberdoc">Дата выдачи</label>
                                     <div class="form-group">
-                                        <div class='input-group date' id='docdate'>
+                                        <div class='input-group date' id='docde'>
                                             <input type='text' class="form-control" />
                                             <span class="input-group-addon">
                                                 <span class="glyphicon glyphicon-calendar"></span>
@@ -434,32 +444,32 @@
                         </p>
                     </div>
                 </div>
+                <p>
                     <div class="row">
-                        <p>
-                            <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-3">
-                                <label for="numberdoc">Дата выдачи</label>
-                                <div class="form-group">
-                                    <div class='input-group date' id='docdate'>
-                                        <input type='text' class="form-control" />
-                                        <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-calendar"></span>
-                                        </span>
-                                    </div>
+                        <div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-3">
+                            <label for="numberdoc">Дата поступления</label>
+                            <div class="form-group">
+                                <div class='input-group date' id='udaten'>
+                                    <input type='text' class="form-control" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                             </div>
+                        </div>
+                        <div class="col-xs-2 col-sm-2 col-md-2">
+                            <label for="numberdoc">Дата окончания</label>
+                            <div class="form-group">
+                                <div class='input-group date' id='udateo'>
+                                    <input type='text' class="form-control" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
                                 </div>
                             </div>
-                            <div class="col-xs-3 col-sm-3 col-md-3">
-                                <label for="dateexiting">Дата окончания</label>
-                                <div class="form-group">
-                                    <div class='input-group date' id='docdate'>
-                                        <input type='text' data-provide="datepicker" class="form-control" >
-                                        <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-calendar"></span>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </p>
+                        </div>
                     </div>
+                </p>
                 <div class = "row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
@@ -546,6 +556,28 @@
                             <label for="phone">Контактный телефон</label>
                             <input type="tel" name = "phone" id ="phone" class="form-control" placeholder="Телефон в формате 8-ххх-ххххххх или 8-хххх-хххххх" pattern="(8-[0-9]{3}-[0-9]{7})|(8-[0-9]{4}-[0-9]{6})" value="{{data.contacts.contact_type.value}}">
                         </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-3">
+                        <label for="phone">Отец</label>
+                        <input type="tel" name = "phone" id ="phone" class="form-control" placeholder="Иванов Иван Иванович"  value="{{data.contacts.contact_type.value}}">
+                    </div>
+
+                    <div class="col-xs-3 col-sm-3 col-md-3">
+                        <label for="phone">Контактный телефон</label>
+                        <input type="tel" name = "phone" id ="phone" class="form-control" placeholder="Телефон в формате 8-ххх-ххххххх или 8-хххх-хххххх" pattern="(8-[0-9]{3}-[0-9]{7})|(8-[0-9]{4}-[0-9]{6})" value="{{data.contacts.contact_type.value}}"> 
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-3">
+                        <label for="phone">Мать</label>
+                        <input type="text" name = "phone" id ="phone" class="form-control" placeholder="Иванова Мария Ивановна"  value="{{data.contacts.contact_type.value}}">
+                    </div>
+
+                    <div class="col-xs-3 col-sm-3 col-md-3">
+                        <label for="phone">Контактный телефон</label>
+                        <input type="tel" name = "phone" id ="phone" class="form-control" placeholder="Телефон в формате 8-ххх-ххххххх или 8-хххх-хххххх" pattern="(8-[0-9]{3}-[0-9]{7})|(8-[0-9]{4}-[0-9]{6})" value="{{data.contacts.contact_type.value}}"> 
                     </div>
                 </div>
                 <div class="row">
