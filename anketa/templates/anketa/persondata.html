@@ -250,7 +250,7 @@
 			<div class="tab-pane" id="tab1">
 				<div class = "container-fluid">
 					<div class = "row">
-						<div class="col-xs-6 col-sm-6 col-md-8 col-md-offset-2">
+						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 							<p>
 								<label for="sname">Фамилия</label>
 								<input type = "text" name= "sname" id = "sname" class = "form-control" placeholder = "Иванов" value="{{ sname }}">
@@ -258,7 +258,7 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-xs-6 col-sm-6 col-md-8 col-md-offset-2">
+						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 							<p>
 								<label for="name">Имя</label>
 								<input type = "text" name= "name" id = "name" class = "form-control" placeholder = "Иван" value="{{ fname }}">
@@ -266,7 +266,7 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-xs-6 col-sm-6 col-md-8 col-md-offset-2">
+						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 							<p>
 								<label for="mname">Отчество</label>
 								<input type="text" name = "mname" id ="mname" class="form-control" placeholder="Иванович" value="{{ mname }}">
@@ -274,7 +274,7 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-xs-3 col-sm-3 col-md-4 col-md-offset-2">
+						<div class="col-xs-6 col-sm-5 col-md-4 col-md-offset-2">
 							<p>
 								<label for="birthday">Дата рождения</label>
 								<div class='input-group date' id='birthday'>
@@ -285,7 +285,7 @@
 								</div>
 							</p>
 						</div>
-						<div class ="col-xs-3 col-sm-6 col-md-3">
+						<div class ="col-xs-6 col-sm-5 col-md-3">
 							<label for="sex">Пол</label>
 								<p>
 									<input type="radio" name = "hostel" value="p1" {% if sex == "М" %} checked {% endif %}>Мужской
@@ -294,7 +294,7 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-xs-6 col-sm-6 col-md-8 col-md-offset-2">
+						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 							<p>
 								<label for="birthplace">Место рождения</label>
 								<input type="text" name = "birthplace" id ="birthplace" class="form-control" placeholder="Татуин" value ="{{ birthplace }}">
@@ -302,13 +302,13 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-xs-3 col-sm-3 col-md-4 col-md-offset-2">
+						<div class="col-xs-6 col-sm-5 col-md-4 col-md-offset-2">
 							<p>
 								<label for="nation">Национальность(по желанию)</label>
 								<input type="hidden" class="form-control" id ="nation" name="nation" placeholder="Саха" value ="{{ nationality }}">
 							</p>
 						</div>
-						<div class="col-xs-3 col-sm-3 col-md-4">
+						<div class="col-xs-6 col-sm-5 col-md-4">
 							<p>
 								<label for="citizenship">Гражданство</label>
 								<input type="hidden" id="citizenship" name="citizenship" class="form-control" placeholder="РФ" value ="{{ citizenship }}"> 
@@ -316,13 +316,13 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-xs-3 col-sm-3 col-md-4 col-md-offset-2">
+						<div class="col-xs-6 col-sm-5 col-md-4 col-md-offset-2">
 							<p>
 								<label for="phone">Контактный телефон</label>
 								<input type="tel" name = "phone" id ="phone" class="form-control" placeholder="Телефон в формате 8-ххх-ххххххх или 8-хххх-хххххх" pattern="(8-[0-9]{3}-[0-9]{7})|(8-[0-9]{4}-[0-9]{6})">
 							</p>
 						</div>
-						<div class="col-xs-3 col-sm-3 col-md-4">
+						<div class="col-xs-6 col-sm-5 col-md-4">
 							<p>
 								<label for="inila">СНИЛС</label>
 								<input id="inila" name="inila" class="form-control" placeholder="123-456-789-00" />
@@ -334,7 +334,7 @@
 			<div class="tab-pane" id="tab2">
 				<div class = "container-fluid">
 					<div class = "row">
-						<div class="col-xs-6 col-sm-6 col-md-8 col-md-offset-2">
+						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 							<p>
 								<label for="doctype">Вид документа, удостоверяющего личность</label>
 								<select name="doctype" id="doctype" size="1" class="form-control">
@@ -367,7 +367,7 @@
 						</div>
 					</p>
 					<div class = "row">
-						<div class="col-xs-6 col-sm-6 col-md-8 col-md-offset-2">
+						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 							<p>
 								<label for="docissuer">Кем выдан</label>
 								<input type="hidden" name= "docissuer" id = "docissuer" class = "form-control" placeholder = "Отделом УФМС по Российской Федерации, г. Якутск">
@@ -375,7 +375,7 @@
 						</div>
 					</div>
 					<div class = "row">
-						<div class="col-xs-6 col-sm-6 col-md-8 col-md-offset-2">
+						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 							<p>
 								<label for="edudoctype">Вид документа об образовании</label>
 								<select name="edudoctype" id="edudoctype" size="1" class="form-control">
@@ -387,18 +387,18 @@
 					</div>
 					<p>
 						<div class = "row">
-							<div class = "col-xs-3 col-sm-3 col-md-4 col-md-offset-2">
+							<div class = "col-xs-6 col-sm-5 col-md-4 col-md-offset-2">
 								<label for="serialedudoc">Серия</label>
 								<input type = "text" name = "serialedudoc" id = "serialedudoc" class = "form-control" placeholder="1234">
 							</div>
-							<div class = "col-xs-3 col-sm-3 col-md-4">
+							<div class = "col-xs-6 col-sm-5 col-md-4">
 								<label for="numberedudoc">Номер</label>
 								<input type = "text" name = "numberedudoc" id = "numberedudoc" class = "form-control" placeholder="123456">
 							</div>
 						</div>
 					</p>
 					<div class = "row">
-						<div class="col-xs-6 col-sm-6 col-md-8 col-md-offset-2">
+						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 							<p>
 								<label for="prevedu">Предыдущие образование</label>
 								<p>
@@ -412,7 +412,7 @@
 					</div>
 					<p>
 						<div class="row">
-								<div class="col-xs-3 col-sm-3 col-md-4 col-md-offset-2">
+								<div class="col-xs-6 col-sm-5 col-md-4 col-md-offset-2">
 									<label for="datejoining">Дата поступления</label>
 									<div class='input-group date' id='datejoining'>
 										<input type="text" class="form-control" name="datejoining" />
@@ -421,7 +421,7 @@
 											</span>
 									</div>
 								</div>
-								<div class="col-xs-3 col-sm-3 col-md-4">
+								<div class="col-xs-6 col-sm-5 col-md-4">
 									<label for="dateexiting">Дата окончания</label>
 									<div class='input-group date' id='dateexiting'>
 										<input type="text" class="form-control" name="dateexiting" />
@@ -433,7 +433,7 @@
 						</div>
 					</p>
 					<div class = "row">
-						<div class="col-xs-6 col-sm-6 col-md-8 col-md-offset-2">
+						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 							<p>
 								<label for="preveduname">Название учебного заведения</label>
 								<input type="hidden" name= "preveduname" id = "preveduname" class = "form-control" placeholder = "МОУ СОШ № 1, г. Якутск">
@@ -446,21 +446,21 @@
 				<div class="container-fluid">
 					<div class="row">
 						<p>
-							<div class="col-xs-3 col-sm-3 col-md-4 col-md-offset-2">
+							<div class="col-xs-6 col-sm-5 col-md-4 col-md-offset-2">
 								<label for="adrstype">Тип адреса</label>
 								<select name="adrstype" id="adrstype" size="1" class="form-control">
 									<option value="perm">По прописке</option>
 									<option value="current">Фактический</option>
 								</select>
 							</div>
-							<div class="col-xs-3 col-sm-3 col-md-4">
+							<div class="col-xs-6 col-sm-5 col-md-4">
 								<label for="adrsindex">Индекс</label>
 								<input type = "text" name="adrsindex" id="adrsindex" class="form-control" placeholder="677000">
 							</div>
 						 </p>
 					</div>
 					<div class="row">
-						<div class="col-xs-6 col-sm-6 col-md-8 col-md-offset-2">
+						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 							<p>
 								<label for="territory">Область</label>
 								<input id="territory" class="form-control" placeholder="Республика Саха (Якутия)">
@@ -469,7 +469,7 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-xs-6 col-sm-6 col-md-8 col-md-offset-2">
+						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 							<p>
 								<label for="district">Район/улус</label>
 								<input id="district" class="form-control" placeholder="">
@@ -478,7 +478,7 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-xs-6 col-sm-6 col-md-8 col-md-offset-2">
+						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 							<p>
 								<label for="city">Город/село</label>
 								<input name="city" id="city" class="form-control" placeholder="Якутск">
@@ -487,7 +487,7 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-xs-6 col-sm-6 col-md-8 col-md-offset-2">
+						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 							<p>
 								<label for="streets">Улица </label>
 								<input id ="streets" name="streets" class="form-control" placeholder="Ленина">
@@ -511,7 +511,7 @@
 						</p>
 					</div>
 					<div class="row">
-						<div class="col-xs-6 col-sm-6 col-md-8 col-md-offset-2">
+						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 							<p>
 								<label for="option1">Адрес прописки совпадает с адресом факт. места жительства</label>
 								<br>
@@ -525,7 +525,7 @@
 			<div class="tab-pane" id="tab4">
 				<div class="container-fluid">
 					<div class="row">
-						<div class="col-xs-6 col-sm-6 col-md-8 col-md-offset-2">
+						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 							<p>
 							   <b>Прошу засчитать рез-ты ЕГЭ</b>
 							</p>
@@ -555,7 +555,7 @@
 				<br>
 				<br>
 					<div class="row">
-						<div class="col-xs-6 col-sm-6 col-md-8 col-md-offset-2">
+						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 							<p>
 							   <b>Также прошу допустить к вступительным испытаниям по следующим предметам</b>
 							</p>
@@ -579,7 +579,7 @@
 						</p>
 					</div>
 					<div class="row">
-						<div class="col-xs-6 col-sm-6 col-md-8 col-md-offset-2">
+						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 							<p>
 							   <b>Прошу создать специальные условия при сдаче вступ. исп-й в связи с ограниченными возможностями здоровья</b>
 								<br>
@@ -594,7 +594,7 @@
 				<div class="container-fluid">
 					<div class="row">
 						<p>
-							<div class="col-xs-6 col-sm-6 col-md-8 col-md-offset-2">
+							<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 								<label for="privcat">Категория</label>
 								<input type="text" id="privcat" size="1" class="form-control">
 							</div>
@@ -602,7 +602,7 @@
 					</div>
 					<div class="row">
 						<p>
-							<div class="col-xs-6 col-sm-6 col-md-8 col-md-offset-2">
+							<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 								<label for="privtype">Тип</label>
 								<input type="text" id="privtype" size="1" class="form-control">
 							</div>
@@ -613,7 +613,7 @@
 			<div class="tab-pane" id="tab6">
 				<div class="container-fluid">
 					<div class="row">
-						<div class="col-xs-6 col-sm-6 col-md-8 col-md-offset-2">
+						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 							<label for="persach">Имеются ли достижения?</label>
 							<p>
 								<input type="radio" name = "persach" value="a1">Нет
@@ -647,7 +647,7 @@
 			<div class="tab-pane" id="tab7">
 				<div class="container-fluid">
 					 <div class="row">
-						<div class="col-xs-6 col-sm-6 col-md-8 col-md-offset-2">
+						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 							<p>
 								<label for="flang">Изучаемый иностранный язык</label>
 								<input type="hidden" name="flang" id="flang" class="form-control" placeholder="Английский">
@@ -655,7 +655,7 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-xs-6 col-sm-6 col-md-8 col-md-offset-2">
+						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 							<label for="hostel">Нуждаетесь ли в общежитие?</label>
 							<p>
 								<input type="radio" name = "hostel" value="a1">Нет
@@ -665,7 +665,7 @@
 					</div>
 					<p>
 						<div class="row">
-								<div class="col-xs-6 col-sm-6 col-md-8 col-md-offset-2">
+								<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 									<label for="liableForMilit">Являетесь ли вы военнообязанным?</label>
 									<p>
 										<input type="radio" name="liableForMilit" value="no">Невоеннообязанный
@@ -676,7 +676,7 @@
 					</p>
 					<p>
 						<div class="row">
-								<div class="col-xs-6 col-sm-6 col-md-8 col-md-offset-2">
+								<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 									<label for="isServed">Служили в армии?</label>
 									<p>
 										<input type="radio" name="isServed" value="no">Нет
@@ -687,11 +687,11 @@
 					</p>
 					<p>
 						<div class="row">
-								<div class="col-xs-3 col-sm-3 col-md-4 col-md-offset-2">
+								<div class="col-xs-6 col-sm-5 col-md-4 col-md-offset-2">
 									<label for="yeararmy">Год увольнения из рядов РА</label>
 									<input type="text" name="yeararmy" id="yeararmy" class="form-control" placeholder="2014" >
 								</div>
-								<div class="col-xs-3 col-sm-3 col-md-4">
+								<div class="col-xs-6 col-sm-3 col-md-4">
 									<label for="rank">Воинское звание</label>
 									<input type="hidden" name="rank" id="rank" class="form-control" placeholder="капитан">
 								</div>
