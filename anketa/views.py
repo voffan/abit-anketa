@@ -301,6 +301,21 @@ def AddDataToPerson(request):
 """
 		if(page==7):
 			abit.foreign_lang=AttrValue.objects.get(pk=request.POST.get('flang',''))
+			if abit.milit_set.first() is not None:
+				milit=abit.milit_set.first()
+			else:
+				milit = Milit()
+			milit.abiturient=abit
+			milit.rank=AttrValue.objects.get(pk=request.POST.get('rank'))
+			if request.POST.get('isServed','')=="no":
+				milit.isServed=False
+			else:
+				milit.isServed=True
+			if request.POST.get('liableForMilit','')=="no":
+				milit.liableForMilit=False
+			else:
+				milit.liableForMilit=True
+			milit.yearDismissial=int(request.POST.get('yeararmy',''))
 		
 		abit.save()
 	return HttpResponse(json.dumps(result), content_type="application/json")
