@@ -43,7 +43,7 @@ def PersonData(request):
 	args['mname']=person.mname
 	args['birthdate']=person.birthdate
 	args['sex']=person.sex
-	if person.birthplace is not None:
+	if person.bithplace is not None:
 		args['birthplace']=person.bithplace
 	if person.citizenship is not None:
 		args['citizenship']=person.citizenship.value
