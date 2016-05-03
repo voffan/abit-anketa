@@ -55,7 +55,26 @@
 						alert("der'mishe");
 					}
 				});
-			}
+			},
+		});
+		$('#rootwizard .finish').click(function() 
+		{
+			$("#currentPage").val(7);
+			$.ajax({
+				url:{% url 'add_data_to_person' %},
+				type:$("#persondata").attr('method'),
+				data:$("#persondata").serialize(),
+				dataProcess:true,
+				timeout:500,
+				success:function(data)
+				{
+					//alert("jopa");
+				},
+				error:function()
+				{
+					alert("der'mishe");
+				}
+			});
 		});
 		$("#nation").select2({
 			language:"ru",
@@ -186,8 +205,21 @@
 				cache: true
 			}
 		});
-		$("#nation").select2('data',{id: '{{nationality_id}}', text:"{{nationality}}"});
-		$("#citizenship").select2('data',{id: '{{citizenship_id}}', text:"{{citizenship}}"});
+		{% if nationality != None  %}
+			$("#nation").select2('data',{id: '{{nationality_id}}', text:"{{nationality}}"});
+		{% endif %}
+		{% if citizenship != None  %}
+			$("#citizenship").select2('data',{id: '{{citizenship_id}}', text:"{{citizenship}}"});
+		{% endif %}
+		{% if snils != None  %}
+			$("#inila").val("{{snils}}")
+		{% endif %}
+		{% if rank != None  %}
+			$("#rank").select2('data',{id: '{{rank_id}}', text:"{{rank}}"});
+		{% endif %}
+		{% if flang != None  %}
+			$("#flang").select2('data',{id: '{{flang_id}}', text:"{{flang}}"});
+		{% endif %}
 	});
 </script>
 {% endblock %}

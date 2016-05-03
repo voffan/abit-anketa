@@ -83,7 +83,7 @@ class Application(models.Model):
 	edu_prog = models.ForeignKey('Education_Prog_Form',verbose_name = u'Направление', null = True, blank=True, db_index=True)		#убрать после sync
 	appState = models.ForeignKey('AttrValue',verbose_name=u'Состояние заявления', db_index=True)
 	points = models.IntegerField(u'Кол-во баллов', db_index=True)
-	priority = models.CharField(u'Приоритет',choices=AppPrior, default='В', max_length=10, null= True, blank = True) #Убрать null, blank
+	#priority = models.CharField(u'Приоритет',choices=AppPrior, default='В', max_length=10, null= True, blank = True) #Убрать null, blank
 	def __str__(self):
 		return self.abiturient.fullname+' application#'+str(self.id)
 

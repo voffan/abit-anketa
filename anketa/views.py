@@ -16,7 +16,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, render,get_object_or_404
 from django.template import RequestContext
 
-from anketa.models import Person, Address, Attribute, AttrValue, Abiturient, Department, Education_Prog, Profile, Application, Education_Prog_Form, EduForm, ApplicationProfiles
+from anketa.models import Person, Address, Attribute, AttrValue, Abiturient, Department, Education_Prog, Profile, Application, Education_Prog_Form, EduForm, ApplicationProfiles, Milit, Docs
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -42,19 +42,24 @@ def PersonData(request):
 	args['sname']=person.sname
 	args['mname']=person.mname
 	args['birthdate']=person.birthdate
+	args['birthplace']=person.bithplace
 	args['sex']=person.sex
-	print(person.nationality)
-	if person.nationality is not None:
-		nation = AttrValue.objects.filter(value__icontains=person.nationality.value).first()
-		if nation is not None:
-			args['nationality']=nation.value
-			args['nationality_id']=nation.id
 	if person.citizenship is not None:
-		citizenship = AttrValue.objects.filter(value__icontains=person.citizenship.value).first()
-		if citizenship is not None:
-			args['citizenship']=citizenship.value
-			args['citizenship_id']=citizenship.id
-	print(args)
+		args['citizenship']=person.citizenship.value
+		args['citizenship_id']=person.citizenship.id
+	if person.nationality is not None:
+		args['nationality']=person.nationality.value
+		args['nationality_id']=person.nationality.id
+	if person.docs_set.filter(docType__value__icontains=u'СНИЛС').first() is not None:
+		args['snils']=person.docs_set.filter(docType__value__icontains=u'СНИЛС').first()
+	if person.milit_set.first() is not None:
+		print(person.milit_set.first())
+		args['rank']=person.milit_set.first().rank.value
+		args['rank_id']=person.milit_set.first().rank.id
+	if person.foreign_lang is not None:
+		args['flang_id']=person.foreign_lang.id
+		args['flang']=person.foreign_lang.value
+	#print(args)
 	args.update(csrf(request))
 	return render(request,'anketa/persondata.html',args)
 
@@ -277,10 +282,11 @@ def AddDataToPerson(request):
 			abit.fname=request.POST.get('name','')
 			abit.mname=request.POST.get('mname','')
 			abit.birthdate=datetime.datetime.strptime(request.POST.get('birthday',''),'%d/%m/%Y').strftime('%Y-%m-%d')
-			print(abit.birthdate)
 			abit.bithplace=request.POST.get('birthplace','')
 			abit.nationality=AttrValue.objects.get(pk=request.POST.get('nation',''))
 			abit.citizenship=AttrValue.objects.get(pk=request.POST.get('citizenship',''))
+			snils = Docs()
+			snils.abiturient=abit
 		"""
 		if(page==2:
 
@@ -291,23 +297,12 @@ def AddDataToPerson(request):
 		if(page==5):
 
 		if(page==6):
-
+"""
 		if(page==7):
-		"""
+			abit.foreign_lang=AttrValue.objects.get(pk=request.POST.get('flang',''))
+		
 		abit.save()
 	return HttpResponse(json.dumps(result), content_type="application/json")
-
-def SavePerson(request):
-	person = Person()
-	person.birthdate = datetime.datetime.strftime(request.POST.get('birthday',''),'%Y-%m-%d')
-	person.bithplace = request.POST.get('birthplace','')
-	person.nationality = get_object_or_404(AttrValue,pk=10)
-	person.citizenship = get_object_or_404(AttrValue,pk=9) #foreign attrval
-	person.hostel = request.POST.get('hostel','')
-	person.foreign_lang = get_object_or_404(AttrValue,pk=18) #foreign attrval
-	#person.father = get_object_or_404(AttrValue,pk=18) #foreign self can be null
-	#person.mother = get_object_or_404(AttrValue,pk=18) #foreign self can be null
-	person.save()
 
 def SaveApplication(request):
 	result = {'result':0, 'error_msg':''}

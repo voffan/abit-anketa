@@ -12,6 +12,7 @@
 	var $currentRow=null;
 	var $rowscount=3;
 	var $selectedprog="";
+	var $selecteddep=""
 	function PopUp(row)
 	{
 		if($($currentRow).attr('id')==$(row).attr('id') && $("#applicationBlank").attr('class')=="panel panel-primary")
@@ -220,6 +221,17 @@
 		language:"ru"
 	});
 	$('#department').on("select2-selecting", function(e) {
+		if($('#department').val())
+		{
+			if($selecteddep!=$('#department').select2('data').text)
+			{
+				$("#eduname").select2('val',"");
+				$("#eduprof").select2('val',"");
+				$("#eduprior").select2('val',"");
+				$("#eduform").select2('val',"");
+				//обнулить дерьмище
+			}
+		}
 		$("#eduname").select2('enable');
 	});
 	$('#eduname').on("select2-selecting", function(e) {
