@@ -6,13 +6,13 @@
 <link href="{% static "anketa/select2-3.5.4/select2-bootstrap.css" %}" rel="stylesheet">
 {% endblock %}
 {% block scripts %}
-<script src="{% static "anketa/js/jquery-1.11.0.min.js" %}"></script>
 <script src="{% static "anketa/select2-3.5.4/select2.min.js" %}"></script>
 <script src="{% static "anketa/js/prettify.js" %}"></script>
-<script src="{% static "anketa/select2-3.5.4/select2_locale_ru.js" %}"></script>
 <script>
 	var $currentRow=null;
 	var $rowscount=3;
+	var $selectedprog="";
+	var $selecteddep=""
 	function PopUp(row)
 	{
 		if($($currentRow).attr('id')==$(row).attr('id') && $("#applicationBlank").attr('class')=="panel panel-primary")
@@ -22,20 +22,55 @@
 		}
 		else
 		{
-			$($currentRow).html("Редактировать");
-			$currentRow=$(row);
-			$(row).html("Закрыть");
-			$("#applicationBlank").attr('class','panel panel-primary');
+			var id=parseInt($(row).attr('id').slice('3'));
+			$.ajax({
+				url:{% url 'getapplication' %},
+				type:"GET",
+				data:{'id':id},
+				dataProcess:true,
+				timeout:300,
+				success:function(data){
+					var list = new Array(); // list == array :DDDDDDDDDDDDDDDDDDDDD
+					for(var i=0;i<parseInt(data['profiles_len']);i++)
+					{
+						list[i]={"id":data['profiles'][i]['id'],"text":data['profiles'][i]['profile']};
+					}
+					$("#eduname").select2('enable');
+					$("#eduprof").select2('enable');
+					$("#eduprior").select2('enable');
+					$("#eduform").select2('enable');
+					$("#department").select2('data',{id: data['department_id'], text:data['department_name']});
+					$("#eduname").select2('data',{id: data['edu_prog_id'], text:data['edu_prog_name']});
+					$("#eduform").select2('data',{id: data['edu_prog_eduform_id'], text:data['edu_prog_eduform_name']});
+					$("#eduprof").select2('data',list);
+					$($currentRow).html("Редактировать");
+					$currentRow=$(row);
+					$(row).html("Закрыть");
+					$("#applicationBlank").attr('class','panel panel-primary');
+				},
+				error:function(data){
+					alert("der'mishe");
+				}
+			});
 		}
 	};
-	$(document).on("click","button[id*='row']", function()
+	$(document).on("click","button[id*='app']", function()
 	{
 		PopUp($(this));
 	});
 	$("#add").on("click", function()
 	{
-		$currentRow=null;
-		if($("#applicationBlank").attr('class')=="panel panel-primary")
+		$("#eduname").select2('disable');
+		$("#eduprof").select2('disable');
+		$("#eduprior").select2('disable');
+		$("#eduform").select2('disable');
+		$("#department").select2('val',"");
+		$("#eduname").select2('val',"");
+		$("#eduprof").select2('val',"");
+		$("#eduprior").select2('val',"");
+		$("#eduform").select2('val',"");
+		//обнулить дерьмище
+		if($("#applicationBlank").attr('class')=="panel panel-primary" && $currentRow==null)
 		{
 			$("#applicationBlank").attr('class','panel panel-primary hidden');
 		}
@@ -43,39 +78,63 @@
 		{
 			$("#applicationBlank").attr('class','panel panel-primary');
 		}
+		$currentRow=null;
 	});
 	$("#save").on("click", function()
 	{
+		$("#facepalm").val("1");
+		if($currentRow==null)
+			$("#facepalm").val("-1");
+		else
+			$("#facepalm").val(parseInt($($currentRow).attr('id').slice('3')));
 		$.ajax({
 			url: {% url 'save_application' %},
-			type:"POST",
 			type:$("#applications").attr('method'),
 			data:$("#applications").serialize(),
 			dataProcess:true,
 			timeout:500,
 			success:function(data)
 			{
-				alert("jopa");
+				/*
+				if($currentRow==null)
+				{
+					$rowscount++;
+					$("#tablebody").append("<tr class='info'><td>"+ $("#department").val() + "</td> <td>"+ $("#eduname").val() + "</td> <td>"+ $("#eduprof").val() + "</td> <td>Подано</td> <td><button class='btn btn-default btn-sm' id='app"+$rowscount+"' type='button'>Редактировать</button></td></tr>");
+				}
+				else
+				{
+					$($currentRow).html("Редактировать");
+				}
+				$("#applicationBlank").attr('class','panel panel-primary hidden');
+				*/
+				window.location.replace("{% url 'applicationList' %}");
 			},
 			error:function()
 			{
 				alert("der'mishe");
 			}
 		});
-		if($currentRow==null)
-		{
-			$rowscount++;
-			$("#tablebody").append("<tr class='info'><td>"+ $("#department").val() + "</td> <td>"+ $("#eduname").val() + "</td> <td>"+ $("#eduprof").val() + "</td> <td>Подано</td> <td><button class='btn btn-default btn-sm' id='row"+$rowscount+"' type='button'>Редактировать</button></td></tr>");
-		}
-		else
-		{
-			$($currentRow).html("Редактировать");
-		}
-		$("#applicationBlank").attr('class','panel panel-primary hidden');
+	});
+	$("#del").on("click",function()
+	{
+		$.ajax({
+			url: {% url 'del_application' %},
+			type:"GET",
+			data:{'id':parseInt($($currentRow).attr('id').slice('3'))},
+			dataProcess:true,
+			timeout:500,
+			success:function(data)
+			{
+				window.location.replace("{% url 'applicationList' %}");
+			},
+			error:function()
+			{
+				alert("der'mishe");
+			}
+		});
 	});
 	$("#department").select2({
 		language:"ru",
-		minimumInputLength: 1,
 		ajax:{
 			url:{% url 'institute' %},
 			dataType:'json',
@@ -117,7 +176,7 @@
 	});
 	$('#eduprof').select2({
 		language:"ru",
-		/*
+		multiple:true,
 		ajax:{
 			url:{% url 'eduprof' %},
 			dataType:'json',
@@ -135,32 +194,66 @@
 				};
 			},
 			cache:true
-		},
-		*/
+		}
+	});
+	$("#eduform").select2({
+		language:"ru",
+		ajax:{
+			url:{% url 'eduform' %},
+			dataType:'json',
+			delay:250,
+			data:function(params){
+				return{
+					query:params,
+					id:$("#eduname").select2('data').id
+				};
+			},
+			processResults:function(data,page)
+			{
+				return{
+					results:data
+				};
+			},
+			cache:true
+		}
 	});
 	$("#eduprior").select2({
 		language:"ru"
 	});
-	$("#edulevel").select2({
-		language:"ru"
-	});
-	$("#eduform").select2({
-		language:"ru"
-	});
 	$('#department').on("select2-selecting", function(e) {
+		if($('#department').val())
+		{
+			if($selecteddep!=$('#department').select2('data').text)
+			{
+				$("#eduname").select2('val',"");
+				$("#eduprof").select2('val',"");
+				$("#eduprior").select2('val',"");
+				$("#eduform").select2('val',"");
+				//обнулить дерьмище
+			}
+		}
 		$("#eduname").select2('enable');
 	});
 	$('#eduname').on("select2-selecting", function(e) {
+		if($('#eduname').val())
+		{
+			if($selectedprog!=$('#eduname').select2('data').text)
+			{
+				$("#eduprof").select2('val',"");
+				$("#eduprior").select2('val',"");
+				$("#eduform").select2('val',"");
+				//обнулить дерьмище
+			}
+		}
 		$("#eduprof").select2('enable');
 		$("#eduprior").select2('enable');
-		$("#edulevel").select2('enable');
 		$("#eduform").select2('enable');
 		//открыть дерьмище
 	});
 </script>
 {% endblock %}
 {% block container %}
-<form name="applications" id = "applications" action="" class="form-horizontal" role="form" method="post">
+<form name="applications" id = "applications" class="form-horizontal" role="form" method="post">
 {% csrf_token %}
 	<div class="col-md-9 col-xs-10 col-sm-8">
 		<div class="row">
@@ -174,35 +267,23 @@
 							<table class="table" id="table">
 								<thead id="tablehead">
 									<tr>
+										<th>Номер</th>
 										<th>Институт/факультет</th>
 										<th>Направление/специальность</th>
-										<th>Профиль</th>
 										<th>Статус</th>
 										<th>Действие</th>
 									</tr>
 								</thead>
 								<tbody id="tablebody">
-									<tr class="success">
-										<td>ИМИ</td>
-										<td>ИВТ</td>
-										<td>-</td>
-										<td>Экспортировано</td>
-										<td><button class="btn btn-default btn-sm" id="row1" type="button">Редактировать</button></td>
+								{% for item in applications %}
+									<tr {% if item.appState.value == "Поданно" %} class="info" {% else %} {% if item.appState.value == "Экспортированно" %} class="success" {% else %} class="info" {% endif %} {% endif %}>
+										<td>{{item.id}}</td>
+										<td>{{item.department}}</td>
+										<td>{{item.edu_prog.edu_prog}}</td>
+										<td>{{item.appState.value}}</td>
+										<td><button class="btn btn-default btn-sm" id="app{{item.id}}" type="button">Редактировать</button></td>
 									</tr>
-									<tr class="danger" >
-										<td>ИМИ</td>
-										<td>ПМ</td>
-										<td>-</td>
-										<td>Аннулировано</td>
-										<td><button class="btn btn-default btn-sm" id="row2"  type="button">Редактировать</button></td>
-									</tr>
-									<tr class="info">
-										<td>ИМИ</td>
-										<td>ФИИТ</td>
-										<td>-</td>
-										<td>Подано</td>
-										<td><button class="btn btn-default btn-sm"  id="row3" type="button">Редактировать</button></td>
-									</tr>
+								{% endfor %}
 								</tbody>
 							</table>
 						</div>
@@ -229,31 +310,19 @@
 						<div class="row">
 							<div class="col-md-11 col-xs-8 col-sm-8">
 								<label for="eduname">Направление/специальность</label>
-								<input type="text" class="form-control" name="eduname" id="eduname" placeholder="ИВТ" disabled>
+								<input type="hidden" class="form-control" name="eduname" id="eduname" placeholder="ИВТ" disabled>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-11 col-xs-8 col-sm-8">
 								<label for="eduprof">Профиль</label>
-								<select multiple id="eduprof" name="eduprof" class="form-control" disabled>
-									<option value="hey">hey
-								</select>
+								<input type="hidden" id="eduprof" name="eduprof" class="form-control" disabled>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-11 col-xs-8 col-sm-8">
 								<label for="eduform">Форма обучения</label>
-								<select id="eduform" name="eduform" class="form-control" disabled>
-									<option value="hey">hey
-								</select>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-11 col-xs-8 col-sm-8">
-								<label for="edulevel">Уровень обучения</label>
-								<select id="edulevel" name="edulevel" class="form-control" disabled>
-									<option value="hey">hey
-								</select>
+								<input type="hidden" id="eduform" name="eduform" class="form-control" disabled>
 							</div>
 						</div>
 						<div class="row">
@@ -267,6 +336,7 @@
 							</div>
 						</div>
 						</br>
+						<input type="hidden" name="facepalm" id="facepalm">
 						<div class="row">
 							<div class="col-md-9 col-xs-8 col-sm-8">
 								<button type="button" class="btn btn-danger pull-right" id="del">Удалить</button>
