@@ -80,6 +80,14 @@ class Application(models.Model):
 	def __str__(self):
 		return self.abiturient.fullname+' application#'+str(self.number)
 
+class Profile(models.Model):
+	edu_prog=models.ForeignKey('Education_Prog')
+	name=models.CharField(u'Профиль', max_length=100, db_index=True)
+	freespaces=models.IntegerField(u'Места')
+	year=models.IntegerField(u'Год')
+	def __str__(self):
+		return self.name
+
 class ApplicationProfiles(models.Model):
 	application = models.ForeignKey(Application, verbose_name=u'Заявление', db_index = True)
 	profile = models.ForeignKey(Profile, verbose_name=u'Профиль направления')
@@ -143,14 +151,8 @@ class Education_Prog(models.Model):
 class Education_Prog_Form(models.Model):
 	edu_prog = models.ForeignKey(Education_Prog, verbose_name = u'Направление подготовки', db_index = True)
 	eduform = models.CharField(u'Форма обучения',choices=EduForm, default='О', max_length=10)
-
-class Profile(models.Model):
-	edu_prog=models.ForeignKey('Education_Prog')
-	name=models.CharField(u'Профиль', max_length=100, db_index=True)
-	freespaces=models.IntegerField(u'Места')
-	year=models.IntegerField(u'Год')
 	def __str__(self):
-		return self.name
+		return self.edu_prog.name
 
 class NeedDocuments(models.Model):
 	docType = models.ForeignKey('AttrValue', verbose_name=u'Тип документа', related_name='DocType_need')
