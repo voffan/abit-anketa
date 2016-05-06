@@ -10,10 +10,7 @@
 
 			$('#attr_value_add').on('hide.bs.modal',function(event){
 				var button = $(event.relatedTarget)
-				//var name = $(button).prop('id');
-				//if(name === "Save"){
 				$('#attr_value_form').submit();
-				//}
 			});
 
 			
@@ -32,6 +29,7 @@
 						$('#attr_value_id').val(data[0]['id']);
 						$('#attr_value').val(data[0]['name']);
 						$('#attr_value_add').modal();
+						$('#myModalLabel').html('Изменить значение атрибута '+'"'+data[0]['attribut']+'"');
 					},
 					error:function(){
 						alert:('4toto poshlo ne tak');
@@ -42,6 +40,7 @@
 				//alert('zashol');
 				$('#attr_value_id').val('-1');
 				$('#attr_value_add').modal();
+				//$('#myModalLabel').html('Добавить новое значение атрибута');
 			});
 		});
 	</script>
@@ -56,7 +55,7 @@
       	{% csrf_token %}
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Добавить новое значение атрибута в "{{ data.attribute.name }}"</h4>
+        <h4 class="modal-title" id="myModalLabel">Добавить новое значение атрибута "{{ data.attribute.name }}"</h4>
       </div>
       <div class="modal-body">
 	  	<div class="panel-body">
