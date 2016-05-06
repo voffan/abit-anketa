@@ -38,13 +38,14 @@ def PersonProfile(request):
 def PersonData(request):
 	args={'currentpage':2}
 	person=Abiturient.objects.get(user=request.user)
+	# 1
 	args['fname']=person.fname
 	args['sname']=person.sname
 	args['mname']=person.mname
 	args['birthdate']=person.birthdate
 	args['sex']=person.sex
-	if person.bithplace is not None:
-		args['birthplace']=person.bithplace
+	if person.birthplace is not None:
+		args['birthplace']=person.birthplace
 	if person.citizenship is not None:
 		args['citizenship']=person.citizenship.value
 		args['citizenship_id']=person.citizenship.id
@@ -53,10 +54,17 @@ def PersonData(request):
 		args['nationality_id']=person.nationality.id
 	if person.docs_set.filter(docType__value__icontains=u'СНИЛС').first() is not None:
 		args['snils']=person.docs_set.filter(docType__value__icontains=u'СНИЛС').first()
-	if person.milit_set.first() is not None:
-		print(person.milit_set.first())
-		args['rank']=person.milit_set.first().rank.value
-		args['rank_id']=person.milit_set.first().rank.id
+	# 7 
+	args['hostel']=person.hostel
+	milit = Milit.objects.filter(abiturient = person).first()
+	if milit is not None:
+		args['liableForMilit']=milit.liableForMilit
+		if milit.liableForMilit==True:
+			args['isServed']=milit.isServed
+			if milit.isServed==True:
+				args['rank']=milit.rank.value
+				args['rank_id']=milit.rank.id
+				args['yeararmy']=milit.yearDismissial
 	if person.foreign_lang is not None:
 		args['flang_id']=person.foreign_lang.id
 		args['flang']=person.foreign_lang.value
@@ -98,6 +106,154 @@ def GetSelectedApplication(request):
 	result['profiles_len']=len(profiles)
 	#print(result['profiles'])
 	return HttpResponse(json.dumps(result), content_type="application/json")
+
+def AddDataToPerson(request):
+	result="success"
+	#print(request.POST)
+	if request.method == 'POST':
+		try:
+			page=int(request.POST.get('currentPage',''))
+			abit=Abiturient.objects.get(user=request.user)
+			if page==1: #Личные данные
+				abit.sname=request.POST.get('sname','')
+				abit.fname=request.POST.get('name','')
+				abit.mname=request.POST.get('mname','')
+				abit.birthplace=request.POST.get('birthplace','')
+				if(len(request.POST.get('birthday','')))>0:
+					abit.birthdate=datetime.datetime.strptime(request.POST.get('birthday',''),'%d/%m/%Y').strftime('%Y-%m-%d')
+				if(len(request.POST.get('nation','')))>0:
+					abit.nationality=AttrValue.objects.get(pk=request.POST.get('nation',''))
+				else:
+					abit.nationality=None
+				if(len(request.POST.get('citizenship','')))>0:
+					abit.citizenship=AttrValue.objects.get(pk=request.POST.get('citizenship',''))
+				if(len(request.POST.get('sex','')))>0:
+					abit.sex=request.POST.get('sex','')
+			if(page==2):
+				doctype = abiturient.docs_set.filter(docType__attribute__name__icontains=u'тип документа удостоверяющего личность').first()
+				if doctype is None:
+					doctype=Docs()
+				doctype.serialno
+				doctype.numer
+				doctype.issueDate
+				doctype
+				snils = Docs()
+				snils.abiturient=abit
+			"""
+			if(page==3):
+
+			if(page==4):
+
+			if(page==5):
+
+			if(page==6):
+			"""
+			if(page==7):
+				if(len(request.POST.get('hostel','')))>0:
+					abit.hostel=False
+					if(request.POST.get('hostel','')=="yes"):
+						abit.hostel=True
+				if(len(request.POST.get('flang','')))>0:
+					abit.foreign_lang=AttrValue.objects.get(pk=request.POST.get('flang',''))
+
+				if Milit.objects.filter(abiturient = abit).first() is not None:
+					Milit.objects.filter(abiturient = abit).first().delete()
+				milit = Milit()
+				milit.abiturient=abit
+				if (len(request.POST.get('liableForMilit','')))>0:
+					if request.POST.get('liableForMilit','')=="yes":
+						milit.liableForMilit=True
+						if (len(request.POST.get('isServed','')))>0:
+							if request.POST.get('isServed','')=="yes":
+								milit.isServed=True
+								if(len(request.POST.get('rank','')))>0:
+									milit.rank=AttrValue.objects.get(pk=request.POST.get('rank'))
+								if (len(request.POST.get('yeararmy','')))>0:
+									milit.yearDismissial=int(request.POST.get('yeararmy',''))
+									# АХАХАХАХАХ ХКАКОЙ ККРАСИВЫЙ КОД АХАХАХАХАХХААХХА
+				milit.save()
+
+			abit.save()
+		except Exception as e:
+					result=str(e)
+	return HttpResponse(json.dumps(result), content_type="application/json")
+
+def SaveApplication(request):
+	result = {'result':0, 'error_msg':''}
+	print(request.POST)
+	if request.method == 'POST':
+		if(int(request.POST.get('facepalm',''))>0):
+			application=Application.objects.get(pk=request.POST.get('facepalm'))
+			ApplicationProfiles.objects.filter(application=application).delete()
+		else:
+			application = Application()
+		application.abiturient=Abiturient.objects.get(user=request.user)
+		application.department = Department.objects.get(pk = request.POST.get('department',''))
+		application.date = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d')
+		application.edu_prog=Education_Prog_Form.objects.get(pk=request.POST.get('eduform',''))
+		application.eduform = application.edu_prog.eduform
+		application.budget = True
+		application.withfee = False
+		kaketomenyabesit = AttrValue.objects.filter(attribute__name__icontains=u'Статус заявления').filter(value__icontains=u'Подано').get(value__icontains=u'Подан')
+		print(kaketomenyabesit.value)
+		application.appState = kaketomenyabesit
+		application.points =100
+		application.save()
+		if (len(request.POST.get('eduprof'))>0):
+			profs=request.POST.get('eduprof','').split(',')
+			for item in profs:
+				appProf = ApplicationProfiles()
+				appProf.application=application
+				appProf.profile=Profile.objects.get(pk=item)
+				appProf.save()
+	return HttpResponse(json.dumps(result), content_type="application/json")
+
+def DeleteApplication(request):
+	result = {'result':0, 'error_msg':''}
+	if request.method == 'GET':
+		Application.objects.get(pk=request.GET.get('id')).delete()
+	return HttpResponse(json.dumps(result), content_type="application/json")
+
+@transaction.atomic
+def Save_Abiturient(values):
+	abit = Abiturient()
+	abit.user = User.objects.create_user(username=values.get('username',''), email=values.get('email',''), password=values.get('password',''))
+	abit.user.save()
+	abit.fname=values.get('fName','')
+	abit.sname=values.get('sName','')
+	abit.mname=values.get('mName','')
+	abit.sex=values.get('sex','')
+	abit.birthdate=datetime.datetime.strptime(values.get('birthday',''),'%Y-%m-%d')
+	abit.save()
+
+def rpHash(person):
+	hash = 5381 
+	value = person.upper() 
+	for caracter in value: 
+		hash = (( np.left_shift(hash, 5) + hash) + ord(caracter)) 
+	hash = np.int32(hash)
+	return hash
+
+def CreatePerson(request):
+	result = {'result':0, 'error_msg':''}
+	if request.method =='POST':
+		if (rpHash(request.POST.get('captcha','')) == int(request.POST.get('captchaHash',''))):
+			try:
+				Save_Abiturient(request.POST)
+				username = request.POST.get('username', '')
+				password = request.POST.get('password', '')
+				user = authenticate(username=username, password=password)
+				if user is not None:
+					login(request, user)
+			except Exception as e:
+				result['result']=1
+				result['error_msg']=str(e)#"Что-то пошло не так."
+		else:
+			result['result']=1
+			result['error_msg']="Неправильно введена капча!"
+	return HttpResponse(json.dumps(result), content_type="application/json")
+
+################################## AJAX ###################################################
 
 def Territory(request):
 	trry = AttrValue.objects.filter(attribute__id = 5)
@@ -171,7 +327,7 @@ def Nation(request):
 	return HttpResponse(json.dumps(result), content_type="application/json")
 	
 def DocType(request):
-	trry = AttrValue.objects.filter(attribute__name__icontains=u'тип докумета')
+	trry = AttrValue.objects.filter(attribute__name__icontains=u'тип документа удостоверяющего личность')
 	part = request.GET.get('query','')
 	if len(part)>0:
 		trry = trry.filter(value__icontains = part)
@@ -182,6 +338,17 @@ def DocType(request):
 
 def DocIssuer(request):
 	trry = AttrValue.objects.filter(attribute__name__icontains=u'выдавший')
+	part = request.GET.get('query','')
+	if len(part)>0:
+		trry = trry.filter(value__icontains = part)
+	trry = trry.values('id', 'value')
+	result = []
+	for item in trry:
+		result.append({'id':item['id'], 'text':item['value']})
+	return HttpResponse(json.dumps(result), content_type="application/json")
+
+def EduDocType(request):
+	trry = AttrValue.objects.filter(value__icontains=u'диплом')|AttrValue.objects.filter(value__icontains=u'аттестат')
 	part = request.GET.get('query','')
 	if len(part)>0:
 		trry = trry.filter(value__icontains = part)
@@ -270,127 +437,4 @@ def Flang(request):
 	result = []
 	for item in trry:
 		result.append({'id':item['id'], 'text':item['value']})
-	return HttpResponse(json.dumps(result), content_type="application/json")
-
-def AddDataToPerson(request):
-	result="jopa"
-	#print(request.POST)
-	if request.method == 'POST':
-		page=int(request.POST.get('currentPage',''))
-		abit=Abiturient.objects.get(user=request.user)
-		if page==1: #Личные данные
-			abit.sname=request.POST.get('sname','')
-			abit.fname=request.POST.get('name','')
-			abit.mname=request.POST.get('mname','')
-			abit.birthdate=datetime.datetime.strptime(request.POST.get('birthday',''),'%d/%m/%Y').strftime('%Y-%m-%d')
-			abit.bithplace=request.POST.get('birthplace','')
-			abit.nationality=AttrValue.objects.get(pk=request.POST.get('nation',''))
-			abit.citizenship=AttrValue.objects.get(pk=request.POST.get('citizenship',''))
-			snils = Docs()
-			snils.abiturient=abit
-		"""
-		if(page==2:
-
-		if(page==3):
-
-		if(page==4):
-
-		if(page==5):
-
-		if(page==6):
-"""
-		if(page==7):
-			abit.foreign_lang=AttrValue.objects.get(pk=request.POST.get('flang',''))
-			if abit.milit_set.first() is not None:
-				milit=abit.milit_set.first()
-			else:
-				milit = Milit()
-			milit.abiturient=abit
-			milit.rank=AttrValue.objects.get(pk=request.POST.get('rank'))
-			if request.POST.get('isServed','')=="no":
-				milit.isServed=False
-			else:
-				milit.isServed=True
-			if request.POST.get('liableForMilit','')=="no":
-				milit.liableForMilit=False
-			else:
-				milit.liableForMilit=True
-			milit.yearDismissial=int(request.POST.get('yeararmy',''))
-		
-		abit.save()
-	return HttpResponse(json.dumps(result), content_type="application/json")
-
-def SaveApplication(request):
-	result = {'result':0, 'error_msg':''}
-	print(request.POST)
-	if request.method == 'POST':
-		if(int(request.POST.get('facepalm',''))>0):
-			application=Application.objects.get(pk=request.POST.get('facepalm'))
-			ApplicationProfiles.objects.filter(application=application).delete()
-		else:
-			application = Application()
-		application.abiturient=Abiturient.objects.get(user=request.user)
-		application.department = Department.objects.get(pk = request.POST.get('department',''))
-		application.date = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d')
-		application.edu_prog=Education_Prog_Form.objects.get(pk=request.POST.get('eduform',''))
-		application.eduform = application.edu_prog.eduform
-		application.budget = True
-		application.withfee = False
-		kaketomenyabesit = AttrValue.objects.filter(attribute__name__icontains=u'Статус заявления').filter(value__icontains=u'Подано').get(value__icontains=u'Подан')
-		print(kaketomenyabesit.value)
-		application.appState = kaketomenyabesit
-		application.points =100
-		application.save()
-		if (len(request.POST.get('eduprof'))>0):
-			profs=request.POST.get('eduprof','').split(',')
-			for item in profs:
-				appProf = ApplicationProfiles()
-				appProf.application=application
-				appProf.profile=Profile.objects.get(pk=item)
-				appProf.save()
-	return HttpResponse(json.dumps(result), content_type="application/json")
-
-def DeleteApplication(request):
-	result = {'result':0, 'error_msg':''}
-	if request.method == 'GET':
-		Application.objects.get(pk=request.GET.get('id')).delete()
-	return HttpResponse(json.dumps(result), content_type="application/json")
-
-@transaction.atomic
-def Save_Abiturient(values):
-	abit = Abiturient()
-	abit.user = User.objects.create_user(username=values.get('username',''), email=values.get('email',''), password=values.get('password',''))
-	abit.user.save()
-	abit.fname=values.get('fName','')
-	abit.sname=values.get('sName','')
-	abit.mname=values.get('mName','')
-	abit.sex=values.get('sex','')
-	abit.birthdate=datetime.datetime.strptime(values.get('birthday',''),'%Y-%m-%d')
-	abit.save()
-
-def rpHash(person):
-	hash = 5381 
-	value = person.upper() 
-	for caracter in value: 
-		hash = (( np.left_shift(hash, 5) + hash) + ord(caracter)) 
-	hash = np.int32(hash)
-	return hash
-
-def CreatePerson(request):
-	result = {'result':0, 'error_msg':''}
-	if request.method =='POST':
-		if (rpHash(request.POST.get('captcha','')) == int(request.POST.get('captchaHash',''))):
-			try:
-				Save_Abiturient(request.POST)
-				username = request.POST.get('username', '')
-				password = request.POST.get('password', '')
-				user = authenticate(username=username, password=password)
-				if user is not None:
-					login(request, user)
-			except Exception as e:
-				result['result']=1
-				result['error_msg']=str(e)#"Что-то пошло не так."
-		else:
-			result['result']=1
-			result['error_msg']="Неправильно введена капча!"
 	return HttpResponse(json.dumps(result), content_type="application/json")
