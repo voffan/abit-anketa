@@ -191,7 +191,7 @@ def AddDataToPerson(request):
 				adrs.flat=request.POST.get('adrsflat','')
 				if ((request.POST.get('adrsisthesame','')) == "yes"):
 					adrs.adrs_type_same=True
-					adrs.adrs_type=AttrValue.objects.filter(value__icontains=u'прописке').first()
+					#adrs.adrs_type=AttrValue.objects.filter(value__icontains=u'прописке').first()
 					Address.objects.filter(abiturient=abiturient).delete()
 				else:
 					adrs.adrs_type_same=False
