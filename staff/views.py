@@ -13,7 +13,7 @@ from django import template
 import json
 from datetime import date
 from staff.models import Employee, Position, Contacts as ContactsStaff
-from anketa.models import Department, Attribute, AttrType, Application, Abiturient, Docs, AttrValue, Profile, Contacts, Address, Education_Prog , Privilegies, Exams, DepAchieves, Milit, DocAttr, Achievements
+from anketa.models import Department, Attribute, AttrType, Application, Abiturient, Docs, AttrValue, Profile, Contacts, Address, Education_Prog, Education_Prog_Form, Privilegies, Exams, DepAchieves, Milit, DocAttr, Achievements
 from django.contrib.auth.models import User
 
 # Create your views here.
@@ -137,7 +137,8 @@ def save_user_profile(user, values):
 	employee.first_name = values.get('fname','')
 	employee.last_name = values.get('lname','')
 	employee.mid_name = values.get('mname','')
-	AddContact(employee,[{'id':AttrValue.objects.get(attribute__name__icontains=u'контакт', value__icontains=values.get('contacts_type')).id,'value':values.get('contacts','')}])
+	if len(values['contacts'])>0:	
+		AddContact(employee,[{'id':AttrValue.objects.get(attribute__name__icontains=u'контакт', value__icontains=values.get('contacts_type')).id,'value':values.get('contacts','')}])
 	employee.save()
 
 @login_required(login_url='/login/')
@@ -145,8 +146,8 @@ def Employee_Useraccount(request):
 	user = request.user
 	contacts = user.employee_set.get().contacts_set.all()
 	error_message = ''
-	Data={}
-	if request.method == 'POST':
+	Data={}	
+	if 'save' in request.POST:
 		try:
 			#сохранить старые значения user и employee
 			#sid = transaction.savepoint()
@@ -156,6 +157,11 @@ def Employee_Useraccount(request):
 			error_message = str(e)
 			transaction.rollback()
 			#восстановить старые значения
+	if request.method == 'POST':
+		if len(request.POST.get('contact_id',''))>0:
+			dels = ContactsStaff.objects.get(pk = request.POST.get('contact_id',''))
+			dels.delete()
+			#pass
 	
 	Data['contacts']=contacts
 	Data['contact_type']=AttrValue.objects.filter(attribute__name__icontains=u'контакт')
@@ -221,12 +227,16 @@ def Application_list (request):
 
 		if 'forma' in request.GET:
 			if request.GET['forma'] =='2':
-				applications = applications.filter(eduform__icontains=u'О')
+				applications = applications.filter(edu_prog__eduform__icontains=u'О')
 				selectform = '2'
 				filters['forma'] = selectform
 			if request.GET['forma'] =='3':
-				applications = applications.filter(eduform__icontains=u'З')
+				applications = applications.filter(edu_prog__eduform__icontains=u'З')
 				selectform = '3'
+				filters['forma'] = selectform
+			if request.GET['forma'] =='4':
+				applications = applications.filter(edu_prog__eduform__icontains=u'ОЗ')
+				selectform = '4'
 				filters['forma'] = selectform
 
 
@@ -252,9 +262,9 @@ def Application_list (request):
 
 
 		if 'napravlenie' in request.GET and int(request.GET['napravlenie'])>0:
-				selectnapr = request.GET['napravlenie']
-				applications = applications.filter(edu_prog__id=selectnapr)
-				filters['naprav'] = int(selectnapr)
+			selectnapr = request.GET['napravlenie']
+			applications = applications.filter(edu_prog__id=selectnapr)
+			filters['naprav'] = int(selectnapr)
 
 
 	if 'cancel' in request.GET:
@@ -285,11 +295,18 @@ def Application_list (request):
 		doc = docs.filter(abiturient__id = app.abiturient.id).first()
 		apps_with_docs.append({'app':app, 'doc':doc})
 	
-	
+	doctyps = AttrValue.objects.filter(
+		attribute__name__icontains=u'тип док'
+	).filter(
+		value__icontains=u'Диплом'
+	)|AttrValue.objects.filter(
+		value__icontains=u'Аттестат'
+	)
+
 	data={}
 	data['applications'] = apps_with_docs
-	data['docType'] = AttrValue.objects.filter(attribute__name__icontains=u'тип док')
-	data['Profile'] = Education_Prog.objects.all()
+	data['docType'] = doctyps
+	data['Profile'] = Education_Prog_Form.objects.all()
 	data['Docs'] = Docs.objects.all()
 	data['Application'] = AttrValue.objects.filter(attribute__name__icontains=u'статус за')
 	data['pages'] = current_page    
@@ -462,7 +479,12 @@ def Get_Attr(request):
 
 def Get_Attr_val(request):
 	text = request.GET.get('query','')
-	attr = AttrValue.objects.get(pk=text)
-	result = [{'name':attr.value, 'id':attr.id}]
+	attr = AttrValue.objects.select_related('Attribute').get(pk=text)
+	result = [{'name':attr.value, 'id':attr.id, 'attribut':attr.attribute.name}]
 	return HttpResponse(json.dumps(result),content_type="application/json")
 
+def Contact_dels(request):
+	args = request.GET.get('query','')
+	contact = ContactsStaff.objects.get(pk=args)
+	result = [{'name':contact.value, 'id':contact.id}]
+	return HttpResponse(json.dumps(result),content_type="application/json")

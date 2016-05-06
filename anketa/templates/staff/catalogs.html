@@ -64,7 +64,7 @@
 						$("#attrtype_detail>option[value='"+data[0]['type']['id']+"']").attr('selected','selected');
 						$('#attr_name_detail').val(data[0]['name']);
 						$('#attr_detail').modal();
-						$('#g').val('Изменить атрибут '+data[0]['name']);
+						$('#myModalLabel').html('Изменить атрибут '+'"'+data[0]['name']+'"');
 					},
 					error:function(){
 						alert('4toto poshlo ne tak');
@@ -76,7 +76,6 @@
            		$('#myModalLabel').html('Новый атрибут');
            		$('#attr_id_detail').val('-1');
            		$('#attr_detail').modal();
-           		$('#g').val('Добавить новый атрибут');
            	});
 		});
 		

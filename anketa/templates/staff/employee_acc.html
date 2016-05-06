@@ -6,165 +6,185 @@
 
 {% block leftmenu %}
 <form>
-    
+	
 </form>
 {% endblock %}
 
 {% load staticfiles %}
 
 {% block scripts %}
+<script type="text/javascript">
+$(document).ready(function(){
+	$('.dels').on('click',function(){
+		var $zad=$(this).attr('value');
+		//console.log($zad);
+		$.ajax({
+			url:"{% url 'staff:contact_dels' %}",
+			method:"GET",
+			data:{
+				'query':$zad,
+			},
+			dataType: "json",
+			dataProcess:true,
+			success:function(data)
+			{
+				$('#contact_id').val(data[0]['id']);
+				$('#contacts_form').submit();
+			},
+			error:function()
+			{
+				alert('jsonelove');
+			},
+		});
+	});
+});
+</script>
 {% endblock %}
 
 
 
 {% block content %}
-<form action="{% url 'staff:employee_acc' %}" class="form-horizontal" role="form" method="post">
-    {% csrf_token %}
-  <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-2">
-    <ul class="nav nav-tabs">
-      <li class="active"><a href="#tab1" data-toggle="tab">Профиль</a></li>
-      <li><a href="#tab2" data-toggle="tab">Личные данные</a></li>
-    </ul>
-  </div>
+<form action="{% url 'staff:employee_acc' %}" class="form-horizontal" id="contacts_form" role="form" method="POST">
+	{% csrf_token %}
+	<div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-2">
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="#tab1" data-toggle="tab">Профиль</a></li>
+		<li><a href="#tab2" data-toggle="tab">Личные данные</a></li>
+	</ul>
+	</div>
 
-  <div class = "container-fluid">   
-   <br></br>
-    <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-2">
-      <div class="row">      
-          {% if data.error_message %}
-          <div class="form-group col-md-12">
-            <div class="alert alert-danger alert-dismissable" role="alert">        
-              <strong>Ошибка!</strong> {{ data.error_message }}
-            </div>
-          </div>
-          {% endif %}
-          {% if data.success_message %}
-          <div class="form-group col-md-12">
-            <div class="alert alert-success alert-dismissable" role="alert">        
-              {{ data.success_message }}
-            </div>
-          </div>
-          {% endif %}     
-      </div>
-    </div>
-  </div>   
+	<div class = "container-fluid">   
+	 <br></br>
+	<div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-2">
+		<div class="row">      
+			{% if data.error_message %}
+			<div class="form-group col-md-12">
+			<div class="alert alert-danger alert-dismissable" role="alert">        
+				<strong>Ошибка!</strong> {{ data.error_message }}
+			</div>
+			</div>
+			{% endif %}
+			{% if data.success_message %}
+			<div class="form-group col-md-12">
+			<div class="alert alert-success alert-dismissable" role="alert">        
+				{{ data.success_message }}
+			</div>
+			</div>
+			{% endif %}     
+		</div>
+	</div>
+	</div>   
 
 <div class="tab-content">
 
-  <!-- pervaiya vkladka -->
+	<!-- pervaiya vkladka -->
 
-  <div class="tab-pane fade in active" id="tab1">
-    <div class = "container-fluid">      
-     
-      <div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-2">
-      <label for="username" class="control-label">Пользователь:</label>
-        <div class="">      
-          <input type="text" class="form-control" name = "username" id="username" placeholder="Имя пользователя" value = "{{ data.user.username }}"disabled>     
-      </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-2">
-      <label for="e-mail" class="control-label">E-mail</label>
-      <div class="">      
-        <input type="text" class="form-control" name = "email" id="email" placeholder="user@yandex.ru" value="{{ data.user.email }}">
-      </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-2">
-      <label for="password" class="control-label">Пароль:</label>
-      <div class="">      
-        <input type="password" class="form-control" name = "password" id="password" placeholder="пароль">
-      </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-2">
-      <label for="confirm" class="control-label">Подтвердите пароль:</label>
-      <div class="">      
-        <input type="password" class="form-control" name = "confirm" id="confirm" placeholder="Подтверждение пароля">
-      </div>
-    </div>
-  </div>  
-  </div>
+	<div class="tab-pane fade in active" id="tab1">
+	<div class = "container-fluid">      
+	 
+		<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-2">
+		<label for="username" class="control-label">Пользователь:</label>
+		<div class="">      
+			<input type="text" class="form-control" name = "username" id="username" placeholder="Имя пользователя" value = "{{ data.user.username }}"disabled>     
+		</div>
+	</div>
+	</div>
+	<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-2">
+		<label for="e-mail" class="control-label">E-mail</label>
+		<div class="">      
+		<input type="text" class="form-control" name = "email" id="email" placeholder="user@yandex.ru" value="{{ data.user.email }}">
+		</div>
+	</div>
+	</div>
+	<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-2">
+		<label for="password" class="control-label">Пароль:</label>
+		<div class="">      
+		<input type="password" class="form-control" name = "password" id="password" placeholder="пароль">
+		</div>
+	</div>
+	</div>
+	<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-2">
+		<label for="confirm" class="control-label">Подтвердите пароль:</label>
+		<div class="">      
+		<input type="password" class="form-control" name = "confirm" id="confirm" placeholder="Подтверждение пароля">
+		</div>
+	</div>
+	</div>  
+	</div>
 </div>
-  <!-- vtoraiya vkladka -->
-  
-  <div class="tab-pane fade" id="tab2">
-    <div class = "container-fluid">
-    <div class="row"> 
-    <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-2">
-    <label class="control-label">Фамилия:</label>
-    <div class="">
-      <input type="Фамилия" class="form-control" name = "fname" id="fname" placeholder="Фамилия" value="{{ data.employee.first_name }}">
-    </div>
-  </div>
-  </div>
-  <div class="row">  
-    <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-2">
-    <label class="control-label">Имя:</label>
-    <div class="">
-      <input type="Имя" class="form-control" name="mname" id="mname" placeholder="Имя" value="{{ data.employee.mid_name }}">
-    </div>
-  </div>
-  </div>
-  <div class="row">  
-    <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-2">
-    <label class="control-label">Отчество:</label>
-      <div class="">
-        <input type="Отчество" class="form-control" name="lname" id="lname" placeholder="Отчество" value="{{ data.employee.last_name }}">
-      </div>
-    </div>
-  </div>
+	<!-- vtoraiya vkladka -->
+	
+	<div class="tab-pane fade" id="tab2">
+	<div class = "container-fluid">
+	<div class="row"> 
+	<div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-2">
+	<label class="control-label">Фамилия:</label>
+	<div class="">
+		<input type="Фамилия" class="form-control" name = "fname" id="fname" placeholder="Фамилия" value="{{ data.employee.first_name }}">
+	</div>
+	</div>
+	</div>
+	<div class="row">  
+	<div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-2">
+	<label class="control-label">Имя:</label>
+	<div class="">
+		<input type="Имя" class="form-control" name="mname" id="mname" placeholder="Имя" value="{{ data.employee.mid_name }}">
+	</div>
+	</div>
+	</div>
+	<div class="row">  
+	<div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-2">
+	<label class="control-label">Отчество:</label>
+		<div class="">
+		<input type="Отчество" class="form-control" name="lname" id="lname" placeholder="Отчество" value="{{ data.employee.last_name }}">
+		</div>
+	</div>
+	</div>
 
-  <div class="row">  
-    <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-2">      
-      <div class="">             
-        <label class="control-label">Контаткты:</label>
-        <table width="100%">
-          {% for item in data.contacts %}
-            <tr>
-              <td>
-                <!--
-                <select class="form-control" name="contact_type">
-                  {% for item in data.contact_type %}
-                    <option value="{{ item.id }}">{{ item.value }}</option>
-                  {% endfor %}      
-                </select>
-                -->
-                <label class="control-label" name="{{item.id}}">{{ item.contact_type.value }}:</label>          
-              </td>
-              <td>
-                <input disabled type="контакт" class="form-control" name="{{item.id}}" placeholder="телефон" value="{{ item.value }}">
-              </td>
-              <td>
-                <button type="submit" class="btn btn-default" name="delete">X</button>
-              </td>
-            </tr>
-          {% endfor %}
-        </table>
-        <label class="control-label">Новый контакт:</label>
-        <select class="form-control" name="contacts_type">
-          {% for item in data.contact_type %}
-            <option value="{{ item.value }}">{{ item.value }}</option>
-          {% endfor %}      
-        </select>
-        <input type="text" class="form-control" name = "contacts" placeholder="Значение:" > 
-      </div>
-    </div>
-  </div>
-  </div>
+	<div class="row">  
+	<div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-2">      
+		<div class="">             
+		<label class="control-label">Контаткты:</label>
+		<table width="100%">
+			{% for item in data.contacts %}
+			<tr class="dels" value="{{ item.id }}">
+				<td>
+					<label class="control-label" name="{{ item.id }}">{{ item.contact_type.value }}:</label>          
+				</td>
+				<td>
+					<input disabled type="контакт" class="form-control" name="{{ item.id }}" value="{{ item.value }}">
+				</td>
+				<td>
+					<button type="button" class="btn btn-default" id="SWAG" name="delete">X</button>
+				</td>
+			</tr>
+			{% endfor %}
+		</table>
+		<input type="text" name="contact_id" id="contact_id" hidden value="">
+		<label class="control-label">Новый контакт:</label>
+		<select class="form-control" name="contacts_type">
+			{% for item in data.contact_type %}
+			<option value="{{ item.value }}">{{ item.value }}</option>
+			{% endfor %}      
+		</select>
+		<input type="text" class="form-control" name = "contacts" placeholder="Значение:" > 
+		</div>
+	</div>
+	</div>
+	</div>
 </div>
 </div>
 <div class = "container-fluid">
-  <div class="form-group">
-    <p></p>
-    <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-2">        
-      <button type="submit" class="btn btn-default" name="save">Сохранить</button>
-    </div>
-  </div>
+	<div class="form-group">
+	<p></p>
+	<div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-2">        
+		<button type="submit" class="btn btn-default" name="save">Сохранить</button>
+	</div>
+	</div>
 </div>
 
  
