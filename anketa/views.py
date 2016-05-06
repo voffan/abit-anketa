@@ -16,6 +16,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, render,get_object_or_404
 from django.template import RequestContext
 
+from kladr.models import Street
 from anketa.models import Person, Address, Attribute, AttrValue, Abiturient, Department, Education_Prog, Profile, Application, Education_Prog_Form, EduForm, ApplicationProfiles, Milit, Docs
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
@@ -68,6 +69,13 @@ def PersonData(request):
 	if person.foreign_lang is not None:
 		args['flang_id']=person.foreign_lang.id
 		args['flang']=person.foreign_lang.value
+	address = person.address_set.filter(adrs_type__value__icontains=u'прописке').first()
+	if address is not None:
+		args['zipcode']=address.zipcode
+		args['street']=address.street
+		args['house']=address.house
+		args['building']=address.building
+		args['flat']=address.flat
 	#print(args)
 	args.update(csrf(request))
 	return render(request,'anketa/persondata.html',args)
@@ -129,26 +137,73 @@ def AddDataToPerson(request):
 					abit.citizenship=AttrValue.objects.get(pk=request.POST.get('citizenship',''))
 				if(len(request.POST.get('sex','')))>0:
 					abit.sex=request.POST.get('sex','')
-			if(page==2):
-				doctype = abiturient.docs_set.filter(docType__attribute__name__icontains=u'тип документа удостоверяющего личность').first()
+			if page==2:
+				doctype = abit.docs_set.filter(docType__attribute__name__icontains=u'удостоверяющего личность').first()
 				if doctype is None:
 					doctype=Docs()
-				doctype.serialno
-				doctype.numer
-				doctype.issueDate
-				doctype
+					doctype.abiturient=abit
+				else:
+					doctype.number=None
+					doctype.serialno=None
+					doctype.issueDate=None
+					doctype.docIssuer=None
+					doctype.docType=None
+				if(len(request.POST.get('doctype',''))>0):
+					doctype.docType=AttrValue.objects.get(pk=request.POST.get('doctype',''))
+				if(len(request.POST.get('serialdoc',''))>0):
+					doctype.serialno=request.POST.get('serialdoc','')
+				if(len(request.POST.get('numberdoc',''))>0):
+					doctype.number=request.POST.get('numberdoc','')
+				if(len(request.POST.get('datedoc',''))>0):
+					doctype.issueDate=datetime.datetime.strptime(request.POST.get('datedoc',''),'%d/%m/%Y').strftime('%Y-%m-%d')
+				if(len(request.POST.get('docIssuer',''))>0):
+					doctype.docIssuer=request.POST.get('docIssuer','')
+				doctype.save()
+				edudoc = abit.docs_set.filter(docType__attribute__name__icontains=u'об образовании').first()
+				if edudoc is None:
+					edudoc=Docs()
+					edudoc.abiturient=abit
+				else:
+					edudoc.number=None
+					edudoc.serialno=None
+					edudoc.issueDate=None
+					edudoc.docIssuer=None
+					edudoc.docType=None
+				
 				snils = Docs()
 				snils.abiturient=abit
+			
+			if page==3:
+				if request.POST.get('adrstype','')=="perm":
+					adrs_type=u'По прописке'
+				else:
+					adrs_type=u'Фактический'
+				abiturient=Abiturient.objects.get(user=request.user)
+				adrs=Address.objects.filter(abiturient=abiturient).filter(adrs_type__value__icontains=adrs_type).first()
+				if adrs is None:
+					adrs=Address()
+					adrs.abiturient=abiturient
+				adrs.adrs_type=AttrValue.objects.filter(value__icontains=adrs_type).first()
+				adrs.zipcode=request.POST.get('adrsindex','')
+				adrs.street=Street.objects.filter(name__icontains=request.POST.get('street','')).first()
+				adrs.house=request.POST.get('adrshouse','')
+				adrs.building=request.POST.get('adrsbuilding','')
+				adrs.flat=request.POST.get('adrsflat','')
+				if ((request.POST.get('adrsisthesame','')) == "yes"):
+					adrs.adrs_type_same=True
+					adrs.adrs_type=AttrValue.objects.filter(value__icontains=u'прописке').first()
+					Address.objects.filter(abiturient=abiturient).delete()
+				else:
+					adrs.adrs_type_same=False
+				adrs.save()
 			"""
-			if(page==3):
-
 			if(page==4):
 
 			if(page==5):
 
 			if(page==6):
 			"""
-			if(page==7):
+			if page==7:
 				if(len(request.POST.get('hostel','')))>0:
 					abit.hostel=False
 					if(request.POST.get('hostel','')=="yes"):
@@ -251,6 +306,44 @@ def CreatePerson(request):
 		else:
 			result['result']=1
 			result['error_msg']="Неправильно введена капча!"
+	return HttpResponse(json.dumps(result), content_type="application/json")
+
+def GetAddressTypeValues(request):
+	result={}
+	result['success']=0
+	if request.method == "POST":
+		if request.POST.get('adrstype','')=="current":
+			adrs_type=u'По прописке'
+			needed_adrs_type=u'Фактический'
+		else:
+			adrs_type=u'Фактический'
+			needed_adrs_type=u'По прописке'
+		abiturient=Abiturient.objects.get(user=request.user)
+		adrs=Address.objects.filter(abiturient=abiturient).filter(adrs_type__value__icontains=adrs_type).first()
+		if adrs is None:
+			adrs=Address()
+			adrs.abiturient=abiturient
+		adrs.adrs_type=AttrValue.objects.filter(value__icontains=adrs_type).first()
+		adrs.zipcode=request.POST.get('adrsindex','')
+		adrs.street=Street.objects.filter(name__icontains=request.POST.get('street','')).first()
+		adrs.house=request.POST.get('adrshouse','')
+		adrs.building=request.POST.get('adrsbuilding','')
+		adrs.flat=request.POST.get('adrsflat','')
+		if ((request.POST.get('adrsisthesame','')) == "yes"):
+			adrs.adrs_type_same=True
+			adrs.adrs_type=AttrValue.objects.filter(value__icontains=u'прописке').first()
+			Address.objects.filter(abiturient=abiturient).delete()
+		else:
+			adrs.adrs_type_same=False
+		adrs.save()
+		needed_adrs=Address.objects.filter(abiturient=abiturient).filter(adrs_type__value__icontains=needed_adrs_type).first()
+		if needed_adrs is not None:
+			result['success']=1
+			result['index']=needed_adrs.zipcode	
+			result['street']=needed_adrs.street.name
+			result['house']=needed_adrs.house
+			result['building']=needed_adrs.building
+			result['flat']=needed_adrs.flat
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 ################################## AJAX ###################################################
