@@ -369,7 +369,8 @@ def Application_review (request, application_id):
 	Data['exams'] = Exams.objects.filter(pk=application_id)
 	Data['privilegies'] = Privilegies.objects.filter(pk=application_id)
 	Data['depachieves'] = DepAchieves.objects.filter(pk=application_id)
-	Data['milit'] = application.abiturient.milit_set.first()
+	if hasattr(application.abiturient, 'milit'):
+		Data['milit'] = application.abiturient.milit
 	Data['docattr'] = DocAttr.objects.filter(pk=application_id)
 	Data['achievements'] = Achievements.objects.filter(pk=application_id) 
 	
