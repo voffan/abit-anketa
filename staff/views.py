@@ -334,10 +334,8 @@ def Application_review (request, application_id):
 	nationality = AttrValue.objects.filter(attribute__name__icontains=u'национальность')
 	doctype = AttrValue.objects.exclude(value__icontains=u'диплом').exclude(value__icontains=u'аттест').exclude(value__icontains=u'СНИЛС').filter(attribute__name__icontains=u'тип документа')
 	edudoctype = AttrValue.objects.filter(value__icontains=u'диплом')|AttrValue.objects.filter(value__icontains=u'аттестат')
-	contacwho = AttrValue.objects.filter(attribute__name__icontains=u'Человек')
 	contactyp = AttrValue.objects.filter(attribute__name__icontains=u'Тип контакта')
-
-
+	#abiturient = application.abiturien_set.filter(attribute__name__icontains=u'Тип контакта')
 	Data['docType'] = doctype
 	Data['docissuer'] = docissuer
 	Data['adrtype'] = adrtype
@@ -348,7 +346,7 @@ def Application_review (request, application_id):
 	Data['snils'] = snils
 	Data['edud'] = edu_doc
 	Data['application']=application
-	Data['contacts'] = Contacts.objects.filter(pk=application_id)
+	Data['contacts'] = Contacts.objects.filter(person_id=application_id)
 	Data['address'] = Address.objects.filter(pk=application_id)
 	Data['education_prog'] = Education_Prog.objects.filter(pk=application_id)
 	Data['exams'] = Exams.objects.filter(pk=application_id)
@@ -357,7 +355,7 @@ def Application_review (request, application_id):
 	Data['milit'] = application.abiturient.milit_set.first()
 	Data['docattr'] = DocAttr.objects.filter(pk=application_id)
 	Data['achievements'] = Achievements.objects.filter(pk=application_id) 
-	Data['contacwho'] = contacwho
+	
 	Data['contactyp'] = contactyp
 	print(Data['contacts'])
 	context = {'data':Data}
