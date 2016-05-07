@@ -157,12 +157,7 @@ def Employee_Useraccount(request):
 			error_message = str(e)
 			transaction.rollback()
 			#восстановить старые значения
-	if request.method == 'POST':
-		if len(request.POST.get('contact_id',''))>0:
-			dels = ContactsStaff.objects.get(pk = request.POST.get('contact_id',''))
-			dels.delete()
-			#pass
-	
+		
 	Data['contacts']=contacts
 	Data['contact_type']=AttrValue.objects.filter(attribute__name__icontains=u'контакт')
 	Data['employee']=user.employee_set.get() 
@@ -263,8 +258,8 @@ def Application_list (request):
 
 		if 'napravlenie' in request.GET and int(request.GET['napravlenie'])>0:
 			selectnapr = request.GET['napravlenie']
-			applications = applications.filter(edu_prog__id=selectnapr)
-			filters['naprav'] = int(selectnapr)
+			applications = applications.filter(edu_prog__edu_prog__id=selectnapr)
+			filters['napravlenie'] = int(selectnapr)
 
 
 	if 'cancel' in request.GET:
@@ -306,7 +301,7 @@ def Application_list (request):
 	data={}
 	data['applications'] = apps_with_docs
 	data['docType'] = doctyps
-	data['Profile'] = Education_Prog_Form.objects.all()
+	data['Profile'] = Education_Prog.objects.all()
 	data['Docs'] = Docs.objects.all()
 	data['Application'] = AttrValue.objects.filter(attribute__name__icontains=u'статус за')
 	data['pages'] = current_page    
@@ -484,7 +479,13 @@ def Get_Attr_val(request):
 	return HttpResponse(json.dumps(result),content_type="application/json")
 
 def Contact_dels(request):
-	args = request.GET.get('query','')
+	args = request.POST.get('query','-1')
 	contact = ContactsStaff.objects.get(pk=args)
-	result = [{'name':contact.value, 'id':contact.id}]
+	result = [{'name':contact.value, 'id':contact.id, 'result':1, 'error_message':''}]
+	try:
+		contact.delete()
+	except Exception as e:
+		result['result']=0
+		result['error_message']=str(e)
+	
 	return HttpResponse(json.dumps(result),content_type="application/json")

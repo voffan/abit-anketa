@@ -24,7 +24,6 @@
 			$('#attribute1').select2({
 			placeholder: "Выбрать атрибут",
 			language:"ru",
-			minimumInputLength: 1,
 			ajax:{
 				url:"{% url 'staff:get_attrs' %}",
 				dataType: 'json',
