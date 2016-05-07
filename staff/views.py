@@ -13,7 +13,7 @@ from django import template
 import json
 from datetime import date
 from staff.models import Employee, Position, Contacts as ContactsStaff
-from anketa.models import Department, Attribute, AttrType, Application, Abiturient, Docs, AttrValue, Profile, Contacts, Address, Education_Prog , Privilegies, Exams, DepAchieves, Milit, DocAttr, Achievements
+from anketa.models import Department, Attribute, AttrType, Application, Abiturient, Docs, AttrValue, Profile, Contacts, Address, Education_Prog, Education_Prog_Form, Privilegies, Exams, DepAchieves, Milit, DocAttr, Achievements
 from django.contrib.auth.models import User
 
 # Create your views here.
@@ -137,7 +137,8 @@ def save_user_profile(user, values):
 	employee.first_name = values.get('fname','')
 	employee.last_name = values.get('lname','')
 	employee.mid_name = values.get('mname','')
-	AddContact(employee,[{'id':AttrValue.objects.get(attribute__name__icontains=u'контакт', value__icontains=values.get('contacts_type')).id,'value':values.get('contacts','')}])
+	if len(values['contacts'])>0:	
+		AddContact(employee,[{'id':AttrValue.objects.get(attribute__name__icontains=u'контакт', value__icontains=values.get('contacts_type')).id,'value':values.get('contacts','')}])
 	employee.save()
 
 @login_required(login_url='/login/')
@@ -145,8 +146,8 @@ def Employee_Useraccount(request):
 	user = request.user
 	contacts = user.employee_set.get().contacts_set.all()
 	error_message = ''
-	Data={}
-	if request.method == 'POST':
+	Data={}	
+	if 'save' in request.POST:
 		try:
 			#сохранить старые значения user и employee
 			#sid = transaction.savepoint()
@@ -156,6 +157,11 @@ def Employee_Useraccount(request):
 			error_message = str(e)
 			transaction.rollback()
 			#восстановить старые значения
+	if request.method == 'POST':
+		if len(request.POST.get('contact_id',''))>0:
+			dels = ContactsStaff.objects.get(pk = request.POST.get('contact_id',''))
+			dels.delete()
+			#pass
 	
 	Data['contacts']=contacts
 	Data['contact_type']=AttrValue.objects.filter(attribute__name__icontains=u'контакт')
@@ -172,7 +178,7 @@ def Application_list (request):
 	applications = Application.objects.all()
 	#employee = request.user.employee_set.get()
 	#applications = Application.objects.select_related('Abiturient').filter(department__id = employee.department.id)
-	profiles = Profile.objects.all()
+	#profiles = Profile.objects.all()
 	select = '0'
 	selectform = '1'
 	selectnapr = '0'
@@ -221,12 +227,16 @@ def Application_list (request):
 
 		if 'forma' in request.GET:
 			if request.GET['forma'] =='2':
-				applications = applications.filter(eduform__icontains=u'О')
+				applications = applications.filter(edu_prog__eduform__icontains=u'О')
 				selectform = '2'
 				filters['forma'] = selectform
 			if request.GET['forma'] =='3':
-				applications = applications.filter(eduform__icontains=u'З')
+				applications = applications.filter(edu_prog__eduform__icontains=u'З')
 				selectform = '3'
+				filters['forma'] = selectform
+			if request.GET['forma'] =='4':
+				applications = applications.filter(edu_prog__eduform__icontains=u'ОЗ')
+				selectform = '4'
 				filters['forma'] = selectform
 
 
@@ -252,9 +262,9 @@ def Application_list (request):
 
 
 		if 'napravlenie' in request.GET and int(request.GET['napravlenie'])>0:
-				selectnapr = request.GET['napravlenie']
-				applications = applications.filter(profile__id=selectnapr)
-				filters['naprav'] = int(selectnapr)
+			selectnapr = request.GET['napravlenie']
+			applications = applications.filter(edu_prog__id=selectnapr)
+			filters['naprav'] = int(selectnapr)
 
 
 	if 'cancel' in request.GET:
@@ -285,11 +295,18 @@ def Application_list (request):
 		doc = docs.filter(abiturient__id = app.abiturient.id).first()
 		apps_with_docs.append({'app':app, 'doc':doc})
 	
-	
+	doctyps = AttrValue.objects.filter(
+		attribute__name__icontains=u'тип док'
+	).filter(
+		value__icontains=u'Диплом'
+	)|AttrValue.objects.filter(
+		value__icontains=u'Аттестат'
+	)
+
 	data={}
 	data['applications'] = apps_with_docs
-	data['docType'] = AttrValue.objects.filter(attribute__name__icontains=u'тип док')
-	data['Profile'] = Profile.objects.all()
+	data['docType'] = doctyps
+	data['Profile'] = Education_Prog_Form.objects.all()
 	data['Docs'] = Docs.objects.all()
 	data['Application'] = AttrValue.objects.filter(attribute__name__icontains=u'статус за')
 	data['pages'] = current_page    
@@ -375,17 +392,24 @@ def attrvalue_dels(values):
 		attr_value.delete()
 
 def attribute_add(values):
-	attri_bute = Attribute(name=values['attr_name'],type_id=values['attrtype'])
+	if int(values['attr_id'])<0:
+		attri_bute = Attribute(name=values['attr_name'],type_id=values['attrtype'])
+	else:
+		attri_bute = Attribute.objects.get(pk = values['attr_id'])
+		attri_bute.name = values['attr_name']
 	attri_bute.save()
 
 def attrvalue_add(attribute, values):
-	attr_value_add = AttrValue(value=values['attr_value'], attribute_id=attribute.id)
+	if int(values['attr_value_id'])<0:
+		attr_value_add = AttrValue(value=values['attr_value'], attribute_id=attribute.id)
+	else:
+		attr_value_add = AttrValue.objects.get(pk=values['attr_value_id'])
+		attr_value_add.value = values['attr_value']
 	attr_value_add.save()
 
 def Catalogs(request):
 	attribute = Attribute.objects.all()
 	Data={}
-	#attributeid = Attribute.objects.get(request.POST.get('attr_ibute_id'))
 	if request.method == 'POST':
 
 		if 'filter' in request.POST:
@@ -397,9 +421,8 @@ def Catalogs(request):
 	if 'delete' in request.POST:		
 		attribute_dels(request.POST)
 
-	if 'save' in request.POST and len(request.POST['attr_name'])>0:
+	if 'save' in request.POST and len(request.POST.get('attr_name',''))>0:
 		attribute_add(request.POST)
-
 	    
 	attribute1 = Attribute.objects.all()    
 	attrvalue = AttrValue.objects.all()
@@ -409,79 +432,26 @@ def Catalogs(request):
 	Data['attrvalue'] = attrvalue
 	Data['attrtype'] = attrtype
 	context = {'data':Data}
-	context.update(csrf(request))
-
-	
+	context.update(csrf(request))	
 	return render(request,'staff\catalogs.html', context)
 
-
-def Catalogs_details(request, attribute_id):
-	attribute = Attribute.objects.get(pk=attribute_id)
-	attrtype = AttrType.objects.all()
-	Data={}
-	#if request.method == 'POST':
-	if 'save' in request.POST and len(request.POST['attr_name'])>0:
-		attri_bute = Attribute.objects.get(pk=attribute_id)
-		attri_bute.name = request.POST['attr_name']
-		attri_bute.type_id = request.POST['attrtype']
-		attri_bute.save()
-	Data['attribute'] = attribute
-	Data['attrtype'] = attrtype
-	context = {'data':Data}
-	context.update(csrf(request))
-	return render(request, 'staff\\catalogs_detail.html', context)
-
-"""def Catalogs_attrtype_add(request):	
-	if request.method == 'POST':
-		if 'save' in request.POST and len(request.POST['attrtype'])>0:
-			attr_type = AttrType(name=request.POST['attrtype'])
-			attr_type.save()
-			#return HttpResponseRedirect(reverse('staff:catalogs_attrtype_add'))
-	return render(request, 'staff\\catalogs_attrtype_add.html')"""
-
-def Catalogs_attrvalue_add(request, attribute_id):
-	attri_bute = Attribute.objects.get(pk=attribute_id)
-	close = '0'
-	#if request.method == 'POST':
-	if 'save' in request.POST and len(request.POST['attrtype'])>0:            
-		attr_value = AttrValue(value=request.POST['attrtype'], attribute_id=attribute_id)
-		attr_value.save()
-		close = '1'
-		#return HttpResponseRedirect(reverse('staff:catalogs_attrvalue_add', attribute_id))
-	Data={}
-	Data['title'] = '1'
-	Data['close'] = close
-	Data['attribute']=attri_bute
-	context = {'data':Data}
-	context.update(csrf(request))
-	return render(request, 'staff\\catalogs_attrtype_add.html',context)
-
-"""def Catalogs_attribute_add(request):
-	#if request.method == 'POST':
-	if 'save' in request.POST and len(request.POST['attr_name'])>0:
-		attri_bute = Attribute(name=request.POST['attr_name'], type_id=request.POST['attrtype'])
-		attri_bute.save()
-		return HttpResponseRedirect(reverse('staff:catalogs_attribute_add'))
-	Data={}
-	Data['title'] = '1'
-	Data['attrtype'] = AttrType.objects.all()
-	context = {'data':Data}
-	context.update(csrf(request))
-	return render(request, 'staff\\catalogs_detail.html',context)
-	"""
 	
 def Catalogs_attrvalue(request, attribute_id):    
 	attribute = Attribute.objects.get(pk=attribute_id)
 	attrvalue = AttrValue.objects.filter(attribute__id=attribute_id)
 	if 'delete' in request.POST:
 		attrvalue_dels(request.POST)
-
+	error_message = ''
 	if 'save' in request.POST and len(request.POST['attr_value'])>0:
-		attrvalue_add(attribute, request.POST)		#ne rabotaet<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<		
+		try:
+			attrvalue_add(attribute, request.POST)
+		except Exception as e:
+			error_message = str(e)
 	
 	Data={}
 	Data['attrvalue'] = attrvalue
 	Data['attribute'] = attribute
+	Data['error_message'] = error_message
 	context = {'data':Data}
 	context.update(csrf(request))
 	return render(request, 'staff\catalogs_attrvalue.html', context)
@@ -498,3 +468,21 @@ def Get_Attrs(request):
 	for item in attrs:
 		result.append({'id':item.id, 'text':item.name})
 	return HttpResponse(json.dumps(result), content_type="application/json")
+
+def Get_Attr(request):
+	text = request.GET.get('attribute_id','')
+	item = Attribute.objects.select_related('AttrType').get(pk= text)
+	result = [{ 'name':item.name, 'id':item.id ,'type':{'id':item.type.id,'name':item.type.name}}]
+	return HttpResponse(json.dumps(result), content_type="application/json")
+
+def Get_Attr_val(request):
+	text = request.GET.get('query','')
+	attr = AttrValue.objects.select_related('Attribute').get(pk=text)
+	result = [{'name':attr.value, 'id':attr.id, 'attribut':attr.attribute.name}]
+	return HttpResponse(json.dumps(result),content_type="application/json")
+
+def Contact_dels(request):
+	args = request.GET.get('query','')
+	contact = ContactsStaff.objects.get(pk=args)
+	result = [{'name':contact.value, 'id':contact.id}]
+	return HttpResponse(json.dumps(result),content_type="application/json")

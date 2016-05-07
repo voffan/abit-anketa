@@ -3,7 +3,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
 
-from anketa.views import StartPage, StartApp, Streets, Territory, District, City, Citizenship, Nation, DocIssuer, PrevEduName, Institute, EduProf, Privilegies, Rank, Flang, CreatePerson, DocType, PersonProfile, Applications, PersonData, Account,EduName, SaveApplication, EduProfForm, GetSelectedApplication,DeleteApplication,AddDataToPerson
+from anketa.views import StartPage, StartApp, Streets, Territory, District, City, Citizenship, Nation, DocIssuer, PrevEduName, Institute, EduProf, Privilegies, Rank, Flang, CreatePerson, DocType, PersonProfile, Applications, PersonData, Account,EduName, SaveApplication, EduProfForm, GetSelectedApplication,DeleteApplication,AddDataToPerson, EduDocType,GetAddressTypeValues
 
 
 urlpatterns = patterns('',
@@ -21,6 +21,7 @@ urlpatterns = patterns('',
     url(r'^nation/$', Nation, name = 'nation'),
     url(r'^doctype/$', DocType, name = 'doctype'),
     url(r'^docissuer/$', DocIssuer, name = 'docissuer'),
+    url(r'^edudoctype/$',EduDocType,name='edudoctype'),
     url(r'^preveduname/$', PrevEduName, name = 'preveduname'),
     url(r'^institute/$', Institute, name = 'institute'),
     url(r'^eduname/$',EduName,name='eduname'),
@@ -34,6 +35,7 @@ urlpatterns = patterns('',
     url(r'^getapplication/$', GetSelectedApplication,name="getapplication"),
     url(r'^rank/$', Rank, name = 'rank'),
     url(r'^flang/$', Flang, name = 'flang'),
+    url(r'^getaddress/$',GetAddressTypeValues,name='getaddress'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^flang/$', Flang, name = 'flang'),
     url(r'^staff/', include('staff.urls',namespace = 'staff')),

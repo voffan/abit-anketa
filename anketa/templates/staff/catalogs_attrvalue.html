@@ -4,18 +4,47 @@
 	Значения атрибута "{{ data.attribute.name }}"
 {% endblock %}
 
+{% block scripts %}
 <script>
 		$(document).ready(function(){
 
 			$('#attr_value_add').on('hide.bs.modal',function(event){
 				var button = $(event.relatedTarget)
-				//var name = $(button).prop('id');
-				//if(name === "Save"){
-					$('#attr_value_form').submit();
-				//}
+				$('#attr_value_form').submit();
+			});
+
+			
+			$('.change').on('click',function(){				
+				var $value=$(this).attr('value');
+				$.ajax({
+					url: "{% url 'staff:get_attr_val' %}",
+					method: "GET",
+					data:{
+						'query':$value,
+					},
+					dataType: "json",
+					dataProcess:true,
+					success:function(data)
+					{
+						$('#attr_value_id').val(data[0]['id']);
+						$('#attr_value').val(data[0]['name']);
+						$('#attr_value_add').modal();
+						$('#myModalLabel').html('Изменить значение атрибута '+'"'+data[0]['attribut']+'"');
+					},
+					error:function(){
+						alert:('4toto poshlo ne tak');
+					}
+				})			
+			});
+			$('#NEW').on('click',function(){
+				//alert('zashol');
+				$('#attr_value_id').val('-1');
+				$('#attr_value_add').modal();
+				//$('#myModalLabel').html('Добавить новое значение атрибута');
 			});
 		});
 	</script>
+{% endblock %}	
 
 {% block content %}
 <!-- Modal -->
@@ -26,10 +55,11 @@
       	{% csrf_token %}
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Добавить новое значение атрибута в "{{ data.attribute.name }}"</h4>
+        <h4 class="modal-title" id="myModalLabel">Добавить новое значение атрибута "{{ data.attribute.name }}"</h4>
       </div>
       <div class="modal-body">
 	  	<div class="panel-body">
+	  		<input type="text" name="attr_value_id" id="attr_value_id" hidden value="">
 		<input type="text" class="form-control" name = "attr_value" id="attr_value" placeholder="значение атрибута" value ="">
 		<p></p>			
 	  </div>
@@ -43,8 +73,13 @@
   </div>
 </div>
 
-<form action="" method="post">
+<form action="" method="POST">
 {% csrf_token %} 
+{% if data.error_message %}
+<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
+	<div class="alert alert-danger">{{ data.error_message }}</div>
+</div>
+{% endif %}
 <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
 	<div class="panel panel-default">
 	    <div class="panel-heading">Список значений</div>
@@ -61,7 +96,7 @@
 				        {% for item in data.attrvalue %}
 				            <tr>
 				                <td>{{ forloop.counter }}</td>
-				                <td>{{ item.value }}</td>
+				                <td><a href="" class="change" name="attr_value_name" id="attr_value_name_{{ item.id }}" value="{{ item.id }}" data-toggle="modal">{{ item.value }}</a></td>
 				                <td><input type="checkbox" name="selected" value="{{ item.id }}">
 				                </td>
 				            </tr>
@@ -69,7 +104,7 @@
 				    </tbody>
             	</table>
 	            
-	            <button type="button" class="btn btn-primary btn-ng" data-toggle="modal" data-target="#attr_value_add">Добавить</button>
+	            <button type="button" class="btn btn-primary btn-ng" id="NEW">Добавить</button>
 	            <button type="submit" class="btn btn-danger" name="delete">Удалить</button>
 	        </div>
 	</div>

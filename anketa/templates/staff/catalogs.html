@@ -19,6 +19,7 @@
 	<script src="{% static "anketa/select2-3.5.4/select2_locale_ru.js" %}"></script>
 
 	<script>
+		
 		$(document).ready(function(){
 			$('#attribute1').select2({
 			placeholder: "Выбрать атрибут",
@@ -41,31 +42,43 @@
 				cache: true
 			}
 			});
-
-			$('#attr_add').on('hide.bs.modal',function(event){
-			var button = $(event.relatedTarget)
-			//var name = $(button).prop('id');
-			//if(name === "Save"){
-				$('#attr_add_form').submit();
-			//}
-			});
-
 			$('#attr_detail').on('hide.bs.modal',function(event){
 			var button = $(event.relatedTarget)
-			//var name = $(button).prop('id');
-			//if(name === "Save"){
-				$('#attr_details_form').submit();
-			//}
+				$('#attr_details_form').submit();			
 			});
-			$('#attr_detail').on('loaded.bs.modal',function(event){
-			//var button = $(event.relatedTarget)
-			//var name = $('#attr_ibute_id').prop('value');
-			//	alert(name);
-			//if(name === "Save"){
-				//$('#attr_details_form').submit();
-			//}
-			});			
-		});	
+
+        	$('.change').on('click',function(){	
+            	var $value = $(this).attr('value');
+            	$.ajax({
+					url: "{% url 'staff:get_attr' %}",					
+					method: "GET",
+					data: {
+						'attribute_id':$value,
+					},
+					dataType: "json",
+					dataProcess:true,
+					success:function(data)
+					{
+						$('option:selected').removeAttr('selected');
+						$('#attr_id_detail').val(data[0]['id']);
+						$("#attrtype_detail>option[value='"+data[0]['type']['id']+"']").attr('selected','selected');
+						$('#attr_name_detail').val(data[0]['name']);
+						$('#attr_detail').modal();
+						$('#myModalLabel').html('Изменить атрибут '+'"'+data[0]['name']+'"');
+					},
+					error:function(){
+						alert('4toto poshlo ne tak');
+					}
+
+				});
+           	});
+           	$('#NEW').on('click',function(){
+           		$('#myModalLabel').html('Новый атрибут');
+           		$('#attr_id_detail').val('-1');
+           		$('#attr_detail').modal();
+           	});
+		});
+		
 		
 	</script>
 {% endblock %}
@@ -84,19 +97,19 @@
       	{% csrf_token %}
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">{{ data.attribute.name }}</h4>
+        <h4 class="modal-title" id="myModalLabel"></h4>
       </div>
       <div class="modal-body">
-      		{% csrf_token %}						
+      			<input type="text" name="attr_id" id="attr_id_detail" value="" hidden>
 			  	<label class="control-label">Тип атрибута:</label>
-					<select class="form-control" name="attrtype" id = "attrtype">
+					<select class="form-control" name="attrtype" id = "attrtype_detail">
 						{% for item in data.attrtype %}
-							<option value="{{item.id}}">{{ item.name }}</option>
+							<option value="{{ item.id }}">{{ item.name }}</option>
 						{% endfor %}      
 					</select>				
 					<p></p>
 					<label class="control-label">Название:</label>
-					<input type="text" class="form-control" name = "attr_name" id="attr_name" value ="{{ data.attribute.name }}">
+					<input type="text" class="form-control" name = "attr_name" id="attr_name_detail" value ="">
 					<p></p>								
 	  </div>
       <div class="modal-footer">
@@ -106,40 +119,8 @@
   		</form>
     </div>
   </div>
-</div>			
-
-
-<!-- Modal attribute add-->
-<div class="modal fade" id="attr_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-    	<form action="" method="POST" id="attr_add_form">
-      	{% csrf_token %}
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Добавить новый атрибут</h4>
-      </div>
-      <div class="modal-body">
-				<label class="control-label">Тип атрибута:</label>
-					<select class="form-control" name="attrtype" id = "attrtype">
-						{% for item in data.attrtype %}
-						<option value="{{item.id}}">{{ item.name }}</option>
-						{% endfor %}      
-					</select>
-				<p></p>
-				<label class="control-label">Название:</label>
-				<input type="text" class="form-control" name = "attr_name" id="attr_name" value ="{{ data.attribute.name }}">
-				<p></p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" name="close">Закрыть</button>
-        <button type="submit" class="btn btn-primary" name="save">Сохранить</button>
-      </div>
-      </form>
-    </div>
-  </div>
 </div>
-				
+
 <!--Фильтр по наименованию атрибута-->
 		<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
 		<div class="panel panel-default">
@@ -174,20 +155,17 @@
 							{% for item in data.attribute %}
 							<tr>
 								<td>{{ forloop.counter }}</td>
-								<td><a href="#attr_detail" name="attr_ibute_id" value="{{ item.id }}" data-toggle="modal">{{ item.name }}</a>
-								</td>
+								<td><a href="" class="change" name="attr_ibute_name" id="attr_ibute_name_{{ item.id }}" value="{{ item.id }}" data-toggle="modal">{{ item.name }}</a>
+								</td>								
 								<td><input type="checkbox" name="selected" value="{{ item.id }}"></td>
 								<td>
-								<!--<button type="submit" class="btn btn-info" name="{{item.id}}">>></button-->
 								<a href="{% url 'staff:catalogs_attrvalue' item.id %}" class="btn btn-info" role="button" name="{{ item.id }}">>></a>
 								</td>
 							</tr>
 							{% endfor %}
 					</tbody>
-			</table>
-			<!--<button type="submit" class="btn btn-default" name="add">добавить</button>-->
-			
-			<button type="button" class="btn btn-primary btn-ng" data-toggle="modal" data-target="#attr_add">Добавить</button>
+			</table>			
+			<button type="button" class="btn btn-primary btn-ng" id="NEW">Добавить</button>
 			<button type="submit" class="btn btn-danger" name="delete">Удалить</button>
 			</form>					 
 			</div>

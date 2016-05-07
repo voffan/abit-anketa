@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block additionalcss %}
-  <link rel="stylesheet" href="https://cdn.rawgit.com/esvit/ng-table/v1.0.0/dist/ng-table.min.css">
+  
 {% endblock %}
 
 {% block leftmenu %}
@@ -40,7 +40,8 @@
           <select class="form-control" name="forma" placeholder="Форма Обучения">
                 <option {% if filters.forma == "1" %} selected {% endif %} value="1">Все</option>
                 <option {% if filters.forma == "2" %} selected {% endif %} value="2">Очная</option>
-                <option {% if filters.forma == "3" %} selected {% endif %} value="3">Заочная</option>
+                <option {% if filters.forma == "3" %} selected {% endif %} value="3">Заочная</option>                
+                <option {% if filters.forma == "4" %} selected {% endif %} value="4">Очно-Заочная</option>
           </select>
         </th>
         <th st-sort="Date" width="8%">          
@@ -66,7 +67,7 @@
           <select class="form-control" name="napravlenie" placeholder="Направление">
             <option {% if filters.naprav == "0" %} selected {% endif %} value="0">Все</option>            
             {% for item in Profile %}
-            <option {% if filters.naprav == item.id %} selected {% endif %} value="{{item.id}}">{{item.name}}</option>
+            <option {% if filters.naprav == item.id %} selected {% endif %} value="{{ item.id }}">{{item.edu_prog}}</option>
             {% endfor %}           
           </select>         
         </th>
@@ -78,7 +79,7 @@
           <select class="form-control" name="status">
                 <option {% if filters.status == "0" %} selected {% endif %} value="0">Все</option>
                 {% for item in Application %}
-                <option {% if filters.status == item.id %} selected {% endif %} value="{{item.id}}">{{item.value}}</option>
+                <option {% if filters.status == item.id %} selected {% endif %} value="{{ item.id }}">{{item.value}}</option>
                 {% endfor %}                
           </select>
         </th>
@@ -93,11 +94,11 @@
       <tr ng-repeat="row in displayedCollection">
         <td class="rowl">{{ forloop.counter }}</td>
         <td class="rowl"><a href="{% url 'staff:application_review' item.app.id %}">{{ item.app.abiturient.fullname }}</a></td>
-        <td class="rowl">{% if item.app.eduform == 'О'%}Очная{% endif %}{% if not item.app.eduform == 'О'%}Заочная{%endif%}</td>
+        <td class="rowl">{% if item.app.edu_prog.eduform == 'О'%}Очная{% endif %}{% if item.app.edu_prog.eduform == 'З'%}Заочная{%endif%}{% if item.app.edu_prog.eduform == 'ОЗ'%}Очно-Заочная{% endif %}</td>
         <td class="rowl">{{ item.app.date }}</td>
         <td class="rowl">{{ item.doc.docType.value }}</td>
         <td class="rowl">{% if item.doc.isCopy %} Оригинал {% endif %}{% if not item.doc.isCopy %} Копия {% endif %}</td>
-        <td class="rowl">{{ item.app.profile }}</td>
+        <td class="rowl">{{ item.app.edu_prog }}</td>
         <td class="rowl">{{ item.app.points }}</td>
         <td class="rowl">{{ item.app.appState.value }}</td>
         <td class="rowl"><div class="checkbox"><input type="checkbox" name="selected"/></div></td>
