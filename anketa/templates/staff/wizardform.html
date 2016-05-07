@@ -8,7 +8,6 @@
 <link href="{% static "anketa/css/bootstrap-datetimepicker.min.css" %}" rel="stylesheet">
 <link href="{% static "anketa/select2-3.5.4/select2.css" %}" rel="stylesheet">
 <link href="{% static "anketa/select2-3.5.4/select2-bootstrap.css" %}" rel="stylesheet">
-
 {% endblock %}
 
 {% block scripts %}
@@ -21,10 +20,16 @@
 <script src="{% static "anketa/select2-3.5.4/select2.min.js" %}"></script>
 <script src="{% static "anketa/select2-3.5.4/ru.js" %}"></script>
 
-
+<script src="{% static "anketa/js/kladr.js" %}"></script>
 
 
 <script>
+
+    $('#kladrbtn').on('click', function(e){
+        //$('#KladrModal').modal();
+        Kladr($('#streets'));
+    });
+
     $('#birthday').datetimepicker({
        locale: 'ru'
     });
@@ -294,6 +299,7 @@
 {% endblock %}
 
 {% block content %}
+{% include '..\templates\kladr\kladr.html' %}
 {% csrf_token %}
 <div id = "rootwizard">
     <div class="navbar">
@@ -548,39 +554,17 @@
                         </div>
                      </p>
                 </div>
-                <div class="row">
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
-                        <p>
-                            <label for="territory">Область</label>
-                            <input id="territory" class="form-control" placeholder="Республика Саха (Якутия)" value="{{Kladr.views.get_region}}">
-                            <input name = "idterritory" id="idterritory" hidden>
-                        </p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
-                        <p>
-                            <label for="district">Район/улус</label>
-                            <input id="district" class="form-control" placeholder="" value="{{Kladr.views.get_region}}">
-                            <input name = "iddistrict" id="iddistrict" hidden/>
-                        </p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
-                        <p>
-                            <label for="city">Город/село</label>
-                            <input name="city" id="city" class="form-control" placeholder="Якутск" value="{{Kladr.views.get_region}}">
-                            <input name="idcity" id="idcity" hidden/>
-                        </p>
-                    </div>
-                </div>
 
                 <div class="row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
                             <label for="streets">Улица </label>
-                            <input id ="streets" name="streets" class="form-control" placeholder="Ленина" value="{{data.docs.street}}">
+                            <div class="input-group">
+                                <input id ="streets" name="streets" class="form-control" placeholder="Ленина" value="{{data.docs.street}}">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button" id="kladrbtn">...</button>
+                                </span>
+                            </div>
                         </p>
                     </div>
                 </div>
@@ -613,9 +597,9 @@
                         <tbody>
                             <tr>
                                 {% for item in data.contacts %}
-                                <td><input type="text" name="fio" class="form-control" placeholder="1" value="{{item.person.value}}"></td>
-                                <td> <input type="text" name="tip" class="form-control" placeholder="1" value="{{item.contact_type.value}}"></td>
-                                <td><input type="text" name="tip" class="form-control" placeholder="1" value="{{item.value}}">{{item.value}}</td>
+                                    <td><input type="text" name="fio" class="form-control" placeholder="1" value="{{item.person.fullname}}"></td>
+                                    <td> <input type="text" name="tip" class="form-control" placeholder="1" value="{{item.contact_type.value}}"></td>
+                                    <td><input type="text" name="tip" class="form-control" placeholder="1" value="{{item.value}}"></td>
                                 {% endfor %}
                             </tr>
                         </tbody>
@@ -924,15 +908,17 @@
             <p><tt id="results"></tt></p>
 
             </div>
+        </br> </br> </br>  </br>
         </div>
-        <ul class="pager wizard">
-            <li class="previous first"><a href="javascript:;">First</a></li>
-            <li class="previous"><a href="javascript:;">Previous</a></li>
-            <li class="next last" ><a href="javascript:;">Last</a></li>
-            <li class="next"><a href="javascript:;">Next</a></li>
-            <li class="next finish" style="display:none;" ><a href="javascript:;">Finish</a></li>
-        </ul>
-    
+            <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                <ul class="pager wizard">
+                    <li class="previous first"><a href="javascript:;">First</a></li>
+                    <li class="previous"><a href="javascript:;">Previous</a></li>
+                    <li class="next last" ><a href="javascript:;">Last</a></li>
+                    <li class="next"><a href="javascript:;">Next</a></li>
+                    <li class="next finish" style="display:none;" ><a href="javascript:;">Finish</a></li>
+                </ul>
+            </div>  
     </div>
 </div> 
 {% endblock %}

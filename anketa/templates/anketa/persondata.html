@@ -29,12 +29,60 @@
 			},
 			error:function()
 			{
-				alert("der'mishe");
+				//alert("der'mishe");
 			}
 		});
 	});
 	$(document).ready(function() 
 	{
+		$('input[type=radio][name=adrsisthesame]').change(function()
+		{
+			if (this.value == "yes")
+			{
+				$("#adrstype").prop('disabled',true);
+				$("#adrstype").val("perm");
+			}
+			else
+			{
+				$("#adrstype").prop('disabled',false);
+			}
+		});
+		$("#adrstype").change(function(){
+		$.ajax({
+			url:{% url 'getaddress' %},
+			type:"POST",
+			data:$("#persondata").serialize(),
+			dataProcess:true,
+			timeout:300,
+			success:function(data){
+				if(parseInt(data['success'])===1)
+				{
+					$("#adrsindex").val(data['index']);
+					//$("#territory").val(data['region']);
+					//$("#district").val(data['district']);
+					//$("#city").val(data['city']);
+					$("#street").val(data['street']);
+					$("#adrshouse").val(data['house']);
+					$("#adrsbuilding").val(data['building']);
+					$("#adrsflat").val(data['flat']);
+				}
+				else
+				{
+					$("#adrsindex").val('');
+					//$("#territory").val(data['region']);
+					//$("#district").val(data['district']);
+					//$("#city").val(data['city']);
+					$("#street").val('');
+					$("#adrshouse").val('');
+					$("#adrsbuilding").val('');
+					$("#adrsflat").val('');
+				}
+			},
+			error:function(){
+				alert("дерьмище");
+			}
+		});
+	})
 		$('#rootwizard').bootstrapWizard(
 		{
 			onTabShow: function(tab, navigation, index) 
@@ -482,7 +530,7 @@
 							</div>
 							<div class="col-xs-6 col-sm-5 col-md-4">
 								<label for="adrsindex">Индекс</label>
-								<input type = "text" name="adrsindex" id="adrsindex" class="form-control" placeholder="677000">
+								<input type = "text" name="adrsindex" id="adrsindex" class="form-control" placeholder="677000" value="{{zipcode}}">
 							</div>
 						 </p>
 					</div>
@@ -491,7 +539,6 @@
 							<p>
 								<label for="territory">Область</label>
 								<input id="territory" class="form-control" placeholder="Республика Саха (Якутия)">
-								<input name = "idterritory" id="idterritory" hidden>
 							</p>
 						</div>
 					</div>
@@ -500,7 +547,6 @@
 							<p>
 								<label for="district">Район/улус</label>
 								<input id="district" class="form-control" placeholder="">
-								<input name = "iddistrict" id="iddistrict" hidden>
 							</p>
 						</div>
 					</div>
@@ -509,15 +555,14 @@
 							<p>
 								<label for="city">Город/село</label>
 								<input name="city" id="city" class="form-control" placeholder="Якутск">
-								<input name="idcity" id="idcity" hidden>
 							</p>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 							<p>
-								<label for="streets">Улица </label>
-								<input id ="streets" name="streets" class="form-control" placeholder="Ленина">
+								<label for="street">Улица </label>
+								<input id ="street" name="street" class="form-control" placeholder="Ленина" value="{{street}}">
 							</p>
 						</div>
 					</div>
@@ -525,25 +570,25 @@
 						<p>
 							<div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-2">
 								<label for="adrshouse">Дом</label>
-								<input type="text" name="adrshouse" id="adrshouse" class="form-control" placeholder="1">
+								<input type="text" name="adrshouse" id="adrshouse" class="form-control" placeholder="1" value="{{house}}">
 							</div>
 							<div class="col-xs-2 col-sm-2 col-md-2">
 								<label for="adrsbuilding">Корпус</label>
-								<input type="text" name="adrsbuilding" id="adrsbuilding" class="form-control" placeholder="1">
+								<input type="text" name="adrsbuilding" id="adrsbuilding" class="form-control" placeholder="1" value="{{building}}">
 							</div>
 							<div class="col-xs-2 col-sm-2 col-md-2">
 								<label for="adrsflat">Квартира</label>
-								<input type="text" name="adrsflat" id="adrsflat" class="form-control" placeholder="1">
+								<input type="text" name="adrsflat" id="adrsflat" class="form-control" placeholder="1" value="{{flat}}">
 							</div>
 						</p>
 					</div>
 					<div class="row">
 						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 							<p>
-								<label for="option1">Адрес прописки совпадает с адресом факт. места жительства</label>
+								<label for="adrsisthesame">Адрес прописки совпадает с адресом факт. места жительства</label>
 								<br>
-								<input type="radio" name = "option1" value="a11">Нет
-								<input type="radio" name = "option1" value="a12">Да
+								<input type="radio" name = "adrsisthesame" value="no">Нет
+								<input type="radio" name = "adrsisthesame" value="yes">Да
 							</p>
 						</div>
 					</div>
