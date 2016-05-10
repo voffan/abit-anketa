@@ -249,8 +249,7 @@ def SaveApplication(request):
 		application.eduform = application.edu_prog.eduform
 		application.budget = True
 		application.withfee = False
-		kaketomenyabesit = AttrValue.objects.filter(attribute__name__icontains=u'Статус заявления').filter(value__icontains=u'Подано').get(value__icontains=u'Подан')
-		print(kaketomenyabesit.value)
+		kaketomenyabesit = AttrValue.objects.filter(attribute__name__icontains=u'Статус заявления').filter(value__icontains=u'Подан').first()
 		application.appState = kaketomenyabesit
 		application.points =100
 		application.save()
