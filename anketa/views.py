@@ -17,7 +17,7 @@ from django.shortcuts import render_to_response, render,get_object_or_404
 from django.template import RequestContext
 
 from kladr.models import Street
-from anketa.models import Person, Address, Attribute, AttrValue, Abiturient, Department, Education_Prog, Profile, Application, Education_Prog_Form, EduForm, ApplicationProfiles, Milit, Docs
+from anketa.models import Person, Address, Attribute, AttrValue, Abiturient, Department, Education_Prog, Profile, Application, Education_Prog_Form, EduForm, ApplicationProfiles, Milit, Docs, Exams
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -53,8 +53,41 @@ def PersonData(request):
 	if person.nationality is not None:
 		args['nationality']=person.nationality.value
 		args['nationality_id']=person.nationality.id
+	# 2 
+	doctype = person.docs_set.filter(docType__attribute__name__icontains=u'удостоверяющего личность').first()
+	if doctype is not None:
+		args['doctype']=doctype.docType.value
+		args['doctype_id']=doctype.docType.id
+		args['doctype_serial']=doctype.serialno
+		args['doctype_number']=doctype.number
+		args['doctype_date']=doctype.issueDate
+		args['doctype_issuer_id']=doctype.docIssuer.id
+		args['doctype_issuer']=doctype.docIssuer.value
+		print(args)
 	if person.docs_set.filter(docType__value__icontains=u'СНИЛС').first() is not None:
-		args['snils']=person.docs_set.filter(docType__value__icontains=u'СНИЛС').first()
+		args['inila']=person.docs_set.filter(docType__value__icontains=u'СНИЛС').first().serialno
+	# 3
+	address = person.address_set.filter(adrs_type__value__icontains=u'прописке').first()
+	if address is not None:
+		args['zipcode']=address.zipcode
+		args['street']=address.street
+		args['house']=address.house
+		args['building']=address.building
+		args['flat']=address.flat
+	# 4
+	exams = person.exams_set.all()
+	if exams is not None:
+		examsList=[]
+		count=0
+		for item in exams:
+			count+=1
+			exam={}
+			exam['subject']=item.exam_subjects.value
+			exam['points']=item.points
+			exam['year']=item.year
+			exam['count']=count
+			examsList.append(exam)
+		args['exams']=examsList
 	# 7 
 	args['hostel']=person.hostel
 	milit = Milit.objects.filter(abiturient = person).first()
@@ -63,19 +96,13 @@ def PersonData(request):
 		if milit.liableForMilit==True:
 			args['isServed']=milit.isServed
 			if milit.isServed==True:
-				args['rank']=milit.rank.value
-				args['rank_id']=milit.rank.id
+				if milit.rank is not None:
+					args['rank']=milit.rank.value
+					args['rank_id']=milit.rank.id
 				args['yeararmy']=milit.yearDismissial
 	if person.foreign_lang is not None:
 		args['flang_id']=person.foreign_lang.id
 		args['flang']=person.foreign_lang.value
-	address = person.address_set.filter(adrs_type__value__icontains=u'прописке').first()
-	if address is not None:
-		args['zipcode']=address.zipcode
-		args['street']=address.street
-		args['house']=address.house
-		args['building']=address.building
-		args['flat']=address.flat
 	#print(args)
 	args.update(csrf(request))
 	return render(request,'anketa/persondata.html',args)
@@ -106,9 +133,7 @@ def GetSelectedApplication(request):
 	result['edu_prog_eduform_name']=[x[1] for x in EduForm if x[0] == application.edu_prog.eduform][0]
 	result['profiles_count']=len(app_profiles)
 	profiles=[]
-	count=0
 	for item in app_profiles:
-		count=count+1
 		profiles.append({'id':item.profile.id,'profile':item.profile.name})
 	result['profiles']=profiles
 	result['profiles_len']=len(profiles)
@@ -146,19 +171,18 @@ def AddDataToPerson(request):
 					doctype.number=None
 					doctype.serialno=None
 					doctype.issueDate=None
-					doctype.docIssuer=None
-					doctype.docType=None
 				if(len(request.POST.get('doctype',''))>0):
 					doctype.docType=AttrValue.objects.get(pk=request.POST.get('doctype',''))
 				if(len(request.POST.get('serialdoc',''))>0):
-					doctype.serialno=request.POST.get('serialdoc','')
+					doctype.serialno=int(request.POST.get('serialdoc',''))
 				if(len(request.POST.get('numberdoc',''))>0):
-					doctype.number=request.POST.get('numberdoc','')
+					doctype.number=int(request.POST.get('numberdoc',''))
 				if(len(request.POST.get('datedoc',''))>0):
 					doctype.issueDate=datetime.datetime.strptime(request.POST.get('datedoc',''),'%d/%m/%Y').strftime('%Y-%m-%d')
-				if(len(request.POST.get('docIssuer',''))>0):
-					doctype.docIssuer=request.POST.get('docIssuer','')
+				if(len(request.POST.get('docissuer',''))>0):
+					doctype.docIssuer=AttrValue.objects.get(pk=request.POST.get('docissuer',''))
 				doctype.save()
+				"""
 				edudoc = abit.docs_set.filter(docType__attribute__name__icontains=u'об образовании').first()
 				if edudoc is None:
 					edudoc=Docs()
@@ -169,20 +193,26 @@ def AddDataToPerson(request):
 					edudoc.issueDate=None
 					edudoc.docIssuer=None
 					edudoc.docType=None
-				
-				snils = Docs()
-				snils.abiturient=abit
+				"""
+				snils = abit.docs_set.filter(docType__value__icontains=u'CНИЛС').first()
+				if snils is None:
+					snils = Docs()
+					snils.docType=AttrValue.objects.filter(value__icontains=u'СНИЛС').first()
+					snils.abiturient=abit
+				if (len(request.POST.get('inila',''))>0):
+					snils.serialno=int(request.POST.get('inila',''))
+				snils.docIssuer=doctype.docIssuer
+				snils.save()
 			
 			if page==3:
 				if request.POST.get('adrstype','')=="perm":
 					adrs_type=u'По прописке'
 				else:
 					adrs_type=u'Фактический'
-				abiturient=Abiturient.objects.get(user=request.user)
-				adrs=Address.objects.filter(abiturient=abiturient).filter(adrs_type__value__icontains=adrs_type).first()
+				adrs=Address.objects.filter(abiturient=abit).filter(adrs_type__value__icontains=adrs_type).first()
 				if adrs is None:
 					adrs=Address()
-					adrs.abiturient=abiturient
+					adrs.abiturient=abit
 				adrs.adrs_type=AttrValue.objects.filter(value__icontains=adrs_type).first()
 				adrs.zipcode=request.POST.get('adrsindex','')
 				adrs.street=Street.objects.filter(name__icontains=request.POST.get('street','')).first()
@@ -196,9 +226,25 @@ def AddDataToPerson(request):
 				else:
 					adrs.adrs_type_same=False
 				adrs.save()
-			"""
-			if(page==4):
+			
+			if page==4:
+				if abit.exams_set.all() is not None:
+					print(abit.exams_set.all())
+					Exams.objects.filter(abiturient=abit).delete()
+					#abit.exams_set.all().delete a cho ne rabotaet
+					print(abit.exams_set.all())
+				examtype=AttrValue.objects.filter(attribute__name__icontains=u'Тип экзамена').filter(value__icontains=u'ЕГЭ').first()
+				egeExamsCount = int(request.POST.get('egeRowsCount',''))
+				for i in range(1, egeExamsCount + 1):
+					exam = Exams()
+					exam.abiturient = abit
+					exam.exam_examType=examtype
+					exam.exam_subjects=AttrValue.objects.filter(attribute__name__icontains=u'Дисциплина').filter(value__icontains=request.POST.get('egeDisc'+str(i),'')).first()
+					exam.points=int(request.POST.get('egePoints'+str(i),''))
+					exam.year=int(request.POST.get('egeYear'+str(i),''))
+					exam.save()
 
+			"""
 			if(page==5):
 
 			if(page==6):
@@ -393,8 +439,6 @@ def Streets(request):
 	for item in strs:
 		result.append({'id':item['id'],'value':item['value']})
 	return HttpResponse(json.dumps(result), content_type="application/json")
-	trry = AttrValue.objects.filter(attribute__name__icontains=u'тип докумета')
-	part = request.GET.get('query','')
 
 def Citizenship(request):
 	trry = AttrValue.objects.filter(attribute__name__icontains = u'гражданство')
