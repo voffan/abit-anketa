@@ -20,16 +20,23 @@ $(document).ready(function(){
 		//console.log($zad);
 		$.ajax({
 			url:"{% url 'staff:contact_dels' %}",
-			method:"GET",
+			method:"POST",
 			data:{
+				'csrfmiddlewaretoken':$("input[name='csrfmiddlewaretoken']").val(),
 				'query':$zad,
 			},
 			dataType: "json",
 			dataProcess:true,
 			success:function(data)
 			{
-				$('#contact_id').val(data[0]['id']);
-				$('#contacts_form').submit();
+				/*$('#contact_id').val(data[0]['id']);
+				$('#contacts_form').submit();*/
+				if(data[0]['result']=='1'){
+					console.log('123');
+					$("tr[id='contact_"+data[0]['id']+"']").remove();
+				}else{
+					alert(data[0]['error_message']);
+				}
 			},
 			error:function()
 			{
@@ -151,7 +158,7 @@ $(document).ready(function(){
 		<label class="control-label">Контаткты:</label>
 		<table width="100%">
 			{% for item in data.contacts %}
-			<tr class="dels" value="{{ item.id }}">
+			<tr class="dels" value="{{ item.id }}" id ="contact_{{ item.id }}">
 				<td>
 					<label class="control-label" name="{{ item.id }}">{{ item.contact_type.value }}:</label>          
 				</td>
