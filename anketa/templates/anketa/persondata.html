@@ -13,10 +13,46 @@
 <script src="{% static "anketa/js/ru.js" %}"></script>
 <script src="{% static "anketa/js/bootstrap-datetimepicker.min.js" %}"></script>
 <script src="{% static "anketa/select2-3.5.4/select2.min.js" %}"></script>
+<script src="{% static "anketa/js/kladr.js" %}"></script>
 <script>
+	{% if exams %}
+		var egerows={{exams|length}}
+	{% else %}
+	var egerows = 1;
+	{% endif %}
+	var maxExams = 10;
+	$(document).on("click","button[id*='egeExamDel']", function()
+	{
+		if(egerows>1)
+		{
+			var id = parseInt($(this).attr('id').slice('10')) + 1;
+			$(this).parent().parent().remove();
+			egerows--;
+			/*
+			$("#egeRows"+id).attr('name','egeRows'+(id-1));
+			$("#egeRows"+id).attr('id','egeRows'+(id-1));
+			$("#egeDisc"+id).attr('name','egeDisc'+(id-1));
+			$("#egeDisc"+id).attr('id','egeDisc'+(id-1));
+			$("#egePoints"+id).attr('name','egePoints'+(id-1));
+			$("#egePoints"+id).attr('id','egeRows'+(id-1));
+			$("#egeYear"+id).attr('name','egeYear'+(id-1));
+			$("#egeYear"+id).attr('id','egeYear'+(id-1));
+			// AHJHAHAHAHAHAHHAHAHAHAHAHAHHAHAHHA 
+			*/
+		}
+	});
+	$("#addExam").on("click", function()
+	{
+		if(egerows<maxExams)
+		{
+			egerows++;
+		$("#egeTableBody").append('<tr class="info" name ="egeRow' +egerows+ '" id ="egeRow' +egerows+ '"><td><input type="text" class="form-control" id ="egeDisc' +egerows+ '" name="egeDisc' +egerows+ '"></td><td><input type="text" class="form-control" id ="egePoints' +egerows+ '" name="egePoints' +egerows+ '"></td><td><input type="text" class="form-control" id ="egeYear' +egerows+ '" name="egeYear' +egerows+ '"></td><td><button class="btn btn-default btn-sm" id="egeExamDel' +egerows+ '" type="button">Удалить</button></td></tr>');
+		}
+	});
 	$(document).on("click","button[id*='save']", function()
 	{
 		$("#currentPage").val(($(this).attr('id').slice('4')));
+		$("#egeRowsCount").val(egerows);
 		$.ajax({
 			url:{% url 'add_data_to_person' %},
 			type:$("#persondata").attr('method'),
@@ -35,6 +71,10 @@
 	});
 	$(document).ready(function() 
 	{
+		$('#kladrbtn').on('click', function(e){
+			//$('#KladrModal').modal();
+			Kladr($('#street'));
+		});
 		$('input[type=radio][name=adrsisthesame]').change(function()
 		{
 			if (this.value == "yes")
@@ -45,6 +85,52 @@
 			else
 			{
 				$("#adrstype").prop('disabled',false);
+			}
+		});
+		$('input[type=radio][name=liableForMilit]').change(function()
+		{
+			if (this.value == "yes")
+			{
+				$("#isServedRow").show();
+			}
+			else
+			{
+				$("#isServedRow").hide();
+			}
+		});
+		$('input[type=radio][name=isServed]').change(function()
+		{
+			if (this.value == "yes")
+			{
+				$("#armyRow").show();
+			}
+			else
+			{
+				$("#armyRow").hide();
+			}
+		});
+		$('input[type=radio][name=privileges]').change(function()
+		{
+			if (this.value == "yes")
+			{
+				$("#privcatrow").show();
+				$("#privtyperow").show();
+			}
+			else
+			{
+				$("#privcatrow").hide();
+				$("#privtyperow").hide();
+			}
+		});
+		$('input[type=radio][name=persach]').change(function()
+		{
+			if (this.value == "yes")
+			{
+				$("#achRow").show();
+			}
+			else
+			{
+				$("#achRow").hide();
 			}
 		});
 		$("#adrstype").change(function(){
@@ -82,220 +168,264 @@
 				alert("дерьмище");
 			}
 		});
-	})
-		$('#rootwizard').bootstrapWizard(
+	});
+	$('#rootwizard').bootstrapWizard(
+	{
+		onTabShow: function(tab, navigation, index) 
 		{
-			onTabShow: function(tab, navigation, index) 
+			var $total = navigation.find('li').length;
+			var $current = index+1;
+			var $percent = ($current/$total) * 100;
+			document.getElementById("progress-bar").style.width=$percent+'%';
+			// If it's the last tab then hide the last button and show the finish instead
+			if($current >= $total) 
 			{
-				var $total = navigation.find('li').length;
-				var $current = index+1;
-				var $percent = ($current/$total) * 100;
-				document.getElementById("progress-bar").style.width=$percent+'%';
-				// If it's the last tab then hide the last button and show the finish instead
-				if($current >= $total) 
-				{
-					$('#rootwizard').find('.pager .next').hide();
-					$('#rootwizard').find('.pager .finish').show();
-					$('#rootwizard').find('.pager .finish').removeClass('disabled');
-				} 
-				else 
-				{
-					$('#rootwizard').find('.pager .next').show();
-					$('#rootwizard').find('.pager .finish').hide();
-				}
+				$('#rootwizard').find('.pager .next').hide();
+				$('#rootwizard').find('.pager .finish').show();
+				$('#rootwizard').find('.pager .finish').removeClass('disabled');
+			} 
+			else 
+			{
+				$('#rootwizard').find('.pager .next').show();
+				$('#rootwizard').find('.pager .finish').hide();
 			}
-		});
-		$("#birthday").datetimepicker({
-			format:'DD/MM/YYYY',
-			locale:"ru",
-			defaultDate:'{{birthdate|date:"Y-m-d"}}'
-		});
-		$("#datedoc").datetimepicker({
-			format:'DD/MM/YYYY',
-			locale:"ru",
-			//defaultDate:'{{birthdate|date:"Y-m-d"}}'
-		});
-		$("#nation").select2({
-			language:"ru",
-			allowClear:true,
-			placeholder: "Саха",
-			ajax:{
-				url:{% url 'nation' %},
-				dataType:'json',
-				delay:250,
-				data:function(params){
-					return{
-						query:params
-					};
-				},
-				processResults:function(data,page)
-				{
-					return{
-						results:data
-					};
-				},
-				cache:true
-			}
-		});
-		$("#citizenship").select2({
-			language:"ru",
-			placeholder: "РФ",
-			ajax:{
-				url:{% url 'citizenship' %},
-				dataType:'json',
-				delay:250,
-				data:function(params){
-					return{
-						query:params
-					};
-				},
-				processResults:function(data,page)
-				{
-					return{
-						results:data
-					};
-				},
-				cache:true
-			}
-		});
-		$("#doctype").select2({
-			language:"ru",
-			placeholder: "Паспорт",
-			ajax:{
-				url:{% url 'doctype' %},
-				dataType: 'json',
-				delay: 250,
-				data:function(params){
-					return{
-						query: params
-					};
-				},
-				processResults: function (data, page) {
-					return {
-						results: data
-					};
-				},
-				cache: true
-			}
-		});
-		$('#docissuer').select2({
-			language:"ru",
-			minimumInputLength: 1,
-			ajax:{
-				url:{% url 'docissuer' %},
-				dataType: 'json',
-				delay: 250,
-				data:function(params){
-					return{
-						query: params
-					};
-				},
-				processResults: function (data, page) {
-					return {
-						results: data
-					};
-				},
-				cache: true
-			}
-		});
-		$("#edudoctype").select2({
-			language:"ru",
-			ajax:{
-				url:{% url 'edudoctype' %},
-				dataType: 'json',
-				delay: 250,
-				data:function(params){
-					return{
-						query: params
-					};
-				},
-				processResults: function (data, page) {
-					return {
-						results: data
-					};
-				},
-				cache: true
-			}
-		});
-		$('#preveduname').select2({
-			language:"ru",
-			minimumInputLength: 1,
-			ajax:{
-				url:{% url 'preveduname' %},
-				dataType: 'json',
-				delay: 250,
-				data:function(params){
-					return{
-						query: params
-					};
-				},
-				processResults: function (data, page) {
-					return {
-						results: data
-					};
-				},
-				cache: true
-			}
-		});
-		$('#rank').select2({
-			allowClear:true,
-			placeholder: "Рядовой",
-			language:"ru",
-			ajax:{
-				url:{% url 'rank' %},
-				dataType: 'json',
-				delay: 250,
-				data:function(params){
-					return{
-						query: params
-					};
-				},
-				processResults: function (data, page) {
-					return {
-						results: data
-					};
-				},
-				cache: true
-			}
-		});
-		$('#flang').select2({
-			language:"ru",
-			ajax:{
-				url:{% url 'flang' %},
-				dataType: 'json',
-				delay: 250,
-				data:function(params){
-					return{
-						query: params
-					};
-				},
-				processResults: function (data, page) {
-					return {
-						results: data
-					};
-				},
-				cache: true
-			}
-		});
-		{% if nationality != None  %}
-			$("#nation").select2('data',{id: '{{nationality_id}}', text:"{{nationality}}"});
-		{% endif %}
-		{% if citizenship != None  %}
-			$("#citizenship").select2('data',{id: '{{citizenship_id}}', text:"{{citizenship}}"});
-		{% endif %}
-		{% if snils != None  %}
-			$("#inila").val("{{snils}}")
-		{% endif %}
-		{% if rank != None  %}
-			$("#rank").select2('data',{id: '{{rank_id}}', text:"{{rank}}"});
-		{% endif %}
-		{% if flang != None  %}
-			$("#flang").select2('data',{id: '{{flang_id}}', text:"{{flang}}"});
-		{% endif %}
+		}
+	});
+	$("#birthday").datetimepicker({
+		format:'DD/MM/YYYY',
+		locale:"ru",
+		defaultDate:'{{birthdate|date:"Y-m-d"}}'
+	});
+	$("#datedoc").datetimepicker({
+		format:'DD/MM/YYYY',
+		locale:"ru",
+		{% if doctype_date %} defaultDate:'{{doctype_date|date:"Y-m-d"}}' {% endif %}
+	});
+	$("#nation").select2({
+		language:"ru",
+		allowClear:true,
+		placeholder: "Саха",
+		ajax:{
+			url:{% url 'nation' %},
+			dataType:'json',
+			delay:250,
+			data:function(params){
+				return{
+					query:params
+				};
+			},
+			processResults:function(data,page)
+			{
+				return{
+					results:data
+				};
+			},
+			cache:true
+		}
+	});
+	$("#citizenship").select2({
+		language:"ru",
+		placeholder: "РФ",
+		ajax:{
+			url:{% url 'citizenship' %},
+			dataType:'json',
+			delay:250,
+			data:function(params){
+				return{
+					query:params
+				};
+			},
+			processResults:function(data,page)
+			{
+				return{
+					results:data
+				};
+			},
+			cache:true
+		}
+	});
+	$("#doctype").select2({
+		language:"ru",
+		placeholder: "Паспорт",
+		ajax:{
+			url:{% url 'doctype' %},
+			dataType: 'json',
+			delay: 250,
+			data:function(params){
+				return{
+					query: params
+				};
+			},
+			processResults: function (data, page) {
+				return {
+					results: data
+				};
+			},
+			cache: true
+		}
+	});
+	$('#docissuer').select2({
+		language:"ru",
+		minimumInputLength: 1,
+		ajax:{
+			url:{% url 'docissuer' %},
+			dataType: 'json',
+			delay: 250,
+			data:function(params){
+				return{
+					query: params
+				};
+			},
+			processResults: function (data, page) {
+				return {
+					results: data
+				};
+			},
+			cache: true
+		}
+	});
+	$("#edudoctype").select2({
+		language:"ru",
+		ajax:{
+			url:{% url 'edudoctype' %},
+			dataType: 'json',
+			delay: 250,
+			data:function(params){
+				return{
+					query: params
+				};
+			},
+			processResults: function (data, page) {
+				return {
+					results: data
+				};
+			},
+			cache: true
+		}
+	});
+	$('#preveduname').select2({
+		language:"ru",
+		minimumInputLength: 1,
+		ajax:{
+			url:{% url 'preveduname' %},
+			dataType: 'json',
+			delay: 250,
+			data:function(params){
+				return{
+					query: params
+				};
+			},
+			processResults: function (data, page) {
+				return {
+					results: data
+				};
+			},
+			cache: true
+		}
+	});
+	$('#privcat').select2({
+		language:"ru",
+		minimumInputLength: 1,
+		ajax:{
+			url:{% url 'preveduname' %},
+			dataType: 'json',
+			delay: 250,
+			data:function(params){
+				return{
+					query: params
+				};
+			},
+			processResults: function (data, page) {
+				return {
+					results: data
+				};
+			},
+			cache: true
+		}
+	});
+	$('#privtype').select2({
+		language:"ru",
+		minimumInputLength: 1,
+		ajax:{
+			url:{% url 'preveduname' %},
+			dataType: 'json',
+			delay: 250,
+			data:function(params){
+				return{
+					query: params
+				};
+			},
+			processResults: function (data, page) {
+				return {
+					results: data
+				};
+			},
+			cache: true
+		}
+	});
+	$('#rank').select2({
+		allowClear:true,
+		placeholder: "Рядовой",
+		language:"ru",
+		ajax:{
+			url:{% url 'rank' %},
+			dataType: 'json',
+			delay: 250,
+			data:function(params){
+				return{
+					query: params
+				};
+			},
+			processResults: function (data, page) {
+				return {
+					results: data
+				};
+			},
+			cache: true
+		}
+	});
+	$('#flang').select2({
+		language:"ru",
+		ajax:{
+			url:{% url 'flang' %},
+			dataType: 'json',
+			delay: 250,
+			data:function(params){
+				return{
+					query: params
+				};
+			},
+			processResults: function (data, page) {
+				return {
+					results: data
+				};
+			},
+			cache: true
+		}
+	});
+	{% if nationality != None  %}
+		$("#nation").select2('data',{id: '{{nationality_id}}', text:"{{nationality}}"});
+	{% endif %}
+	{% if citizenship != None  %}
+		$("#citizenship").select2('data',{id: '{{citizenship_id}}', text:"{{citizenship}}"});
+	{% endif %}
+	{% if doctype != None  %}
+		$("#doctype").select2('data', {id : "{{doctype_id}}" , text: "{{doctype}}"});
+	{% endif %}
+	{% if doctype_issuer != None %}
+		$("#docissuer").select2('data', {id : "{{doctype_issuer_id}}" , text: "{{doctype_issuer}}"});
+	{% endif %}
+	{% if rank != None  %}
+		$("#rank").select2('data',{id: '{{rank_id}}', text:"{{rank}}"});
+	{% endif %}
+	{% if flang != None  %}
+		$("#flang").select2('data',{id: '{{flang_id}}', text:"{{flang}}"});
+	{% endif %}
 	});
 </script>
 {% endblock %}
 {% block container %}
+{% include '..\templates\kladr\kladr.html' %}
 <form id="persondata" name="persondata" class="form-horizontal" role="form" method="post" >
 {% csrf_token %}
 	<div id="rootwizard" class="col-md-9 col-xs-12 col-sm-12">
@@ -305,9 +435,9 @@
 					<ul>
 						<li><a href="#tab1" data-toggle="tab">Личные данные</a></li>
 						<li><a href="#tab2" data-toggle="tab">Документы</a></li>
-						<li><a href="#tab3" data-toggle="tab">Адрес</a></li>
+						<li><a href="#tab3" data-toggle="tab">Контактные данные</a></li>
 						<li><a href="#tab4" data-toggle="tab">Экзамены</a></li>
-						<li><a href="#tab5" data-toggle="tab">Льготы</a></li>
+						<li><a href="#tab5" data-toggle="tab">Льготы и достижения</a></li>
 						<li><a href="#tab6" data-toggle="tab">Личные достижения</a></li>
 						<li><a href="#tab7" data-toggle="tab">Прочее</a></li>
 					</ul>
@@ -318,6 +448,7 @@
 			<div id="progress-bar" class="progress-bar progress-bar-striped active" role="progressbar" style=""></div>
 		</div>
 		<input type="hidden" name="currentPage" id="currentPage">
+		<input type="hidden" name="egeRowsCount" id="egeRowsCount">
 		<div class="tab-content">
 			<div class="tab-pane" id="tab1">
 				<div class = "container-fluid">
@@ -408,11 +539,11 @@
 						<div class = "row">
 							<div class = "col-xs-2 col-sm-2 col-md-2 col-md-offset-2">
 								<label for="serialdoc">Серия</label>
-								<input type = "text" name = "serialdoc" id = "serialdoc" class = "form-control" placeholder="1234">
+								<input type = "text" name = "serialdoc" id = "serialdoc" class = "form-control" placeholder="1234" {% if doctype_serial %} value="{{doctype_serial}}" {% endif %}>
 							</div>
 							<div class = "col-xs-2 col-sm-2 col-md-2">
 								<label for="numberdoc">Номер</label>
-								<input type = "text" name = "numberdoc" id = "numberdoc" class = "form-control" placeholder="123456">
+								<input type = "text" name = "numberdoc" id = "numberdoc" class = "form-control" placeholder="123456" {% if doctype_number %} value="{{doctype_number}}" {% endif %}>
 							</div>
 							<div class = "col-xs-2 col-sm-2 col-md-4">
 								<label for="datedoc">Дата выдачи</label>
@@ -506,7 +637,7 @@
 						<div class="col-xs-6 col-sm-5 col-md-4">
 							<p>
 								<label for="inila">СНИЛС</label>
-								<input id="inila" name="inila" class="form-control" placeholder="123-456-789-00" />
+								<input id="inila" name="inila" class="form-control" placeholder="123-456-789-00" {% if inila %} value={{inila}} {% endif %}/>
 							</p>
 						</div>
 					</div>
@@ -520,76 +651,76 @@
 			<div class="tab-pane" id="tab3">
 				<div class="container-fluid">
 					<div class="row">
-						<p>
-							<div class="col-xs-6 col-sm-5 col-md-4 col-md-offset-2">
-								<label for="adrstype">Тип адреса</label>
-								<select name="adrstype" id="adrstype" size="1" class="form-control">
-									<option value="perm">По прописке</option>
-									<option value="current">Фактический</option>
-								</select>
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<h3 class="panel-title">Адресная информация</h3>
 							</div>
-							<div class="col-xs-6 col-sm-5 col-md-4">
-								<label for="adrsindex">Индекс</label>
-								<input type = "text" name="adrsindex" id="adrsindex" class="form-control" placeholder="677000" value="{{zipcode}}">
+							<div class="panel-body">
+								<div class="row">
+									<p>
+										<div class="col-xs-6 col-sm-5 col-md-4 col-md-offset-2">
+											<label for="adrstype">Тип адреса</label>
+											<select name="adrstype" id="adrstype" size="1" class="form-control">
+												<option value="perm">По прописке</option>
+												<option value="current">Фактический</option>
+											</select>
+										</div>
+										<div class="col-xs-6 col-sm-5 col-md-4">
+											<label for="adrsindex">Индекс</label>
+											<input type = "text" name="adrsindex" id="adrsindex" class="form-control" placeholder="677000" value="{{zipcode}}">
+										</div>
+									 </p>
+								</div>
+								<div class="row">
+									<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
+										<p>
+											<label for="street">Улица </label>
+											<div class="input-group">
+												<input id ="street" name="street" class="form-control" placeholder="Ленина" value="{{street}}">
+												<span class="input-group-btn">
+													<button class="btn btn-default" type="button" id="kladrbtn">...</button>
+												</span>
+											</div>
+										</p>
+									</div>
+								</div>
+								<div class="row">
+									<p>
+										<div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-2">
+											<label for="adrshouse">Дом</label>
+											<input type="text" name="adrshouse" id="adrshouse" class="form-control" placeholder="1" value="{{house}}">
+										</div>
+										<div class="col-xs-2 col-sm-2 col-md-2">
+											<label for="adrsbuilding">Корпус</label>
+											<input type="text" name="adrsbuilding" id="adrsbuilding" class="form-control" placeholder="1" value="{{building}}">
+										</div>
+										<div class="col-xs-2 col-sm-2 col-md-2">
+											<label for="adrsflat">Квартира</label>
+											<input type="text" name="adrsflat" id="adrsflat" class="form-control" placeholder="1" value="{{flat}}">
+										</div>
+									</p>
+								</div>
+								</br>
+								<div class="row">
+									<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
+										<p>
+											<label for="adrsisthesame">Адрес прописки совпадает с адресом факт. места жительства</label>
+											<br>
+											<input type="radio" name = "adrsisthesame" value="no">Нет
+											<input type="radio" name = "adrsisthesame" value="yes">Да
+										</p>
+									</div>
+								</div>
 							</div>
-						 </p>
-					</div>
-					<div class="row">
-						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-							<p>
-								<label for="territory">Область</label>
-								<input id="territory" class="form-control" placeholder="Республика Саха (Якутия)">
-							</p>
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-							<p>
-								<label for="district">Район/улус</label>
-								<input id="district" class="form-control" placeholder="">
-							</p>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-							<p>
-								<label for="city">Город/село</label>
-								<input name="city" id="city" class="form-control" placeholder="Якутск">
-							</p>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-							<p>
-								<label for="street">Улица </label>
-								<input id ="street" name="street" class="form-control" placeholder="Ленина" value="{{street}}">
-							</p>
-						</div>
-					</div>
-					<div class="row">
-						<p>
-							<div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-2">
-								<label for="adrshouse">Дом</label>
-								<input type="text" name="adrshouse" id="adrshouse" class="form-control" placeholder="1" value="{{house}}">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<h3 class="panel-title">Контакты</h3>
 							</div>
-							<div class="col-xs-2 col-sm-2 col-md-2">
-								<label for="adrsbuilding">Корпус</label>
-								<input type="text" name="adrsbuilding" id="adrsbuilding" class="form-control" placeholder="1" value="{{building}}">
+							<div class="panel-body">
 							</div>
-							<div class="col-xs-2 col-sm-2 col-md-2">
-								<label for="adrsflat">Квартира</label>
-								<input type="text" name="adrsflat" id="adrsflat" class="form-control" placeholder="1" value="{{flat}}">
-							</div>
-						</p>
-					</div>
-					<div class="row">
-						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-							<p>
-								<label for="adrsisthesame">Адрес прописки совпадает с адресом факт. места жительства</label>
-								<br>
-								<input type="radio" name = "adrsisthesame" value="no">Нет
-								<input type="radio" name = "adrsisthesame" value="yes">Да
-							</p>
 						</div>
 					</div>
 					<div class="row">
@@ -611,26 +742,35 @@
 									<table class="table" id="table">
 										<thead id="tablehead">
 											<tr>
-												<th>Номер</th>
 												<th>Дисциплина</th>
 												<th>Баллы</th>
 												<th>Год</th>
 												<th>Действие</th>
 											</tr>
 										</thead>
-										<tbody id="tablebody">
-											<tr class="info">
-												<td>1</td>
-												<td><input type="text" class="form-control"></td>
-												<td><input type="text" class="form-control"></td>
-												<td><input type="text" class="form-control"></td>
-												<td><button class="btn btn-default btn-sm" id="app{{item.id}}" type="button">Удалить</button></td>
+										<tbody id="egeTableBody">
+										{% if exams %}
+											{% for item in exams %}
+											<tr class="info" id ="egeRow{{item.count}}">
+												<td><input type="text" class="form-control" name="egeDisc{{item.count}}" value ={{item.subject}}></td>
+												<td><input type="text" class="form-control" name="egePoints{{item.count}}" value ={{item.points}}></td>
+												<td><input type="text" class="form-control" name="egeYear{{item.count}}"  value ={{item.year}}></td>
+												<td><button class="btn btn-default btn-sm" id="egeExamDel{{item.count}}" type="button">Удалить</button></td>
 											</tr>
+											{% endfor %}
+										{% else %}
+											<tr class="info" id ="egeRow1">
+												<td><input type="text" class="form-control" name="egeDisc1" id="egeDisc1"></td>
+												<td><input type="text" class="form-control" name="egePoints1" id="egePoints1"></td>
+												<td><input type="text" class="form-control" name="egeYear1" id="egeYear1"></td>
+												<td><button class="btn btn-default btn-sm" id="egeExamDel1" type="button">Удалить</button></td>
+											</tr>
+										{% endif %}
 										</tbody>
 									</table>
 								</div>
 								<div class="row">
-									<button class="btn btn-primary btn-block" type="button" id="add">Добавить</button>
+									<button class="btn btn-primary btn-block" type="button" id="addExam">Добавить</button>
 								</div>
 							</div>
 						</div>
@@ -645,7 +785,6 @@
 									<table class="table" id="table">
 										<thead id="tablehead">
 											<tr>
-												<th>Номер</th>
 												<th>Дисциплина</th>
 												<th>Баллы</th>
 												<th>Год</th>
@@ -654,7 +793,6 @@
 										</thead>
 										<tbody id="tablebody">
 											<tr class="info">
-												<td></td>
 												<td></td>
 												<td></td>
 												<td></td>
@@ -687,22 +825,54 @@
 			</div>
 			<div class="tab-pane" id="tab5">
 				<div class="container-fluid">
+					<div class ="row">
+						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
+							<label for="privileges">Имеются ли льготы?</label>
+							<p>
+								<input type="radio" name = "privileges" value="no">Нет
+								<input type="radio" name = "privileges" value="yes">Да
+							</p>
+						</div>
+					</div>
 					<div class="row">
 						<p>
-							<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
+							<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2" id="privcatrow" {% if not privcat %} hidden {% endif %}>
 								<label for="privcat">Категория</label>
-								<input type="text" id="privcat" size="1" class="form-control">
+								<input type="hidden" id="privcat" class="form-control">
 							</div>
 						</p>
 					</div>
 					<div class="row">
 						<p>
-							<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
+							<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2" id="privtyperow" {% if not privtype %} hidden {% endif %}>
 								<label for="privtype">Тип</label>
-								<input type="text" id="privtype" size="1" class="form-control">
+								<input type="hidden" id="privtype" class="form-control">
 							</div>
 						</p>
 					</div>
+					</br>
+					<div class="row">
+						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
+							<label for="persach">Имеются ли достижения?</label>
+							<p>
+								<input type="radio" name = "persach" value="no">Нет
+								<input type="radio" name = "persach" value="yes">Да
+							</p>
+						</div>
+					</div>
+					<div id="achRow" class="row" {% if not achievements %} hidden {% endif %}>
+						<p>
+							<div class="col-xs-6 col-sm-5 col-md-4 col-md-offset-2">
+								<label for="achievname[1]">Наименование достижения</label>
+								<input name="achievname[1]" id="achievname[1]" class="form-control" placeholder="По жизни чемпион">
+							</div>
+							<div class="col-xs-6 col-sm-5 col-md-4">
+								<label for="proof[1]">Подтверждающие документы</label>
+								<input name="proof[1]" id="proof[1]" class="form-control" placeholder="Я тебе говорю">
+							</div>
+						</p>
+					</div>
+					</br>
 					<div class="row">
 						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 							<button class="btn btn-primary btn-block" type="button" id="save5">Сохранить</button>
@@ -716,32 +886,24 @@
 						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 							<label for="persach">Имеются ли достижения?</label>
 							<p>
-								<input type="radio" name = "persach" value="a1">Нет
-								<input type="radio" name = "persach" value="a2">Да
+								<input type="radio" name = "persach" value="no">Нет
+								<input type="radio" name = "persach" value="yes">Да
 							</p>
 						</div>
 					</div>
-					<div id="parentpersachId" class="row">
-						<div>
-							<p>
-							<div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-3">
+					<div id="achRow" class="row" {% if not achievements %} hidden {% endif %}>
+						<p>
+							<div class="col-xs-6 col-sm-5 col-md-4 col-md-offset-2">
 								<label for="achievname[1]">Наименование достижения</label>
 								<input name="achievname[1]" id="achievname[1]" class="form-control" placeholder="По жизни чемпион">
 							</div>
-							<div class="col-xs-2 col-sm-2 col-md-2">
+							<div class="col-xs-6 col-sm-5 col-md-4">
 								<label for="proof[1]">Подтверждающие документы</label>
 								<input name="proof[1]" id="proof[1]" class="form-control" placeholder="Я тебе говорю">
 							</div>
-							<div class="col-xs-2 col-sm-2 col-md-2">
-								<label for="numbofpoints[1]">Причисляемый балл</label>
-								<input name="numbofpoints[1]" id="numbofpoints[1]" class="form-control" placeholder="+100">
-							</div>
-							<br>
-							<a style="" onclick="return deleteFieldPersach(this)" href="#"><span class="glyphicon glyphicon-minus"></span></a>
-							<a style="" onclick="return addFieldPersach()" href="#"><span class="glyphicon glyphicon-plus"></span></a>
-							</p>
-						</div>
+						</p>
 					</div>
+					</br>
 					<div class="row">
 						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 							<button class="btn btn-primary btn-block" type="button" id="save6">Сохранить</button>
@@ -780,7 +942,7 @@
 						</div>
 					</p>
 					<p>
-						<div class="row">
+						<div class="row" id ="isServedRow" {% if liableForMilit == False %} hidden {% endif %}>
 								<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 									<label for="isServed">Служили в армии?</label>
 									<p>
@@ -791,10 +953,10 @@
 						</div>
 					</p>
 					<p>
-						<div class="row">
+						<div class="row" id="armyRow" {% if isServed == False or liableForMilit == False %} hidden {% endif %}>
 								<div class="col-xs-6 col-sm-5 col-md-4 col-md-offset-2">
 									<label for="yeararmy">Год увольнения из рядов РА</label>
-									<input type="text" name="yeararmy" id="yeararmy" class="form-control" placeholder="2014" value={{yeararmy}} >
+									<input type="text" name="yeararmy" id="yeararmy" class="form-control" placeholder="2014" {% if yeararmy %} value={{yeararmy}} {% endif %}>
 								</div>
 								<div class="col-xs-6 col-sm-3 col-md-4">
 									<label for="rank">Воинское звание</label>
