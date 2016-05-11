@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib import auth
 from django.core.context_processors import csrf
 from django.core.urlresolvers import reverse
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.generic import ListView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import transaction
@@ -19,7 +19,7 @@ from django.contrib.auth.models import User
 # Create your views here.
 register = template.Library()
 
-def CheckUserIsStaff:
+def CheckUserIsStaff(request):
 	return true
 
 @login_required(login_url = '/login')
@@ -162,7 +162,7 @@ def save_user_profile(user, values):
 		AddContact(employee,[{'id':AttrValue.objects.get(attribute__name__icontains=u'контакт', value__icontains=values.get('contacts_type')).id,'value':values.get('contacts','')}])
 	employee.save()
 
-@login_required(login_url='/login/')
+#@login_required(login_url='/login/')
 @login_required(login_url = '/login')
 @user_passes_test(CheckUserIsStaff, login_url = '/staff/accessdenied')
 def Employee_Useraccount(request):
