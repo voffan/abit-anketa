@@ -104,6 +104,8 @@ class Contacts(models.Model):
 	person = models.ForeignKey('Person',verbose_name = u'Человек', db_index=True)
 	contact_type = models.ForeignKey('AttrValue',verbose_name=u'Тип контакта', related_name="ContactTypeAnketa")
 	value = models.CharField(u'Контакт', max_length=200)
+	def __str__(self):
+		return self.person.fullname+' '+self.contact_type.value
 
 class DocAttr(models.Model):
 	doc = models.ForeignKey('Docs', verbose_name=u'Документ')
