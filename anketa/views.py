@@ -63,7 +63,7 @@ def PersonData(request):
 		args['doctype_date']=doctype.issueDate
 		args['doctype_issuer_id']=doctype.docIssuer.id
 		args['doctype_issuer']=doctype.docIssuer.value
-		print(args)
+		#print(args)
 	if person.docs_set.filter(docType__value__icontains=u'СНИЛС').first() is not None:
 		args['inila']=person.docs_set.filter(docType__value__icontains=u'СНИЛС').first().serialno
 	# 3
@@ -75,19 +75,27 @@ def PersonData(request):
 		args['building']=address.building
 		args['flat']=address.flat
 	# 4
-	exams = person.exams_set.all()
+	exams = person.exams_set.filter(exam_examType__value=u'ЕГЭ')
 	if exams is not None:
 		examsList=[]
-		count=0
 		for item in exams:
-			count+=1
 			exam={}
-			exam['subject']=item.exam_subjects.value
+			exam['subject']=item.exam_subjects.id
+			exam['subject_value']=item.exam_subjects.value
 			exam['points']=item.points
 			exam['year']=item.year
-			exam['count']=count
 			examsList.append(exam)
 		args['exams']=examsList
+	add_exams = person.exams_set.filter(exam_examType__value=u'Вступительный')
+	print(person.exams_set.all())
+	if add_exams is not None:
+		addExamsList=[]
+		for item in add_exams:
+			exam={}
+			exam['subject']=item.exam_subjects.id
+			exam['subject_value']=item.exam_subjects.value
+			addExamsList.append(exam)
+		args['addExams']=addExamsList
 	# 7 
 	args['hostel']=person.hostel
 	milit = Milit.objects.filter(abiturient = person).first()
@@ -131,13 +139,11 @@ def GetSelectedApplication(request):
 	result['edu_prog_name']=application.edu_prog.edu_prog.name+' ' + application.edu_prog.edu_prog.qualification.value
 	result['edu_prog_eduform_id']=application.edu_prog.id
 	result['edu_prog_eduform_name']=[x[1] for x in EduForm if x[0] == application.edu_prog.eduform][0]
-	result['profiles_count']=len(app_profiles)
 	profiles=[]
 	for item in app_profiles:
 		profiles.append({'id':item.profile.id,'profile':item.profile.name})
 	result['profiles']=profiles
 	result['profiles_len']=len(profiles)
-	#print(result['profiles'])
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def AddDataToPerson(request):
@@ -228,22 +234,32 @@ def AddDataToPerson(request):
 				adrs.save()
 			
 			if page==4:
-				if abit.exams_set.all() is not None:
-					print(abit.exams_set.all())
-					Exams.objects.filter(abiturient=abit).delete()
+				if abit.exams_set.filter(exam_examType__value=u'ЕГЭ') is not None:
+					Exams.objects.filter(abiturient=abit).filter(exam_examType__value=u'ЕГЭ').delete()
 					#abit.exams_set.all().delete a cho ne rabotaet
-					print(abit.exams_set.all())
 				examtype=AttrValue.objects.filter(attribute__name__icontains=u'Тип экзамена').filter(value__icontains=u'ЕГЭ').first()
-				egeExamsCount = int(request.POST.get('egeRowsCount',''))
-				for i in range(1, egeExamsCount + 1):
+				exams = request.POST.getlist('egeDisc')
+				points = request.POST.getlist('egePoints')
+				years=request.POST.getlist('egeYear')
+				for i in range(0, len(exams)):
 					exam = Exams()
 					exam.abiturient = abit
 					exam.exam_examType=examtype
-					exam.exam_subjects=AttrValue.objects.filter(attribute__name__icontains=u'Дисциплина').filter(value__icontains=request.POST.get('egeDisc'+str(i),'')).first()
-					exam.points=int(request.POST.get('egePoints'+str(i),''))
-					exam.year=int(request.POST.get('egeYear'+str(i),''))
+					exam.exam_subjects=AttrValue.objects.filter(attribute__name__icontains=u'Дисциплина').filter(pk=exams[i]).first()
+					exam.points=points[i]
+					exam.year=years[i]
 					exam.save()
-
+				if len(request.POST.get('additionalExams','')) > 0:
+					add_exams=request.POST.get('additionalExams','').split(',')
+					if abit.exams_set.filter(exam_examType__value=u'Вступительный') is not None:
+						Exams.objects.filter(abiturient=abit).filter(exam_examType__value=u'Вступительный').delete()
+					for item in add_exams:
+						add_exam = Exams()
+						add_exam.abiturient=abit
+						add_exam.exam_examType = AttrValue.objects.filter(attribute__name__icontains=u'Тип экзамена').filter(value__icontains=u'Вступительный').first()
+						add_exam.exam_subjects=AttrValue.objects.filter(attribute__name__icontains=u'Дисциплина').filter(pk=item).first()
+						add_exam.year=2016
+						add_exam.save()
 			"""
 			if(page==5):
 
