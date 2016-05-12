@@ -17,7 +17,7 @@ from django.shortcuts import render_to_response, render,get_object_or_404
 from django.template import RequestContext
 
 from kladr.models import Street
-from anketa.models import Person, Address, Attribute, AttrValue, Abiturient, Department, Education_Prog, Profile, Application, Education_Prog_Form, EduForm, ApplicationProfiles, Milit, Docs, Exams
+from anketa.models import Person, Address, Attribute, AttrValue, Abiturient, Department, Education_Prog, Profile, Application, Education_Prog_Form, EduForm, ApplicationProfiles, Milit, Docs, Exams, DocAttr
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -63,7 +63,22 @@ def PersonData(request):
 		args['doctype_date']=doctype.issueDate
 		args['doctype_issuer_id']=doctype.docIssuer.id
 		args['doctype_issuer']=doctype.docIssuer.value
-		#print(args)
+	edudoctype = person.docs_set.filter(docType__attribute__name__icontains=u'об образовании').first()
+	if edudoctype is not None:
+		args['edudoctype']=edudoctype.docType.value
+		args['edudoctype_id']=edudoctype.docType.id
+		args['edudoctype_serial']=edudoctype.serialno
+		args['edudoctype_number']=edudoctype.number
+		args['edudoctype_date']=edudoctype.issueDate
+		args['edudoctype_issuer_id']=edudoctype.docIssuer.id
+		args['edudoctype_issuer']=edudoctype.docIssuer.value
+	prevedu = DocAttr.objects.filter(doc=edudoctype).exclude(attr__value__icontains=u'Дата поступления').first()
+	if prevedu is not None:
+		args['prevedu'] = prevedu.attr.value
+		print(prevedu.attr.value)
+	datejoining = DocAttr.objects.filter(doc=edudoctype).filter(attr__value__icontains=u'Дата поступления').first()
+	if datejoining is not None:
+		args['datejoining'] = datetime.datetime.strptime(datejoining.value,'%d/%m/%Y').strftime('%Y-%m-%d')
 	if person.docs_set.filter(docType__value__icontains=u'СНИЛС').first() is not None:
 		args['inila']=person.docs_set.filter(docType__value__icontains=u'СНИЛС').first().serialno
 	# 3
@@ -188,18 +203,53 @@ def AddDataToPerson(request):
 				if(len(request.POST.get('docissuer',''))>0):
 					doctype.docIssuer=AttrValue.objects.get(pk=request.POST.get('docissuer',''))
 				doctype.save()
-				"""
+				
 				edudoc = abit.docs_set.filter(docType__attribute__name__icontains=u'об образовании').first()
 				if edudoc is None:
 					edudoc=Docs()
 					edudoc.abiturient=abit
-				else:
-					edudoc.number=None
-					edudoc.serialno=None
-					edudoc.issueDate=None
-					edudoc.docIssuer=None
-					edudoc.docType=None
-				"""
+				if(len(request.POST.get('edudoctype','')))>0:
+					edudoc.docType=AttrValue.objects.get(pk=request.POST.get('edudoctype',''))
+				if(len(request.POST.get('serialedudoc',''))>0):
+					edudoc.serialno=int(request.POST.get('serialedudoc',''))
+				if(len(request.POST.get('numberedudoc',''))>0):
+					edudoc.number=int(request.POST.get('numberedudoc',''))
+				if(len(request.POST.get('dateexiting',''))>0):
+					edudoc.issueDate=datetime.datetime.strptime(request.POST.get('dateexiting',''),'%d/%m/%Y').strftime('%Y-%m-%d')
+				if(len(request.POST.get('preveduname','')))>0:
+					edudoc.docIssuer=AttrValue.objects.get(pk=request.POST.get('preveduname',''))
+				edudoc.save()
+
+				prevedu = request.POST.get('prevedu','')
+				if len(prevedu)>0:
+					if prevedu == "soo":
+						attr = AttrValue.objects.filter(attribute__name__icontains=u'Предыдущее образование').filter(value__icontains=u'СОО').first()
+					else:
+						if prevedu == "npo":
+							attr = AttrValue.objects.filter(attribute__name__icontains=u'Предыдущее образование').filter(value__icontains=u'НПО').first()
+						else:
+							if prevedu == "spo":
+								attr = AttrValue.objects.filter(attribute__name__icontains=u'Предыдущее образование').filter(value__icontains=u'СПО').first()
+							else:
+								attr = AttrValue.objects.filter(attribute__name__icontains=u'Предыдущее образование').filter(value__icontains=u'ВПО').first()
+					if attr is not None:
+						docattr = DocAttr.objects.filter(doc=edudoc).exclude(value__icontains=u'Дата поступления').first()
+						if docattr is None:
+							docattr = DocAttr()
+							docattr.doc = edudoc
+						docattr.attr=attr
+						docattr.value = attr.value
+						docattr.save()
+				datejoining = request.POST.get('datejoining','')
+				if len(datejoining)>0:
+					joinattr = DocAttr.objects.filter(doc=edudoc).filter(value__icontains=u'Дата поступления').first()
+					if joinattr is None:
+						joinattr=DocAttr()
+						joinattr.doc = edudoc
+					joinattr.attr=AttrValue.objects.filter(attribute__name__icontains=u'Предыдущее образование').filter(value__icontains=u'Дата поступления').first()
+					joinattr.value = datejoining
+					joinattr.save()
+				
 				snils = abit.docs_set.filter(docType__value__icontains=u'CНИЛС').first()
 				if snils is None:
 					snils = Docs()
