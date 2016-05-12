@@ -497,7 +497,6 @@ def EduDocType(request):
 def PrevEduName(request):
 	trry = AttrValue.objects.filter(attribute__name__icontains=u'выдавший')
 	part = request.GET.get('query','')
-	
 	if len(part)>0:
 		trry = trry.filter(value__icontains = part)
 	trry = trry.values('id', 'value')
@@ -505,6 +504,13 @@ def PrevEduName(request):
 	for item in trry:
 		result.append({'id':item['id'], 'text':item['value']})
 	return HttpResponse(json.dumps(result), content_type="application/json")
+
+def ExamSubject(request):
+	subjects = AttrValue.objects.filter(attribute__name__icontains=u'Дисциплина')
+	result = []
+	for item in subjects:
+		result.append({'id':item.id, 'text':item.value})
+	return HttpResponse(json.dumps(result), content_type="application/json")	
 
 def Institute(request):
 	institute = Department.objects.filter(name__icontains = request.GET.get('query',''))

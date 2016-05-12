@@ -15,62 +15,78 @@
 <script src="{% static "anketa/select2-3.5.4/select2.min.js" %}"></script>
 <script src="{% static "anketa/js/kladr.js" %}"></script>
 <script>
-	{% if exams %}
-		var egerows={{exams|length}}
-	{% else %}
-	var egerows = 1;
-	{% endif %}
-	var maxExams = 10;
-	$(document).on("click","button[id*='egeExamDel']", function()
-	{
-		if(egerows>1)
-		{
-			var id = parseInt($(this).attr('id').slice('10')) + 1;
-			$(this).parent().parent().remove();
-			egerows--;
-			/*
-			$("#egeRows"+id).attr('name','egeRows'+(id-1));
-			$("#egeRows"+id).attr('id','egeRows'+(id-1));
-			$("#egeDisc"+id).attr('name','egeDisc'+(id-1));
-			$("#egeDisc"+id).attr('id','egeDisc'+(id-1));
-			$("#egePoints"+id).attr('name','egePoints'+(id-1));
-			$("#egePoints"+id).attr('id','egeRows'+(id-1));
-			$("#egeYear"+id).attr('name','egeYear'+(id-1));
-			$("#egeYear"+id).attr('id','egeYear'+(id-1));
-			// AHJHAHAHAHAHAHHAHAHAHAHAHAHHAHAHHA 
-			*/
-		}
-	});
-	$("#addExam").on("click", function()
-	{
-		if(egerows<maxExams)
-		{
-			egerows++;
-		$("#egeTableBody").append('<tr class="info" name ="egeRow' +egerows+ '" id ="egeRow' +egerows+ '"><td><input type="text" class="form-control" id ="egeDisc' +egerows+ '" name="egeDisc' +egerows+ '"></td><td><input type="text" class="form-control" id ="egePoints' +egerows+ '" name="egePoints' +egerows+ '"></td><td><input type="text" class="form-control" id ="egeYear' +egerows+ '" name="egeYear' +egerows+ '"></td><td><button class="btn btn-default btn-sm" id="egeExamDel' +egerows+ '" type="button">Удалить</button></td></tr>');
-		}
-	});
-	$(document).on("click","button[id*='save']", function()
-	{
-		$("#currentPage").val(($(this).attr('id').slice('4')));
-		$("#egeRowsCount").val(egerows);
-		$.ajax({
-			url:{% url 'add_data_to_person' %},
-			type:$("#persondata").attr('method'),
-			data:$("#persondata").serialize(),
-			dataProcess:true,
-			timeout:500,
-			success:function(data)
-			{
-				//alert("jopa");
-			},
-			error:function()
-			{
-				//alert("der'mishe");
-			}
-		});
-	});
 	$(document).ready(function() 
 	{
+		{% if exams %}
+			var egerows={{exams|length}}
+		{% else %}
+		var egerows = 1;
+		{% endif %}
+		var maxExams = 10;
+
+		$(document).on("click","button[id*='egeExamDel']", function()
+		{
+			if(egerows>1)
+			{
+				$(this).parent().parent().remove();
+				egerows--;
+			}
+		});
+		$("#addExam").on("click", function()
+		{
+			if(egerows<maxExams)
+			{
+				egerows++;
+				var newRow = $('<tr class="info" name ="egeRow' +egerows+ '" id ="egeRow' +egerows+ '"><td><input type="hidden" class="form-control" id ="egeDisc' +egerows+ '" name="egeDisc' +egerows+ '"></td><td><input type="text" class="form-control" id ="egePoints' +egerows+ '" name="egePoints' +egerows+ '"></td><td><input type="text" class="form-control" id ="egeYear' +egerows+ '" name="egeYear' +egerows+ '"></td><td><button class="btn btn-default btn-sm" id="egeExamDel' +egerows+ '" type="button">Удалить</button></td></tr>');
+				$("#egeTableBody").append(newRow);
+				initSelect2(newRow.find('input[name^="egeDisc"]'));
+			}
+			
+		});
+		$(document).on("click","button[id*='save']", function()
+		{
+			$("#currentPage").val(($(this).attr('id').slice('4')));
+			$("#egeRowsCount").val(egerows);
+			$.ajax({
+				url:{% url 'add_data_to_person' %},
+				type:$("#persondata").attr('method'),
+				data:$("#persondata").serialize(),
+				dataProcess:true,
+				timeout:500,
+				success:function(data)
+				{
+					//alert("jopa");
+				},
+				error:function()
+				{
+					//alert("der'mishe");
+				}
+			});
+		});
+		function initSelect2(object){
+			object.select2({
+				language:"ru",
+				allowClear:true,
+				ajax:{
+					url:{% url 'examsubject' %},
+					dataType:'json',
+					delay:250,
+					data:function(params){
+						return{
+							query:params
+						};
+					},
+					processResults:function(data,page)
+					{
+						return{
+							results:data
+						};
+					},
+					cache:true
+				}
+			});
+		};
+		initSelect2($(document).find('input[name^="egeDisc"]'));
 		$('#kladrbtn').on('click', function(e){
 			//$('#KladrModal').modal();
 			Kladr($('#street'));
@@ -752,7 +768,7 @@
 										{% if exams %}
 											{% for item in exams %}
 											<tr class="info" id ="egeRow{{item.count}}">
-												<td><input type="text" class="form-control" name="egeDisc{{item.count}}" value ={{item.subject}}></td>
+												<td><input type="hidden" class="form-control" name="egeDisc{{item.count}}" value ={{item.subject}}></td>
 												<td><input type="text" class="form-control" name="egePoints{{item.count}}" value ={{item.points}}></td>
 												<td><input type="text" class="form-control" name="egeYear{{item.count}}"  value ={{item.year}}></td>
 												<td><button class="btn btn-default btn-sm" id="egeExamDel{{item.count}}" type="button">Удалить</button></td>
@@ -760,7 +776,7 @@
 											{% endfor %}
 										{% else %}
 											<tr class="info" id ="egeRow1">
-												<td><input type="text" class="form-control" name="egeDisc1" id="egeDisc1"></td>
+												<td><input type="hidden" class="form-control" name="egeDisc1" id="egeDisc1"></td>
 												<td><input type="text" class="form-control" name="egePoints1" id="egePoints1"></td>
 												<td><input type="text" class="form-control" name="egeYear1" id="egeYear1"></td>
 												<td><button class="btn btn-default btn-sm" id="egeExamDel1" type="button">Удалить</button></td>
