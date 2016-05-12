@@ -22,6 +22,8 @@ class Relation(models.Model):
 	person=models.ForeignKey('Person',verbose_name=u'Родственник', related_name="RelationPerson") # ??????
 	abiturient=models.ForeignKey('Abiturient',verbose_name=u'Абитуриент', related_name="RelationAbiturient", db_index=True)# ??????# ??????# ??????# ??????# ??????# ??????# ??????# ??????# ??????
 	relType = models.ForeignKey('AttrValue',verbose_name=u'Тип связи', db_index=True)
+	def __str__(self):
+		return self.person.fullname+' '+self.relType.value+' '+self.abiturient.fullname
 
 class AttrType(models.Model):
 	name=models.CharField(u"", max_length=100)
@@ -111,6 +113,8 @@ class DocAttr(models.Model):
 	doc = models.ForeignKey('Docs', verbose_name=u'Документ')
 	attr = models.ForeignKey(AttrValue, verbose_name = u'Наименование атрибута', related_name='Attrname', db_index = True)
 	value = models.CharField(u'Значение атрибута', max_length=200)
+	def __str__(self):
+		return self.doc.abiturient.fullname+' '+self.doc.docType.value+' '+self.value
 
 class Docs(models.Model):
 	abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент')

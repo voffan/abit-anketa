@@ -12,18 +12,22 @@ from django import template
 
 import json
 from datetime import date
+import datetime
 from staff.models import Employee, Position, Contacts as ContactsStaff
-from anketa.models import Department, Attribute, AttrType, Application, Abiturient, Docs, AttrValue, Profile, Contacts, Address, Education_Prog, Education_Prog_Form, Privilegies, Exams, DepAchieves, Milit, DocAttr, Achievements
+from anketa.models import Department, Attribute, AttrType, Relation, Person, Application, Abiturient, Docs, AttrValue, Profile, Contacts, Address, Education_Prog, Education_Prog_Form, Privilegies, Exams, DepAchieves, Milit, DocAttr, Achievements
 from django.contrib.auth.models import User
 
 # Create your views here.
 register = template.Library()
 
-def CheckUserIsStaff(request):
-	return true
+def CheckUserIsStaff(user):
+	if user.is_staff:
+		return True
+	else:
+		return False
 
 @login_required(login_url = '/login')
-@user_passes_test(CheckUserIsStaff, login_url = '/staff/accessdenied')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def index(request):
 	n = 'Anufriev'
 	if request.method == 'POST':
@@ -31,7 +35,7 @@ def index(request):
 	return render(request,'staff\staff_index.html',{'data':{'username':'nik'}}.update(csrf(request)))
 
 @login_required(login_url = '/login')
-@user_passes_test(CheckUserIsStaff, login_url = '/staff/accessdenied')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def login(request):
 		args = {}
 		args.update(csrf(request))
@@ -49,14 +53,14 @@ def login(request):
 
 
 @login_required(login_url = '/login')
-@user_passes_test(CheckUserIsStaff, login_url = '/staff/accessdenied')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def logout(request):
 	if request.POST:
 		auth.logout(request)
 		return redirect('/staff/')
 
 @login_required(login_url = '/login')
-@user_passes_test(CheckUserIsStaff, login_url = '/staff/accessdenied')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Employee_list(request):
 	if request.method == 'POST':
 		if 'Delete' in request.POST:
@@ -77,7 +81,7 @@ def Employee_list(request):
 
 @transaction.atomic
 @login_required(login_url = '/login')
-@user_passes_test(CheckUserIsStaff, login_url = '/staff/accessdenied')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Add_Employee(values):
 	empl_id = values.get('user-id','')
 	if len(empl_id)>0:
@@ -100,7 +104,7 @@ def Add_Employee(values):
 	employee.save()
 
 @login_required(login_url = '/login')
-@user_passes_test(CheckUserIsStaff, login_url = '/staff/accessdenied')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def AddEmployee(request):
 	if request.method == 'POST':
 		try:
@@ -119,7 +123,7 @@ def AddEmployee(request):
 	return render(request,'staff\employee_add.html',context)
 
 @login_required(login_url = '/login')
-@user_passes_test(CheckUserIsStaff, login_url = '/staff/accessdenied')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def EditEmployee(request, employee_id):
 	departments = Department.objects.all()
 	employee = Employee.objects.get(pk=employee_id)
@@ -133,7 +137,7 @@ def EditEmployee(request, employee_id):
 	return render(request,'staff\employee_add.html',context)
 
 @login_required(login_url = '/login')
-@user_passes_test(CheckUserIsStaff, login_url = '/staff/accessdenied')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def AddContact(employee, contacts):
 	for item in contacts:
 		contact = ContactsStaff()
@@ -144,7 +148,7 @@ def AddContact(employee, contacts):
 
 @transaction.atomic
 @login_required(login_url = '/login')
-@user_passes_test(CheckUserIsStaff, login_url = '/staff/accessdenied')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def save_user_profile(user, values):
 	user.email = values.get('email','')
 	password2 = values['confirm']
@@ -162,9 +166,8 @@ def save_user_profile(user, values):
 		AddContact(employee,[{'id':AttrValue.objects.get(attribute__name__icontains=u'контакт', value__icontains=values.get('contacts_type')).id,'value':values.get('contacts','')}])
 	employee.save()
 
-#@login_required(login_url='/login/')
 @login_required(login_url = '/login')
-@user_passes_test(CheckUserIsStaff, login_url = '/staff/accessdenied')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Employee_Useraccount(request):
 	user = request.user
 	contacts = user.employee_set.get().contacts_set.all()
@@ -193,7 +196,7 @@ def Employee_Useraccount(request):
 	return render(request,'staff\employee_acc.html',context)
 
 @login_required(login_url = '/login')
-@user_passes_test(CheckUserIsStaff, login_url = '/staff/accessdenied')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Application_list (request):
 	applications = Application.objects.all()
 	#employee = request.user.employee_set.get()
@@ -208,7 +211,8 @@ def Application_list (request):
 	bal1 = '0'
 	bal2 = '0'
 	dategt = '2016-01-01'
-	datelt = '0'     
+	datelt = '0'
+	selectprof = '0'     
 	filters={'apply':''}
 
 	if 'apply' in request.GET:
@@ -286,13 +290,18 @@ def Application_list (request):
 			applications = applications.filter(edu_prog__edu_prog__id=selectnapr)
 			filters['napravlenie'] = int(selectnapr)
 
+		if 'profil' in request.GET and int(request.GET['profil'])>0:
+			selectprof = request.GET['profil']
+			applications = applications.filter(edu_prog__edu_prog__qualification__id=selectprof)
+			filters['profil'] = int(selectprof)
+
 
 	if 'cancel' in request.GET:
 		return HttpResponseRedirect(reverse('staff:application_list'))
 
 
 	
-	app_pages = Paginator(applications, 2)
+	app_pages = Paginator(applications, 4)
 
 	page = request.GET.get('page')
 	try:
@@ -316,16 +325,20 @@ def Application_list (request):
 		apps_with_docs.append({'app':app, 'doc':doc})
 	
 	doctyps = AttrValue.objects.filter(
-		attribute__name__icontains=u'тип док'
+		attribute__name__icontains=u'об образовании'
 	).filter(
 		value__icontains=u'Диплом'
 	)|AttrValue.objects.filter(
 		value__icontains=u'Аттестат'
 	)
 
+	profill = AttrValue.objects.filter(attribute__name__icontains=u'Квалификация')
+
 	data={}
 	data['applications'] = apps_with_docs
 	data['docType'] = doctyps
+	data['profill'] = profill
+	print(data['profill'])
 	data['Profile'] = Education_Prog.objects.all()
 	data['Docs'] = Docs.objects.all()
 	data['Application'] = AttrValue.objects.filter(attribute__name__icontains=u'статус за')
@@ -335,11 +348,11 @@ def Application_list (request):
 
 
 @login_required(login_url = '/login')
-@user_passes_test(CheckUserIsStaff, login_url = '/staff/accessdenied')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Application_review (request, application_id):
 	if request.method =='POST':
 		return HttpResponseRedirect(reverse('staff:application_list'))
-	application = Application.objects.select_related('Abiturient').get(pk=application_id)
+	application = Application.objects.select_related('Abiturient').get(pk=application_id)	
 	#passp = AttrValue.objects.filter(attribute__id = 6)
 	
 	snils = application.abiturient.docs_set.filter(docType__value__icontains=u'СНИЛС').first()
@@ -375,6 +388,15 @@ def Application_review (request, application_id):
 	Data['edudoctype'] = AttrValue.objects.filter(value__icontains=u'диплом')|AttrValue.objects.filter(value__icontains=u'аттестат')
 	contactyp = AttrValue.objects.filter(attribute__name__icontains=u'Тип контакта')
 	#abiturient = application.abiturien_set.filter(attribute__name__icontains=u'Тип контакта')
+	relation = Relation.objects.filter(abiturient__id=application.abiturient.id)
+	relcontacts=[]
+	for item in relation:
+		text = Person.objects.get(pk=item.person.id).fullname
+		cont_value = Contacts.objects.get(person__id=item.person.id).value
+		cont_type = item.relType
+		relcontacts.append({'text':text, 'cont':cont_value, 'type':{'name':cont_type.value,'id':cont_type.id}})
+	Data['relation'] = relcontacts
+	Data['rel_type'] = AttrValue.objects.filter(attribute__name__icontains=u'тип связи')
 	Data['nationality'] = nationality
 	Data['docType'] = doctype
 	Data['docissuer'] = docissuer
@@ -385,6 +407,8 @@ def Application_review (request, application_id):
 	Data['rank'] = rank
 	Data['snils'] = snils
 	Data['edud'] = edu_doc
+	date_object = DocAttr.objects.get(doc__id=edu_doc.id).value
+	Data['start_date'] = datetime.datetime.strptime(date_object, '%Y.%m.%d')
 	Data['application']=application
 	Data['contacts'] = Contacts.objects.filter(person_id=application.abiturient.id)
 	Data['address'] = Address.objects.filter(pk=application_id)
@@ -398,13 +422,12 @@ def Application_review (request, application_id):
 	Data['achievements'] = Achievements.objects.filter(pk=application_id)
 	
 	Data['contactyp'] = contactyp
-	print(Data['address'])
 	context = {'data':Data}
 	context.update(csrf(request))
 	return render(request,'staff\\wizardform.html',context)
 
 @login_required(login_url = '/login')
-@user_passes_test(CheckUserIsStaff, login_url = '/staff/accessdenied')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def attribute_dels(values):
 	dels = values.getlist('selected')
 	for item in dels:
@@ -412,15 +435,16 @@ def attribute_dels(values):
 		attri_bute.delete()
 
 @login_required(login_url = '/login')
-@user_passes_test(CheckUserIsStaff, login_url = '/staff/accessdenied')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def attrvalue_dels(values):
 	dels = values.getlist('selected')
-	for item in dels:
-		attr_value = AttrValue.objects.filter(id=item)
-		attr_value.delete()
+	if len(dels)>0:
+		for item in dels:
+			attr_value = AttrValue.objects.filter(id=item)
+			attr_value.delete()
 
 @login_required(login_url = '/login')
-@user_passes_test(CheckUserIsStaff, login_url = '/staff/accessdenied')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def attribute_add(values):
 	if int(values['attr_id'])<0:
 		attri_bute = Attribute(name=values['attr_name'],type_id=values['attrtype'])
@@ -430,7 +454,7 @@ def attribute_add(values):
 	attri_bute.save()
 
 @login_required(login_url = '/login')
-@user_passes_test(CheckUserIsStaff, login_url = '/staff/accessdenied')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def attrvalue_add(attribute, values):
 	if int(values['attr_value_id'])<0:
 		attr_value_add = AttrValue(value=values['attr_value'], attribute_id=attribute.id)
@@ -440,7 +464,7 @@ def attrvalue_add(attribute, values):
 	attr_value_add.save()
 
 @login_required(login_url = '/login')
-@user_passes_test(CheckUserIsStaff, login_url = '/staff/accessdenied')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Catalogs(request):
 	attribute = Attribute.objects.all()
 	Data={}
@@ -471,7 +495,7 @@ def Catalogs(request):
 
 	
 @login_required(login_url = '/login')
-@user_passes_test(CheckUserIsStaff, login_url = '/staff/accessdenied')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Catalogs_attrvalue(request, attribute_id):    
 	attribute = Attribute.objects.get(pk=attribute_id)
 	attrvalue = AttrValue.objects.filter(attribute__id=attribute_id)
@@ -496,7 +520,7 @@ def Catalogs_attrvalue(request, attribute_id):
 
 
 @login_required(login_url = '/login')
-@user_passes_test(CheckUserIsStaff, login_url = '/staff/accessdenied')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Get_Attrs(request):
 	result=[]
 	attrs=Attribute.objects.all()
@@ -508,7 +532,7 @@ def Get_Attrs(request):
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 @login_required(login_url = '/login')
-@user_passes_test(CheckUserIsStaff, login_url = '/staff/accessdenied')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Get_Attr(request):
 	text = request.GET.get('attribute_id','')
 	item = Attribute.objects.select_related('AttrType').get(pk= text)
@@ -516,7 +540,7 @@ def Get_Attr(request):
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 @login_required(login_url = '/login')
-@user_passes_test(CheckUserIsStaff, login_url = '/staff/accessdenied')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Get_Attr_val(request):
 	text = request.GET.get('query','')
 	attr = AttrValue.objects.select_related('Attribute').get(pk=text)
@@ -524,7 +548,7 @@ def Get_Attr_val(request):
 	return HttpResponse(json.dumps(result),content_type="application/json")
 
 @login_required(login_url = '/login')
-@user_passes_test(CheckUserIsStaff, login_url = '/staff/accessdenied')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Contact_dels(request):
 	args = request.POST.get('query','-1')
 	contact = ContactsStaff.objects.get(pk=args)
