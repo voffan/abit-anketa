@@ -15,62 +15,99 @@
 <script src="{% static "anketa/select2-3.5.4/select2.min.js" %}"></script>
 <script src="{% static "anketa/js/kladr.js" %}"></script>
 <script>
-	{% if exams %}
-		var egerows={{exams|length}}
-	{% else %}
-	var egerows = 1;
-	{% endif %}
-	var maxExams = 10;
-	$(document).on("click","button[id*='egeExamDel']", function()
-	{
-		if(egerows>1)
-		{
-			var id = parseInt($(this).attr('id').slice('10')) + 1;
-			$(this).parent().parent().remove();
-			egerows--;
-			/*
-			$("#egeRows"+id).attr('name','egeRows'+(id-1));
-			$("#egeRows"+id).attr('id','egeRows'+(id-1));
-			$("#egeDisc"+id).attr('name','egeDisc'+(id-1));
-			$("#egeDisc"+id).attr('id','egeDisc'+(id-1));
-			$("#egePoints"+id).attr('name','egePoints'+(id-1));
-			$("#egePoints"+id).attr('id','egeRows'+(id-1));
-			$("#egeYear"+id).attr('name','egeYear'+(id-1));
-			$("#egeYear"+id).attr('id','egeYear'+(id-1));
-			// AHJHAHAHAHAHAHHAHAHAHAHAHAHHAHAHHA 
-			*/
-		}
-	});
-	$("#addExam").on("click", function()
-	{
-		if(egerows<maxExams)
-		{
-			egerows++;
-		$("#egeTableBody").append('<tr class="info" name ="egeRow' +egerows+ '" id ="egeRow' +egerows+ '"><td><input type="text" class="form-control" id ="egeDisc' +egerows+ '" name="egeDisc' +egerows+ '"></td><td><input type="text" class="form-control" id ="egePoints' +egerows+ '" name="egePoints' +egerows+ '"></td><td><input type="text" class="form-control" id ="egeYear' +egerows+ '" name="egeYear' +egerows+ '"></td><td><button class="btn btn-default btn-sm" id="egeExamDel' +egerows+ '" type="button">Удалить</button></td></tr>');
-		}
-	});
-	$(document).on("click","button[id*='save']", function()
-	{
-		$("#currentPage").val(($(this).attr('id').slice('4')));
-		$("#egeRowsCount").val(egerows);
-		$.ajax({
-			url:{% url 'add_data_to_person' %},
-			type:$("#persondata").attr('method'),
-			data:$("#persondata").serialize(),
-			dataProcess:true,
-			timeout:500,
-			success:function(data)
-			{
-				//alert("jopa");
-			},
-			error:function()
-			{
-				//alert("der'mishe");
-			}
-		});
-	});
 	$(document).ready(function() 
 	{
+		// AHAHAHAHHAHAHAHAHHAHAHAHHAHAHAHAHAHAHHAHAHAHAHAHAHHA
+		var sub_id = new Array();
+		var sub_val = new Array();
+		{% for item in exams %}
+			sub_id.push({{item.subject}});
+			sub_val.push("{{item.subject_value}}");
+		{% endfor %}
+		{% if exams %}
+			var egerows={{exams|length}}
+		{% else %}
+		var egerows = 1;
+		{% endif %}
+		var maxExams = 10;
+
+		$(document).on("click","button[id*='egeExamDel']", function()
+		{
+			if(egerows>1)
+			{
+				$(this).parent().parent().remove();
+				egerows--;
+			}
+		});
+		$("#addExam").on("click", function()
+		{
+			if(egerows<maxExams)
+			{
+				egerows++;
+				var newRow = $('<tr class="info" name ="egeRow' +egerows+ '" id ="egeRow' +egerows+ '"><td><input type="hidden" class="form-control" id ="egeDisc" name="egeDisc"></td><td><input type="text" class="form-control" id ="egePoints' +egerows+ '" name="egePoints"></td><td><input type="text" class="form-control" id ="egeYear' +egerows+ '" name="egeYear"></td><td><button class="btn btn-default btn-sm" id="egeExamDel' +egerows+ '" type="button">Удалить</button></td></tr>');
+				$("#egeTableBody").append(newRow);
+				initSelect2(newRow.find('input[name^="egeDisc"]'));
+			}
+			
+		});
+		$(document).on("click","button[id*='save']", function()
+		{
+			$("#currentPage").val(($(this).attr('id').slice('4')));
+			$("#egeRowsCount").val(egerows);
+			$.ajax({
+				url:{% url 'add_data_to_person' %},
+				type:$("#persondata").attr('method'),
+				data:$("#persondata").serialize(),
+				dataProcess:true,
+				timeout:500,
+				success:function(data)
+				{
+					//alert("jopa");
+				},
+				error:function()
+				{
+					//alert("der'mishe");
+				}
+			});
+		});
+		function initSelect2(object){
+			object.select2({
+				language:"ru",
+				allowClear:true,
+				ajax:{
+					url:{% url 'examsubject' %},
+					dataType:'json',
+					delay:250,
+					data:function(params){
+						return{
+							query:params
+						};
+					},
+					processResults:function(data,page)
+					{
+						return{
+							results:data
+						};
+					},
+					cache:true
+				}
+			});
+			if($(object).val() != "")
+			{
+				for (var i = 0; i<sub_id.length;i++)
+				{
+					if(sub_id[i]===parseInt($(object).val()))
+					{
+						object.select2('data',{id:sub_id[i], text:sub_val[i]});
+						return;
+					}
+				}
+			}
+		};
+		$('input[name^="egeDisc"]').each(function()
+		{
+			initSelect2($(this));
+		});
 		$('#kladrbtn').on('click', function(e){
 			//$('#KladrModal').modal();
 			Kladr($('#street'));
@@ -144,9 +181,6 @@
 				if(parseInt(data['success'])===1)
 				{
 					$("#adrsindex").val(data['index']);
-					//$("#territory").val(data['region']);
-					//$("#district").val(data['district']);
-					//$("#city").val(data['city']);
 					$("#street").val(data['street']);
 					$("#adrshouse").val(data['house']);
 					$("#adrsbuilding").val(data['building']);
@@ -155,9 +189,6 @@
 				else
 				{
 					$("#adrsindex").val('');
-					//$("#territory").val(data['region']);
-					//$("#district").val(data['district']);
-					//$("#city").val(data['city']);
 					$("#street").val('');
 					$("#adrshouse").val('');
 					$("#adrsbuilding").val('');
@@ -200,6 +231,16 @@
 		format:'DD/MM/YYYY',
 		locale:"ru",
 		{% if doctype_date %} defaultDate:'{{doctype_date|date:"Y-m-d"}}' {% endif %}
+	});
+	$("#datejoining").datetimepicker({
+		format:'DD/MM/YYYY',
+		locale:"ru",
+		{% if datejoining %} defaultDate:'{{datejoining}}' {% endif %}
+	});
+	$("#dateexiting").datetimepicker({
+		format:'DD/MM/YYYY',
+		locale:"ru",
+		{% if edudoctype_date %} defaultDate:'{{edudoctype_date|date:"Y-m-d"}}' {% endif %}
 	});
 	$("#nation").select2({
 		language:"ru",
@@ -323,6 +364,35 @@
 			cache: true
 		}
 	});
+	$('#additionalExams').select2({
+		language:"ru",
+		multiple:true,
+		ajax:{
+			url:{% url 'examsubject' %},
+			dataType:'json',
+			delay:250,
+			data:function(params){
+				return{
+					query:params,
+					id:$("#eduname").select2('data').id
+				};
+			},
+			processResults:function(data,page)
+			{
+				return{
+					results:data
+				};
+			},
+			cache:true
+			}
+	});
+	var addExamsList = new Array();
+	{% if addExams %}
+		{% for item in addExams %}
+			addExamsList.push({"id":{{item.subject}},"text":"{{item.subject_value}}"});
+		{% endfor %}
+		$("#additionalExams").select2('data',addExamsList);
+	{% endif %}
 	$('#privcat').select2({
 		language:"ru",
 		minimumInputLength: 1,
@@ -344,6 +414,46 @@
 		}
 	});
 	$('#privtype').select2({
+		language:"ru",
+		minimumInputLength: 1,
+		ajax:{
+			url:{% url 'preveduname' %},
+			dataType: 'json',
+			delay: 250,
+			data:function(params){
+				return{
+					query: params
+				};
+			},
+			processResults: function (data, page) {
+				return {
+					results: data
+				};
+			},
+			cache: true
+		}
+	});
+	$('#achievement').select2({
+		language:"ru",
+		minimumInputLength: 1,
+		ajax:{
+			url:{% url 'preveduname' %},
+			dataType: 'json',
+			delay: 250,
+			data:function(params){
+				return{
+					query: params
+				};
+			},
+			processResults: function (data, page) {
+				return {
+					results: data
+				};
+			},
+			cache: true
+		}
+	});
+	$('#achievementDoc').select2({
 		language:"ru",
 		minimumInputLength: 1,
 		ajax:{
@@ -415,6 +525,12 @@
 	{% if doctype_issuer != None %}
 		$("#docissuer").select2('data', {id : "{{doctype_issuer_id}}" , text: "{{doctype_issuer}}"});
 	{% endif %}
+	{% if edudoctype != None  %}
+		$("#edudoctype").select2('data', {id : "{{edudoctype_id}}" , text: "{{edudoctype}}"});
+	{% endif %}
+	{% if edudoctype_issuer != None %}
+		$("#preveduname").select2('data', {id : "{{doctype_issuer_id}}" , text: "{{doctype_issuer}}"});
+	{% endif %}
 	{% if rank != None  %}
 		$("#rank").select2('data',{id: '{{rank_id}}', text:"{{rank}}"});
 	{% endif %}
@@ -438,8 +554,7 @@
 						<li><a href="#tab3" data-toggle="tab">Контактные данные</a></li>
 						<li><a href="#tab4" data-toggle="tab">Экзамены</a></li>
 						<li><a href="#tab5" data-toggle="tab">Льготы и достижения</a></li>
-						<li><a href="#tab6" data-toggle="tab">Личные достижения</a></li>
-						<li><a href="#tab7" data-toggle="tab">Прочее</a></li>
+						<li><a href="#tab6" data-toggle="tab">Прочее</a></li>
 					</ul>
 				</div>
 			</div>
@@ -576,11 +691,11 @@
 						<div class = "row">
 							<div class = "col-xs-6 col-sm-5 col-md-4 col-md-offset-2">
 								<label for="serialedudoc">Серия</label>
-								<input type = "text" name = "serialedudoc" id = "serialedudoc" class = "form-control" placeholder="1234">
+								<input type = "text" name = "serialedudoc" id = "serialedudoc" class = "form-control" placeholder="1234" {% if edudoctype_serial %} value="{{edudoctype_serial}}" {% endif %}>
 							</div>
 							<div class = "col-xs-6 col-sm-5 col-md-4">
 								<label for="numberedudoc">Номер</label>
-								<input type = "text" name = "numberedudoc" id = "numberedudoc" class = "form-control" placeholder="123456">
+								<input type = "text" name = "numberedudoc" id = "numberedudoc" class = "form-control" placeholder="123456" {% if edudoctype_number %} value="{{edudoctype_number}}" {% endif %}>
 							</div>
 						</div>
 					</p>
@@ -589,10 +704,10 @@
 							<p>
 								<label for="prevedu">Предыдущие образование</label>
 								<p>
-									<input type = "radio" name= "prevedu" id = "prevedu"  value = "soo">СОО
-									<input type = "radio" name= "prevedu" id = "prevedu"  value = "npo">НПО
-									<input type = "radio" name= "prevedu" id = "prevedu"  value = "spo">СПО
-									<input type = "radio" name= "prevedu" id = "prevedu"  value = "vpo">ВПО
+									<input type = "radio" name= "prevedu" id = "prevedu" {% if prevedu == "СОО" %} checked {% endif %} value = "soo">СОО
+									<input type = "radio" name= "prevedu" id = "prevedu" {% if prevedu == "НПО" %} checked {% endif %} value = "npo">НПО
+									<input type = "radio" name= "prevedu" id = "prevedu" {% if prevedu == "СПО" %} checked {% endif %} value = "spo">СПО
+									<input type = "radio" name= "prevedu" id = "prevedu" {% if prevedu == "ВПО" %} checked {% endif %} value = "vpo">ВПО
 								</p>
 							</p>
 						</div>
@@ -752,17 +867,17 @@
 										{% if exams %}
 											{% for item in exams %}
 											<tr class="info" id ="egeRow{{item.count}}">
-												<td><input type="text" class="form-control" name="egeDisc{{item.count}}" value ={{item.subject}}></td>
-												<td><input type="text" class="form-control" name="egePoints{{item.count}}" value ={{item.points}}></td>
-												<td><input type="text" class="form-control" name="egeYear{{item.count}}"  value ={{item.year}}></td>
-												<td><button class="btn btn-default btn-sm" id="egeExamDel{{item.count}}" type="button">Удалить</button></td>
+												<td><input type="hidden" class="form-control" name="egeDisc" value ={{item.subject}}></td>
+												<td><input type="text" class="form-control" name="egePoints" value ={{item.points}}></td>
+												<td><input type="text" class="form-control" name="egeYear"  value ={{item.year}}></td>
+												<td><button class="btn btn-default btn-sm" id="egeExamDel" type="button">Удалить</button></td>
 											</tr>
 											{% endfor %}
 										{% else %}
 											<tr class="info" id ="egeRow1">
-												<td><input type="text" class="form-control" name="egeDisc1" id="egeDisc1"></td>
-												<td><input type="text" class="form-control" name="egePoints1" id="egePoints1"></td>
-												<td><input type="text" class="form-control" name="egeYear1" id="egeYear1"></td>
+												<td><input type="hidden" class="form-control" name="egeDisc" id="egeDisc1"></td>
+												<td><input type="text" class="form-control" name="egePoints" id="egePoints1"></td>
+												<td><input type="text" class="form-control" name="egeYear" id="egeYear1"></td>
 												<td><button class="btn btn-default btn-sm" id="egeExamDel1" type="button">Удалить</button></td>
 											</tr>
 										{% endif %}
@@ -782,27 +897,13 @@
 							</div>
 							<div class="panel-body">
 								<div class="row">
-									<table class="table" id="table">
-										<thead id="tablehead">
-											<tr>
-												<th>Дисциплина</th>
-												<th>Баллы</th>
-												<th>Год</th>
-												<th>Действие</th>
-											</tr>
-										</thead>
-										<tbody id="tablebody">
-											<tr class="info">
-												<td></td>
-												<td></td>
-												<td></td>
-												<td><button class="btn btn-default btn-sm" id="app{{item.id}}" type="button">Удалить</button></td>
-											</tr>
-										</tbody>
-									</table>
+									<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
+										<label for="additionalExams">Выберите дисциплины</label>
+										<input type="hidden" id="additionalExams" name="additionalExams" class="form-control">
+									</div>
 								</div>
 								<div class="row">
-									<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
+									<div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-1">
 										<p>
 											<label for="specusl">Прошу создать специальные условия при сдаче вступ. исп-й в связи с ограниченными возможностями здоровья></label>
 											<input type="radio" name="specusl" value="no">Нет
@@ -863,12 +964,12 @@
 					<div id="achRow" class="row" {% if not achievements %} hidden {% endif %}>
 						<p>
 							<div class="col-xs-6 col-sm-5 col-md-4 col-md-offset-2">
-								<label for="achievname[1]">Наименование достижения</label>
-								<input name="achievname[1]" id="achievname[1]" class="form-control" placeholder="По жизни чемпион">
+								<label for="achievement">Наименование достижения</label>
+								<input type="hidden" id="achievement" name="achievement" class="form-control">
 							</div>
 							<div class="col-xs-6 col-sm-5 col-md-4">
-								<label for="proof[1]">Подтверждающие документы</label>
-								<input name="proof[1]" id="proof[1]" class="form-control" placeholder="Я тебе говорю">
+								<label for="achievementDoc">Подтверждающий документ</label>
+								<input type="hidden" id="achievementDoc" name="achievementDoc" class="form-control">
 							</div>
 						</p>
 					</div>
@@ -881,37 +982,6 @@
 				</div>
 			</div>
 			<div class="tab-pane" id="tab6">
-				<div class="container-fluid">
-					<div class="row">
-						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-							<label for="persach">Имеются ли достижения?</label>
-							<p>
-								<input type="radio" name = "persach" value="no">Нет
-								<input type="radio" name = "persach" value="yes">Да
-							</p>
-						</div>
-					</div>
-					<div id="achRow" class="row" {% if not achievements %} hidden {% endif %}>
-						<p>
-							<div class="col-xs-6 col-sm-5 col-md-4 col-md-offset-2">
-								<label for="achievname[1]">Наименование достижения</label>
-								<input name="achievname[1]" id="achievname[1]" class="form-control" placeholder="По жизни чемпион">
-							</div>
-							<div class="col-xs-6 col-sm-5 col-md-4">
-								<label for="proof[1]">Подтверждающие документы</label>
-								<input name="proof[1]" id="proof[1]" class="form-control" placeholder="Я тебе говорю">
-							</div>
-						</p>
-					</div>
-					</br>
-					<div class="row">
-						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-							<button class="btn btn-primary btn-block" type="button" id="save6">Сохранить</button>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="tab-pane" id="tab7">
 				<div class="container-fluid">
 					 <div class="row">
 						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
