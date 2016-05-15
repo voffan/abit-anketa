@@ -13,7 +13,7 @@ from django.core.urlresolvers import reverse
 from django.core.context_processors import csrf
 from django.http import HttpResponse, HttpResponseRedirect
 
-from django.shortcuts import render_to_response, render,get_object_or_404
+from django.shortcuts import render_to_response, render,get_object_or_404, redirect
 from django.template import RequestContext
 
 from kladr.models import Street
@@ -31,6 +31,9 @@ def StartApp(request):
 
 @login_required(login_url='authapp:index')
 def PersonProfile(request):
+	person=Abiturient.objects.filter(user=request.user).first()
+	if person is None:
+		return redirect('/staff')
 	args={'currentpage':1}
 	args.update(csrf(request))
 	return render(request, 'anketa/profile.html', args)
@@ -38,7 +41,9 @@ def PersonProfile(request):
 @login_required(login_url='authapp:index')
 def PersonData(request):
 	args={'currentpage':2}
-	person=Abiturient.objects.get(user=request.user)
+	person=Abiturient.objects.filter(user=request.user).first()
+	if person is None:
+		return redirect('/staff')
 	# 1
 	args['fname']=person.fname
 	args['sname']=person.sname
@@ -133,6 +138,9 @@ def PersonData(request):
 @login_required(login_url='authapp:index')
 def Applications(request):
 	args={'currentpage':3}
+	person=Abiturient.objects.filter(user=request.user).first()
+	if person is None:
+		return redirect('/staff')
 	applications=Application.objects.filter(abiturient__user=request.user)
 	args['applications']=applications
 	return render(request,'anketa/applicationList.html',args)
@@ -140,6 +148,9 @@ def Applications(request):
 @login_required(login_url='authapp:index')
 def Account(request):
 	args={'currentpage':4}
+	person=Abiturient.objects.filter(user=request.user).first()
+	if person is None:
+		return redirect('/staff')
 	args['email'] = request.user.email
 	args.update(csrf(request))
 	return render(request,'anketa/account.html',args)
