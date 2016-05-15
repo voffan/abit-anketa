@@ -45,7 +45,7 @@
     $('#udaten').datetimepicker({
         format:'DD.MM.YYYY',
         locale: 'ru',
-        defaultDate:'{{data.start_date|date:"Y-m-d"}}'
+        defaultDate:'{{data.education.enterDate|date:"Y-m-d"}}'
     });
    
     $('#udateo').datetimepicker({
@@ -621,12 +621,12 @@
                 <div class = "row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
-                            <label for="prevedu">Предыдущие образование</label>
+                            <label for="prevedu">Уровень образования</label>
                             <p>
-                                <input type = "radio" name= "prevedu" value="soo"{% if data.docs.doctype.attribute_id == "soo" %} checked {% endif %}>СОО 
-                                <input type = "radio" name= "prevedu" value="npo"{% if data.docs.doctype.attribute_id == "npo" %} checked {% endif %}>НПО 
-                                <input type = "radio" name= "prevedu" value="spo"{% if data.docs.doctype.attribute_id == "spo" %} checked {% endif %}>СПО 
-                                <input type = "radio" name= "prevedu" value="vpo"{% if data.docs.doctype.attribute_id == "vpo" %} checked {% endif %}>ВПО
+                                <input type = "radio" name= "prevedu" value="soo"{% if data.education.level.value == "СОО" %} checked {% endif %}>СОО 
+                                <input type = "radio" name= "prevedu" value="npo"{% if data.education.level.value == "НПО" %} checked {% endif %}>НПО 
+                                <input type = "radio" name= "prevedu" value="spo"{% if data.education.level.value == "СПО" %} checked {% endif %}>СПО 
+                                <input type = "radio" name= "prevedu" value="vpo"{% if data.education.level.value == "ВПО" %} checked {% endif %}>ВПО
                             </p>
                         </p>
                     </div>
@@ -648,7 +648,7 @@
                             <label for="numberdoc">Дата окончания</label>
                             <div class="form-group">
                                 <div class='input-group date' id='udateo'>
-                                    <input type='text' class="form-control" />
+                                    <input type='text' class="form-control" name="dateexiting" />
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
@@ -765,11 +765,15 @@
                                     </tr>
 
                                     {% endfor %}
+
                                 </tbody>
+
                             </table>
+
                             <div class="col-md-offset-11">
                                 <a style="" onclick="return addcontactrow2()" href="#"><span class="glyphicon glyphicon-plus"></span></a>   
-                            </div>                            
+                            </div> 
+                             <button type="submit" class="btn btn-primary" name="sav" >сохранить</button>                           
                         </div>
                     </div>
                     <input type="hidden" class="form-control" name = "wiz_cont_apply_name" id="wiz_cont_apply_name" value ="{{data.application.abiturient.id}}" hidden>
@@ -778,14 +782,13 @@
                 <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                 <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Дополнительные контакты</h3>
+                            <h3 class="panel-title">Родственники</h3>
                         </div>
                         <div class="panel-body">
                             <table class="table table-striped" >
                                 <thead>
                                     <tr>
                                         <th>ФИО</th>
-                                        <th>Тип</th>
                                         <th>Номер</th>
                                         <th></th>
                                     </tr>
@@ -797,7 +800,7 @@
                                             <td>
                                                 <select id="rel_type[{{item.id}}]" name = "rel_type[{{item.id}}]" class="form-control">
                                                     {% for item1 in data.rel_type %}
-                                                    <option {% if item1.id == item.type.id %}selected{% endif %} value="{{ item.type.id }}">{{ item1.value }}</option>
+                                                    <option {% if item1.id == item.type.id %}selected{% endif %} value="{{ item1.id }}">{{ item1.value }}</option>
                                                     {% endfor %}
                                                 </select>
                                             </td>
@@ -814,6 +817,7 @@
                                 <a style="" onclick="return addcontactrow()" href="#"><span class="glyphicon glyphicon-plus"></span></a>   
                             </div>                                       
                         </div>
+                        <button type="submit" class="btn btn-primary" name="sav" >сохранить</button>
                 </div>
                 </div>
                 
