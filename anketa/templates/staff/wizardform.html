@@ -45,7 +45,7 @@
     $('#udaten').datetimepicker({
         format:'DD.MM.YYYY',
         locale: 'ru',
-        defaultDate:'{{data.start_date|date:"Y-m-d"}}'
+        defaultDate:'{{data.education.enterDate|date:"Y-m-d"}}'
     });
    
     $('#udateo').datetimepicker({
@@ -303,7 +303,7 @@
 }
 </script>
 <script>
-    var countOfTr = 2; // Текущее число полей
+    var countOfTr = {{ data.relation_len }}; // Текущее число полей
     var curTrNameId = 1; // Уникальное значение для атрибута name
     var maxTrLimit = 10; // Максимальное число возможных полей
     function deletecontactrow(a) {
@@ -340,38 +340,85 @@
     }
 </script>
 <script>
-var countOfTr = 2; // Текущее число полей
-    var curTrNameId = 1; // Уникальное значение для атрибута name
-    var maxTrLimit = 10; // Максимальное число возможных полей
+    var countOfTr2 = {{ data.contacts_len }}; // Текущее число полей
+    var curTrNameId2 = 1; // Уникальное значение для атрибута name
+    var maxTrLimit2 = 10; // Максимальное число возможных полей
     function deletecontactrow2(a) {
-        if (countOfTr > 1)
+        if (countOfTr2 > 1)
         {
-        // Получаем доступ к ДИВу, содержащему поле
-        var contDiv = a.parentNode.parentNode;
-        // Удаляем этот ДИВ из DOM-дерева
-        contDiv.parentNode.removeChild(contDiv);
-        // Уменьшаем значение текущего числа полей
-        countOfTr--;
-    }
-    function applycontactrow2(){
-        
-    }
+            var $arg=$(a).attr('value');           
+            $.ajax({
+                url:"{% url 'staff:wiz_cont_dels' %}",
+                method:"POST",
+                data:{
+                    'csrfmiddlewaretoken':$("input[name='csrfmiddlewaretoken']").val(),
+                    'query':$arg,    
+                },
+                dataType: "json",
+                dataProcess:true,
+                success:function(data)
+                {
+                    if(data[0]['result']=='1'){
+                        // Получаем доступ к ДИВу, содержащему поле
+                        var contDiv = a.parentNode.parentNode;
+                        // Удаляем этот ДИВ из DOM-дерева
+                        contDiv.parentNode.removeChild(contDiv);
+                        // Уменьшаем значение текущего числа полей
+                        countOfTr2--;
+                    }else{
+                        alert(data[0]['error_message']);
+                    }
+                    
+                },
+                error:function()
+                {
+                    alert('JSonelove');
+                },    
+            });
+        }    
      // Возвращаем false, чтобы не было перехода по сслыке
     return false;
     }
+    function applycontactrow2(b){
+        var $arg1 = $(b).attr('value');        
+        $.ajax({
+            url: "{% url 'staff:wiz_cont_apply' %}",
+            method: "POST",
+            data:{
+                'csrfmiddlewaretoken':$("input[name='csrfmiddlewaretoken']").val(),
+                'query1':$arg1,
+                'query2':$arg2,
+                'query3':$arg3,
+            },
+            dataType: "json",
+            dataProcess:true,
+            success:function()
+            {
+                alert('success');
+            },
+            error:function(data)
+            {
+                alert('jopa');
+            },
+        });
+    // Возвращаем false, чтобы не было перехода по сслыке
+    return false; 
+    }
+
+
     function addcontactrow2(){
         // Проверяем, не достигло ли число полей максимума
-        if (countOfTr >= maxTrLimit) {
-        alert("Число полей достигло своего максимума = " + maxTrLimit);
+        if (countOfTr2 >= maxTrLimit2) {
+        alert("Число полей достигло своего максимума = " + maxTrLimit2);
         return false;
         }
         // Увеличиваем текущее значение числа полей
-        countOfTr++;
+        countOfTr2++;
         // Увеличиваем ID
-        curTrNameId++;
-        // Создаем элемент ДИВ
+        //curTrNameId2++;
+        // Создаем элемент ДИВ        
         var tr = document.createElement("tr");
-        tr.innerHTML = "<td><select id=\"contacttype\" name = \"contacttype\" class=\"form-control\">{% for item in data.contactyp %}<option {% if item.id == item1.contact_type.id %} selected {% endif %}  value=\"{{item.id}}\">{{item.value}}</option>{% endfor %}</select></td><td><input type=\"text\" class=\"form-control\" name = \"contactvalue\" id=\"contactvalue\" value =\"{{item1.value}}\"></td><td><a style=\"\" onclick=\"return applycontactrow2()\" href=\"#\"><span class=\"glyphicon glyphicon-ok\"></span></a><a style=\"\" onclick=\"return deletecontactrow2(this)\" href=\"#\"><span class=\"glyphicon glyphicon-minus\"></span></a></td>";
+        tr.innerHTML = "<td><select id=\"contacttype\" name = \"contacttype\" class=\"form-control\">{% for item in data.contactyp %}<option {% if item.id == item1.contact_type.id %} selected {% endif %}  value=\"{{item.id}}\">{{item.value}}</option>{% endfor %}</select></td><td><input type=\"text\" class=\"form-control\" name = \"contactvalue["+curTrNameId2+"]\" id=\"contactvalue["+curTrNameId2+"]\" value =\"\"></td><td><a style=\"\" onclick=\"return applycontactrow2(this)\" value=\"{{data.application.abiturient.id}}\" href=\"#\"><span class=\"glyphicon glyphicon-ok\"></span></a><a style=\"\" onclick=\"return deletecontactrow2(this)\" value=\""+curTrNameId2+"\" href=\"#\"><span class=\"glyphicon glyphicon-minus\"></span></a></td>";
         document.getElementById("TableContactAdd2").appendChild(tr);
         return false;
     }
@@ -574,12 +621,12 @@ var countOfTr = 2; // Текущее число полей
                 <div class = "row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                         <p>
-                            <label for="prevedu">Предыдущие образование</label>
+                            <label for="prevedu">Уровень образования</label>
                             <p>
-                                <input type = "radio" name= "prevedu" value="soo"{% if data.docs.doctype.attribute_id == "soo" %} checked {% endif %}>СОО 
-                                <input type = "radio" name= "prevedu" value="npo"{% if data.docs.doctype.attribute_id == "npo" %} checked {% endif %}>НПО 
-                                <input type = "radio" name= "prevedu" value="spo"{% if data.docs.doctype.attribute_id == "spo" %} checked {% endif %}>СПО 
-                                <input type = "radio" name= "prevedu" value="vpo"{% if data.docs.doctype.attribute_id == "vpo" %} checked {% endif %}>ВПО
+                                <input type = "radio" name= "prevedu" value="soo"{% if data.education.level.value == "СОО" %} checked {% endif %}>СОО 
+                                <input type = "radio" name= "prevedu" value="npo"{% if data.education.level.value == "НПО" %} checked {% endif %}>НПО 
+                                <input type = "radio" name= "prevedu" value="spo"{% if data.education.level.value == "СПО" %} checked {% endif %}>СПО 
+                                <input type = "radio" name= "prevedu" value="vpo"{% if data.education.level.value == "ВПО" %} checked {% endif %}>ВПО
                             </p>
                         </p>
                     </div>
@@ -601,7 +648,7 @@ var countOfTr = 2; // Текущее число полей
                             <label for="numberdoc">Дата окончания</label>
                             <div class="form-group">
                                 <div class='input-group date' id='udateo'>
-                                    <input type='text' class="form-control" />
+                                    <input type='text' class="form-control" name="dateexiting" />
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
@@ -709,35 +756,39 @@ var countOfTr = 2; // Текущее число полей
                                             </select>
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control" name = "contactvalue" id="contactvalue" value ="{{item1.value}}">
+                                            <input type="text" class="form-control" name = "contactvalue[{{item1.id}}]" id="contactvalue[{{item1.id}}]" value ="{{item1.value}}">
                                         </td>
                                         <td>
-                                            <a style="" onclick="return applycontactrow2()" href="#"><span class="glyphicon glyphicon-ok"></span></a>
-                                            <a style="" onclick="return deletecontactrow2(this)" href="#"><span class="glyphicon glyphicon-minus"></span></a>
+                                            <a style="" onclick="return applycontactrow2(this)" href="#"><span class="glyphicon glyphicon-ok"></span></a>
+                                            <a style="" onclick="return deletecontactrow2(this)" value="{{item1.id}}" href="#"><span class="glyphicon glyphicon-minus"></span></a>
                                         </td>
                                     </tr>
 
                                     {% endfor %}
+
                                 </tbody>
+
                             </table>
+
                             <div class="col-md-offset-11">
                                 <a style="" onclick="return addcontactrow2()" href="#"><span class="glyphicon glyphicon-plus"></span></a>   
                             </div> 
+                             <button type="submit" class="btn btn-primary" name="sav" >сохранить</button>                           
                         </div>
                     </div>
+                    <input type="hidden" class="form-control" name = "wiz_cont_apply_name" id="wiz_cont_apply_name" value ="{{data.application.abiturient.id}}" hidden>
                 </div>
                 <br>
                 <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                 <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title">Дополнительные контакты</h3>
+                            <h3 class="panel-title">Родственники</h3>
                         </div>
                         <div class="panel-body">
                             <table class="table table-striped" >
                                 <thead>
                                     <tr>
                                         <th>ФИО</th>
-                                        <th>Тип</th>
                                         <th>Номер</th>
                                         <th></th>
                                     </tr>
@@ -749,7 +800,7 @@ var countOfTr = 2; // Текущее число полей
                                             <td>
                                                 <select id="rel_type[{{item.id}}]" name = "rel_type[{{item.id}}]" class="form-control">
                                                     {% for item1 in data.rel_type %}
-                                                    <option {% if item1.id == item.type.id %}selected{% endif %} value="{{ item.type.id }}">{{ item1.value }}</option>
+                                                    <option {% if item1.id == item.type.id %}selected{% endif %} value="{{ item1.id }}">{{ item1.value }}</option>
                                                     {% endfor %}
                                                 </select>
                                             </td>
@@ -766,6 +817,7 @@ var countOfTr = 2; // Текущее число полей
                                 <a style="" onclick="return addcontactrow()" href="#"><span class="glyphicon glyphicon-plus"></span></a>   
                             </div>                                       
                         </div>
+                        <button type="submit" class="btn btn-primary" name="sav" >сохранить</button>
                 </div>
                 </div>
                 

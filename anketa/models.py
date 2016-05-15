@@ -109,9 +109,15 @@ class Contacts(models.Model):
 	def __str__(self):
 		return self.person.fullname+' '+self.contact_type.value
 
+class Education(models.Model):
+	abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент')
+	doc = models.ForeignKey('Docs', verbose_name=u'Документ')
+	level = models.ForeignKey('AttrValue', verbose_name=u'Уровень образования')
+	enterDate = models.DateField(u'Дата поступления')
+
 class DocAttr(models.Model):
 	doc = models.ForeignKey('Docs', verbose_name=u'Документ')
-	attr = models.ForeignKey(AttrValue, verbose_name = u'Наименование атрибута', related_name='Attrname', db_index = True)
+	attr = models.ForeignKey(Attribute, verbose_name = u'Наименование атрибута', related_name='Attrname', db_index = True)
 	value = models.CharField(u'Значение атрибута', max_length=200)
 	def __str__(self):
 		return self.doc.abiturient.fullname+' '+self.doc.docType.value+' '+self.value
@@ -133,6 +139,7 @@ class Exams(models.Model):
 	exam_subjects = models.ForeignKey('AttrValue', verbose_name=u'Дисциплина',related_name='Exam_Subjects')
 	points = models.IntegerField(u'Кол-во баллов', max_length=3, blank = True, null = True, db_index=True)
 	year = models.IntegerField(u'Год', max_length=4)
+	special = models.BooleanField(u'Особые условия', default = False)
 
 class Department(models.Model):
 	university = models.ForeignKey('University')

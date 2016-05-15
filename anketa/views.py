@@ -77,13 +77,13 @@ def PersonData(request):
 		args['edudoctype_date']=edudoctype.issueDate
 		args['edudoctype_issuer_id']=edudoctype.docIssuer.id
 		args['edudoctype_issuer']=edudoctype.docIssuer.value
-	prevedu = DocAttr.objects.filter(doc=edudoctype).exclude(attr__value__icontains=u'Дата поступления').first()
-	if prevedu is not None:
+	#prevedu = DocAttr.objects.filter(doc=edudoctype).exclude(attr__value__icontains=u'Дата поступления').first()
+	'''if prevedu is not None:
 		args['prevedu'] = prevedu.attr.value
 		print(prevedu.attr.value)
 	datejoining = DocAttr.objects.filter(doc=edudoctype).filter(attr__value__icontains=u'Дата поступления').first()
 	if datejoining is not None:
-		args['datejoining'] = datetime.datetime.strptime(datejoining.value,'%d/%m/%Y').strftime('%Y-%m-%d')
+		args['datejoining'] = datetime.datetime.strptime(datejoining.value,'%d/%m/%Y').strftime('%Y-%m-%d')'''
 	if person.docs_set.filter(docType__value__icontains=u'СНИЛС').first() is not None:
 		args['inila']=person.docs_set.filter(docType__value__icontains=u'СНИЛС').first().serialno
 	# 3

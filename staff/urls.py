@@ -22,4 +22,6 @@ urlpatterns = patterns('',
 	url(r'get_attr/',views.Get_Attr,name='get_attr'),
 	url(r'get_attr_val/',views.Get_Attr_val,name='get_attr_val'),
 	url(r'contact_dels/',views.Contact_dels,name='contact_dels'),
+	url(r'wiz_cont_dels/',views.Wiz_cont_dels, name='wiz_cont_dels'),
+	url(r'wiz_cont_apply',views.Wiz_cont_apply, name='wiz_cont_apply'),
 					)

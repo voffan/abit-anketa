@@ -365,18 +365,9 @@ def Application_review (request, application_id):
 		passp = application.abiturient.docs_set.filter(docType__value__icontains=u'Военн').first()
 	
 	Data={}
-	edu_doc = application.abiturient.docs_set.filter(docType__value__icontains=u'Аттестат').first()
-	if edu_doc is not None:
-		Data['level'] = 1
-	else:
-		edu_doc = application.abiturient.docs_set.filter(docType__value__icontains=u'диплом').first()
-		level = edu_doc.docattr_set.filter(attr__value__icontains = u'Уровень').first()
-		if level is not None and level.value == u'НПО':
-			Data['level'] = 2
-		if level is not None and level.value == u'СПО':
-			Data['level'] = 3
-		if level is not None and level.value == u'ВПО':
-			Data['level'] = 4
+	education = application.abiturient.education_set.get()
+	edu_doc = education.doc #application.abiturient.docs_set.filter(docType__value__icontains=u'Аттестат').first()
+	
 
 	adrtype = AttrValue.objects.filter(attribute__name__icontains=u'Тип адреса')
 	rank = AttrValue.objects.filter(attribute__name__icontains=u'Воинское звание')
@@ -392,10 +383,12 @@ def Application_review (request, application_id):
 	relcontacts=[]
 	for item in relation:
 		text = Person.objects.get(pk=item.person.id).fullname
-		cont_value = Contacts.objects.get(person__id=item.person.id).value
+		cont_value = Contacts.objects.filter(person__id=item.person.id).first().value
 		cont_type = item.relType
-		relcontacts.append({'text':text, 'cont':cont_value, 'type':{'name':cont_type.value,'id':cont_type.id}})
+		relcontacts.append({'id':item.id,'text':text, 'cont':cont_value, 'type':{'name':cont_type.value,'id':cont_type.id}})
+	Data['education'] = education
 	Data['relation'] = relcontacts
+	Data['relation_len'] = len(relcontacts)
 	Data['rel_type'] = AttrValue.objects.filter(attribute__name__icontains=u'тип связи')
 	Data['nationality'] = nationality
 	Data['docType'] = doctype
@@ -407,10 +400,10 @@ def Application_review (request, application_id):
 	Data['rank'] = rank
 	Data['snils'] = snils
 	Data['edud'] = edu_doc
-	date_object = DocAttr.objects.get(doc__id=edu_doc.id).value
-	Data['start_date'] = datetime.datetime.strptime(date_object, '%Y.%m.%d')
 	Data['application']=application
 	Data['contacts'] = Contacts.objects.filter(person_id=application.abiturient.id)
+	Data['contacts_len'] = len(Data['contacts'])	
+	print(Data['contacts_len'])
 	Data['address'] = Address.objects.filter(pk=application_id)
 	Data['education_prog'] = Education_Prog.objects.filter(pk=application_id)
 	Data['exams'] = Exams.objects.filter(pk=application_id)
@@ -560,3 +553,34 @@ def Contact_dels(request):
 		result['error_message']=str(e)
 	
 	return HttpResponse(json.dumps(result),content_type="application/json")
+
+@login_required(login_url = '/login')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
+def Wiz_cont_dels(request):
+	args = request.POST.get('query','')
+	wiz_cont = Contacts.objects.get(pk=args)
+	result=[{'name':wiz_cont.value, 'id':wiz_cont.id, 'result':1, 'error_message':''}]
+	try:
+		wiz_cont.delete()
+	except Exception as e:
+		result['result'] =0
+		result['error_message'] = str(e)
+	return HttpResponse(json.dumps(result), content_type="application/json")
+
+@login_required(login_url = '/login')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
+def Wiz_cont_apply(request):
+	pass
+	args1 = request.POST.get('query1','')
+	args2 = request.POST.get('query2','')
+	args3 = request.POST.get('query3','')
+	wiz_cont = Contacts(person=args1, contact_type=args2, value=args3)
+	result=[{'result':1, 'error_message':''}]
+	try:
+		wiz_cont.save()
+	except Exception as e:
+		result['result'] = 0
+		result['error_message'] = str(e)	
+	return HttpResponse(json.dumps(result), content_type="application/json")
+	#attri_bute = Attribute(name=values['attr_name'],type_id=values['attrtype'])
+
