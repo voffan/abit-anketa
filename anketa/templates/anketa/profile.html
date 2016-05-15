@@ -81,31 +81,25 @@
 							<table class="table">
 								<thead>
 									<tr>
+										<th>Номер заявления</th>
 										<th>Институт/факультет</th>
 										<th>Направление/специальность</th>
-										<th>Профиль</th>
 										<th>Статус</th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr class="success">
-										<td>ИМИ</td>
-										<td>ИВТ</td>
-										<td>-</td>
-										<td>Экспортировано</td>
-									</tr>
-									<tr class="danger">
-										<td>ИМИ</td>
-										<td>ПМ</td>
-										<td>-</td>
-										<td>Аннулировано</td>
-									</tr>
-									<tr class="info">
-										<td>ИМИ</td>
-										<td>ФИИТ</td>
-										<td>-</td>
-										<td>Подано</td>
-									</tr>
+								{% if applications %}
+									{% for item in applications %}
+										<tr {% if item.appState.value == "Поданно" %} class="info" {% else %} {% if item.appState.value == "Экспортированно" %} class="success" {% else %} class="info" {% endif %} {% endif %}>
+											<td>{{item.id}}</td>
+											<td>{{item.department}}</td>
+											<td>{{item.edu_prog.edu_prog}}</td>
+											<td>{{item.appState.value}}</td>
+										</tr>
+									{% endfor %}
+								{% else %}
+									<tr>У вас пока нет заявлений :(</tr>
+								{% endif %}
 								</tbody>
 							</table>
 						</div>

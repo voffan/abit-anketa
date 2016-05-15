@@ -78,102 +78,101 @@
 <script src="{% static "anketa/js/jquery.bootstrap.wizard.js" %}"></script>
 <script src="{% static "anketa/js/prettify.js" %}"></script>
 <script src="{% static "anketa/js/bootstrap-typeahead.js" %}"></script>
-<script src="{% static "anketa/js/jquery.validate.js" %}"></script>
 <script>
-var $prevmail = $("#email").val();
-$("#email").focusout(function()
-{
-	var check = $("#email").parent().find("#descr");
-	var check1 = $("#email").parent().find('.help-block');
-	if ($prevmail == $("#email").val() || $("#email").val().length === 0)
+	var $prevmail = $("#email").val();
+	$("#email").focusout(function()
 	{
-		$("#email").parent().attr("class","has-feedback col-sm-10 col-md-8 col-xs-10");
-		$("#email").parent().find("#icon").attr("class", "");
-		$("#email").parent().find("#descr").html("");
-		return;
-	}
-	var emailReg = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-	if(!emailReg.test($("#email").val()))
-	{
-		$("#email").parent().attr("class","has-error has-feedback col-sm-10 col-md-8 col-xs-10");
-		$("#email").parent().find("#icon").attr("class", "glyphicon glyphicon-remove form-control-feedback");
-		$("#email").parent().find("#descr").html("Неверный формат");
-		return;
-	}
-	$.ajax(
-	{
-		url:"{% url 'authapp:checkEmailValid' %}",
-		method:"GET",
-		data:{'email':$('#email').val()},
-		dataProcess:true,
-		timeout:500,
-		success:function(data)
+		var check = $("#email").parent().find("#descr");
+		var check1 = $("#email").parent().find('.help-block');
+		if ($prevmail == $("#email").val() || $("#email").val().length === 0)
 		{
-			if(parseInt(data['result'])===1)
+			$("#email").parent().attr("class","has-feedback col-sm-10 col-md-8 col-xs-10");
+			$("#email").parent().find("#icon").attr("class", "");
+			$("#email").parent().find("#descr").html("");
+			return;
+		}
+		var emailReg = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+		if(!emailReg.test($("#email").val()))
+		{
+			$("#email").parent().attr("class","has-error has-feedback col-sm-10 col-md-8 col-xs-10");
+			$("#email").parent().find("#icon").attr("class", "glyphicon glyphicon-remove form-control-feedback");
+			$("#email").parent().find("#descr").html("Неверный формат");
+			return;
+		}
+		$.ajax(
+		{
+			url:"{% url 'authapp:checkEmailValid' %}",
+			method:"GET",
+			data:{'email':$('#email').val()},
+			dataProcess:true,
+			timeout:500,
+			success:function(data)
 			{
-				$("#email").parent().attr("class","has-error has-feedback col-sm-10 col-md-8 col-xs-10");
-				$("#email").parent().find("#icon").attr("class", "glyphicon glyphicon-remove form-control-feedback");
-				$("#email").parent().find("#descr").html(data['error_msg']);
+				if(parseInt(data['result'])===1)
+				{
+					$("#email").parent().attr("class","has-error has-feedback col-sm-10 col-md-8 col-xs-10");
+					$("#email").parent().find("#icon").attr("class", "glyphicon glyphicon-remove form-control-feedback");
+					$("#email").parent().find("#descr").html(data['error_msg']);
+				}
+				else
+				{
+					$("#email").parent().attr("class","has-success has-feedback col-sm-10 col-md-8 col-xs-10");
+					$("#email").parent().find("#icon").attr("class", "glyphicon glyphicon-ok form-control-feedback");
+					$("#email").parent().find("#descr").html("Почта свободна");
+				}
+			},
+			error:function(){
+				alert('Check Internet connnection!');
 			}
-			else
-			{
-				$("#email").parent().attr("class","has-success has-feedback col-sm-10 col-md-8 col-xs-10");
-				$("#email").parent().find("#icon").attr("class", "glyphicon glyphicon-ok form-control-feedback");
-				$("#email").parent().find("#descr").html("Почта свободна");
-			}
-		},
-		error:function(){
-			alert('Check Internet connnection!');
+		});
+	});
+	$("#passwordNew").focusout(function()
+	{
+		if ($("#passwordNew").val().length === 0)
+		{
+			$("#passwordNew").parent().attr("class","has-feedback col-sm-10 col-md-8 col-xs-10");
+			$("#passwordNew").parent().find("#icon").attr("class", "");
+			$("#passwordNew").parent().find("#descr").html("");
+			return;
+		}
+		if($("#passwordNew").val().length>=6)
+		{
+			$("#passwordNew").parent().attr("class","has-success has-feedback col-sm-10 col-md-8 col-xs-10");
+			$("#passwordNew").parent().find("#icon").attr("class", "glyphicon glyphicon-ok form-control-feedback");
+			$("#passwordNew").parent().find("#descr").html("");
+		}
+		else
+		{
+			$("#passwordNew").parent().attr("class","has-error has-feedback col-sm-10 col-md-8 col-xs-10");
+			$("#passwordNew").parent().find("#icon").attr("class", "glyphicon glyphicon-remove form-control-feedback");
+			$("#passwordNew").parent().find("#descr").html("Минимальная длина пароля 6 символов");
 		}
 	});
-});
-$("#passwordNew").focusout(function()
-{
-	if ($("#passwordNew").val().length === 0)
+	$("#passwordNewVerify").focusout(function()
 	{
-		$("#passwordNew").parent().attr("class","has-feedback col-sm-10 col-md-8 col-xs-10");
-		$("#passwordNew").parent().find("#icon").attr("class", "");
-		$("#passwordNew").parent().find("#descr").html("");
-		return;
-	}
-	if($("#passwordNew").val().length>=6)
+		if ($("#passwordNewVerify").val().length < 6)
+		{
+			$("#passwordNewVerify").parent().attr("class","has-feedback col-sm-10 col-md-8 col-xs-10");
+			$("#passwordNewVerify").parent().find("#icon").attr("class", "");
+			$("#passwordNewVerify").parent().find("#descr").html("");
+			return;
+		}
+		if($("#passwordNewVerify").val() === $("#passwordNew").val())
+		{
+			$("#passwordNewVerify").parent().attr("class","has-success has-feedback col-sm-10 col-md-8 col-xs-10");
+			$("#passwordNewVerify").parent().find("#icon").attr("class", "glyphicon glyphicon-ok form-control-feedback");
+			$("#passwordNewVerify").parent().find("#descr").html("");
+		}
+		else
+		{
+			$("#passwordNewVerify").parent().attr("class","has-error has-feedback col-sm-10 col-md-8 col-xs-10");
+			$("#passwordNewVerify").parent().find("#icon").attr("class", "glyphicon glyphicon-remove form-control-feedback");
+			$("#passwordNewVerify").parent().find("#descr").html("Пароли должны совпадать");
+		}
+	});
+	$("#button").click(function()
 	{
-		$("#passwordNew").parent().attr("class","has-success has-feedback col-sm-10 col-md-8 col-xs-10");
-		$("#passwordNew").parent().find("#icon").attr("class", "glyphicon glyphicon-ok form-control-feedback");
-		$("#passwordNew").parent().find("#descr").html("");
-	}
-	else
-	{
-		$("#passwordNew").parent().attr("class","has-error has-feedback col-sm-10 col-md-8 col-xs-10");
-		$("#passwordNew").parent().find("#icon").attr("class", "glyphicon glyphicon-remove form-control-feedback");
-		$("#passwordNew").parent().find("#descr").html("Минимальная длина пароля 6 символов");
-	}
-});
-$("#passwordNewVerify").focusout(function()
-{
-	if ($("#passwordNewVerify").val().length < 6)
-	{
-		$("#passwordNewVerify").parent().attr("class","has-feedback col-sm-10 col-md-8 col-xs-10");
-		$("#passwordNewVerify").parent().find("#icon").attr("class", "");
-		$("#passwordNewVerify").parent().find("#descr").html("");
-		return;
-	}
-	if($("#passwordNewVerify").val() === $("#passwordNew").val())
-	{
-		$("#passwordNewVerify").parent().attr("class","has-success has-feedback col-sm-10 col-md-8 col-xs-10");
-		$("#passwordNewVerify").parent().find("#icon").attr("class", "glyphicon glyphicon-ok form-control-feedback");
-		$("#passwordNewVerify").parent().find("#descr").html("");
-	}
-	else
-	{
-		$("#passwordNewVerify").parent().attr("class","has-error has-feedback col-sm-10 col-md-8 col-xs-10");
-		$("#passwordNewVerify").parent().find("#icon").attr("class", "glyphicon glyphicon-remove form-control-feedback");
-		$("#passwordNewVerify").parent().find("#descr").html("Пароли должны совпадать");
-	}
-});
-$("#button").click(function()
-{
-	
-});
+		
+	});
 </script>
 {% endblock %}

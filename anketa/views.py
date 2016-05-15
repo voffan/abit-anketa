@@ -17,7 +17,7 @@ from django.shortcuts import render_to_response, render,get_object_or_404, redir
 from django.template import RequestContext
 
 from kladr.models import Street
-from anketa.models import Person, Address, Attribute, AttrValue, Abiturient, Department, Education_Prog, Profile, Application, Education_Prog_Form, EduForm, ApplicationProfiles, Milit, Docs, Exams, DocAttr
+from anketa.models import Person, Address, Attribute, AttrValue, Abiturient, Department, Education_Prog, Profile, Application, Education_Prog_Form, EduForm, ApplicationProfiles, Milit, Docs, Exams, DocAttr,Education, Contacts
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -35,6 +35,9 @@ def PersonProfile(request):
 	if person is None:
 		return redirect('/staff')
 	args={'currentpage':1}
+	applications=Application.objects.filter(abiturient__user=request.user)
+	if applications is not None:
+		args['applications']=applications
 	args.update(csrf(request))
 	return render(request, 'anketa/profile.html', args)
 
@@ -68,22 +71,17 @@ def PersonData(request):
 		args['doctype_date']=doctype.issueDate
 		args['doctype_issuer_id']=doctype.docIssuer.id
 		args['doctype_issuer']=doctype.docIssuer.value
-	edudoctype = person.docs_set.filter(docType__attribute__name__icontains=u'об образовании').first()
-	if edudoctype is not None:
-		args['edudoctype']=edudoctype.docType.value
-		args['edudoctype_id']=edudoctype.docType.id
-		args['edudoctype_serial']=edudoctype.serialno
-		args['edudoctype_number']=edudoctype.number
-		args['edudoctype_date']=edudoctype.issueDate
-		args['edudoctype_issuer_id']=edudoctype.docIssuer.id
-		args['edudoctype_issuer']=edudoctype.docIssuer.value
-	#prevedu = DocAttr.objects.filter(doc=edudoctype).exclude(attr__value__icontains=u'Дата поступления').first()
-	'''if prevedu is not None:
-		args['prevedu'] = prevedu.attr.value
-		print(prevedu.attr.value)
-	datejoining = DocAttr.objects.filter(doc=edudoctype).filter(attr__value__icontains=u'Дата поступления').first()
-	if datejoining is not None:
-		args['datejoining'] = datetime.datetime.strptime(datejoining.value,'%d/%m/%Y').strftime('%Y-%m-%d')'''
+	if person.education_set.first():
+		edudoctype = person.education_set.first()
+		args['edudoctype']=edudoctype.doc.docType.value
+		args['edudoctype_id']=edudoctype.doc.docType.id
+		args['edudoctype_serial']=edudoctype.doc.serialno
+		args['edudoctype_number']=edudoctype.doc.number
+		args['edudoctype_date']=edudoctype.doc.issueDate
+		args['edudoctype_issuer_id']=edudoctype.doc.docIssuer.id
+		args['edudoctype_issuer']=edudoctype.doc.docIssuer.value
+		args['datejoining'] = edudoctype.enterDate
+		args['prevedu'] = edudoctype.level.value
 	if person.docs_set.filter(docType__value__icontains=u'СНИЛС').first() is not None:
 		args['inila']=person.docs_set.filter(docType__value__icontains=u'СНИЛС').first().serialno
 	# 3
@@ -94,6 +92,18 @@ def PersonData(request):
 		args['house']=address.house
 		args['building']=address.building
 		args['flat']=address.flat
+	contacts_type = AttrValue.objects.filter(attribute__name__icontains=u'Тип контакта')
+	if contacts_type is not None:
+		args['contacts_type']=contacts_type
+	person_contacts = person.contacts_set.all()
+	if person.contacts_set is not None:
+		contacts=[]
+		for item in person_contacts:
+			cont = {}
+			cont['type']=item.contact_type
+			cont['value']=item.value
+			contacts.append(cont)
+		args['contacts']=contacts
 	# 4
 	exams = person.exams_set.filter(exam_examType__value=u'ЕГЭ')
 	if exams is not None:
@@ -107,13 +117,15 @@ def PersonData(request):
 			examsList.append(exam)
 		args['exams']=examsList
 	add_exams = person.exams_set.filter(exam_examType__value=u'Вступительный')
-	print(person.exams_set.all())
 	if add_exams is not None:
+		specusl= False
 		addExamsList=[]
 		for item in add_exams:
 			exam={}
 			exam['subject']=item.exam_subjects.id
 			exam['subject_value']=item.exam_subjects.value
+			if item.special and specusl == False:
+				args['specusl']=True
 			addExamsList.append(exam)
 		args['addExams']=addExamsList
 	# 7 
@@ -214,52 +226,42 @@ def AddDataToPerson(request):
 				if(len(request.POST.get('docissuer',''))>0):
 					doctype.docIssuer=AttrValue.objects.get(pk=request.POST.get('docissuer',''))
 				doctype.save()
-				
-				edudoc = abit.docs_set.filter(docType__attribute__name__icontains=u'об образовании').first()
+				edudoc = abit.education_set.first()
 				if edudoc is None:
-					edudoc=Docs()
+					edudoc=Education()
 					edudoc.abiturient=abit
+					doc = Docs()
+					doc.abiturient=abit
+				else:
+					doc = edudoc.doc
 				if(len(request.POST.get('edudoctype','')))>0:
-					edudoc.docType=AttrValue.objects.get(pk=request.POST.get('edudoctype',''))
+					doc.docType=AttrValue.objects.get(pk=request.POST.get('edudoctype',''))
 				if(len(request.POST.get('serialedudoc',''))>0):
-					edudoc.serialno=int(request.POST.get('serialedudoc',''))
+					doc.serialno=int(request.POST.get('serialedudoc',''))
 				if(len(request.POST.get('numberedudoc',''))>0):
-					edudoc.number=int(request.POST.get('numberedudoc',''))
+					doc.number=int(request.POST.get('numberedudoc',''))
 				if(len(request.POST.get('dateexiting',''))>0):
-					edudoc.issueDate=datetime.datetime.strptime(request.POST.get('dateexiting',''),'%d/%m/%Y').strftime('%Y-%m-%d')
+					doc.issueDate=datetime.datetime.strptime(request.POST.get('dateexiting',''),'%d/%m/%Y').strftime('%Y-%m-%d')
 				if(len(request.POST.get('preveduname','')))>0:
-					edudoc.docIssuer=AttrValue.objects.get(pk=request.POST.get('preveduname',''))
-				edudoc.save()
-
-				prevedu = request.POST.get('prevedu','')
-				if len(prevedu)>0:
-					if prevedu == "soo":
-						attr = AttrValue.objects.filter(attribute__name__icontains=u'Предыдущее образование').filter(value__icontains=u'СОО').first()
-					else:
-						if prevedu == "npo":
-							attr = AttrValue.objects.filter(attribute__name__icontains=u'Предыдущее образование').filter(value__icontains=u'НПО').first()
-						else:
-							if prevedu == "spo":
-								attr = AttrValue.objects.filter(attribute__name__icontains=u'Предыдущее образование').filter(value__icontains=u'СПО').first()
-							else:
-								attr = AttrValue.objects.filter(attribute__name__icontains=u'Предыдущее образование').filter(value__icontains=u'ВПО').first()
-					if attr is not None:
-						docattr = DocAttr.objects.filter(doc=edudoc).exclude(value__icontains=u'Дата поступления').first()
-						if docattr is None:
-							docattr = DocAttr()
-							docattr.doc = edudoc
-						docattr.attr=attr
-						docattr.value = attr.value
-						docattr.save()
+					doc.docIssuer=AttrValue.objects.get(pk=request.POST.get('preveduname',''))
+				doc.save()
+				edudoc.doc = doc
 				datejoining = request.POST.get('datejoining','')
 				if len(datejoining)>0:
-					joinattr = DocAttr.objects.filter(doc=edudoc).filter(value__icontains=u'Дата поступления').first()
-					if joinattr is None:
-						joinattr=DocAttr()
-						joinattr.doc = edudoc
-					joinattr.attr=AttrValue.objects.filter(attribute__name__icontains=u'Предыдущее образование').filter(value__icontains=u'Дата поступления').first()
-					joinattr.value = datejoining
-					joinattr.save()
+					edudoc.enterDate=datetime.datetime.strptime(datejoining,'%d/%m/%Y').strftime('%Y-%m-%d')
+				if doc.docType.value == "Аттестат":
+					edudoc.level = AttrValue.objects.filter(attribute__name__icontains=u'Предыдущее образование').filter(value__icontains=u'СОО').first()
+				else:
+					prevedu = request.POST.get('prevedu','')
+					if len(prevedu)>0:
+						if prevedu == "npo":
+							edudoc.level = AttrValue.objects.filter(attribute__name__icontains=u'Предыдущее образование').filter(value__icontains=u'НПО').first()
+						else:
+							if prevedu == "spo":
+								edudoc.level = AttrValue.objects.filter(attribute__name__icontains=u'Предыдущее образование').filter(value__icontains=u'СПО').first()
+							else:
+								edudoc.level = AttrValue.objects.filter(attribute__name__icontains=u'Предыдущее образование').filter(value__icontains=u'ВПО').first()
+				edudoc.save()
 				
 				snils = abit.docs_set.filter(docType__value__icontains=u'CНИЛС').first()
 				if snils is None:
@@ -293,7 +295,17 @@ def AddDataToPerson(request):
 				else:
 					adrs.adrs_type_same=False
 				adrs.save()
-			
+				if abit.contacts_set.all() is not None:
+					Contacts.objects.filter(person=abit).delete()
+				contacttype = request.POST.getlist('contacttype')
+				contactvalue = request.POST.getlist('contactvalue')
+				for i in range(0, len(contacttype)):
+					if len(contacttype[i])>0 and len(contactvalue[i])>0:
+						contact = Contacts()
+						contact.person = abit
+						contact.contact_type=AttrValue.objects.filter(pk=contacttype[i]).first()
+						contact.value = contactvalue[i]
+						contact.save()
 			if page==4:
 				if abit.exams_set.filter(exam_examType__value=u'ЕГЭ') is not None:
 					Exams.objects.filter(abiturient=abit).filter(exam_examType__value=u'ЕГЭ').delete()
@@ -312,6 +324,9 @@ def AddDataToPerson(request):
 					exam.save()
 				if len(request.POST.get('additionalExams','')) > 0:
 					add_exams=request.POST.get('additionalExams','').split(',')
+					specusl = False
+					if request.POST.get('specusl','') == "yes":
+						specusl=True
 					if abit.exams_set.filter(exam_examType__value=u'Вступительный') is not None:
 						Exams.objects.filter(abiturient=abit).filter(exam_examType__value=u'Вступительный').delete()
 					for item in add_exams:
@@ -320,6 +335,7 @@ def AddDataToPerson(request):
 						add_exam.exam_examType = AttrValue.objects.filter(attribute__name__icontains=u'Тип экзамена').filter(value__icontains=u'Вступительный').first()
 						add_exam.exam_subjects=AttrValue.objects.filter(attribute__name__icontains=u'Дисциплина').filter(pk=item).first()
 						add_exam.year=2016
+						add_exam.special = specusl
 						add_exam.save()
 			"""
 			if(page==5):
@@ -358,7 +374,7 @@ def AddDataToPerson(request):
 
 def SaveApplication(request):
 	result = {'result':0, 'error_msg':''}
-	print(request.POST)
+	#print(request.POST)
 	if request.method == 'POST':
 		if(int(request.POST.get('facepalm',''))>0):
 			application=Application.objects.get(pk=request.POST.get('facepalm'))

@@ -5,13 +5,16 @@
 {% block additionalcss %}
 <link href="{% static "anketa/css/prettify.css" %}" rel="stylesheet">
 <link href="{% static "anketa/css/jquery.realperson.css" %}" rel="stylesheet">
+<link href="{% static "anketa/css/bootstrap-datetimepicker.min.css" %}" rel="stylesheet">
 {% endblock %}
 {% block scripts %}
-<script src="{% static "anketa/js/jquery-1.10-min.js" %"></script>
 <script src="{% static "anketa/js/jquery.bootstrap.wizard.js" %}"></script>
 <script src="{% static "anketa/js/prettify.js" %}"></script>
 <script src="{% static "anketa/js/jquery.plugin.js" %}"></script>
 <script src="{% static "anketa/js/jquery.realperson.js" %}"></script>
+<script src="{% static "anketa/js/moment.min.js" %}"></script>
+<script src="{% static "anketa/js/ru.js" %}"></script>
+<script src="{% static "anketa/js/bootstrap-datetimepicker.min.js" %}"></script>
 <script>
 	/*
 	............................................________ 
@@ -44,6 +47,7 @@
 	var $emailError=true;
 	var $pwdError=true;
 	var $pwdVerError=true;
+
 	function SetIcon(field, status)
 	{
 		if(status==="okay")
@@ -187,6 +191,10 @@
 	var $dateError=false;
 	var $sexError=true;
 	var symbolsValid = /^[а-яА-ЯЁё]+$/;
+	$("#birthday").datetimepicker({
+		format:'DD/MM/YYYY',
+		locale:"ru"
+	});
 	$("#fName").focusout(function()
 	{
 		$fnameError=true;
@@ -242,11 +250,11 @@
 			$mnameError=false;
 		}
 	});
-	$("#birthday").focusout(function()
+	$('input[name="birthday"]').focusout(function()
 	{
 		$dateError=true;
 		var dtRegex =/^\d{4}-\d{1,2}-\d{1,2}$/;
-		if(!dtRegex.test($("#birthday").val()) || $("#birthday").val().length===0)
+		if($(this).val().length===0)
 		{
 			SetIcon("birthday","error");
 			$("#birthdayField").attr("class","has-error has-feedback col-xs-3 col-sm-3 col-md-3 col-md-offset-4");
@@ -441,7 +449,12 @@
 						<div class="col-xs-12 col-sm-12 col-md-3 col-md-offset-4" id="birthdayField">
 							<p>
 								<label class="control-label"  for="birthday">Дата рождения</label>
-								<input type="date" name = "birthday" id ="birthday" value="1997-01-01" class="form-control">
+								<div class='input-group date' id='birthday'>
+									<input type="text" class="form-control" name="birthday" />
+										<span class="input-group-addon">
+											<span class="glyphicon glyphicon-calendar"></span>
+										</span>
+								</div>
 								<span id="birthdayIcon"></span>
 								<span id="birthdayFieldDescr" class="help-block"></span>
 							</p>
