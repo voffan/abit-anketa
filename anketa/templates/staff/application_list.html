@@ -46,23 +46,7 @@
 
 {% block content %}
 <form action="{% url 'staff:application_list' %}"  method="GET">
-	<div class="col-md-offset-10">
-		<div class="btn-group">
-			<button type="submit" class="btn btn-success" name="export">Экспорт</button>
-			<div class="btn-group">
-				<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-						Состояние заявления
-						<span class="caret"></span>
-				</button>
-				<ul class="dropdown-menu">
-					<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Анулированный</a></li>
-					<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Поданный</a></li>
-					<li role="presentation" class="divider"></li>
-					<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Подтвержденный</a></li>
-				</ul>
-			</div>
-		</div>
-	</div>
+	
 	<table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-striped table-hover">
 		<thead>
 		<tr class="info">
@@ -147,45 +131,74 @@
 		</tr>
 		</thead>
 		<tbody>
-		{% for item in applications %}
-		<tr ng-repeat="row in displayedCollection">
-		<td class="rowl">{{ forloop.counter }}</td>
-		<td class="rowl"><a href="{% url 'staff:application_review' item.app.id %}">{{ item.app.abiturient.fullname }}</a></td>
-		<td class="rowl">{% if item.app.edu_prog.eduform == 'О'%}Очная{% endif %}{% if item.app.edu_prog.eduform == 'З'%}Заочная{%endif%}{% if item.app.edu_prog.eduform == 'ОЗ'%}Очно-Заочная{% endif %}</td>
-		<td class="rowl">{{ item.app.date }}</td>
-		<td class="rowl">{{ item.doc.docType.value }}</td>
-		<td class="rowl">{% if item.doc.isCopy %} Оригинал {% endif %}{% if not item.doc.isCopy %} Копия {% endif %}</td>
-		<td class="rowl">{{ item.app.edu_prog.edu_prog.name }}</td>
-		<td class="rowl">{{ item.app.edu_prog.edu_prog.qualification.value }}</td>
-		<td class="rowl">{{ item.app.points }}</td>
-		<td class="rowl">{{ item.app.appState.value }}</td>
-		<td class="rowl"><div class="col-md-offset-5"><input type="checkbox" name="selected"/></div></td>
-		</tr>
-		{% endfor %}
+			{% for item in applications %}
+			<tr ng-repeat="row in displayedCollection">
+				<td class="rowl">{{ forloop.counter }}</td>
+				<td class="rowl"><a href="{% url 'staff:application_review' item.app.id %}">{{ item.app.abiturient.fullname }}</a></td>
+				<td class="rowl">{% if item.app.edu_prog.eduform == 'О'%}Очная{% endif %}{% if item.app.edu_prog.eduform == 'З'%}Заочная{%endif%}{% if item.app.edu_prog.eduform == 'ОЗ'%}Очно-Заочная{% endif %}</td>
+				<td class="rowl">{{ item.app.date }}</td>
+				<td class="rowl">{{ item.doc.docType.value }}</td>
+				<td class="rowl">{% if item.doc.isCopy %} Оригинал {% endif %}{% if not item.doc.isCopy %} Копия {% endif %}</td>
+				<td class="rowl">{{ item.app.edu_prog.edu_prog.name }}</td>
+				<td class="rowl">{{ item.app.edu_prog.edu_prog.qualification.value }}</td>
+				<td class="rowl">{{ item.app.points }}</td>
+				<td class="rowl">{{ item.app.appState.value }}</td>
+				<td class="rowl"><div class="col-md-offset-5"><input type="checkbox" name="selected"/></div></td>
+			</tr>
+			{% endfor %}
 		</tbody>
 	</table> 
 	
-	<div class="row">
-		<div class="col-md-offset-4 columns">
-			<ul class="pagination">
-				{% if pages.has_previous %}
-					<li class="arrow"><a href="{% url 'staff:application_list' %}?page={{ pages.previous_page_number }}{% for key,value in filters.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">&laquo;</a></li>
-				{% else %}
-					<li class="arrow disabled"><a href="">&laquo;</a></li>
-				{% endif %}
-				{% for page in pages.paginator.page_range %}
-					{% if page == pages.number %}
-						<li class="active"><a href="{% url 'staff:application_list' %}?page={{ page }}{% for key,value in filters.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">{{ page }}</a></li>
-					{% else %}
-						<li><a href="{% url 'staff:application_list' %}?page={{ page }}{% for key,value in filters.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">{{ page }}</a></li>
-					{% endif %}
-				{% endfor %}
-				{% if pages.has_next %}
-					<li class="arrow"><a href="{% url 'staff:application_list' %}?page={{ pages.next_page_number }}{% for key,value in filters.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">&raquo;</a></li>
-				{% else %}
-					<li class="arrow disabled"><a href="">&raquo;</a></li>
-				{% endif %}
-			</ul>
+	<div class="col-xs-5 col-sm-5 col-md-5 col-md-offset-4">
+		<div class="row">
+			<table class="table" >
+				<tr>
+					<td>
+						<div>
+							<ul class="pagination">
+								{% if pages.has_previous %}
+									<li class="arrow"><a href="{% url 'staff:application_list' %}?page={{ pages.previous_page_number }}{% for key,value in filters.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">&laquo;</a></li>
+								{% else %}
+									<li class="arrow disabled"><a href="">&laquo;</a></li>
+								{% endif %}
+								{% for page in pages.paginator.page_range %}
+									{% if page == pages.number %}
+										<li class="active"><a href="{% url 'staff:application_list' %}?page={{ page }}{% for key,value in filters.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">{{ page }}</a></li>
+									{% else %}
+										<li><a href="{% url 'staff:application_list' %}?page={{ page }}{% for key,value in filters.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">{{ page }}</a></li>
+									{% endif %}
+								{% endfor %}
+								{% if pages.has_next %}
+									<li class="arrow"><a href="{% url 'staff:application_list' %}?page={{ pages.next_page_number }}{% for key,value in filters.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">&raquo;</a></li>
+								{% else %}
+									<li class="arrow disabled"><a href="">&raquo;</a></li>
+								{% endif %}
+							</ul>
+						</div>
+					</td>
+
+					<td>	
+						<div>
+						</br>
+							<div class="btn-group">
+								<button type="submit" class="btn btn-success" name="export">Экспорт</button>
+								<div class="btn-group">
+									<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+											Состояние заявления
+											<span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu">
+										<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Анулированный</a></li>
+										<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Поданный</a></li>
+										<li role="presentation" class="divider"></li>
+										<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Подтвержденный</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</td>
+				</tr>
+			</table>
 		</div>
 	</div>
 		 

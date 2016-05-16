@@ -8,7 +8,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
 	url(r'^login/','staff.views.login', name = 'login'),
-	url(r'^logout/','staff.views.logout'),
+	url(r'^logout/','staff.views.logout',name = 'logout'),
 	#url(r'^$',views.index,name='index'),
 	url(r'^employee_list/',views.Employee_list, name = 'employee_list'),
 	url(r'^employee_add/',views.AddEmployee, name = 'employee_add'),
@@ -24,4 +24,5 @@ urlpatterns = patterns('',
 	url(r'contact_dels/',views.Contact_dels,name='contact_dels'),
 	url(r'wiz_cont_dels/',views.Wiz_cont_dels, name='wiz_cont_dels'),
 	url(r'wiz_cont_apply',views.Wiz_cont_apply, name='wiz_cont_apply'),
+	url(r'^add_data_to_person/$',views.AddDataToPerson,name="add_data_to_person"),
 					)
