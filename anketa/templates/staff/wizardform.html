@@ -371,7 +371,7 @@
 
             alert($("#currentPage").val());
             $.ajax({
-                url:{% url 'add_data_to_person' %},
+                url:"{% url 'staff:add_data_to_person' %}",
                 type:$("#persondata").attr('method'),
                 data:$("#persondata").serialize(),
                 dataProcess:true,
