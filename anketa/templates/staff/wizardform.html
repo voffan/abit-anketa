@@ -19,7 +19,7 @@
 <script src="{% static "anketa/js/prettify.js" %}"></script>
 <script src="{% static "anketa/select2-3.5.4/select2.min.js" %}"></script>
 <script src="{% static "anketa/select2-3.5.4/ru.js" %}"></script>
-
+<script src="{% static "anketa/js/notify.js" %}"></script>
 <script src="{% static "anketa/js/kladr.js" %}"></script>
 
 
@@ -340,88 +340,60 @@
     }
 </script>
 <script>
-    var countOfTr2 = {{ data.contacts_len }}; // Текущее число полей
-    var curTrNameId2 = 1; // Уникальное значение для атрибута name
-    var maxTrLimit2 = 10; // Максимальное число возможных полей
-    function deletecontactrow2(a) {
-        if (countOfTr2 > 1)
+    {% if data.contacts1 %}
+    var contactsrow = {{data.contacts1|length}};
+    {% else %}
+    var contactsrow = 1;
+    {% endif %}
+    var maxContacts = 10;
+    $(document).on("click","button[id*='delContactRow']", function()
+    {
+        if(contactsrow>1)
         {
-            var $arg=$(a).attr('value');           
+            $(this).parent().parent().remove();
+            contactsrow--;
+        }
+    });
+
+    $("#addContact").on("click", function()
+    {
+        if(contactsrow<maxContacts)
+        {
+            contactsrow++;
+            var newRow = $('<tr class="info"><td><select id="contacttype" name = "contacttype" class="form-control">{% if data.contacts_type %}{% for item in data.contacts_type %}<option value="{{item.id}}">{{item.value}}</option>{% endfor %}{% endif %}</select></td><td><input type="text" class="form-control" name="contactvalue"></td><td><button class="btn btn-default btn-sm" id="delContactRow" type="button">Удалить</button></td></tr>');
+                $("#contactsTable").append(newRow);
+        }
+            
+    });
+    $(document).on("click","button[id*='save']", function()
+        {
+            $("#currentPage").val(($(this).attr('id').slice('4')));
+
+            alert($("#currentPage").val());
             $.ajax({
-                url:"{% url 'staff:wiz_cont_dels' %}",
-                method:"POST",
-                data:{
-                    'csrfmiddlewaretoken':$("input[name='csrfmiddlewaretoken']").val(),
-                    'query':$arg,    
-                },
-                dataType: "json",
+                url:{% url 'add_data_to_person' %},
+                type:$("#persondata").attr('method'),
+                data:$("#persondata").serialize(),
                 dataProcess:true,
+                timeout:500,
                 success:function(data)
                 {
-                    if(data[0]['result']=='1'){
-                        // Получаем доступ к ДИВу, содержащему поле
-                        var contDiv = a.parentNode.parentNode;
-                        // Удаляем этот ДИВ из DOM-дерева
-                        contDiv.parentNode.removeChild(contDiv);
-                        // Уменьшаем значение текущего числа полей
-                        countOfTr2--;
-                    }else{
-                        alert(data[0]['error_message']);
+                    if (data==="success")
+                    {
+                        $.notify("Сохранено.", "success");
+                    }
+                    else
+                    {
+                        $.notify("Что-то пошло не так :(", "error");
                     }
                     
                 },
                 error:function()
                 {
-                    alert('JSonelove');
-                },    
+                    $.notify("Что-то пошло не так2 :(", "error");
+                }
             });
-        }    
-     // Возвращаем false, чтобы не было перехода по сслыке
-    return false;
-    }
-    function applycontactrow2(b){
-        var $arg1 = $(b).attr('value');        
-        $.ajax({
-            url: "{% url 'staff:wiz_cont_apply' %}",
-            method: "POST",
-            data:{
-                'csrfmiddlewaretoken':$("input[name='csrfmiddlewaretoken']").val(),
-                'query1':$arg1,
-                'query2':$arg2,
-                'query3':$arg3,
-            },
-            dataType: "json",
-            dataProcess:true,
-            success:function()
-            {
-                alert('success');
-            },
-            error:function(data)
-            {
-                alert('jopa');
-            },
         });
-    // Возвращаем false, чтобы не было перехода по сслыке
-    return false; 
-    }
-
-
-    function addcontactrow2(){
-        // Проверяем, не достигло ли число полей максимума
-        if (countOfTr2 >= maxTrLimit2) {
-        alert("Число полей достигло своего максимума = " + maxTrLimit2);
-        return false;
-        }
-        // Увеличиваем текущее значение числа полей
-        countOfTr2++;
-        // Увеличиваем ID
-        //curTrNameId2++;
-        // Создаем элемент ДИВ        
-        var tr = document.createElement("tr");
-        tr.innerHTML = "<td><select id=\"contacttype\" name = \"contacttype\" class=\"form-control\">{% for item in data.contactyp %}<option {% if item.id == item1.contact_type.id %} selected {% endif %}  value=\"{{item.id}}\">{{item.value}}</option>{% endfor %}</select></td><td><input type=\"text\" class=\"form-control\" name = \"contactvalue["+curTrNameId2+"]\" id=\"contactvalue["+curTrNameId2+"]\" value =\"\"></td><td><a style=\"\" onclick=\"return applycontactrow2(this)\" value=\"{{data.application.abiturient.id}}\" href=\"#\"><span class=\"glyphicon glyphicon-ok\"></span></a><a style=\"\" onclick=\"return deletecontactrow2(this)\" value=\""+curTrNameId2+"\" href=\"#\"><span class=\"glyphicon glyphicon-minus\"></span></a></td>";
-        document.getElementById("TableContactAdd2").appendChild(tr);
-        return false;
-    }
 
 
 </script>
@@ -430,6 +402,7 @@
 
 {% block content %}
 {% include '..\templates\kladr\kladr.html' %}
+<form id="persondata" name="persondata" class="form-horizontal" role="form" method="post" >
 {% csrf_token %}
 <div id = "rootwizard">
     <div class="navbar">
@@ -448,6 +421,7 @@
             </div>
         </div>
     </div>
+    <input type="hidden" name="currentPage" id="currentPage">
     <div class="tab-content">
         <div class="tab-pane" id="tab1">
             <div class = "container-fluid">
@@ -735,7 +709,7 @@
                 </div>
                </br>
                <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
-                    <div class="panel panel-default">
+                    <!--<div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title">Контакты</h3>
                         </div>
@@ -749,7 +723,7 @@
                                     {% for item1 in data.contacts %}
                                     <tr>
                                         <td>
-                                            <select id="contacttype" name = "contacttype" class="form-control">
+                                            <select id="contacttype2" name = "contacttype2" class="form-control">
                                                 {% for item in data.contactyp %}
                                                 <option {% if item.id == item1.contact_type.id %} selected {% endif %}  value="{{item.id}}">{{item.value}}</option>
                                                 {% endfor %}
@@ -773,10 +747,70 @@
                             <div class="col-md-offset-11">
                                 <a style="" onclick="return addcontactrow2()" href="#"><span class="glyphicon glyphicon-plus"></span></a>   
                             </div> 
-                             <button type="submit" class="btn btn-primary" name="sav" >сохранить</button>                           
+                             <button type="submit" class="btn btn-primary" name="sav1" >сохранить</button>                           
                         </div>
-                    </div>
+                    </div>-->
                     <input type="hidden" class="form-control" name = "wiz_cont_apply_name" id="wiz_cont_apply_name" value ="{{data.application.abiturient.id}}" hidden>
+
+                    <div >
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Контакты</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div >
+                                    <table class="table" id="table">
+                                        <thead id="tablehead">
+                                            <tr>
+                                                <th>Тип контакта</th>
+                                                <th>Номер</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="contactsTable">
+                                            {% if data.contacts1 %}
+                                                {% for item in data.contacts1 %}
+                                                <tr>
+                                                    <td>
+                                                    <select id="contacttype" name = "contacttype" class="form-control">
+                                                        {% if data.contacts_type %}
+                                                            {% for item2 in data.contacts_type %}
+                                                                <option value="{{item2.id}}" {% if item.type.id == item2.id %} selected {% endif %}>{{item2.value}}</option>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </select>
+                                                    </td>
+                                                    <td><input type="text" class="form-control" name="contactvalue" value= {{item.value}}></td>
+                                                    <td><button class="btn btn-default btn-sm" id="delContactRow" type="button">Удалить</button></td>
+                                                </tr>
+                                                {% endfor %}
+                                            {% else %}
+                                            <tr>
+                                                <td>
+                                                    <select id="contacttype" name = "contacttype" class="form-control">
+                                                        {% if data.contacts_type %}
+                                                            {% for item in data.contacts_type %}
+                                                                <option value="{{item.id}}">{{item.value}}</option>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </select>
+                                                </td>
+                                                <td><input type="text" class="form-control" name="contactvalue"></td>
+                                                <td><button class="btn btn-default btn-sm" id="delContactRow" type="button">Удалить</button></td>
+                                            </tr>
+                                            {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div>
+                                    <button class="btn btn-primary btn-block" type="button" id="addContact">Добавить контакт</button>
+                                </div>
+                                </br>
+                                <div>
+                                    <button class="btn btn-primary" type="button" id="save3">Сохранить</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                  
                 </div>
                 <br>
                 <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
@@ -1082,13 +1116,13 @@
                     <div class="row" id="Mujik">
                             <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
                                 <label for="option7">Служили в армии?</label>
-                                <form >
+                                
                                     <p>
                                         <input type = "radio" name= "option7" id="pacan" value="a62"{% if data.milit.isServed %} checked {% endif %}>Да
                                         <input type = "radio" name= "option7" id="nepacan" value="a61"{% if not data.milit.isServed %} checked {% endif %}>Нет
                                         
                                     </p>
-                                </form>
+                                
                             </div>
                     </div>
                 </p>
@@ -1126,5 +1160,6 @@
                 </ul>
             </div>  
     </div>
-</div> 
+</div>
+</form> 
 {% endblock %}
