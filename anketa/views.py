@@ -335,7 +335,6 @@ def AddDataToPerson(request):
 						relation.relType = AttrValue.objects.filter(pk=relationtype[i]).first()
 						relperson = Person()
 						fio=relationFIO[i].split(' ')
-						print(fio)
 						if fio[0]:
 							relperson.sname=fio[0]
 						if fio[1]:
@@ -343,7 +342,7 @@ def AddDataToPerson(request):
 						if fio[2]:
 							relperson.mname=fio[2]
 						relperson.sex="М"
-						relperson.birthdate=datetime.datetime.strptime('15/05/407','%d/%m/%Y').strftime('%Y-%m-%d')
+						relperson.birthdate=datetime.datetime.strptime('15/05/2007','%d/%m/%Y').strftime('%Y-%m-%d')
 						relperson.save()
 						relation.person=relperson
 						contact = Contacts()
