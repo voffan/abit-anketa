@@ -384,7 +384,6 @@
         {
             $("#currentPage").val(($(this).attr('id').slice('4')));
 
-            alert($("#currentPage").val());
             $.ajax({
                 url:"{% url 'staff:add_data_to_person' %}",
                 type:$("#persondata").attr('method'),

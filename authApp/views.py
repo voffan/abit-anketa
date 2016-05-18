@@ -3,7 +3,7 @@ from django.http import HttpResponse,HttpResponseRedirect
 from django.shortcuts import render_to_response, render, redirect
 #from anketa.models import User
 from django.core.context_processors import csrf
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.template import RequestContext
 
@@ -14,6 +14,10 @@ def index(request):
 	args={}
 	args.update(csrf(request))
 	return render (request, 'auth/auth.html',args)
+
+def logout_user(request):
+	logout(request)
+	return redirect('startpage')
 
 def login_user(request):
 	if request.POST:
