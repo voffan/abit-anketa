@@ -331,7 +331,6 @@ def AddDataToPerson(request):
 				for i in range(0, len(relationtype)):
 					if len(relationtype[i])>0 and len(relationcontactvalue[i])>0 and len(relationFIO[i])>0:
 						relation = Relation()
-						print("hui")
 						relation.abiturient = abit
 						relation.relType = AttrValue.objects.filter(pk=relationtype[i]).first()
 						relperson = Person()
@@ -352,7 +351,6 @@ def AddDataToPerson(request):
 						contact.contact_type=AttrValue.objects.filter(value__icontains=u'телефон').first()
 						contact.value = relationcontactvalue[i]
 						contact.save()
-						print("hui")
 						relation.save()
 			if page==4:
 				if abit.exams_set.filter(exam_examType__value=u'ЕГЭ') is not None:
