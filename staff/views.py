@@ -374,7 +374,7 @@ def Application_review (request, application_id):
 	adrtype = AttrValue.objects.filter(attribute__name__icontains=u'Тип адреса')
 	rank = AttrValue.objects.filter(attribute__name__icontains=u'Воинское звание')
 	snils = application.abiturient.docs_set.filter(docType__value__icontains=u'СНИЛС').first()
-	foreign_lang = AttrValue.objects.filter(attribute__name__icontains=u'иностранный язык')
+	foreign_lang = AttrValue.objects.filter(attribute__name__icontains=u'Изучаемый язык')
 	docissuer = AttrValue.objects.filter(attribute__name__icontains=u'выдавший ')
 	nationality = AttrValue.objects.filter(attribute__name__icontains=u'национальность')
 	doctype = AttrValue.objects.exclude(value__icontains=u'диплом').exclude(value__icontains=u'аттест').exclude(value__icontains=u'СНИЛС').filter(attribute__name__icontains=u'тип документа')
@@ -423,7 +423,7 @@ def Application_review (request, application_id):
 	contacts_type = AttrValue.objects.filter(attribute__name__icontains=u'Тип контакта')
 	if contacts_type is not None:
 		Data['contacts_type']=contacts_type
-	print(passp.docIssuer)
+	print(application.abiturient.foreign_lang)
 	person_contacts = person.contacts_set.all()
 	if person.contacts_set is not None:
 		contacts=[]
