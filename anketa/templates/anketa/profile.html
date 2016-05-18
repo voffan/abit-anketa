@@ -93,6 +93,7 @@
 							<h3 class="panel-title">Заявления</h3>
 						</div>
 						<div class="panel-body">
+						{% if applications %}
 							<table class="table">
 								<thead>
 									<tr>
@@ -103,7 +104,6 @@
 									</tr>
 								</thead>
 								<tbody>
-								{% if applications %}
 									{% for item in applications %}
 										<tr {% if item.appState.value == "Поданно" %} class="info" {% else %} {% if item.appState.value == "Экспортированно" %} class="success" {% else %} class="info" {% endif %} {% endif %}>
 											<td>{{item.id}}</td>
@@ -112,11 +112,11 @@
 											<td>{{item.appState.value}}</td>
 										</tr>
 									{% endfor %}
-								{% else %}
-									<tr>У вас пока нет заявлений :(</tr>
-								{% endif %}
 								</tbody>
 							</table>
+						{% else %}
+						У вас пока нет заявлений :(
+						{% endif %}
 						</div>
 					</div>
 				</div>

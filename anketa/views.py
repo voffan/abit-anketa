@@ -16,7 +16,7 @@ from django.shortcuts import render_to_response, render,get_object_or_404, redir
 from django.template import RequestContext
 
 from kladr.models import Street
-from anketa.models import Person, Address, Attribute, AttrValue, Abiturient, Department, Education_Prog, Profile, Application, Education_Prog_Form, EduForm, ApplicationProfiles, Milit, Docs, Exams, DocAttr,Education, Contacts
+from anketa.models import Person, Address, Attribute, AttrValue, Abiturient, Department, Education_Prog, Profile, Application, Education_Prog_Form, EduForm, ApplicationProfiles, Milit, Docs, Exams, DocAttr,Education, Contacts, Relation
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -95,7 +95,7 @@ def PersonData(request):
 	if contacts_type is not None:
 		args['contacts_type']=contacts_type
 	person_contacts = person.contacts_set.all()
-	if person.contacts_set is not None:
+	if person_contacts is not None:
 		contacts=[]
 		for item in person_contacts:
 			cont = {}
@@ -103,6 +103,20 @@ def PersonData(request):
 			cont['value']=item.value
 			contacts.append(cont)
 		args['contacts']=contacts
+	relation_type = AttrValue.objects.filter(attribute__name__icontains=u'Тип связи')
+	if relation_type is not None:
+		args['relation_type']=relation_type
+	if Relation.objects.filter(abiturient=person) is not None:
+		person_relations = Relation.objects.filter(abiturient=person)
+		relations=[]
+		for item in person_relations:
+			cont = {}
+			cont['type']=item.relType
+			cont['fio']=item.person.fullname
+			cont['value']=Contacts.objects.filter(person=item.person).first().value
+			relations.append(cont)
+		args['relation']=relations
+		print(relations)
 	# 4
 	exams = person.exams_set.filter(exam_examType__value=u'ЕГЭ')
 	if exams is not None:
@@ -190,7 +204,11 @@ def AddDataToPerson(request):
 		try:
 			page=int(request.POST.get('currentPage',''))
 			abit=Abiturient.objects.get(user=request.user)
+			if abit.info_progress is None:
+				abit.info_progress="000000"
+			#progress = abit.info_progress.split()
 			if page==1: #Личные данные
+				#pageIsComplete=True;
 				abit.sname=request.POST.get('sname','')
 				abit.fname=request.POST.get('name','')
 				abit.mname=request.POST.get('mname','')
@@ -199,8 +217,6 @@ def AddDataToPerson(request):
 					abit.birthdate=datetime.datetime.strptime(request.POST.get('birthday',''),'%d/%m/%Y').strftime('%Y-%m-%d')
 				if(len(request.POST.get('nation','')))>0:
 					abit.nationality=AttrValue.objects.get(pk=request.POST.get('nation',''))
-				else:
-					abit.nationality=None
 				if(len(request.POST.get('citizenship','')))>0:
 					abit.citizenship=AttrValue.objects.get(pk=request.POST.get('citizenship',''))
 				if(len(request.POST.get('sex','')))>0:
@@ -248,6 +264,8 @@ def AddDataToPerson(request):
 				datejoining = request.POST.get('datejoining','')
 				if len(datejoining)>0:
 					edudoc.enterDate=datetime.datetime.strptime(datejoining,'%d/%m/%Y').strftime('%Y-%m-%d')
+				else:
+					pageIsComplete=False;
 				if doc.docType.value == "Аттестат":
 					edudoc.level = AttrValue.objects.filter(attribute__name__icontains=u'Предыдущее образование').filter(value__icontains=u'СОО').first()
 				else:
@@ -305,6 +323,37 @@ def AddDataToPerson(request):
 						contact.contact_type=AttrValue.objects.filter(pk=contacttype[i]).first()
 						contact.value = contactvalue[i]
 						contact.save()
+				if Relation.objects.filter(abiturient=abit) is not None:
+					Relation.objects.filter(abiturient=abit).delete()
+				relationtype = request.POST.getlist('relationtype')
+				relationcontactvalue = request.POST.getlist('relationcontactvalue')
+				relationFIO = request.POST.getlist('relationFIO')
+				for i in range(0, len(relationtype)):
+					if len(relationtype[i])>0 and len(relationcontactvalue[i])>0 and len(relationFIO[i])>0:
+						relation = Relation()
+						print("hui")
+						relation.abiturient = abit
+						relation.relType = AttrValue.objects.filter(pk=relationtype[i]).first()
+						relperson = Person()
+						fio=relationFIO[i].split(' ')
+						print(fio)
+						if fio[0]:
+							relperson.sname=fio[0]
+						if fio[1]:
+							relperson.fname=fio[1]
+						if fio[2]:
+							relperson.mname=fio[2]
+						relperson.sex="М"
+						relperson.birthdate=datetime.datetime.strptime('15/05/407','%d/%m/%Y').strftime('%Y-%m-%d')
+						relperson.save()
+						relation.person=relperson
+						contact = Contacts()
+						contact.person = relperson
+						contact.contact_type=AttrValue.objects.filter(value__icontains=u'телефон').first()
+						contact.value = relationcontactvalue[i]
+						contact.save()
+						print("hui")
+						relation.save()
 			if page==4:
 				if abit.exams_set.filter(exam_examType__value=u'ЕГЭ') is not None:
 					Exams.objects.filter(abiturient=abit).filter(exam_examType__value=u'ЕГЭ').delete()
@@ -415,7 +464,7 @@ def Save_Abiturient(values):
 	abit.sname=values.get('sName','')
 	abit.mname=values.get('mName','')
 	abit.sex=values.get('sex','')
-	abit.birthdate=datetime.datetime.strptime(values.get('birthday',''),'%Y-%m-%d')
+	abit.birthdate=datetime.datetime.strptime(values.get('birthday',''),'%d/%m/%Y').strftime('%Y-%m-%d')
 	abit.save()
 
 def rpHash(person):

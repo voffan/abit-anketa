@@ -37,6 +37,29 @@
 		var contactsrow = 1;
 		{% endif %}
 		var maxContacts = 10;
+		{% if relations %}
+			var relationsrow = {{relations|length}};
+		{% else %}
+		var relationsrow = 1;
+		{% endif %}
+		var maxRelations = 10;
+		$(document).on("click","button[id*='delRelationRow']", function()
+		{
+			if(relationsrow>1)
+			{
+				$(this).parent().parent().remove();
+				relationsrow--;
+			}
+		});
+		$("#addRelation").on("click", function()
+		{
+			if(contactsrow<maxContacts)
+			{
+				relationsrow++;
+				var newRow = $('<tr><td><select id="relationtype" name = "relationtype" class="form-control">{% if relation_type %}{% for item in relation_type %}<option value="{{item.id}}">{{item.value}}</option>{% endfor %}{% endif %}</select></td><td><input type="text" class="form-control" name="relationFIO"></td><td><input type="text" class="form-control" name="relationcontactvalue"></td><td><button class="btn btn-default btn-sm" id="delRelationRow" type="button">Удалить</button></td></tr>');
+				$("#relationsTable").append(newRow);
+			}
+		});
 		$(document).on("click","button[id*='delContactRow']", function()
 		{
 			if(contactsrow>1)
@@ -53,7 +76,6 @@
 				var newRow = $('<tr class="info"><td><select id="contacttype" name = "contacttype" class="form-control">{% if contacts_type %}{% for item in contacts_type %}<option value="{{item.id}}">{{item.value}}</option>{% endfor %}{% endif %}</select></td><td><input type="text" class="form-control" name="contactvalue"></td><td><button class="btn btn-default btn-sm" id="delContactRow" type="button">Удалить</button></td></tr>');
 				$("#contactsTable").append(newRow);
 			}
-			
 		});
 		$(document).on("click","button[id*='delExamRow']", function()
 		{
@@ -68,7 +90,7 @@
 			if(egerows<maxExams)
 			{
 				egerows++;
-				var newRow = $('<tr class="info"><td><input type="hidden" class="form-control" name="egeDisc"></td><td><input type="text" class="form-control" name="egePoints"></td><td><input type="text" class="form-control" name="egeYear"></td><td><button class="btn btn-default btn-sm" id="delExamRow" type="button">Удалить</button></td></tr>');
+				var newRow = $('<tr><td><input type="hidden" class="form-control" name="egeDisc"></td><td><input type="text" class="form-control" name="egePoints"></td><td><input type="text" class="form-control" name="egeYear"></td><td><button class="btn btn-default btn-sm" id="delExamRow" type="button">Удалить</button></td></tr>');
 				$("#egeTableBody").append(newRow);
 				initSelect2(newRow.find('input[name^="egeDisc"]'));
 			}
@@ -925,6 +947,64 @@
 								</div>
 								<div class="row">
 									<button class="btn btn-primary btn-block" type="button" id="addContact">Добавить контакт</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<h3 class="panel-title">Родственники</h3>
+							</div>
+							<div class="panel-body">
+								<div class="row">
+									<table class="table" id="table">
+										<thead id="tablehead">
+											<tr>
+												<th>Родственник</th>
+												<th>ФИО</th>
+												<th>Номер телефона</th>
+											</tr>
+										</thead>
+										<tbody id="relationsTable">
+											{% if relation %}
+												{% for item in relation %}
+												<tr>
+													<td>
+													<select id="relationtype" name = "relationtype" class="form-control">
+														{% if relation_type %}
+															{% for item2 in relation_type %}
+																<option value="{{item2.id}}" {% if item.type.id == item2.id %} selected {% endif %}>{{item2.value}}</option>
+															{% endfor %}
+														{% endif %}
+													</select>
+													</td>
+													<td><input type="text" class="form-control" name="relationFIO" value= {{item.fio}}></td>
+													<td><input type="text" class="form-control" name="relationcontactvalue" value= {{item.value}}></td>
+													<td><button class="btn btn-default btn-sm" id="delRelationRow" type="button">Удалить</button></td>
+												</tr>
+												{% endfor %}
+											{% else %}
+											<tr>
+												<td>
+													<select id="relationtype" name = "relationtype" class="form-control">
+														{% if relation_type %}
+															{% for item in relation_type %}
+																<option value="{{item.id}}">{{item.value}}</option>
+															{% endfor %}
+														{% endif %}
+													</select>
+												</td>
+												<td><input type="text" class="form-control" name="relationFIO"></td>
+												<td><input type="text" class="form-control" name="relationcontactvalue"></td>
+												<td><button class="btn btn-default btn-sm" id="delRelationRow" type="button">Удалить</button></td>
+											</tr>
+											{% endif %}
+										</tbody>
+									</table>
+								</div>
+								<div class="row">
+									<button class="btn btn-primary btn-block" type="button" id="addRelation">Добавить родственника</button>
 								</div>
 							</div>
 						</div>
