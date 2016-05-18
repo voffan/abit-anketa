@@ -26,7 +26,7 @@ def CheckUserIsStaff(user):
 	else:
 		return False
 
-@login_required(login_url = '/login')
+@login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def index(request):
 	n = 'Anufriev'
@@ -34,7 +34,7 @@ def index(request):
 		n = request.POST['input1']
 	return render(request,'staff\staff_index.html',{'data':{'username':'nik'}}.update(csrf(request)))
 
-@login_required(login_url = '/login')
+@login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def login(request):
 		args = {}
@@ -52,13 +52,13 @@ def login(request):
 
 
 
-@login_required(login_url = '/login')
+@login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def logout(request):
 	auth.logout(request)
 	return redirect('/auth')
 
-@login_required(login_url = '/login')
+@login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Employee_list(request):
 	if request.method == 'POST':
@@ -79,8 +79,6 @@ def Employee_list(request):
 	return render(request,'staff\employee_manage.html',  context)
 
 @transaction.atomic
-@login_required(login_url = '/login')
-@user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Add_Employee(values):
 	empl_id = values.get('user-id','')
 	if len(empl_id)>0:
@@ -102,7 +100,7 @@ def Add_Employee(values):
 	employee.position = posit
 	employee.save()
 
-@login_required(login_url = '/login')
+@login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def AddEmployee(request):
 	if request.method == 'POST':
@@ -121,7 +119,7 @@ def AddEmployee(request):
 	context.update(csrf(request))
 	return render(request,'staff\employee_add.html',context)
 
-@login_required(login_url = '/login')
+@login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def EditEmployee(request, employee_id):
 	departments = Department.objects.all()
@@ -135,7 +133,7 @@ def EditEmployee(request, employee_id):
 	context.update(csrf(request))
 	return render(request,'staff\employee_add.html',context)
 
-@login_required(login_url = '/login')
+@login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def AddContact(employee, contacts):
 	for item in contacts:
@@ -146,8 +144,6 @@ def AddContact(employee, contacts):
 		contact.save()
 
 @transaction.atomic
-@login_required(login_url = '/login')
-@user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def save_user_profile(user, values):
 	user.email = values.get('email','')
 	password2 = values['confirm']
@@ -165,7 +161,7 @@ def save_user_profile(user, values):
 		AddContact(employee,[{'id':AttrValue.objects.get(attribute__name__icontains=u'контакт', value__icontains=values.get('contacts_type')).id,'value':values.get('contacts','')}])
 	employee.save()
 
-@login_required(login_url = '/login')
+@login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Employee_Useraccount(request):
 	user = request.user
@@ -194,7 +190,7 @@ def Employee_Useraccount(request):
 	context.update(csrf(request))
 	return render(request,'staff\employee_acc.html',context)
 
-@login_required(login_url = '/login')
+@login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Application_list (request):
 	applications = Application.objects.all()
@@ -346,7 +342,7 @@ def Application_list (request):
 	return render(request,'staff\\application_list.html', data)
 
 
-@login_required(login_url = '/login')
+@login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Application_review (request, application_id):
 	if request.method =='POST':
@@ -374,7 +370,7 @@ def Application_review (request, application_id):
 	adrtype = AttrValue.objects.filter(attribute__name__icontains=u'Тип адреса')
 	rank = AttrValue.objects.filter(attribute__name__icontains=u'Воинское звание')
 	snils = application.abiturient.docs_set.filter(docType__value__icontains=u'СНИЛС').first()
-	foreign_lang = AttrValue.objects.filter(attribute__name__icontains=u'иностранный язык')
+	foreign_lang = AttrValue.objects.filter(attribute__name__icontains=u'Изучаемый язык')
 	docissuer = AttrValue.objects.filter(attribute__name__icontains=u'выдавший ')
 	nationality = AttrValue.objects.filter(attribute__name__icontains=u'национальность')
 	doctype = AttrValue.objects.exclude(value__icontains=u'диплом').exclude(value__icontains=u'аттест').exclude(value__icontains=u'СНИЛС').filter(attribute__name__icontains=u'тип документа')
@@ -423,7 +419,7 @@ def Application_review (request, application_id):
 	contacts_type = AttrValue.objects.filter(attribute__name__icontains=u'Тип контакта')
 	if contacts_type is not None:
 		Data['contacts_type']=contacts_type
-	print(contacts_type)
+	print(application.abiturient.foreign_lang)
 	person_contacts = person.contacts_set.all()
 	if person.contacts_set is not None:
 		contacts=[]
@@ -472,7 +468,7 @@ def attrvalue_add(attribute, values):
 		attr_value_add.value = values['attr_value']
 	attr_value_add.save()
 
-@login_required(login_url = '/login')
+@login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Catalogs(request):
 	attribute = Attribute.objects.all()
@@ -503,7 +499,7 @@ def Catalogs(request):
 	return render(request,'staff\catalogs.html', context)
 
 	
-@login_required(login_url = '/login')
+@login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Catalogs_attrvalue(request, attribute_id):    
 	attribute = Attribute.objects.get(pk=attribute_id)
@@ -528,7 +524,7 @@ def Catalogs_attrvalue(request, attribute_id):
 #=================================================ajax functions==========================================================
 
 
-@login_required(login_url = '/login')
+@login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Get_Attrs(request):
 	result=[]
@@ -540,7 +536,7 @@ def Get_Attrs(request):
 		result.append({'id':item.id, 'text':item.name})
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
-@login_required(login_url = '/login')
+@login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Get_Attr(request):
 	text = request.GET.get('attribute_id','')
@@ -548,7 +544,7 @@ def Get_Attr(request):
 	result = [{ 'name':item.name, 'id':item.id ,'type':{'id':item.type.id,'name':item.type.name}}]
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
-@login_required(login_url = '/login')
+@login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Get_Attr_val(request):
 	text = request.GET.get('query','')
@@ -556,7 +552,7 @@ def Get_Attr_val(request):
 	result = [{'name':attr.value, 'id':attr.id, 'attribut':attr.attribute.name}]
 	return HttpResponse(json.dumps(result),content_type="application/json")
 
-@login_required(login_url = '/login')
+@login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Contact_dels(request):
 	args = request.POST.get('query','-1')
@@ -570,7 +566,7 @@ def Contact_dels(request):
 	
 	return HttpResponse(json.dumps(result),content_type="application/json")
 
-@login_required(login_url = '/login')
+@login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Wiz_cont_dels(request):
 	args = request.POST.get('query','')
@@ -583,7 +579,7 @@ def Wiz_cont_dels(request):
 		result['error_message'] = str(e)
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
-@login_required(login_url = '/login')
+@login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Wiz_cont_apply(request):
 	pass

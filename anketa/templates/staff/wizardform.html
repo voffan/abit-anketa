@@ -234,6 +234,21 @@
                 cache: true
             }
         });
+    {% if data.application.abiturient.citizenship.value != None  %}
+        $("#citizenship").select2('data',{id: '{{citizenship_id}}', text:"{{data.application.abiturient.citizenship.value}}"});
+    {% endif %}
+    {% if data.passp.docIssuer.value != None  %}
+        $("#docissuer").select2('data',{id: '{{citizenship_id}}', text:"{{data.passp.docIssuer.value}}"});
+    {% endif %}
+    {% if data.edud.docIssuer.value != None  %}
+        $("#preveduname").select2('data',{id: '{{citizenship_id}}', text:"{{data.edud.docIssuer.value}}"});
+    {% endif %}
+    {% if data.application.department != None  %}
+        $("#inst").select2('data',{id: '{{citizenship_id}}', text:"{{data.application.department}}"});
+    {% endif %}
+    {% if data.application.edu_prog != None  %}
+        $("#eduprog").select2('data',{id: '{{citizenship_id}}', text:"{{data.application.edu_prog.edu_prog}}"});
+    {% endif %}
     });
 </script>
 
@@ -369,7 +384,6 @@
         {
             $("#currentPage").val(($(this).attr('id').slice('4')));
 
-            alert($("#currentPage").val());
             $.ajax({
                 url:"{% url 'staff:add_data_to_person' %}",
                 type:$("#persondata").attr('method'),
@@ -876,15 +890,15 @@
                             <div class="col-xs-3 col-sm-3 col-md-4">
                         
                                 <label for="option8">Приоритетность поступления</label><br>
-                                <input type = "radio" name= "option8" value="a41"{% if data.application == '' %} checked {% endif %}>Высокий
-                                <input type = "radio" name= "option8" value="a42"{% if data.application == '' %} checked {% endif %}>Средний
-                                <input type = "radio" name= "option8" value="a43"{% if data.application == '' %} checked {% endif %}>Низкий
+                                <input type = "radio" name= "option23" value="a41"{% if data.application.priority == 'В' %} checked {% endif %}>Высокий
+                                <input type = "radio" name= "option23" value="a42"{% if data.application.priority == 'С' %} checked {% endif %}>Средний
+                                <input type = "radio" name= "option23" value="a43"{% if data.application.priority == 'Н' %} checked {% endif %}>Низкий
                             </div>
                             </br>
                             <label for="option2">Прошу допустить меня к участию в конкурсе</label>
                             <br>
-                            <input type = "radio" name= "option2" value="a21"{% if not data.application.budget  %} checked {% endif %}> в рамках контр.цифр приема
-                            <input type = "radio" name= "option2" value="a22"{% if data.application.withfee  %} checked {% endif %}> по договорам об оказании платных обр.услуг
+                            <input type = "radio" name= "option2" value="a21"{% if data.application.budget != None   %} checked {% endif %}> в рамках контр.цифр приема
+                            <input type = "radio" name= "option2" value="a22"{% if data.application.withfee != None %} checked {% endif %}> по договорам об оказании платных обр.услуг
                         </p>
                     </div>
                 </div>
@@ -918,8 +932,8 @@
                     <div class="col-xs-3 col-sm-3 col-md-3 col-md-offset-3">
                         <p>
                             <label for="option4">Форма обучения</label><br>
-                            <input type = "radio" name= "option4" value="a41"{% if data.application.eduform == 'О' %} checked {% endif %}>Очная
-                            <input type = "radio" name= "option4" value="a42"{% if data.application.eduform == 'З' %} checked {% endif %}>Заочная
+                            <input type = "radio" name= "option4" value="a41"{% if data.application.edu_prog.eduform == 'О' %} checked {% endif %}>Очная
+                            <input type = "radio" name= "option4" value="a42"{% if data.application.edu_prog.eduform == 'З' %} checked {% endif %}>Заочная
                         </p>
                     </div>
                 </div>
