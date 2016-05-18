@@ -7,7 +7,7 @@ from anketa.views import StartPage, StartApp, Streets, Territory, District, City
 
 
 urlpatterns = patterns('',
-    url(r'^$', StartPage.as_view(),name ='startpage'),
+    url(r'^$', StartPage,name ='startpage'),
     url(r'^profile/$', PersonProfile, name='profile'),
     url(r'^applicationlist/$', Applications, name='applicationList'),
     url(r'^persondata/$', PersonData, name='persondata'),
