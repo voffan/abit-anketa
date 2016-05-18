@@ -234,6 +234,21 @@
                 cache: true
             }
         });
+    {% if data.application.abiturient.citizenship.value != None  %}
+        $("#citizenship").select2('data',{id: '{{citizenship_id}}', text:"{{data.application.abiturient.citizenship.value}}"});
+    {% endif %}
+    {% if data.passp.docIssuer.value != None  %}
+        $("#docissuer").select2('data',{id: '{{citizenship_id}}', text:"{{data.passp.docIssuer.value}}"});
+    {% endif %}
+    {% if data.edud.docIssuer.value != None  %}
+        $("#preveduname").select2('data',{id: '{{citizenship_id}}', text:"{{data.edud.docIssuer.value}}"});
+    {% endif %}
+    {% if data.application.abiturient.citizenship.value != None  %}
+        $("#citizenship").select2('data',{id: '{{citizenship_id}}', text:"{{data.application.abiturient.citizenship.value}}"});
+    {% endif %}
+    {% if data.application.abiturient.citizenship.value != None  %}
+        $("#citizenship").select2('data',{id: '{{citizenship_id}}', text:"{{data.application.abiturient.citizenship.value}}"});
+    {% endif %}
     });
 </script>
 
@@ -876,9 +891,9 @@
                             <div class="col-xs-3 col-sm-3 col-md-4">
                         
                                 <label for="option8">Приоритетность поступления</label><br>
-                                <input type = "radio" name= "option8" value="a41"{% if data.application == '' %} checked {% endif %}>Высокий
-                                <input type = "radio" name= "option8" value="a42"{% if data.application == '' %} checked {% endif %}>Средний
-                                <input type = "radio" name= "option8" value="a43"{% if data.application == '' %} checked {% endif %}>Низкий
+                                <input type = "radio" name= "option23" value="a41"{% if data.application.priority == 'В' %} checked {% endif %}>Высокий
+                                <input type = "radio" name= "option23" value="a42"{% if data.application.priority == 'С' %} checked {% endif %}>Средний
+                                <input type = "radio" name= "option23" value="a43"{% if data.application.priority == 'Н' %} checked {% endif %}>Низкий
                             </div>
                             </br>
                             <label for="option2">Прошу допустить меня к участию в конкурсе</label>

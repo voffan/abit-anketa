@@ -423,7 +423,7 @@ def Application_review (request, application_id):
 	contacts_type = AttrValue.objects.filter(attribute__name__icontains=u'Тип контакта')
 	if contacts_type is not None:
 		Data['contacts_type']=contacts_type
-	print(contacts_type)
+	print(passp.docIssuer)
 	person_contacts = person.contacts_set.all()
 	if person.contacts_set is not None:
 		contacts=[]
