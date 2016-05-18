@@ -3,7 +3,6 @@ import json
 import numpy as np
 import datetime
 
-from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
 from django.forms.formsets import formset_factory
 from django.utils import timezone
@@ -23,8 +22,8 @@ from django.contrib.auth.models import User
 from django.db import transaction
 from django.contrib.auth.decorators import login_required
 
-class StartPage(TemplateView):
-	template_name = 'anketa/start.html'
+def StartPage(request):
+	return render(request,'anketa/start.html')
 
 def StartApp(request):
 	return render(request, 'anketa/wizardform.html')

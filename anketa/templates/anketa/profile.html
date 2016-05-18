@@ -17,6 +17,7 @@
 						<li {% if currentpage == 2 %} class="active"> <a href="#"> {% else %}> <a href="{% url 'persondata' %}"> {% endif %}Личные данные</a></li>
 						<li {% if currentpage == 3 %} class="active"> <a href="#"> {% else %}> <a href="{% url 'applicationList' %}"> {% endif %}Заявления</a></li>
 						<li {% if currentpage == 4 %} class="active"> <a href="#"> {% else %}> <a href="{% url 'account' %}"> {% endif %}Учетная запись</a></li>
+						<li><a href="{% url 'authapp:logout' %}">Выйти</a></li>
 					</ul>
 				</div>
 			</div>
