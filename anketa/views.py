@@ -491,6 +491,29 @@ def CreatePerson(request):
 			result['error_msg']="Неправильно введена капча!"
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
+def AccountInfoChanging(request):
+	print(request.POST)
+	result = {'result':0, 'error_msg':''}
+	if request.method =='POST':
+		try:
+			username = request.user.username
+			password = request.POST.get('passwordCurrent', '')
+			user = authenticate(username=username, password=password)
+			if user is None:
+				result['result']=1
+				result['error_msg']="Указан неверный пароль."
+			else:
+				if request.POST.get('passwordNew','') == request.POST.get('passwordNewVerify',''):
+					user.set_password(request.POST.get('passwordNew',''))
+					user.save()
+				else:
+					result['result']=1
+					result['error_msg']="Новый пароль не совпадает."
+		except Exception as e:
+				result['result']=1
+				result['error_msg']=str(e)#"Что-то пошло не так."
+	return HttpResponse(json.dumps(result), content_type="application/json")
+
 def GetAddressTypeValues(request):
 	result={}
 	result['success']=0
