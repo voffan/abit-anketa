@@ -317,44 +317,9 @@
      return false;
 }
 </script>
+
 <script>
-    var countOfTr = {{ data.relation_len }}; // Текущее число полей
-    var curTrNameId = 1; // Уникальное значение для атрибута name
-    var maxTrLimit = 10; // Максимальное число возможных полей
-    function deletecontactrow(a) {
-        if (countOfTr > 1)
-        {
-        // Получаем доступ к ДИВу, содержащему поле
-        var contDiv = a.parentNode.parentNode;
-        // Удаляем этот ДИВ из DOM-дерева
-        contDiv.parentNode.removeChild(contDiv);
-        // Уменьшаем значение текущего числа полей
-        countOfTr--;
-    }
-    function applycontactrow(){
-        
-    }
-     // Возвращаем false, чтобы не было перехода по сслыке
-    return false;
-    }
-    function addcontactrow(){
-        // Проверяем, не достигло ли число полей максимума
-        if (countOfTr >= maxTrLimit) {
-        alert("Число полей достигло своего максимума = " + maxTrLimit);
-        return false;
-        }
-        // Увеличиваем текущее значение числа полей
-        countOfTr++;
-        // Увеличиваем ID
-        curTrNameId++;
-        // Создаем элемент ДИВ
-        var tr = document.createElement("tr");
-        tr.innerHTML = "<td><input type=\"text\" name=\"fio["+curTrNameId+"]\" id=\"fio["+curTrNameId+"]\" class=\"form-control\" placeholder=\"1\" value=\"\"></td><td><select id=\"rel_type["+curTrNameId+"]\" name = \"rel_type["+curTrNameId+"]\" class=\"form-control\">{% for item1 in data.rel_type %}<option {% if item1.id == item.type.id %}selected{% endif %} value=\"{{ item.type.id }}\">{{ item1.value }}</option>{% endfor %}</select></td><td><input type=\"text\" name=\"value["+curTrNameId+"]\" id=\"value["+curTrNameId+"]\" class=\"form-control\" placeholder=\"1\" value=\"\"></td><td><a style=\"\" onclick=\"return applycontactrow()\" href=\"#\"><span class=\"glyphicon glyphicon-ok\"></span></a><a style=\"\" onclick=\"return deletecontactrow(this)\" href=\"#\"><span class=\"glyphicon glyphicon-minus\"></span></a></td>";
-        document.getElementById("TableContactAdd").appendChild(tr);
-        return false;
-    }
-</script>
-<script>
+    // li4nie kontakti
     {% if data.contacts1 %}
     var contactsrow = {{data.contacts1|length}};
     {% else %}
@@ -377,9 +342,34 @@
             contactsrow++;
             var newRow = $('<tr class="info"><td><select id="contacttype" name = "contacttype" class="form-control">{% if data.contacts_type %}{% for item in data.contacts_type %}<option value="{{item.id}}">{{item.value}}</option>{% endfor %}{% endif %}</select></td><td><input type="text" class="form-control" name="contactvalue"></td><td><button class="btn btn-default btn-sm" id="delContactRow" type="button">Удалить</button></td></tr>');
                 $("#contactsTable").append(newRow);
-        }
-            
+        } 
     });
+
+    //dop kontakti
+    {% if data.relation %}
+    var ponycontactsrow = {{data.relation|length}};
+    {% else %}
+    var ponycontactsrow = 1;
+    {% endif %}
+    var maxponycontactsrow = 10;
+    $(document).on("click","button[id*='delPonyContactRow']", function()
+    {
+        if(ponycontactsrow > 1)
+        {
+            $(this).parent().parent().remove();
+            ponycontactsrow--;
+        }
+    });
+    $("#addPonyContact").on("click", function()
+    {
+        if(ponycontactsrow<maxponycontactsrow)
+        {
+            ponycontactsrow++;
+            var newRow = $('<tr class="info"><td><input type="text" name="rel_fio" id="rel_fio" class="form-control" placeholder="ФИО"></td><td><select id="rel_contacttype" name = "rel_contacttype" class="form-control">{% if data.rel_type %}{% for item in data.rel_type %}<option value="{{ item.id }}">{{ item.value }}</option>{% endfor %}{% endif %}</select></td><td><input type="text" name="rel_contactvalue" class="form-control" placeholder="Значение" ></td><td><button class="btn btn-default btn-sm" id="delPonyContactRow" type="button">Удалить</button></td></tr>');
+            $("#PonycontactsTable").append(newRow);
+        }
+    });
+
     $(document).on("click","button[id*='save']", function()
         {
             $("#currentPage").val(($(this).attr('id').slice('4')));
@@ -816,12 +806,9 @@
                                     </table>
                                 </div>
                                 <div>
-                                    <button class="btn btn-primary btn-block" type="button" id="addContact">Добавить контакт</button>
+                                    <button class="btn btn-default btn-block" type="button" id="addContact">Добавить контакт</button>
                                 </div>
-                                </br>
-                                <div>
-                                    <button class="btn btn-primary" type="button" id="save3">Сохранить</button>
-                                </div>
+                                </br>                               
                             </div>
                         </div>
                     </div>                  
@@ -837,36 +824,55 @@
                                 <thead>
                                     <tr>
                                         <th>ФИО</th>
+                                        <th>Тип связи</th>
                                         <th>Номер</th>
                                         <th></th>
                                     </tr>
                                 </thead>
-                                <tbody id="TableContactAdd">
-                                    {% for item in data.relation %}
+                                <tbody id="PonycontactsTable">
+                                    {% if data.relation %}
+                                        {% for item in data.relation %}
+                                            <tr>                                
+                                                <td><input type="text" name="rel_fio" id="rel_fio" class="form-control" placeholder="ФИО" value="{{item.text}}"></td>
+                                                <td>
+                                                    <select id="rel_contacttype" name = "rel_contacttype" class="form-control">
+                                                        {% if data.rel_type %}
+                                                            {% for item1 in data.rel_type %}
+                                                                <option {% if item1.id == item.type.id %}selected{% endif %} value="{{ item1.id }}">{{ item1.value }}</option>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                    </select>
+                                                </td>
+                                                <td><input type="text" name="rel_contactvalue" class="form-control" placeholder="Значение" value="{{item.cont}}"></td>
+                                                <td><button class="btn btn-default btn-sm" id="delPonyContactRow" type="button">Удалить</button></td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% else %}
                                         <tr>                                
-                                            <td><input type="text" name="fio[{{item.id}}]" id="fio[{{item.id}}]" class="form-control" placeholder="ФИО" value="{{item.text}}"></td>
+                                            <td><input type="text" name="rel_fio" id="rel_fio" class="form-control" placeholder="ФИО"></td>
                                             <td>
-                                                <select id="rel_type[{{item.id}}]" name = "rel_type[{{item.id}}]" class="form-control">
-                                                    {% for item1 in data.rel_type %}
-                                                    <option {% if item1.id == item.type.id %}selected{% endif %} value="{{ item1.id }}">{{ item1.value }}</option>
-                                                    {% endfor %}
+                                                <select id="rel_contacttype" name = "rel_contacttype" class="form-control">
+                                                    {% if data.rel_type %}
+                                                        {% for item in data.rel_type %}
+                                                            <option value="{{ item.id }}">{{ item.value }}</option>
+                                                        {% endfor %}
+                                                    {% endif %}
                                                 </select>
                                             </td>
-                                            <td><input type="text" name="value[{{item.id}}]" id="value[{{item.id}}]" class="form-control" placeholder="Значение" value="{{item.cont}}"></td>
-                                            <td>                                        
-                                                <a style="" onclick="return applycontactrow()" href="#"><span class="glyphicon glyphicon-ok"></span></a>
-                                                <a style="" onclick="return deletecontactrow(this)" href="#"><span class="glyphicon glyphicon-minus"></span></a>
-                                            </td>                               
+                                            <td><input type="text" name="rel_contactvalue" class="form-control" placeholder="Значение" ></td>
+                                            <td><button class="btn btn-default btn-sm" id="delPonyContactRow" type="button">Удалить</button></td>
                                         </tr>
-                                    {% endfor %}
+                                    {% endif %}
                                 </tbody>
                             </table>
-                            <div class="col-md-offset-11">
-                                <a style="" onclick="return addcontactrow()" href="#"><span class="glyphicon glyphicon-plus"></span></a>   
-                            </div>                                       
-                        </div>
-                        <button type="submit" class="btn btn-primary" name="sav" >сохранить</button>
+                            <div>
+                                <button class="btn btn-default btn-block" type="button" id="addPonyContact">Добавить контакт</button>
+                            </div>                                                                                           
+                        </div>                                               
                 </div>
+                    <div class="col-md-offset-11">                  
+                        <button class="btn btn-primary" type="button" id="save3">Сохранить</button>                    
+                    </div> 
                 </div>
                 
                 <!--<div class="row">
