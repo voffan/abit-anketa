@@ -386,7 +386,6 @@ def Application_review (request, application_id):
 		relcontacts.append({'id':item.id,'text':text, 'cont':cont_value, 'type':{'name':cont_type.value,'id':cont_type.id}})
 	
 	Data['relation'] = relcontacts
-	Data['relation_len'] = len(relcontacts)
 	Data['rel_type'] = AttrValue.objects.filter(attribute__name__icontains=u'тип связи')
 	Data['nationality'] = nationality
 	Data['docType'] = doctype
@@ -399,8 +398,7 @@ def Application_review (request, application_id):
 	Data['snils'] = snils
 	
 	Data['application']=application
-	Data['contacts'] = Contacts.objects.filter(person_id=application.abiturient.id)
-	Data['contacts_len'] = len(Data['contacts'])
+	Data['contacts'] = Contacts.objects.filter(person_id=application.abiturient.id)	
 	Data['address'] = Address.objects.filter(pk=application_id)
 	Data['education_prog'] = Education_Prog.objects.filter(pk=application_id)
 	Data['exams'] = Exams.objects.filter(pk=application_id)
@@ -409,8 +407,7 @@ def Application_review (request, application_id):
 	if hasattr(application.abiturient, 'milit'):
 		Data['milit'] = application.abiturient.milit
 	Data['docattr'] = DocAttr.objects.filter(pk=application_id)
-	Data['achievements'] = Achievements.objects.filter(pk=application_id)
-	
+	Data['achievements'] = Achievements.objects.filter(pk=application_id)	
 	Data['contactyp'] = contactyp
 
 
@@ -719,6 +716,34 @@ def AddDataToPerson(request):
 						contact.contact_type=AttrValue.objects.filter(pk=contacttype[i]).first()
 						contact.value = contactvalue[i]
 						contact.save()
+
+				if Relation.objects.filter(abiturient = abit) is not None:
+					Relation.objects.filter(abiturient = abit).delete()
+				reltype = request.POST.getlist('rel_contacttype')
+				relcontactvalue = request.POST.getlist('rel_contactvalue')				
+				arr = request.POST.getlist('rel_fio')				
+				for i in range(0, len(reltype)):
+					if len(reltype[i])>0 and len(relcontactvalue[i])>0 and len(arr[i])>0:
+						relperson = Person()
+						fio =[]
+						fio = arr[i].split(' ')
+						relperson.sname = fio[0]
+						relperson.fname = fio[1]
+						relperson.mname = fio[2]
+						relperson.fullname = arr[i]
+						relperson.sex = 'М'
+						relperson.birthdate = "2000-11-11"
+						relperson.save()
+						contact = Contacts()
+						contact.person = relperson
+						contact.contact_type = AttrValue.objects.filter(value__icontains=u'телефон').first()
+						contact.value = relcontactvalue[i]
+						contact.save()
+						newrel = Relation()
+						newrel.person = relperson
+						newrel.abiturient = abit
+						newrel.relType = AttrValue.objects.filter(pk=reltype[i]).first()
+						newrel.save()	
 			if page==4:
 				if abit.exams_set.filter(exam_examType__value=u'ЕГЭ') is not None:
 					Exams.objects.filter(abiturient=abit).filter(exam_examType__value=u'ЕГЭ').delete()
@@ -779,8 +804,9 @@ def AddDataToPerson(request):
 									milit.yearDismissial=int(request.POST.get('yeararmy',''))
 									# АХАХАХАХАХ ХКАКОЙ ККРАСИВЫЙ КОД АХАХАХАХАХХААХХА
 				milit.save()
-
+			print("hui")
 			abit.save()
+			print("hui2")
 		except Exception as e:
 					result=str(e)
 	return HttpResponse(json.dumps(result), content_type="application/json")
