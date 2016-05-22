@@ -496,19 +496,25 @@ def AccountInfoChanging(request):
 	result = {'result':0, 'error_msg':''}
 	if request.method =='POST':
 		try:
-			username = request.user.username
-			password = request.POST.get('passwordCurrent', '')
-			user = authenticate(username=username, password=password)
-			if user is None:
-				result['result']=1
-				result['error_msg']="Указан неверный пароль."
-			else:
-				if request.POST.get('passwordNew','') == request.POST.get('passwordNewVerify',''):
-					user.set_password(request.POST.get('passwordNew',''))
-					user.save()
-				else:
+			# AHAHHAHAHAHAHAHAHAHAH HAHAHAHHAH O BOJE MOI POSCHADITE HAHAHAHAHAHAHAHHAHAHAHAHAHA
+			if len(request.POST.get('email',''))>0:
+				user = request.user
+				user.email = request.POST.get('email','')
+				user.save()
+			if len(request.POST.get('passwordCurrent',''))>0:
+				username = request.user.username
+				password = request.POST.get('passwordCurrent', '')
+				user = authenticate(username=username, password=password)
+				if user is None:
 					result['result']=1
-					result['error_msg']="Новый пароль не совпадает."
+					result['error_msg']="Указан неверный пароль."
+				else:
+					if request.POST.get('passwordNew','') == request.POST.get('passwordNewVerify',''):
+						user.set_password(request.POST.get('passwordNew',''))
+						user.save()
+					else:
+						result['result']=1
+						result['error_msg']="Новый пароль не совпадает."
 		except Exception as e:
 				result['result']=1
 				result['error_msg']=str(e)#"Что-то пошло не так."
