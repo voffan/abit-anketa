@@ -116,7 +116,6 @@ def PersonData(request):
 			cont['value']=Contacts.objects.filter(person=item.person).first().value
 			relations.append(cont)
 		args['relation']=relations
-		print(relations)
 	# 4
 	exams = person.exams_set.filter(exam_examType__value=u'ЕГЭ')
 	if exams is not None:
@@ -514,7 +513,7 @@ def AccountInfoChanging(request):
 						user.save()
 					else:
 						result['result']=1
-						result['error_msg']="Новый пароль не совпадает."
+						result['error_msg']="Значения нового пароля не совпадают."
 		except Exception as e:
 				result['result']=1
 				result['error_msg']=str(e)#"Что-то пошло не так."
