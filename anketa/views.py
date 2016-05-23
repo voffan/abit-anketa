@@ -116,7 +116,6 @@ def PersonData(request):
 			cont['value']=Contacts.objects.filter(person=item.person).first().value
 			relations.append(cont)
 		args['relation']=relations
-		print(relations)
 	# 4
 	exams = person.exams_set.filter(exam_examType__value=u'ЕГЭ')
 	if exams is not None:
@@ -489,6 +488,35 @@ def CreatePerson(request):
 		else:
 			result['result']=1
 			result['error_msg']="Неправильно введена капча!"
+	return HttpResponse(json.dumps(result), content_type="application/json")
+
+def AccountInfoChanging(request):
+	print(request.POST)
+	result = {'result':0, 'error_msg':''}
+	if request.method =='POST':
+		try:
+			# AHAHHAHAHAHAHAHAHAHAH HAHAHAHHAH O BOJE MOI POSCHADITE HAHAHAHAHAHAHAHHAHAHAHAHAHA
+			if len(request.POST.get('email',''))>0:
+				user = request.user
+				user.email = request.POST.get('email','')
+				user.save()
+			if len(request.POST.get('passwordCurrent',''))>0:
+				username = request.user.username
+				password = request.POST.get('passwordCurrent', '')
+				user = authenticate(username=username, password=password)
+				if user is None:
+					result['result']=1
+					result['error_msg']="Указан неверный пароль."
+				else:
+					if request.POST.get('passwordNew','') == request.POST.get('passwordNewVerify',''):
+						user.set_password(request.POST.get('passwordNew',''))
+						user.save()
+					else:
+						result['result']=1
+						result['error_msg']="Значения нового пароля не совпадают."
+		except Exception as e:
+				result['result']=1
+				result['error_msg']=str(e)#"Что-то пошло не так."
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def GetAddressTypeValues(request):
