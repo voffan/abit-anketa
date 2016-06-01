@@ -803,10 +803,8 @@ def AddDataToPerson(request):
 								if (len(request.POST.get('yeararmy','')))>0:
 									milit.yearDismissial=int(request.POST.get('yeararmy',''))
 									# АХАХАХАХАХ ХКАКОЙ ККРАСИВЫЙ КОД АХАХАХАХАХХААХХА
-				milit.save()
-			print("hui")
-			abit.save()
-			print("hui2")
+				milit.save()			
+			abit.save()			
 		except Exception as e:
 					result=str(e)
 	return HttpResponse(json.dumps(result), content_type="application/json")
