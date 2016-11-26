@@ -3,15 +3,16 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
 
-from anketa.views import StartPage, StartApp, Streets, Territory, District, City, Citizenship, Nation, DocIssuer, PrevEduName, Institute, EduProf, Privilegies, Rank, Flang, CreatePerson, DocType, PersonProfile, Applications, PersonData, Account,EduName, SaveApplication, EduProfForm, GetSelectedApplication,DeleteApplication,AddDataToPerson, EduDocType,GetAddressTypeValues
+from anketa.views import StartPage, StartApp, Streets, Territory, District, City, Citizenship, Nation, DocIssuer, PrevEduName, Institute, EduProf, Privilegies, Rank, Flang, CreatePerson, DocType, PersonProfile, Applications, PersonData, Account,EduName, SaveApplication, EduProfForm, GetSelectedApplication,DeleteApplication,AddDataToPerson, EduDocType,GetAddressTypeValues, ExamSubject,AccountInfoChanging
 
 
 urlpatterns = patterns('',
-    url(r'^$', StartPage.as_view(),name ='startpage'),
+    url(r'^$', StartPage,name ='startpage'),
     url(r'^profile/$', PersonProfile, name='profile'),
     url(r'^applicationlist/$', Applications, name='applicationList'),
     url(r'^persondata/$', PersonData, name='persondata'),
     url(r'^account/$', Account, name='account'),
+    url(r'^accountInfoChanging/$', AccountInfoChanging, name='accountInfoChanging'),
     url(r'^application/$', StartApp, name = 'application'),
     url(r'^territory/$', Territory, name = 'territory'),
     url(r'^district/$', District, name = 'district'),
@@ -26,6 +27,7 @@ urlpatterns = patterns('',
     url(r'^institute/$', Institute, name = 'institute'),
     url(r'^eduname/$',EduName,name='eduname'),
     url(r'^eduprof/$', EduProf, name = 'eduprof'),
+    url(r'^examsubject/$', ExamSubject, name = 'examsubject'),
     url(r'^eduform/$', EduProfForm, name='eduform'),
     url(r'^privilegies/$', Privilegies, name = 'privilegies'),
     url(r'^create_person/$', CreatePerson, name="create_person"),

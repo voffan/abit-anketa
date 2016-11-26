@@ -1,6 +1,0 @@
-input[type="email"], textarea {
-    border: 1px solid darkgray;
-}
-.error input, .error textarea {
-    border: 1px solid red;
-}

@@ -3,7 +3,6 @@ import json
 import numpy as np
 import datetime
 
-from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
 from django.forms.formsets import formset_factory
 from django.utils import timezone
@@ -13,32 +12,40 @@ from django.core.urlresolvers import reverse
 from django.core.context_processors import csrf
 from django.http import HttpResponse, HttpResponseRedirect
 
-from django.shortcuts import render_to_response, render,get_object_or_404
+from django.shortcuts import render_to_response, render,get_object_or_404, redirect
 from django.template import RequestContext
 
 from kladr.models import Street
-from anketa.models import Person, Address, Attribute, AttrValue, Abiturient, Department, Education_Prog, Profile, Application, Education_Prog_Form, EduForm, ApplicationProfiles, Milit, Docs, Exams
+from anketa.models import Person, Address, Attribute, AttrValue, Abiturient, Department, Education_Prog, Profile, Application, Education_Prog_Form, EduForm, ApplicationProfiles, Milit, Docs, Exams, DocAttr,Education, Contacts, Relation
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.db import transaction
 from django.contrib.auth.decorators import login_required
 
-class StartPage(TemplateView):
-	template_name = 'anketa/start.html'
+def StartPage(request):
+	return render(request,'anketa/start.html')
 
 def StartApp(request):
 	return render(request, 'anketa/wizardform.html')
 
 @login_required(login_url='authapp:index')
 def PersonProfile(request):
+	person=Abiturient.objects.filter(user=request.user).first()
+	if person is None:
+		return redirect('/staff')
 	args={'currentpage':1}
+	applications=Application.objects.filter(abiturient__user=request.user)
+	if applications is not None:
+		args['applications']=applications
 	args.update(csrf(request))
 	return render(request, 'anketa/profile.html', args)
 
 @login_required(login_url='authapp:index')
 def PersonData(request):
 	args={'currentpage':2}
-	person=Abiturient.objects.get(user=request.user)
+	person=Abiturient.objects.filter(user=request.user).first()
+	if person is None:
+		return redirect('/staff')
 	# 1
 	args['fname']=person.fname
 	args['sname']=person.sname
@@ -63,7 +70,17 @@ def PersonData(request):
 		args['doctype_date']=doctype.issueDate
 		args['doctype_issuer_id']=doctype.docIssuer.id
 		args['doctype_issuer']=doctype.docIssuer.value
-		print(args)
+	if person.education_set.first():
+		edudoctype = person.education_set.first()
+		args['edudoctype']=edudoctype.doc.docType.value
+		args['edudoctype_id']=edudoctype.doc.docType.id
+		args['edudoctype_serial']=edudoctype.doc.serialno
+		args['edudoctype_number']=edudoctype.doc.number
+		args['edudoctype_date']=edudoctype.doc.issueDate
+		args['edudoctype_issuer_id']=edudoctype.doc.docIssuer.id
+		args['edudoctype_issuer']=edudoctype.doc.docIssuer.value
+		args['datejoining'] = edudoctype.enterDate
+		args['prevedu'] = edudoctype.level.value
 	if person.docs_set.filter(docType__value__icontains=u'СНИЛС').first() is not None:
 		args['inila']=person.docs_set.filter(docType__value__icontains=u'СНИЛС').first().serialno
 	# 3
@@ -74,20 +91,55 @@ def PersonData(request):
 		args['house']=address.house
 		args['building']=address.building
 		args['flat']=address.flat
+	contacts_type = AttrValue.objects.filter(attribute__name__icontains=u'Тип контакта')
+	if contacts_type is not None:
+		args['contacts_type']=contacts_type
+	person_contacts = person.contacts_set.all()
+	if person_contacts is not None:
+		contacts=[]
+		for item in person_contacts:
+			cont = {}
+			cont['type']=item.contact_type
+			cont['value']=item.value
+			contacts.append(cont)
+		args['contacts']=contacts
+	relation_type = AttrValue.objects.filter(attribute__name__icontains=u'Тип связи')
+	if relation_type is not None:
+		args['relation_type']=relation_type
+	if Relation.objects.filter(abiturient=person) is not None:
+		person_relations = Relation.objects.filter(abiturient=person)
+		relations=[]
+		for item in person_relations:
+			cont = {}
+			cont['type']=item.relType
+			cont['fio']=item.person.fullname
+			cont['value']=Contacts.objects.filter(person=item.person).first().value
+			relations.append(cont)
+		args['relation']=relations
 	# 4
-	exams = person.exams_set.all()
+	exams = person.exams_set.filter(exam_examType__value=u'ЕГЭ')
 	if exams is not None:
 		examsList=[]
-		count=0
 		for item in exams:
-			count+=1
 			exam={}
-			exam['subject']=item.exam_subjects.value
+			exam['subject']=item.exam_subjects.id
+			exam['subject_value']=item.exam_subjects.value
 			exam['points']=item.points
 			exam['year']=item.year
-			exam['count']=count
 			examsList.append(exam)
 		args['exams']=examsList
+	add_exams = person.exams_set.filter(exam_examType__value=u'Вступительный')
+	if add_exams is not None:
+		specusl= False
+		addExamsList=[]
+		for item in add_exams:
+			exam={}
+			exam['subject']=item.exam_subjects.id
+			exam['subject_value']=item.exam_subjects.value
+			if item.special and specusl == False:
+				args['specusl']=True
+			addExamsList.append(exam)
+		args['addExams']=addExamsList
 	# 7 
 	args['hostel']=person.hostel
 	milit = Milit.objects.filter(abiturient = person).first()
@@ -110,6 +162,9 @@ def PersonData(request):
 @login_required(login_url='authapp:index')
 def Applications(request):
 	args={'currentpage':3}
+	person=Abiturient.objects.filter(user=request.user).first()
+	if person is None:
+		return redirect('/staff')
 	applications=Application.objects.filter(abiturient__user=request.user)
 	args['applications']=applications
 	return render(request,'anketa/applicationList.html',args)
@@ -117,6 +172,9 @@ def Applications(request):
 @login_required(login_url='authapp:index')
 def Account(request):
 	args={'currentpage':4}
+	person=Abiturient.objects.filter(user=request.user).first()
+	if person is None:
+		return redirect('/staff')
 	args['email'] = request.user.email
 	args.update(csrf(request))
 	return render(request,'anketa/account.html',args)
@@ -131,13 +189,11 @@ def GetSelectedApplication(request):
 	result['edu_prog_name']=application.edu_prog.edu_prog.name+' ' + application.edu_prog.edu_prog.qualification.value
 	result['edu_prog_eduform_id']=application.edu_prog.id
 	result['edu_prog_eduform_name']=[x[1] for x in EduForm if x[0] == application.edu_prog.eduform][0]
-	result['profiles_count']=len(app_profiles)
 	profiles=[]
 	for item in app_profiles:
 		profiles.append({'id':item.profile.id,'profile':item.profile.name})
 	result['profiles']=profiles
 	result['profiles_len']=len(profiles)
-	#print(result['profiles'])
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def AddDataToPerson(request):
@@ -147,7 +203,11 @@ def AddDataToPerson(request):
 		try:
 			page=int(request.POST.get('currentPage',''))
 			abit=Abiturient.objects.get(user=request.user)
+			if abit.info_progress is None:
+				abit.info_progress="000000"
+			#progress = abit.info_progress.split()
 			if page==1: #Личные данные
+				#pageIsComplete=True;
 				abit.sname=request.POST.get('sname','')
 				abit.fname=request.POST.get('name','')
 				abit.mname=request.POST.get('mname','')
@@ -156,8 +216,6 @@ def AddDataToPerson(request):
 					abit.birthdate=datetime.datetime.strptime(request.POST.get('birthday',''),'%d/%m/%Y').strftime('%Y-%m-%d')
 				if(len(request.POST.get('nation','')))>0:
 					abit.nationality=AttrValue.objects.get(pk=request.POST.get('nation',''))
-				else:
-					abit.nationality=None
 				if(len(request.POST.get('citizenship','')))>0:
 					abit.citizenship=AttrValue.objects.get(pk=request.POST.get('citizenship',''))
 				if(len(request.POST.get('sex','')))>0:
@@ -182,18 +240,45 @@ def AddDataToPerson(request):
 				if(len(request.POST.get('docissuer',''))>0):
 					doctype.docIssuer=AttrValue.objects.get(pk=request.POST.get('docissuer',''))
 				doctype.save()
-				"""
-				edudoc = abit.docs_set.filter(docType__attribute__name__icontains=u'об образовании').first()
+				edudoc = abit.education_set.first()
 				if edudoc is None:
-					edudoc=Docs()
+					edudoc=Education()
 					edudoc.abiturient=abit
+					doc = Docs()
+					doc.abiturient=abit
 				else:
-					edudoc.number=None
-					edudoc.serialno=None
-					edudoc.issueDate=None
-					edudoc.docIssuer=None
-					edudoc.docType=None
-				"""
+					doc = edudoc.doc
+				if(len(request.POST.get('edudoctype','')))>0:
+					doc.docType=AttrValue.objects.get(pk=request.POST.get('edudoctype',''))
+				if(len(request.POST.get('serialedudoc',''))>0):
+					doc.serialno=int(request.POST.get('serialedudoc',''))
+				if(len(request.POST.get('numberedudoc',''))>0):
+					doc.number=int(request.POST.get('numberedudoc',''))
+				if(len(request.POST.get('dateexiting',''))>0):
+					doc.issueDate=datetime.datetime.strptime(request.POST.get('dateexiting',''),'%d/%m/%Y').strftime('%Y-%m-%d')
+				if(len(request.POST.get('preveduname','')))>0:
+					doc.docIssuer=AttrValue.objects.get(pk=request.POST.get('preveduname',''))
+				doc.save()
+				edudoc.doc = doc
+				datejoining = request.POST.get('datejoining','')
+				if len(datejoining)>0:
+					edudoc.enterDate=datetime.datetime.strptime(datejoining,'%d/%m/%Y').strftime('%Y-%m-%d')
+				else:
+					pageIsComplete=False;
+				if doc.docType.value == "Аттестат":
+					edudoc.level = AttrValue.objects.filter(attribute__name__icontains=u'Предыдущее образование').filter(value__icontains=u'СОО').first()
+				else:
+					prevedu = request.POST.get('prevedu','')
+					if len(prevedu)>0:
+						if prevedu == "npo":
+							edudoc.level = AttrValue.objects.filter(attribute__name__icontains=u'Предыдущее образование').filter(value__icontains=u'НПО').first()
+						else:
+							if prevedu == "spo":
+								edudoc.level = AttrValue.objects.filter(attribute__name__icontains=u'Предыдущее образование').filter(value__icontains=u'СПО').first()
+							else:
+								edudoc.level = AttrValue.objects.filter(attribute__name__icontains=u'Предыдущее образование').filter(value__icontains=u'ВПО').first()
+				edudoc.save()
+				
 				snils = abit.docs_set.filter(docType__value__icontains=u'CНИЛС').first()
 				if snils is None:
 					snils = Docs()
@@ -226,24 +311,76 @@ def AddDataToPerson(request):
 				else:
 					adrs.adrs_type_same=False
 				adrs.save()
-			
+				if abit.contacts_set.all() is not None:
+					Contacts.objects.filter(person=abit).delete()
+				contacttype = request.POST.getlist('contacttype')
+				contactvalue = request.POST.getlist('contactvalue')
+				for i in range(0, len(contacttype)):
+					if len(contacttype[i])>0 and len(contactvalue[i])>0:
+						contact = Contacts()
+						contact.person = abit
+						contact.contact_type=AttrValue.objects.filter(pk=contacttype[i]).first()
+						contact.value = contactvalue[i]
+						contact.save()
+				if Relation.objects.filter(abiturient=abit) is not None:
+					Relation.objects.filter(abiturient=abit).delete()
+				relationtype = request.POST.getlist('relationtype')
+				relationcontactvalue = request.POST.getlist('relationcontactvalue')
+				relationFIO = request.POST.getlist('relationFIO')
+				for i in range(0, len(relationtype)):
+					if len(relationtype[i])>0 and len(relationcontactvalue[i])>0 and len(relationFIO[i])>0:
+						relation = Relation()
+						relation.abiturient = abit
+						relation.relType = AttrValue.objects.filter(pk=relationtype[i]).first()
+						relperson = Person()
+						fio=relationFIO[i].split(' ')
+						if fio[0]:
+							relperson.sname=fio[0]
+						if fio[1]:
+							relperson.fname=fio[1]
+						if fio[2]:
+							relperson.mname=fio[2]
+						relperson.sex="М"
+						relperson.birthdate=datetime.datetime.strptime('15/05/2007','%d/%m/%Y').strftime('%Y-%m-%d')
+						relperson.save()
+						relation.person=relperson
+						contact = Contacts()
+						contact.person = relperson
+						contact.contact_type=AttrValue.objects.filter(value__icontains=u'телефон').first()
+						contact.value = relationcontactvalue[i]
+						contact.save()
+						relation.save()
 			if page==4:
-				if abit.exams_set.all() is not None:
-					print(abit.exams_set.all())
-					Exams.objects.filter(abiturient=abit).delete()
+				if abit.exams_set.filter(exam_examType__value=u'ЕГЭ') is not None:
+					Exams.objects.filter(abiturient=abit).filter(exam_examType__value=u'ЕГЭ').delete()
 					#abit.exams_set.all().delete a cho ne rabotaet
-					print(abit.exams_set.all())
 				examtype=AttrValue.objects.filter(attribute__name__icontains=u'Тип экзамена').filter(value__icontains=u'ЕГЭ').first()
-				egeExamsCount = int(request.POST.get('egeRowsCount',''))
-				for i in range(1, egeExamsCount + 1):
+				exams = request.POST.getlist('egeDisc')
+				points = request.POST.getlist('egePoints')
+				years=request.POST.getlist('egeYear')
+				for i in range(0, len(exams)):
 					exam = Exams()
 					exam.abiturient = abit
 					exam.exam_examType=examtype
-					exam.exam_subjects=AttrValue.objects.filter(attribute__name__icontains=u'Дисциплина').filter(value__icontains=request.POST.get('egeDisc'+str(i),'')).first()
-					exam.points=int(request.POST.get('egePoints'+str(i),''))
-					exam.year=int(request.POST.get('egeYear'+str(i),''))
+					exam.exam_subjects=AttrValue.objects.filter(attribute__name__icontains=u'Дисциплина').filter(pk=exams[i]).first()
+					exam.points=points[i]
+					exam.year=years[i]
 					exam.save()
-
+				if len(request.POST.get('additionalExams','')) > 0:
+					add_exams=request.POST.get('additionalExams','').split(',')
+					specusl = False
+					if request.POST.get('specusl','') == "yes":
+						specusl=True
+					if abit.exams_set.filter(exam_examType__value=u'Вступительный') is not None:
+						Exams.objects.filter(abiturient=abit).filter(exam_examType__value=u'Вступительный').delete()
+					for item in add_exams:
+						add_exam = Exams()
+						add_exam.abiturient=abit
+						add_exam.exam_examType = AttrValue.objects.filter(attribute__name__icontains=u'Тип экзамена').filter(value__icontains=u'Вступительный').first()
+						add_exam.exam_subjects=AttrValue.objects.filter(attribute__name__icontains=u'Дисциплина').filter(pk=item).first()
+						add_exam.year=2016
+						add_exam.special = specusl
+						add_exam.save()
 			"""
 			if(page==5):
 
@@ -281,7 +418,7 @@ def AddDataToPerson(request):
 
 def SaveApplication(request):
 	result = {'result':0, 'error_msg':''}
-	print(request.POST)
+	#print(request.POST)
 	if request.method == 'POST':
 		if(int(request.POST.get('facepalm',''))>0):
 			application=Application.objects.get(pk=request.POST.get('facepalm'))
@@ -323,7 +460,7 @@ def Save_Abiturient(values):
 	abit.sname=values.get('sName','')
 	abit.mname=values.get('mName','')
 	abit.sex=values.get('sex','')
-	abit.birthdate=datetime.datetime.strptime(values.get('birthday',''),'%Y-%m-%d')
+	abit.birthdate=datetime.datetime.strptime(values.get('birthday',''),'%d/%m/%Y').strftime('%Y-%m-%d')
 	abit.save()
 
 def rpHash(person):
@@ -351,6 +488,35 @@ def CreatePerson(request):
 		else:
 			result['result']=1
 			result['error_msg']="Неправильно введена капча!"
+	return HttpResponse(json.dumps(result), content_type="application/json")
+
+def AccountInfoChanging(request):
+	print(request.POST)
+	result = {'result':0, 'error_msg':''}
+	if request.method =='POST':
+		try:
+			# AHAHHAHAHAHAHAHAHAHAH HAHAHAHHAH O BOJE MOI POSCHADITE HAHAHAHAHAHAHAHHAHAHAHAHAHA
+			if len(request.POST.get('email',''))>0:
+				user = request.user
+				user.email = request.POST.get('email','')
+				user.save()
+			if len(request.POST.get('passwordCurrent',''))>0:
+				username = request.user.username
+				password = request.POST.get('passwordCurrent', '')
+				user = authenticate(username=username, password=password)
+				if user is None:
+					result['result']=1
+					result['error_msg']="Указан неверный пароль."
+				else:
+					if request.POST.get('passwordNew','') == request.POST.get('passwordNewVerify',''):
+						user.set_password(request.POST.get('passwordNew',''))
+						user.save()
+					else:
+						result['result']=1
+						result['error_msg']="Значения нового пароля не совпадают."
+		except Exception as e:
+				result['result']=1
+				result['error_msg']=str(e)#"Что-то пошло не так."
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def GetAddressTypeValues(request):
@@ -497,7 +663,6 @@ def EduDocType(request):
 def PrevEduName(request):
 	trry = AttrValue.objects.filter(attribute__name__icontains=u'выдавший')
 	part = request.GET.get('query','')
-	
 	if len(part)>0:
 		trry = trry.filter(value__icontains = part)
 	trry = trry.values('id', 'value')
@@ -505,6 +670,13 @@ def PrevEduName(request):
 	for item in trry:
 		result.append({'id':item['id'], 'text':item['value']})
 	return HttpResponse(json.dumps(result), content_type="application/json")
+
+def ExamSubject(request):
+	subjects = AttrValue.objects.filter(attribute__name__icontains=u'Дисциплина')
+	result = []
+	for item in subjects:
+		result.append({'id':item.id, 'text':item.value})
+	return HttpResponse(json.dumps(result), content_type="application/json")	
 
 def Institute(request):
 	institute = Department.objects.filter(name__icontains = request.GET.get('query',''))

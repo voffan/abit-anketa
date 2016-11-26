@@ -14,63 +14,153 @@
 <script src="{% static "anketa/js/bootstrap-datetimepicker.min.js" %}"></script>
 <script src="{% static "anketa/select2-3.5.4/select2.min.js" %}"></script>
 <script src="{% static "anketa/js/kladr.js" %}"></script>
+<script src="{% static "anketa/js/notify.js" %}"></script>
 <script>
-	{% if exams %}
-		var egerows={{exams|length}}
-	{% else %}
-	var egerows = 1;
-	{% endif %}
-	var maxExams = 10;
-	$(document).on("click","button[id*='egeExamDel']", function()
-	{
-		if(egerows>1)
-		{
-			var id = parseInt($(this).attr('id').slice('10')) + 1;
-			$(this).parent().parent().remove();
-			egerows--;
-			/*
-			$("#egeRows"+id).attr('name','egeRows'+(id-1));
-			$("#egeRows"+id).attr('id','egeRows'+(id-1));
-			$("#egeDisc"+id).attr('name','egeDisc'+(id-1));
-			$("#egeDisc"+id).attr('id','egeDisc'+(id-1));
-			$("#egePoints"+id).attr('name','egePoints'+(id-1));
-			$("#egePoints"+id).attr('id','egeRows'+(id-1));
-			$("#egeYear"+id).attr('name','egeYear'+(id-1));
-			$("#egeYear"+id).attr('id','egeYear'+(id-1));
-			// AHJHAHAHAHAHAHHAHAHAHAHAHAHHAHAHHA 
-			*/
-		}
-	});
-	$("#addExam").on("click", function()
-	{
-		if(egerows<maxExams)
-		{
-			egerows++;
-		$("#egeTableBody").append('<tr class="info" name ="egeRow' +egerows+ '" id ="egeRow' +egerows+ '"><td><input type="text" class="form-control" id ="egeDisc' +egerows+ '" name="egeDisc' +egerows+ '"></td><td><input type="text" class="form-control" id ="egePoints' +egerows+ '" name="egePoints' +egerows+ '"></td><td><input type="text" class="form-control" id ="egeYear' +egerows+ '" name="egeYear' +egerows+ '"></td><td><button class="btn btn-default btn-sm" id="egeExamDel' +egerows+ '" type="button">Удалить</button></td></tr>');
-		}
-	});
-	$(document).on("click","button[id*='save']", function()
-	{
-		$("#currentPage").val(($(this).attr('id').slice('4')));
-		$("#egeRowsCount").val(egerows);
-		$.ajax({
-			url:{% url 'add_data_to_person' %},
-			type:$("#persondata").attr('method'),
-			data:$("#persondata").serialize(),
-			dataProcess:true,
-			timeout:500,
-			success:function(data)
-			{
-				//alert("jopa");
-			},
-			error:function()
-			{
-				//alert("der'mishe");
-			}
-		});
-	});
 	$(document).ready(function() 
 	{
+		// AHAHAHAHHAHAHAHAHHAHAHAHHAHAHAHAHAHAHHAHAHAHAHAHAHHA
+		var sub_id = new Array();
+		var sub_val = new Array();
+		{% if exams %}
+			var egerows={{exams|length}}
+			{% for item in exams %}
+				sub_id.push({{item.subject}});
+				sub_val.push("{{item.subject_value}}");
+			{% endfor %}
+		{% else %}
+		var egerows = 1;
+		{% endif %}
+		var maxExams = 10;
+		{% if contacts %}
+			var contactsrow = {{contacts|length}};
+		{% else %}
+		var contactsrow = 1;
+		{% endif %}
+		var maxContacts = 10;
+		{% if relations %}
+			var relationsrow = {{relations|length}};
+		{% else %}
+		var relationsrow = 1;
+		{% endif %}
+		var maxRelations = 10;
+		$(document).on("click","button[id*='delRelationRow']", function()
+		{
+			if(relationsrow>1)
+			{
+				$(this).parent().parent().remove();
+				relationsrow--;
+			}
+		});
+		$("#addRelation").on("click", function()
+		{
+			if(contactsrow<maxContacts)
+			{
+				relationsrow++;
+				var newRow = $('<tr><td><select id="relationtype" name = "relationtype" class="form-control">{% if relation_type %}{% for item in relation_type %}<option value="{{item.id}}">{{item.value}}</option>{% endfor %}{% endif %}</select></td><td><input type="text" class="form-control" name="relationFIO"></td><td><input type="text" class="form-control" name="relationcontactvalue"></td><td><button class="btn btn-default btn-sm" id="delRelationRow" type="button">Удалить</button></td></tr>');
+				$("#relationsTable").append(newRow);
+			}
+		});
+		$(document).on("click","button[id*='delContactRow']", function()
+		{
+			if(contactsrow>1)
+			{
+				$(this).parent().parent().remove();
+				contactsrow--;
+			}
+		});
+		$("#addContact").on("click", function()
+		{
+			if(contactsrow<maxContacts)
+			{
+				contactsrow++;
+				var newRow = $('<tr class="info"><td><select id="contacttype" name = "contacttype" class="form-control">{% if contacts_type %}{% for item in contacts_type %}<option value="{{item.id}}">{{item.value}}</option>{% endfor %}{% endif %}</select></td><td><input type="text" class="form-control" name="contactvalue"></td><td><button class="btn btn-default btn-sm" id="delContactRow" type="button">Удалить</button></td></tr>');
+				$("#contactsTable").append(newRow);
+			}
+		});
+		$(document).on("click","button[id*='delExamRow']", function()
+		{
+			if(egerows>1)
+			{
+				$(this).parent().parent().remove();
+				egerows--;
+			}
+		});
+		$("#addExam").on("click", function()
+		{
+			if(egerows<maxExams)
+			{
+				egerows++;
+				var newRow = $('<tr><td><input type="hidden" class="form-control" name="egeDisc"></td><td><input type="text" class="form-control" name="egePoints"></td><td><input type="text" class="form-control" name="egeYear"></td><td><button class="btn btn-default btn-sm" id="delExamRow" type="button">Удалить</button></td></tr>');
+				$("#egeTableBody").append(newRow);
+				initSelect2(newRow.find('input[name^="egeDisc"]'));
+			}
+			
+		});
+		$(document).on("click","button[id*='save']", function()
+		{
+			$("#currentPage").val(($(this).attr('id').slice('4')));
+			$.ajax({
+				url:{% url 'add_data_to_person' %},
+				type:$("#persondata").attr('method'),
+				data:$("#persondata").serialize(),
+				dataProcess:true,
+				timeout:500,
+				success:function(data)
+				{
+					if (data==="success")
+					{
+						$.notify("Сохранено.", "success");
+					}
+					else
+					{
+						$.notify("Что-то пошло не так :(", "error");
+					}
+					
+				},
+				error:function()
+				{
+					$.notify("Отсутствует соединение :(", "error");
+				}
+			});
+		});
+		function initSelect2(object){
+			object.select2({
+				language:"ru",
+				allowClear:true,
+				ajax:{
+					url:{% url 'examsubject' %},
+					dataType:'json',
+					delay:250,
+					data:function(params){
+						return{
+							query:params
+						};
+					},
+					processResults:function(data,page)
+					{
+						return{
+							results:data
+						};
+					},
+					cache:true
+				}
+			});
+			if($(object).val() != "")
+			{
+				for (var i = 0; i<sub_id.length;i++)
+				{
+					if(sub_id[i]===parseInt($(object).val()))
+					{
+						object.select2('data',{id:sub_id[i], text:sub_val[i]});
+						return;
+					}
+				}
+			}
+		};
+		$('input[name^="egeDisc"]').each(function()
+		{
+			initSelect2($(this));
+		});
 		$('#kladrbtn').on('click', function(e){
 			//$('#KladrModal').modal();
 			Kladr($('#street'));
@@ -144,9 +234,6 @@
 				if(parseInt(data['success'])===1)
 				{
 					$("#adrsindex").val(data['index']);
-					//$("#territory").val(data['region']);
-					//$("#district").val(data['district']);
-					//$("#city").val(data['city']);
 					$("#street").val(data['street']);
 					$("#adrshouse").val(data['house']);
 					$("#adrsbuilding").val(data['building']);
@@ -155,9 +242,6 @@
 				else
 				{
 					$("#adrsindex").val('');
-					//$("#territory").val(data['region']);
-					//$("#district").val(data['district']);
-					//$("#city").val(data['city']);
 					$("#street").val('');
 					$("#adrshouse").val('');
 					$("#adrsbuilding").val('');
@@ -201,6 +285,16 @@
 		locale:"ru",
 		{% if doctype_date %} defaultDate:'{{doctype_date|date:"Y-m-d"}}' {% endif %}
 	});
+	$("#datejoining").datetimepicker({
+		format:'DD/MM/YYYY',
+		locale:"ru",
+		{% if datejoining %} defaultDate:'{{datejoining|date:"Y-m-d"}}' {% endif %}
+	});
+	$("#dateexiting").datetimepicker({
+		format:'DD/MM/YYYY',
+		locale:"ru",
+		{% if edudoctype_date %} defaultDate:'{{edudoctype_date|date:"Y-m-d"}}' {% endif %}
+	});
 	$("#nation").select2({
 		language:"ru",
 		allowClear:true,
@@ -224,7 +318,6 @@
 		}
 	});
 	$("#citizenship").select2({
-		language:"ru",
 		placeholder: "РФ",
 		ajax:{
 			url:{% url 'citizenship' %},
@@ -323,6 +416,35 @@
 			cache: true
 		}
 	});
+	$('#additionalExams').select2({
+		language:"ru",
+		multiple:true,
+		ajax:{
+			url:{% url 'examsubject' %},
+			dataType:'json',
+			delay:250,
+			data:function(params){
+				return{
+					query:params,
+					id:$("#eduname").select2('data').id
+				};
+			},
+			processResults:function(data,page)
+			{
+				return{
+					results:data
+				};
+			},
+			cache:true
+			}
+	});
+	var addExamsList = new Array();
+	{% if addExams %}
+		{% for item in addExams %}
+			addExamsList.push({"id":{{item.subject}},"text":"{{item.subject_value}}"});
+		{% endfor %}
+		$("#additionalExams").select2('data',addExamsList);
+	{% endif %}
 	$('#privcat').select2({
 		language:"ru",
 		minimumInputLength: 1,
@@ -344,6 +466,46 @@
 		}
 	});
 	$('#privtype').select2({
+		language:"ru",
+		minimumInputLength: 1,
+		ajax:{
+			url:{% url 'preveduname' %},
+			dataType: 'json',
+			delay: 250,
+			data:function(params){
+				return{
+					query: params
+				};
+			},
+			processResults: function (data, page) {
+				return {
+					results: data
+				};
+			},
+			cache: true
+		}
+	});
+	$('#achievement').select2({
+		language:"ru",
+		minimumInputLength: 1,
+		ajax:{
+			url:{% url 'preveduname' %},
+			dataType: 'json',
+			delay: 250,
+			data:function(params){
+				return{
+					query: params
+				};
+			},
+			processResults: function (data, page) {
+				return {
+					results: data
+				};
+			},
+			cache: true
+		}
+	});
+	$('#achievementDoc').select2({
 		language:"ru",
 		minimumInputLength: 1,
 		ajax:{
@@ -415,6 +577,12 @@
 	{% if doctype_issuer != None %}
 		$("#docissuer").select2('data', {id : "{{doctype_issuer_id}}" , text: "{{doctype_issuer}}"});
 	{% endif %}
+	{% if edudoctype != None  %}
+		$("#edudoctype").select2('data', {id : "{{edudoctype_id}}" , text: "{{edudoctype}}"});
+	{% endif %}
+	{% if edudoctype_issuer != None %}
+		$("#preveduname").select2('data', {id : "{{doctype_issuer_id}}" , text: "{{doctype_issuer}}"});
+	{% endif %}
 	{% if rank != None  %}
 		$("#rank").select2('data',{id: '{{rank_id}}', text:"{{rank}}"});
 	{% endif %}
@@ -438,8 +606,7 @@
 						<li><a href="#tab3" data-toggle="tab">Контактные данные</a></li>
 						<li><a href="#tab4" data-toggle="tab">Экзамены</a></li>
 						<li><a href="#tab5" data-toggle="tab">Льготы и достижения</a></li>
-						<li><a href="#tab6" data-toggle="tab">Личные достижения</a></li>
-						<li><a href="#tab7" data-toggle="tab">Прочее</a></li>
+						<li><a href="#tab6" data-toggle="tab">Прочее</a></li>
 					</ul>
 				</div>
 			</div>
@@ -448,7 +615,6 @@
 			<div id="progress-bar" class="progress-bar progress-bar-striped active" role="progressbar" style=""></div>
 		</div>
 		<input type="hidden" name="currentPage" id="currentPage">
-		<input type="hidden" name="egeRowsCount" id="egeRowsCount">
 		<div class="tab-content">
 			<div class="tab-pane" id="tab1">
 				<div class = "container-fluid">
@@ -527,120 +693,135 @@
 			</div>
 			<div class="tab-pane" id="tab2">
 				<div class = "container-fluid">
-					<div class = "row">
-						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-							<p>
-								<label for="doctype">Вид документа, удостоверяющего личность</label>
-								<input type="hidden" id="doctype" name="doctype" class="form-control">
-							</p>
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h3 class="panel-title">Документ, удостоверяющий личность</h3>
 						</div>
-					</div>
-					<p>
-						<div class = "row">
-							<div class = "col-xs-2 col-sm-2 col-md-2 col-md-offset-2">
-								<label for="serialdoc">Серия</label>
-								<input type = "text" name = "serialdoc" id = "serialdoc" class = "form-control" placeholder="1234" {% if doctype_serial %} value="{{doctype_serial}}" {% endif %}>
-							</div>
-							<div class = "col-xs-2 col-sm-2 col-md-2">
-								<label for="numberdoc">Номер</label>
-								<input type = "text" name = "numberdoc" id = "numberdoc" class = "form-control" placeholder="123456" {% if doctype_number %} value="{{doctype_number}}" {% endif %}>
-							</div>
-							<div class = "col-xs-2 col-sm-2 col-md-4">
-								<label for="datedoc">Дата выдачи</label>
-								<div class='input-group date' id='datedoc'>
-									<input type="text" class="form-control" name="datedoc" />
-										<span class="input-group-addon">
-											<span class="glyphicon glyphicon-calendar"></span>
-										</span>
+						<div class="panel-body">
+							<div class = "row">
+								<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
+									<p>
+										<label for="doctype">Вид документа, удостоверяющего личность</label>
+										<input type="hidden" id="doctype" name="doctype" class="form-control">
+									</p>
 								</div>
 							</div>
-						</div>
-					</p>
-					<div class = "row">
-						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 							<p>
-								<label for="docissuer">Кем выдан</label>
-								<input type="hidden" name= "docissuer" id = "docissuer" class = "form-control" placeholder = "Отделом УФМС по Российской Федерации, г. Якутск">
-							</p>
-						</div>
-					</div>
-					<div class = "row">
-						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-							<p>
-								<label for="edudoctype">Вид документа об образовании</label>
-								<input type="hidden" id="edudoctype" name="edudoctype" class="form-control">
-							</p>
-						</div>
-					</div>
-					<p>
-						<div class = "row">
-							<div class = "col-xs-6 col-sm-5 col-md-4 col-md-offset-2">
-								<label for="serialedudoc">Серия</label>
-								<input type = "text" name = "serialedudoc" id = "serialedudoc" class = "form-control" placeholder="1234">
-							</div>
-							<div class = "col-xs-6 col-sm-5 col-md-4">
-								<label for="numberedudoc">Номер</label>
-								<input type = "text" name = "numberedudoc" id = "numberedudoc" class = "form-control" placeholder="123456">
-							</div>
-						</div>
-					</p>
-					<div class = "row">
-						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-							<p>
-								<label for="prevedu">Предыдущие образование</label>
-								<p>
-									<input type = "radio" name= "prevedu" id = "prevedu"  value = "soo">СОО
-									<input type = "radio" name= "prevedu" id = "prevedu"  value = "npo">НПО
-									<input type = "radio" name= "prevedu" id = "prevedu"  value = "spo">СПО
-									<input type = "radio" name= "prevedu" id = "prevedu"  value = "vpo">ВПО
-								</p>
-							</p>
-						</div>
-					</div>
-					<p>
-						<div class="row">
-								<div class="col-xs-6 col-sm-5 col-md-4 col-md-offset-2">
-									<label for="datejoining">Дата поступления</label>
-									<div class='input-group date' id='datejoining'>
-										<input type="text" class="form-control" name="datejoining" />
-											<span class="input-group-addon">
-												<span class="glyphicon glyphicon-calendar"></span>
-											</span>
+								<div class = "row">
+									<div class = "col-xs-2 col-sm-2 col-md-2 col-md-offset-2">
+										<label for="serialdoc">Серия</label>
+										<input type = "text" name = "serialdoc" id = "serialdoc" class = "form-control" placeholder="1234" {% if doctype_serial %} value="{{doctype_serial}}" {% endif %}>
+									</div>
+									<div class = "col-xs-2 col-sm-2 col-md-2">
+										<label for="numberdoc">Номер</label>
+										<input type = "text" name = "numberdoc" id = "numberdoc" class = "form-control" placeholder="123456" {% if doctype_number %} value="{{doctype_number}}" {% endif %}>
+									</div>
+									<div class = "col-xs-2 col-sm-2 col-md-4">
+										<label for="datedoc">Дата выдачи</label>
+										<div class='input-group date' id='datedoc'>
+											<input type="text" class="form-control" name="datedoc" />
+												<span class="input-group-addon">
+													<span class="glyphicon glyphicon-calendar"></span>
+												</span>
+										</div>
 									</div>
 								</div>
-								<div class="col-xs-6 col-sm-5 col-md-4">
-									<label for="dateexiting">Дата окончания</label>
-									<div class='input-group date' id='dateexiting'>
-										<input type="text" class="form-control" name="dateexiting" />
-											<span class="input-group-addon">
-												<span class="glyphicon glyphicon-calendar"></span>
-											</span>
+							</p>
+							<div class = "row">
+								<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
+									<p>
+										<label for="docissuer">Кем выдан</label>
+										<input type="hidden" name= "docissuer" id = "docissuer" class = "form-control" placeholder = "Отделом УФМС по Российской Федерации, г. Якутск">
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h3 class="panel-title">Документ об образовании</h3>
+						</div>
+						<div class="panel-body">
+							<div class = "row">
+								<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
+									<p>
+										<label for="edudoctype">Вид документа об образовании</label>
+										<input type="hidden" id="edudoctype" name="edudoctype" class="form-control">
+									</p>
+								</div>
+							</div>
+							<p>
+								<div class = "row">
+									<div class = "col-xs-6 col-sm-5 col-md-4 col-md-offset-2">
+										<label for="serialedudoc">Серия</label>
+										<input type = "text" name = "serialedudoc" id = "serialedudoc" class = "form-control" placeholder="1234" {% if edudoctype_serial %} value="{{edudoctype_serial}}" {% endif %}>
+									</div>
+									<div class = "col-xs-6 col-sm-5 col-md-4">
+										<label for="numberedudoc">Номер</label>
+										<input type = "text" name = "numberedudoc" id = "numberedudoc" class = "form-control" placeholder="123456" {% if edudoctype_number %} value="{{edudoctype_number}}" {% endif %}>
 									</div>
 								</div>
-						</div>
-					</p>
-					<div class = "row">
-						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-							<p>
-								<label for="preveduname">Название учебного заведения</label>
-								<input type="hidden" name= "preveduname" id = "preveduname" class = "form-control" placeholder = "МОУ СОШ № 1, г. Якутск">
 							</p>
+							<div class = "row">
+								<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
+									<p>
+										<label for="prevedu">Предыдущие образование</label>
+										<p>
+											<input type = "radio" name= "prevedu" id = "prevedu" {% if prevedu == "СОО" %} checked {% endif %} value = "soo">СОО
+											<input type = "radio" name= "prevedu" id = "prevedu" {% if prevedu == "НПО" %} checked {% endif %} value = "npo">НПО
+											<input type = "radio" name= "prevedu" id = "prevedu" {% if prevedu == "СПО" %} checked {% endif %} value = "spo">СПО
+											<input type = "radio" name= "prevedu" id = "prevedu" {% if prevedu == "ВПО" %} checked {% endif %} value = "vpo">ВПО
+										</p>
+									</p>
+								</div>
+							</div>
+							<p>
+								<div class="row">
+										<div class="col-xs-6 col-sm-5 col-md-4 col-md-offset-2">
+											<label for="datejoining">Дата поступления</label>
+											<div class='input-group date' id='datejoining'>
+												<input type="text" class="form-control" name="datejoining" />
+													<span class="input-group-addon">
+														<span class="glyphicon glyphicon-calendar"></span>
+													</span>
+											</div>
+										</div>
+										<div class="col-xs-6 col-sm-5 col-md-4">
+											<label for="dateexiting">Дата окончания</label>
+											<div class='input-group date' id='dateexiting'>
+												<input type="text" class="form-control" name="dateexiting" />
+													<span class="input-group-addon">
+														<span class="glyphicon glyphicon-calendar"></span>
+													</span>
+											</div>
+										</div>
+								</div>
+							</p>
+							<div class = "row">
+								<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
+									<p>
+										<label for="preveduname">Название учебного заведения</label>
+										<input type="hidden" name= "preveduname" id = "preveduname" class = "form-control" placeholder = "МОУ СОШ № 1, г. Якутск">
+									</p>
+								</div>
+							</div>
 						</div>
 					</div>
-					<div class="row">
-						<div class="col-xs-6 col-sm-5 col-md-4 col-md-offset-2">
-							<p>
-								<label for="phone">Контактный телефон</label>
-								<input type="tel" name = "phone" id ="phone" class="form-control" placeholder="Телефон в формате 8-ххх-ххххххх или 8-хххх-хххххх" pattern="(8-[0-9]{3}-[0-9]{7})|(8-[0-9]{4}-[0-9]{6})">
-							</p>
-						</div>
-						<div class="col-xs-6 col-sm-5 col-md-4">
-							<p>
-								<label for="inila">СНИЛС</label>
-								<input id="inila" name="inila" class="form-control" placeholder="123-456-789-00" {% if inila %} value={{inila}} {% endif %}/>
-							</p>
-						</div>
-					</div>
+					<div class="panel panel-primary">
+								<div class="panel-heading">
+									<h3 class="panel-title">СНИЛС</h3>
+								</div>
+								<div class="panel-body">
+									<div class="row">
+										<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
+											<p>
+												<label for="inila">СНИЛС</label>
+												<input id="inila" name="inila" class="form-control" placeholder="123-456-789-00" {% if inila %} value={{inila}} {% endif %}/>
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
 					<div class="row">
 						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 							<button class="btn btn-primary btn-block" type="button" id="save2">Сохранить</button>
@@ -720,6 +901,110 @@
 								<h3 class="panel-title">Контакты</h3>
 							</div>
 							<div class="panel-body">
+								<div class="row">
+									<table class="table" id="table">
+										<thead id="tablehead">
+											<tr>
+												<th>Тип контакта</th>
+												<th>Номер</th>
+											</tr>
+										</thead>
+										<tbody id="contactsTable">
+											{% if contacts %}
+												{% for item in contacts %}
+												<tr>
+													<td>
+													<select id="contacttype" name = "contacttype" class="form-control">
+														{% if contacts_type %}
+															{% for item2 in contacts_type %}
+																<option value="{{item2.id}}" {% if item.type.id == item2.id %} selected {% endif %}>{{item2.value}}</option>
+															{% endfor %}
+														{% endif %}
+													</select>
+													</td>
+													<td><input type="text" class="form-control" name="contactvalue" value= {{item.value}}></td>
+													<td><button class="btn btn-default btn-sm" id="delContactRow" type="button">Удалить</button></td>
+												</tr>
+												{% endfor %}
+											{% else %}
+											<tr>
+												<td>
+													<select id="contacttype" name = "contacttype" class="form-control">
+														{% if contacts_type %}
+															{% for item in contacts_type %}
+																<option value="{{item.id}}">{{item.value}}</option>
+															{% endfor %}
+														{% endif %}
+													</select>
+												</td>
+												<td><input type="text" class="form-control" name="contactvalue"></td>
+												<td><button class="btn btn-default btn-sm" id="delContactRow" type="button">Удалить</button></td>
+											</tr>
+											{% endif %}
+										</tbody>
+									</table>
+								</div>
+								<div class="row">
+									<button class="btn btn-primary btn-block" type="button" id="addContact">Добавить контакт</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<h3 class="panel-title">Родственники</h3>
+							</div>
+							<div class="panel-body">
+								<div class="row">
+									<table class="table" id="table">
+										<thead id="tablehead">
+											<tr>
+												<th>Родственник</th>
+												<th>ФИО</th>
+												<th>Номер телефона</th>
+											</tr>
+										</thead>
+										<tbody id="relationsTable">
+											{% if relation %}
+												{% for item in relation %}
+												<tr>
+													<td>
+													<select id="relationtype" name = "relationtype" class="form-control">
+														{% if relation_type %}
+															{% for item2 in relation_type %}
+																<option value="{{item2.id}}" {% if item.type.id == item2.id %} selected {% endif %}>{{item2.value}}</option>
+															{% endfor %}
+														{% endif %}
+													</select>
+													</td>
+													<td><input type="text" class="form-control" name="relationFIO" value= {{item.fio}}></td>
+													<td><input type="text" class="form-control" name="relationcontactvalue" value= {{item.value}}></td>
+													<td><button class="btn btn-default btn-sm" id="delRelationRow" type="button">Удалить</button></td>
+												</tr>
+												{% endfor %}
+											{% else %}
+											<tr>
+												<td>
+													<select id="relationtype" name = "relationtype" class="form-control">
+														{% if relation_type %}
+															{% for item in relation_type %}
+																<option value="{{item.id}}">{{item.value}}</option>
+															{% endfor %}
+														{% endif %}
+													</select>
+												</td>
+												<td><input type="text" class="form-control" name="relationFIO"></td>
+												<td><input type="text" class="form-control" name="relationcontactvalue"></td>
+												<td><button class="btn btn-default btn-sm" id="delRelationRow" type="button">Удалить</button></td>
+											</tr>
+											{% endif %}
+										</tbody>
+									</table>
+								</div>
+								<div class="row">
+									<button class="btn btn-primary btn-block" type="button" id="addRelation">Добавить родственника</button>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -751,19 +1036,19 @@
 										<tbody id="egeTableBody">
 										{% if exams %}
 											{% for item in exams %}
-											<tr class="info" id ="egeRow{{item.count}}">
-												<td><input type="text" class="form-control" name="egeDisc{{item.count}}" value ={{item.subject}}></td>
-												<td><input type="text" class="form-control" name="egePoints{{item.count}}" value ={{item.points}}></td>
-												<td><input type="text" class="form-control" name="egeYear{{item.count}}"  value ={{item.year}}></td>
-												<td><button class="btn btn-default btn-sm" id="egeExamDel{{item.count}}" type="button">Удалить</button></td>
+											<tr class="info">
+												<td><input type="hidden" class="form-control" name="egeDisc" value ={{item.subject}}></td>
+												<td><input type="text" class="form-control" name="egePoints" value ={{item.points}}></td>
+												<td><input type="text" class="form-control" name="egeYear"  value ={{item.year}}></td>
+												<td><button class="btn btn-default btn-sm" id="delExamRow" type="button">Удалить</button></td>
 											</tr>
 											{% endfor %}
 										{% else %}
-											<tr class="info" id ="egeRow1">
-												<td><input type="text" class="form-control" name="egeDisc1" id="egeDisc1"></td>
-												<td><input type="text" class="form-control" name="egePoints1" id="egePoints1"></td>
-												<td><input type="text" class="form-control" name="egeYear1" id="egeYear1"></td>
-												<td><button class="btn btn-default btn-sm" id="egeExamDel1" type="button">Удалить</button></td>
+											<tr class="info">
+												<td><input type="hidden" class="form-control" name="egeDisc"></td>
+												<td><input type="text" class="form-control" name="egePoints"></td>
+												<td><input type="text" class="form-control" name="egeYear"></td>
+												<td><button class="btn btn-default btn-sm" id="delExamRow" type="button">Удалить</button></td>
 											</tr>
 										{% endif %}
 										</tbody>
@@ -782,36 +1067,19 @@
 							</div>
 							<div class="panel-body">
 								<div class="row">
-									<table class="table" id="table">
-										<thead id="tablehead">
-											<tr>
-												<th>Дисциплина</th>
-												<th>Баллы</th>
-												<th>Год</th>
-												<th>Действие</th>
-											</tr>
-										</thead>
-										<tbody id="tablebody">
-											<tr class="info">
-												<td></td>
-												<td></td>
-												<td></td>
-												<td><button class="btn btn-default btn-sm" id="app{{item.id}}" type="button">Удалить</button></td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-								<div class="row">
-									<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-										<p>
-											<label for="specusl">Прошу создать специальные условия при сдаче вступ. исп-й в связи с ограниченными возможностями здоровья></label>
-											<input type="radio" name="specusl" value="no">Нет
-											<input type="radio" name="specusl" value="yes">Да
-										</p>
+									<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
+										<label for="additionalExams">Выберите дисциплины</label>
+										<input type="hidden" id="additionalExams" name="additionalExams" class="form-control">
 									</div>
 								</div>
 								<div class="row">
-									<button class="btn btn-primary btn-block" type="button" id="add">Добавить</button>
+									<div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-1">
+										<p>
+											<label for="specusl">Прошу создать специальные условия при сдаче вступ. исп-й в связи с ограниченными возможностями здоровья></label>
+											<input type="radio" name="specusl" value="no" {% if not specusl %} checked {% endif %}>Нет
+											<input type="radio" name="specusl" value="yes" {% if specusl %} checked {% endif %}>Да
+										</p>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -863,12 +1131,12 @@
 					<div id="achRow" class="row" {% if not achievements %} hidden {% endif %}>
 						<p>
 							<div class="col-xs-6 col-sm-5 col-md-4 col-md-offset-2">
-								<label for="achievname[1]">Наименование достижения</label>
-								<input name="achievname[1]" id="achievname[1]" class="form-control" placeholder="По жизни чемпион">
+								<label for="achievement">Наименование достижения</label>
+								<input type="hidden" id="achievement" name="achievement" class="form-control">
 							</div>
 							<div class="col-xs-6 col-sm-5 col-md-4">
-								<label for="proof[1]">Подтверждающие документы</label>
-								<input name="proof[1]" id="proof[1]" class="form-control" placeholder="Я тебе говорю">
+								<label for="achievementDoc">Подтверждающий документ</label>
+								<input type="hidden" id="achievementDoc" name="achievementDoc" class="form-control">
 							</div>
 						</p>
 					</div>
@@ -881,37 +1149,6 @@
 				</div>
 			</div>
 			<div class="tab-pane" id="tab6">
-				<div class="container-fluid">
-					<div class="row">
-						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-							<label for="persach">Имеются ли достижения?</label>
-							<p>
-								<input type="radio" name = "persach" value="no">Нет
-								<input type="radio" name = "persach" value="yes">Да
-							</p>
-						</div>
-					</div>
-					<div id="achRow" class="row" {% if not achievements %} hidden {% endif %}>
-						<p>
-							<div class="col-xs-6 col-sm-5 col-md-4 col-md-offset-2">
-								<label for="achievname[1]">Наименование достижения</label>
-								<input name="achievname[1]" id="achievname[1]" class="form-control" placeholder="По жизни чемпион">
-							</div>
-							<div class="col-xs-6 col-sm-5 col-md-4">
-								<label for="proof[1]">Подтверждающие документы</label>
-								<input name="proof[1]" id="proof[1]" class="form-control" placeholder="Я тебе говорю">
-							</div>
-						</p>
-					</div>
-					</br>
-					<div class="row">
-						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-							<button class="btn btn-primary btn-block" type="button" id="save6">Сохранить</button>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="tab-pane" id="tab7">
 				<div class="container-fluid">
 					 <div class="row">
 						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
