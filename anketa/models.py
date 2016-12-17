@@ -202,6 +202,8 @@ class TemplateAttrs(models.Model):
 class Profile(models.Model):
 	edu_prog=models.ForeignKey('Education_Prog')
 	name=models.CharField(u'Профиль', max_length=100, db_index=True)
+	def __str__(self):
+		return self.name
 
 class ProfileAttrs(models.Model):
 	profile=models.ForeignKey('Profile', db_index=True)
@@ -209,7 +211,7 @@ class ProfileAttrs(models.Model):
 	eduform = models.CharField(u'Форма обучения',choices=EduForm, default='О', max_length=10)
 	year=models.IntegerField(u'Год')
 	def __str__(self):
-		return self.name
+		return self.profile.name+' '+eduform
 
 -class ApplicationProfiles(models.Model):
 	application = models.ForeignKey(Application, verbose_name=u'Заявление', db_index = True)
