@@ -87,13 +87,12 @@ class Abiturient_attrs(models.Model):
 		
 
 class Application(models.Model):
-	department = models.ForeignKey('Department', verbose_name = u'Институт/факультет', db_index=True)
+	department = models.ForeignKey('EduOrg', verbose_name = u'Институт/факультет', db_index=True)
 	abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент', db_index=True)
 	date = models.DateField(u'Дата подачи', auto_now_add=True, db_index=True)
 	number = models.IntegerField(u'Номер заявления', max_length=10, null=True, blank=True)										#номер в журнале в приемной комиссии
 	budget = models.BooleanField(u'В рамках контрольных цифр приёма', default=False)
 	withfee = models.BooleanField(u'по договорам об оказании платных обр. услуг', default=False)
-	edu_prog = models.ForeignKey('Education_Prog_Form',verbose_name = u'Направление', null = True, blank=True, db_index=True)		#убрать после sync
 	appState = models.ForeignKey('AttrValue',verbose_name=u'Состояние заявления', limit_choices_to={'attribute__name':u'Состояние заявления'}, db_index=True)
 	points = models.IntegerField(u'Кол-во баллов', db_index=True)
 	priority = models.CharField(u'Приоритет',choices=AppPrior, default='В', max_length=10, null= True, blank = True) #Убрать null, blank
@@ -173,14 +172,14 @@ class University(models.Model):
 class EduOrg(models.Model):
 	name=models.CharField(u'Образовательное учреждение', max_length=100, db_index = True)
 	head=models.ForeignKey('self', null=True, blank=True, db_index = True)
-	orgtype=models.ForeignKey('AttrValue', verbose_name=u'Тип образовательного учреждения', db_index=True)
+	orgtype=models.ForeignKey('AttrValue', verbose_name=u'Тип образовательного учреждения', null=True, blank=True, db_index=True)
 	def __str__(self):
 		return self.name
 
 class Education_Prog(models.Model):
 	eduorg=models.ForeignKey(EduOrg, verbose_name=u'Образовательное учреждение', db_index=True)
 	qualification=models.ForeignKey('AttrValue', verbose_name=u'Квалификация', limit_choices_to={'attribute__name':u'Квалификация'}, db_index=True)
-	duration=models.ForeignKey('AttrValue', verbose_name=u'Срок обучения', limit_choices_to={'attribute__name':u'Срок обучения'}, db_index=True)
+	duration=models.ForeignKey('AttrValue', verbose_name=u'Срок обучения', limit_choices_to={'attribute__name':u'Срок обучения'}, null = True, blank=True)
 	name=models.CharField(u'Направление/специальность', max_length=200, db_index=True)
 	def __str__(self):
 		return self.name + ' ' + self.qualification.value
@@ -202,20 +201,18 @@ class TemplateAttrs(models.Model):
 class Profile(models.Model):
 	edu_prog=models.ForeignKey('Education_Prog')
 	name=models.CharField(u'Профиль', max_length=100, db_index=True)
-	def __str__(self):
-		return self.name
 
 class ProfileAttrs(models.Model):
 	profile=models.ForeignKey('Profile', db_index=True)
 	freespaces=models.IntegerField(u'КЦП')
-	eduform = models.CharField(u'Форма обучения',choices=EduForm, default='О', max_length=10)
+	eduform = models.CharField(u'Форма обучения',choices=EduForm, default='О', max_length=10, null=True, blank=True)
 	year=models.IntegerField(u'Год')
 	def __str__(self):
-		return self.profile.name+' '+eduform
+		return self.name
 
--class ApplicationProfiles(models.Model):
+class ApplicationProfiles(models.Model):
 	application = models.ForeignKey(Application, verbose_name=u'Заявление', db_index = True)
-	profile = models.ForeignKey(ProfileAttrs, verbose_name=u'Профиль направления', blank=True, null=True)
+	profile = models.ForeignKey(ProfileAttrs, verbose_name=u'Профиль направления')
 	def __str__(self):
 		return self.application.abiturient.fullname + ' ' +self.profile.name
 

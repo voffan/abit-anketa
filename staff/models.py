@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.auth.models import User
-from anketa.models import Attribute, Department, AttrValue, Application
+from anketa.models import Attribute, EdiOrg, AttrValue, Application
 
 class Employee(models.Model):
 	user = models.ForeignKey(User, verbose_name=u'Пользователь', db_index=True)
-	department = models.ForeignKey(Department,verbose_name=u'Подразделение', db_index=True)
+	department = models.ForeignKey(EduOrg,verbose_name=u'Подразделение', db_index=True)
 	position = models.ForeignKey('Position', verbose_name=u'Должность',db_index=True)
 	uniemployee = models.IntegerField(u'УнивСотрудник', db_index=True)
 	fullname = models.CharField(u'ФИО', max_length = 200, blank=True, null=True, db_index=True)
