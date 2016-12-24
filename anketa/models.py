@@ -178,8 +178,8 @@ class EduOrg(models.Model):
 
 class Education_Prog(models.Model):
 	eduorg=models.ForeignKey(EduOrg, verbose_name=u'Образовательное учреждение', db_index=True)
-	qualification=models.ForeignKey('AttrValue', verbose_name=u'Квалификация', limit_choices_to={'attribute__name':u'Квалификация'}, db_index=True)
-	duration=models.ForeignKey('AttrValue', verbose_name=u'Срок обучения', limit_choices_to={'attribute__name':u'Срок обучения'}, null = True, blank=True)
+	qualification=models.ForeignKey('AttrValue', verbose_name=u'Квалификация', limit_choices_to={'attribute__name':u'Квалификация'}, related_name='qualification', db_index=True)
+	duration=models.ForeignKey('AttrValue', verbose_name=u'Срок обучения', limit_choices_to={'attribute__name':u'Срок обучения'}, related_name='duration	', null = True, blank=True)
 	name=models.CharField(u'Направление/специальность', max_length=200, db_index=True)
 	def __str__(self):
 		return self.name + ' ' + self.qualification.value

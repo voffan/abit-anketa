@@ -527,7 +527,6 @@
 {
     "pk": 1,
     "fields": {
-        "parent": null,
         "value": "ork",
         "attribute": 1
     },
@@ -536,7 +535,6 @@
 {
     "pk": 2,
     "fields": {
-        "parent": null,
         "value": "\u0420\u0424",
         "attribute": 2
     },
@@ -545,7 +543,6 @@
 {
     "pk": 3,
     "fields": {
-        "parent": null,
         "value": "\u0410\u043d\u0433\u043b\u0438\u0439\u0441\u043a\u0438\u0439",
         "attribute": 3
     },
@@ -554,7 +551,6 @@
 {
     "pk": 4,
     "fields": {
-        "parent": null,
         "value": "\u0438\u043d\u0444\u043e\u0440\u043c\u0430\u0442\u0438\u043a\u0430 \u0438 \u0432\u044b\u0447\u0438\u0441\u043b\u0438\u0442\u0435\u043b\u044c\u043d\u0430\u044f \u0442\u0435\u0445\u043d\u0438\u043a\u0430",
         "attribute": 4
     },
@@ -563,7 +559,6 @@
 {
     "pk": 5,
     "fields": {
-        "parent": null,
         "value": "\u041f\u043e\u0434\u0430\u043d\u043d\u044b\u0439",
         "attribute": 5
     },
@@ -572,7 +567,6 @@
 {
     "pk": 6,
     "fields": {
-        "parent": null,
         "value": "\u0410\u0442\u0442\u0435\u0441\u0442\u0430\u0442",
         "attribute": 19
     },
@@ -581,7 +575,6 @@
 {
     "pk": 7,
     "fields": {
-        "parent": null,
         "value": "\u041c\u0411\u041e\u0423 \u0421\u041e\u0428 \u211631 \u041c\u041e \u0413\u043e\u0440\u043e\u0434 \u042f\u043a\u0443\u0442\u0441\u043a",
         "attribute": 7
     },
@@ -590,7 +583,6 @@
 {
     "pk": 8,
     "fields": {
-        "parent": null,
         "value": "\u0421\u0430\u0445\u0430",
         "attribute": 1
     },
@@ -599,7 +591,6 @@
 {
     "pk": 9,
     "fields": {
-        "parent": null,
         "value": "\u041d\u0435\u043c\u0435\u0446\u043a\u0438\u0439",
         "attribute": 3
     },
@@ -608,7 +599,6 @@
 {
     "pk": 10,
     "fields": {
-        "parent": null,
         "value": "\u0424\u0440\u0430\u043d\u0446\u0443\u0437\u043a\u0438\u0439",
         "attribute": 3
     },
@@ -617,7 +607,6 @@
 {
     "pk": 11,
     "fields": {
-        "parent": null,
         "value": "\u041a\u0438\u0442\u0430\u0439\u0441\u043a\u0438\u0439",
         "attribute": 3
     },
@@ -626,7 +615,6 @@
 {
     "pk": 12,
     "fields": {
-        "parent": null,
         "value": "\u041f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\u043d\u044b\u0439",
         "attribute": 5
     },
@@ -635,7 +623,6 @@
 {
     "pk": 13,
     "fields": {
-        "parent": null,
         "value": "\u042d\u043a\u0441\u043f\u043e\u0440\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u044b\u0439",
         "attribute": 5
     },
@@ -644,7 +631,6 @@
 {
     "pk": 14,
     "fields": {
-        "parent": null,
         "value": "\u0410\u043d\u0443\u043b\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u044b\u0439",
         "attribute": 5
     },
@@ -653,7 +639,6 @@
 {
     "pk": 15,
     "fields": {
-        "parent": null,
         "value": "\u0420\u0443\u0441\u0441\u043a\u0438\u0439",
         "attribute": 1
     },
@@ -662,7 +647,6 @@
 {
     "pk": 16,
     "fields": {
-        "parent": null,
         "value": "\u0414\u0438\u043f\u043b\u043e\u043c",
         "attribute": 19
     },
@@ -671,7 +655,6 @@
 {
     "pk": 17,
     "fields": {
-        "parent": null,
         "value": "\u041c\u0443\u0445\u043e\u0441\u0440\u0430\u043d\u0441\u043a\u0438\u0439 \u0443\u043d\u0438\u0432\u0435\u0440",
         "attribute": 7
     },
@@ -680,7 +663,6 @@
 {
     "pk": 18,
     "fields": {
-        "parent": null,
         "value": "\u041c\u041e\u0423 \u0421\u041e\u0428 \u21167 \u0433.\u042f\u043a\u0443\u0442\u0441\u043a",
         "attribute": 7
     },
@@ -689,7 +671,6 @@
 {
     "pk": 19,
     "fields": {
-        "parent": null,
         "value": "\u0421\u041e\u0428 \u0442\u0443\u0440\u0443\u043a\u0442\u0438\u043d\u0441\u043a\u0430\u044f \u044f \u0435\u0431\u0443",
         "attribute": 7
     },
@@ -698,7 +679,6 @@
 {
     "pk": 20,
     "fields": {
-        "parent": null,
         "value": "\u041c\u041e\u0423 \u0421\u041e\u0428 \u211617 \u041c\u041e \u0413\u043e\u0440\u043e\u0434 \u042f\u043a\u0443\u0442\u0441\u043a",
         "attribute": 7
     },
@@ -707,7 +687,6 @@
 {
     "pk": 22,
     "fields": {
-        "parent": null,
         "value": "\u0421\u041e\u041e",
         "attribute": 8
     },
@@ -716,7 +695,6 @@
 {
     "pk": 23,
     "fields": {
-        "parent": null,
         "value": "\u041d\u041f\u041e",
         "attribute": 8
     },
@@ -725,7 +703,6 @@
 {
     "pk": 24,
     "fields": {
-        "parent": null,
         "value": "\u0412\u041f\u041e",
         "attribute": 8
     },
@@ -734,7 +711,6 @@
 {
     "pk": 26,
     "fields": {
-        "parent": null,
         "value": "\u0421\u041f\u041e",
         "attribute": 8
     },
@@ -743,7 +719,6 @@
 {
     "pk": 27,
     "fields": {
-        "parent": null,
         "value": "\u041f\u0435\u0447\u0435\u043d\u044c",
         "attribute": 7
     },
@@ -752,7 +727,6 @@
 {
     "pk": 34,
     "fields": {
-        "parent": null,
         "value": "\u0414\u043e\u043c\u0430\u0448\u043d\u0438\u0439 \u0442\u0435\u043b\u0435\u0444\u043e\u043d",
         "attribute": 13
     },
@@ -761,7 +735,6 @@
 {
     "pk": 35,
     "fields": {
-        "parent": null,
         "value": "\u0420\u0430\u0431\u043e\u0447\u0438\u0439 \u0442\u0435\u043b\u0435\u0444\u043e\u043d",
         "attribute": 13
     },
@@ -770,7 +743,6 @@
 {
     "pk": 37,
     "fields": {
-        "parent": null,
         "value": "\u043c\u043e\u0431\u0438\u043b\u044c\u043d\u044b\u0439",
         "attribute": 13
     },
@@ -779,7 +751,6 @@
 {
     "pk": 39,
     "fields": {
-        "parent": null,
         "value": "\u0410\u0434\u0440\u0435\u0441 \u0444\u0430\u043a\u0442\u0438\u0447\u0435\u0441\u043a\u0438\u0439",
         "attribute": 13
     },
@@ -788,7 +759,6 @@
 {
     "pk": 43,
     "fields": {
-        "parent": null,
         "value": "vk-id",
         "attribute": 13
     },
@@ -797,7 +767,7 @@
 {
     "pk": 44,
     "fields": {
-        "parent": null,
+        
         "value": "\u041f\u0430\u0441\u043f\u043e\u0440\u0442",
         "attribute": 6
     },
@@ -806,7 +776,7 @@
 {
     "pk": 45,
     "fields": {
-        "parent": null,
+        
         "value": "\u0421\u041d\u0418\u041b\u0421",
         "attribute": 20
     },
@@ -815,7 +785,7 @@
 {
     "pk": 54,
     "fields": {
-        "parent": null,
+        
         "value": "45",
         "attribute": 14
     },
@@ -824,7 +794,7 @@
 {
     "pk": 57,
     "fields": {
-        "parent": null,
+        
         "value": "\u0422\u0430\u0442\u0430\u0440",
         "attribute": 1
     },
@@ -833,7 +803,7 @@
 {
     "pk": 58,
     "fields": {
-        "parent": null,
+        
         "value": "\u041a\u0430\u043f\u0438\u0442\u0430\u043d",
         "attribute": 15
     },
@@ -842,7 +812,7 @@
 {
     "pk": 59,
     "fields": {
-        "parent": null,
+        
         "value": "\u0420\u044f\u0434\u043e\u0432\u043e\u0439",
         "attribute": 15
     },
@@ -851,7 +821,7 @@
 {
     "pk": 60,
     "fields": {
-        "parent": null,
+        
         "value": "\u0424\u0430\u043a\u0442\u0438\u0447\u0435\u0441\u043a\u0438\u0439",
         "attribute": 16
     },
@@ -860,7 +830,7 @@
 {
     "pk": 61,
     "fields": {
-        "parent": null,
+        
         "value": "\u041f\u043e \u043f\u0440\u043e\u043f\u0438\u0441\u043a\u0435",
         "attribute": 16
     },
@@ -869,7 +839,7 @@
 {
     "pk": 62,
     "fields": {
-        "parent": null,
+        
         "value": "\u041c\u0430\u0442\u0435\u043c\u0430\u0442\u0438\u043a\u0430",
         "attribute": 17
     },
@@ -878,7 +848,7 @@
 {
     "pk": 63,
     "fields": {
-        "parent": null,
+        
         "value": "\u0420\u0443\u0441\u0441\u043a\u0438\u0439 \u044f\u0437\u044b\u043a",
         "attribute": 17
     },
@@ -887,7 +857,7 @@
 {
     "pk": 64,
     "fields": {
-        "parent": null,
+        
         "value": "\u0415\u0413\u042d",
         "attribute": 18
     },
@@ -896,7 +866,7 @@
 {
     "pk": 65,
     "fields": {
-        "parent": null,
+        
         "value": "\u041e\u0442\u0435\u0446",
         "attribute": 21
     },
@@ -905,7 +875,7 @@
 {
     "pk": 66,
     "fields": {
-        "parent": null,
+        
         "value": "\u041c\u0430\u0442\u044c",
         "attribute": 21
     },
@@ -914,7 +884,7 @@
 {
     "pk": 67,
     "fields": {
-        "parent": null,
+        
         "value": "US",
         "attribute": 2
     },
@@ -923,7 +893,7 @@
 {
     "pk": 68,
     "fields": {
-        "parent": null,
+        
         "value": "EU",
         "attribute": 2
     },
@@ -932,7 +902,7 @@
 {
     "pk": 69,
     "fields": {
-        "parent": null,
+        
         "value": "123123",
         "attribute": 14
     },
@@ -941,7 +911,7 @@
 {
     "pk": 72,
     "fields": {
-        "parent": null,
+        
         "value": "\u0413\u043b\u043e\u0431\u0430\u043b\u042d\u043b\u0438\u0442",
         "attribute": 15
     },
@@ -950,7 +920,7 @@
 {
     "pk": 76,
     "fields": {
-        "parent": null,
+        
         "value": "\u0432\u0430\u043f",
         "attribute": 14
     },
