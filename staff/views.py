@@ -14,7 +14,7 @@ import json
 from datetime import date
 import datetime
 from staff.models import Employee, Position, Contacts as ContactsStaff
-from anketa.models import Department, Attribute, AttrType, Relation, Person, Application, Abiturient, Docs, AttrValue, Profile, Contacts, Address, Education_Prog, Education_Prog_Form, Privilegies, Exams, DepAchieves, Milit, DocAttr, Achievements
+from anketa.models import Attribute, AttrType, Relation, Person, Application, Abiturient, Docs, AttrValue, Profile, Contacts, Address, Education_Prog,  Privilegies, Exams, DepAchieves, Milit, DocAttr, Achievements
 from django.contrib.auth.models import User
 
 # Create your views here.

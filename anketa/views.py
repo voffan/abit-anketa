@@ -14,9 +14,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 from django.shortcuts import render_to_response, render,get_object_or_404, redirect
 from django.template import RequestContext
-
 from kladr.models import Street
-from anketa.models import Person, Address, Attribute, AttrValue, Abiturient, Department, Education_Prog, Profile, Application, Education_Prog_Form, EduForm, ApplicationProfiles, Milit, Docs, Exams, DocAttr,Education, Contacts, Relation
+from anketa.models import Person, Address, Attribute, AttrValue, Abiturient, Education_Prog, Profile, Application, EduForm, ApplicationProfiles, Milit, Docs, Exams, DocAttr,Education, Contacts, Relation
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -679,7 +678,7 @@ def ExamSubject(request):
 	return HttpResponse(json.dumps(result), content_type="application/json")	
 
 def Institute(request):
-	institute = Department.objects.filter(name__icontains = request.GET.get('query',''))
+	institute = EduOrg.objects.filter(name__icontains = request.GET.get('query',''))
 	institute = institute.values('id', 'name')
 	result = []
 	for item in institute:
@@ -687,7 +686,7 @@ def Institute(request):
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def EduName(request):
-	institute = Department.objects.get(pk = request.GET.get('id',''))
+	institute = EduOrg.objects.get(pk = request.GET.get('id',''))
 	eduname=institute.education_prog_set.filter(name__icontains=request.GET.get('query',''))
 	eduname=eduname.values('id','name', 'qualification__value')
 	result = []
