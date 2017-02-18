@@ -135,12 +135,12 @@
 			<tr ng-repeat="row in displayedCollection">
 				<td class="rowl">{{ forloop.counter }}</td>
 				<td class="rowl"><a href="{% url 'staff:application_review' item.app.id %}">{{ item.app.abiturient.fullname }}</a></td>
-				<td class="rowl">{% if item.app.edu_prog.eduform == 'О'%}Очная{% endif %}{% if item.app.edu_prog.eduform == 'З'%}Заочная{%endif%}{% if item.app.edu_prog.eduform == 'ОЗ'%}Очно-Заочная{% endif %}</td>
+				<td class="rowl">{% if item.prof.profile.eduform == 'О'%}Очная{% endif %}{% if item.prof.profile.eduform == 'З'%}Заочная{%endif%}{% if item.prof.profile.eduform == 'ОЗ'%}Очно-Заочная{% endif %}</td>
 				<td class="rowl">{{ item.app.date }}</td>
 				<td class="rowl">{{ item.doc.docType.value }}</td>
 				<td class="rowl">{% if item.doc.isCopy %} Оригинал {% endif %}{% if not item.doc.isCopy %} Копия {% endif %}</td>
-				<td class="rowl">{{ item.app.edu_prog.edu_prog.name }}</td>
-				<td class="rowl">{{ item.app.edu_prog.edu_prog.qualification.value }}</td>
+				<td class="rowl">{{ item.prof.profile.profile.name }}</td>
+				<td class="rowl">{{ item.prof.profile.profile.edu_prog.qualification.value }}</td>
 				<td class="rowl">{{ item.app.points }}</td>
 				<td class="rowl">{{ item.app.appState.value }}</td>
 				<td class="rowl"><div class="col-md-offset-5"><input type="checkbox" name="selected"/></div></td>

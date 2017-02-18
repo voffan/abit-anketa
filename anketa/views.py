@@ -15,7 +15,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, render,get_object_or_404, redirect
 from django.template import RequestContext
 from kladr.models import Street
-from anketa.models import Person, Address, Attribute, AttrValue, Abiturient, Education_Prog, Profile, Application, EduForm, ApplicationProfiles, Milit, Docs, Exams, DocAttr,Education, Contacts, Relation
+from anketa.models import Person, Address, Attribute, AttrValue, Abiturient, EduOrg, ProfileAttrs, ApplicationProfiles, Education_Prog, Profile, Application, EduForm, ApplicationProfiles, Milit, Docs, Exams, DocAttr,Education, Contacts, Relation
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -161,11 +161,21 @@ def PersonData(request):
 @login_required(login_url='authapp:index')
 def Applications(request):
 	args={'currentpage':3}
+	args1=[]
 	person=Abiturient.objects.filter(user=request.user).first()
 	if person is None:
 		return redirect('/staff')
 	applications=Application.objects.filter(abiturient__user=request.user)
-	args['applications']=applications
+	print(applications)
+	appProf = ApplicationProfiles.objects.all()
+	print(appProf)
+	#args['appProf'] = appProf
+
+	for app in applications:
+		prof = appProf.filter(application__id = app.id).first()
+		args1.append({'app':app, 'prof':prof})
+	
+	args['applications']=args1
 	return render(request,'anketa/applicationList.html',args)
 
 @login_required(login_url='authapp:index')
@@ -688,10 +698,10 @@ def Institute(request):
 def EduName(request):
 	institute = EduOrg.objects.get(pk = request.GET.get('id',''))
 	eduname=institute.education_prog_set.filter(name__icontains=request.GET.get('query',''))
-	eduname=eduname.values('id','name', 'qualification__value')
+	eduname=eduname.values('id','name')
 	result = []
 	for item in eduname:
-		result.append({'id':item['id'], 'text':item['name'] + ' ' + item['qualification__value']})
+		result.append({'id':item['id'], 'text':item['name']})
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def EduProf(request):
@@ -700,7 +710,7 @@ def EduProf(request):
 	eduprof = eduprof.values('id', 'name')
 	result = []
 	for item in eduprof:
-		result.append({'id':item['id'],'text':item['name']})
+		result.append({'id':item['id'],'text':item['value']})
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def EduProfForm(request):

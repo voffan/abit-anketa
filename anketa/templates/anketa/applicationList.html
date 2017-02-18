@@ -277,10 +277,10 @@
 								<tbody id="tablebody">
 								{% for item in applications %}
 									<tr {% if item.appState.value == "Поданно" %} class="info" {% else %} {% if item.appState.value == "Экспортированно" %} class="success" {% else %} class="info" {% endif %} {% endif %}>
-										<td>{{item.id}}</td>
-										<td>{{item.department}}</td>
-										<td>{{item.edu_prog.edu_prog}}</td>
-										<td>{{item.appState.value}}</td>
+										<td>{{item.app.id}}</td>
+										<td>{{item.app.department.name}}</td>
+										<td>{{item.prof.profile.profile.edu_prog.name}}</td><!--._.-->
+										<td>{{item.app.appState.value}}</td>
 										<td><button class="btn btn-default btn-sm" id="app{{item.id}}" type="button">Редактировать</button></td>
 									</tr>
 								{% endfor %}

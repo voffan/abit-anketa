@@ -182,7 +182,7 @@ class Education_Prog(models.Model):
 	duration=models.ForeignKey('AttrValue', verbose_name=u'Срок обучения', limit_choices_to={'attribute__name':u'Срок обучения'}, related_name='duration	', null = True, blank=True)
 	name=models.CharField(u'Направление/специальность', max_length=200, db_index=True)
 	def __str__(self):
-		return self.name + ' ' + self.qualification.value
+		return self.name
 
 class Template(models.Model):
 	name=models.CharField(u'Шаблон', max_length=200, db_index=True)
@@ -201,6 +201,8 @@ class TemplateAttrs(models.Model):
 class Profile(models.Model):
 	edu_prog=models.ForeignKey('Education_Prog')
 	name=models.CharField(u'Профиль', max_length=100, db_index=True)
+	def __str__(self):
+		return self.name
 
 class ProfileAttrs(models.Model):
 	profile=models.ForeignKey('Profile', db_index=True)
@@ -208,13 +210,13 @@ class ProfileAttrs(models.Model):
 	eduform = models.CharField(u'Форма обучения',choices=EduForm, default='О', max_length=10, null=True, blank=True)
 	year=models.IntegerField(u'Год')
 	def __str__(self):
-		return self.name
+		return self.profile.name
 
 class ApplicationProfiles(models.Model):
 	application = models.ForeignKey(Application, verbose_name=u'Заявление', db_index = True)
 	profile = models.ForeignKey(ProfileAttrs, verbose_name=u'Профиль направления')
 	def __str__(self):
-		return self.application.abiturient.fullname + ' ' +self.profile.name
+		return self.application.abiturient.fullname + ' ' +self.profile.profile.name
 
 class NeedDocuments(models.Model):
 	docType = models.ForeignKey('AttrValue', verbose_name=u'Тип документа', limit_choices_to={'attribute__name':u'Тип документа'}, related_name='DocType_need')

@@ -14,7 +14,7 @@ import json
 from datetime import date
 import datetime
 from staff.models import Employee, Position, Contacts as ContactsStaff
-from anketa.models import Attribute, AttrType, Relation, Person, Application, Abiturient, Docs, AttrValue, Profile, Contacts, Address, Education_Prog,  Privilegies, Exams, DepAchieves, Milit, DocAttr, Achievements
+from anketa.models import ApplicationProfiles, EduOrg, ProfileAttrs, Attribute, AttrType, Relation, Person, Application, Abiturient, Docs, AttrValue, Profile, Contacts, Address, Education_Prog,  Privilegies, Exams, DepAchieves, Milit, DocAttr, Achievements
 from django.contrib.auth.models import User
 
 # Create your views here.
@@ -194,6 +194,7 @@ def Employee_Useraccount(request):
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Application_list (request):
 	applications = Application.objects.all()
+	appProfile = ApplicationProfiles.objects.all()
 	#employee = request.user.employee_set.get()
 	#applications = Application.objects.select_related('Abiturient').filter(department__id = employee.department.id)
 	#profiles = Profile.objects.all()
@@ -246,15 +247,15 @@ def Application_list (request):
 
 		if 'forma' in request.GET:
 			if request.GET['forma'] =='2':
-				applications = applications.filter(edu_prog__eduform__icontains=u'О')
+				applications = applications.filter(profile__eduform__icontains=u'О')
 				selectform = '2'
 				filters['forma'] = selectform
 			if request.GET['forma'] =='3':
-				applications = applications.filter(edu_prog__eduform__icontains=u'З')
+				applications = applications.filter(profile__eduform__icontains=u'З')
 				selectform = '3'
 				filters['forma'] = selectform
 			if request.GET['forma'] =='4':
-				applications = applications.filter(edu_prog__eduform__icontains=u'ОЗ')
+				applications = applications.filter(profile__eduform__icontains=u'ОЗ')
 				selectform = '4'
 				filters['forma'] = selectform
 
@@ -287,7 +288,8 @@ def Application_list (request):
 
 		if 'profil' in request.GET and int(request.GET['profil'])>0:
 			selectprof = request.GET['profil']
-			applications = applications.filter(edu_prog__edu_prog__qualification__id=selectprof)
+			applications = app_profil.filter(profile_id=selectprof)
+			#applications = applications.filter(edu_prog__edu_prog__qualification__id=selectprof)
 			filters['profil'] = int(selectprof)
 
 
@@ -310,6 +312,9 @@ def Application_list (request):
 	
 	abiturients = [app.abiturient.id for app in applications]
 
+	
+	
+
 
 	docs = Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains=u'аттестат')|Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains=u'Диплом')
 	
@@ -317,7 +322,9 @@ def Application_list (request):
 	apps_with_docs=[]
 	for app in applications:
 		doc = docs.filter(abiturient__id = app.abiturient.id).first()
-		apps_with_docs.append({'app':app, 'doc':doc})
+		prof = appProfile.filter(application__id=app.id)
+		print(prof)		
+		apps_with_docs.append({'app':app, 'doc':doc, 'prof':prof})
 	
 	doctyps = AttrValue.objects.filter(
 		attribute__name__icontains=u'об образовании'
