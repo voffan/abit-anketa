@@ -51,6 +51,7 @@
 				relationsrow--;
 			}
 		});
+		{% include 'anketa\contacts.js' %}
 		$("#addRelation").on("click", function()
 		{
 			if(contactsrow<maxContacts)
@@ -58,23 +59,6 @@
 				relationsrow++;
 				var newRow = $('<tr><td><select id="relationtype" name = "relationtype" class="form-control">{% if relation_type %}{% for item in relation_type %}<option value="{{item.id}}">{{item.value}}</option>{% endfor %}{% endif %}</select></td><td><input type="text" class="form-control" name="relationFIO"></td><td><input type="text" class="form-control" name="relationcontactvalue"></td><td><button class="btn btn-default btn-sm" id="delRelationRow" type="button">Удалить</button></td></tr>');
 				$("#relationsTable").append(newRow);
-			}
-		});
-		$(document).on("click","button[id*='delContactRow']", function()
-		{
-			if(contactsrow>1)
-			{
-				$(this).parent().parent().remove();
-				contactsrow--;
-			}
-		});
-		$("#addContact").on("click", function()
-		{
-			if(contactsrow<maxContacts)
-			{
-				contactsrow++;
-				var newRow = $('<tr class="info"><td><select id="contacttype" name = "contacttype" class="form-control">{% if contacts_type %}{% for item in contacts_type %}<option value="{{item.id}}">{{item.value}}</option>{% endfor %}{% endif %}</select></td><td><input type="text" class="form-control" name="contactvalue"></td><td><button class="btn btn-default btn-sm" id="delContactRow" type="button">Удалить</button></td></tr>');
-				$("#contactsTable").append(newRow);
 			}
 		});
 		$(document).on("click","button[id*='delExamRow']", function()
@@ -160,10 +144,6 @@
 		$('input[name^="egeDisc"]').each(function()
 		{
 			initSelect2($(this));
-		});
-		$('#kladrbtn').on('click', function(e){
-			//$('#KladrModal').modal();
-			Kladr($('#street'));
 		});
 		$('input[type=radio][name=adrsisthesame]').change(function()
 		{
