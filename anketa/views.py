@@ -15,7 +15,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, render,get_object_or_404, redirect
 from django.template import RequestContext
 from kladr.models import Street
-from anketa.models import Person, Address, Attribute, AttrValue, Abiturient, EduOrg, ProfileAttrs, ApplicationProfiles, Education_Prog, Profile, Application, EduForm, ApplicationProfiles, Milit, Docs, Exams, DocAttr,Education, Contacts, Relation
+from anketa.models import Person, Address, Attribute, AttrValue, Abiturient, EduOrg, ProfileAttrs, ApplicationProfiles, Education_Prog, Profile, Application, EduForm, ApplicationProfiles, Milit, Docs, Exams, DocAttr,Education, Contacts, Relation,\
+	Exams_needed
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -205,8 +206,47 @@ def GetSelectedApplication(request):
 	result['profiles_len']=len(profiles)
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
+def SaveExam(request, abit):
+	print('Saving Exam!!')
+	if abit.exams_set.filter(exam_examType__value=u'ЕГЭ') is not None:
+		Exams.objects.filter(abiturient__id=abit.id).filter(exam_examType__value=u'ЕГЭ').delete()
+	# abit.exams_set.all().delete a cho ne rabotaet
+	examtype = AttrValue.objects.filter(attribute__name__icontains=u'Тип экзамена').filter(
+		value__icontains=u'ЕГЭ').first()
+	exams = request.POST.getlist('egeDisc')
+	points = request.POST.getlist('egePoints')
+	years = request.POST.getlist('egeYear')
+	for i in range(0, len(exams)):
+		subject = AttrValue.objects.filter(attribute__name__icontains=u'Дисциплина').filter(
+			pk=exams[i]).first()
+		exam = Exams()
+		exam.abiturient = abit
+		exam.exam_examType = examtype
+		exam.exam_subjects = subject
+		exam.points = points[i]
+		exam.year = years[i]
+		exam.save()
+	if len(request.POST.get('additionalExams', '')) > 0:
+		add_exams = request.POST.get('additionalExams', '').split(',')
+		specusl = False
+		if request.POST.get('specusl', '') == "yes":
+			specusl = True
+		if abit.exams_set.filter(exam_examType__value=u'Вступительный') is not None:
+			Exams.objects.filter(abiturient=abit).filter(exam_examType__value=u'Вступительный').delete()
+		for item in add_exams:
+			add_exam = Exams()
+			add_exam.abiturient = abit
+			add_exam.exam_examType = AttrValue.objects.filter(attribute__name__icontains=u'Тип экзамена').filter(
+				value__icontains=u'Вступительный').first()
+			add_exam.exam_subjects = AttrValue.objects.filter(attribute__name__icontains=u'Дисциплина').filter(
+				pk=item).first()
+			add_exam.year = datetime.date.today().year
+			add_exam.special = specusl
+			add_exam.save()
+	print('Added!')
+
 def AddDataToPerson(request):
-	result="success"
+	result={'result':"success"}
 	#print(request.POST)
 	if request.method == 'POST':
 		try:
@@ -360,36 +400,7 @@ def AddDataToPerson(request):
 						contact.save()
 						relation.save()
 			if page==4:
-				if abit.exams_set.filter(exam_examType__value=u'ЕГЭ') is not None:
-					Exams.objects.filter(abiturient=abit).filter(exam_examType__value=u'ЕГЭ').delete()
-					#abit.exams_set.all().delete a cho ne rabotaet
-				examtype=AttrValue.objects.filter(attribute__name__icontains=u'Тип экзамена').filter(value__icontains=u'ЕГЭ').first()
-				exams = request.POST.getlist('egeDisc')
-				points = request.POST.getlist('egePoints')
-				years=request.POST.getlist('egeYear')
-				for i in range(0, len(exams)):
-					exam = Exams()
-					exam.abiturient = abit
-					exam.exam_examType=examtype
-					exam.exam_subjects=AttrValue.objects.filter(attribute__name__icontains=u'Дисциплина').filter(pk=exams[i]).first()
-					exam.points=points[i]
-					exam.year=years[i]
-					exam.save()
-				if len(request.POST.get('additionalExams','')) > 0:
-					add_exams=request.POST.get('additionalExams','').split(',')
-					specusl = False
-					if request.POST.get('specusl','') == "yes":
-						specusl=True
-					if abit.exams_set.filter(exam_examType__value=u'Вступительный') is not None:
-						Exams.objects.filter(abiturient=abit).filter(exam_examType__value=u'Вступительный').delete()
-					for item in add_exams:
-						add_exam = Exams()
-						add_exam.abiturient=abit
-						add_exam.exam_examType = AttrValue.objects.filter(attribute__name__icontains=u'Тип экзамена').filter(value__icontains=u'Вступительный').first()
-						add_exam.exam_subjects=AttrValue.objects.filter(attribute__name__icontains=u'Дисциплина').filter(pk=item).first()
-						add_exam.year=2016
-						add_exam.special = specusl
-						add_exam.save()
+				SaveExam(request, abit)
 			"""
 			if(page==5):
 
@@ -422,7 +433,7 @@ def AddDataToPerson(request):
 
 			abit.save()
 		except Exception as e:
-					result=str(e)
+					result['result']=str(e)
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def SaveApplication(request):
