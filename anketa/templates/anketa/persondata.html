@@ -51,6 +51,7 @@
 				relationsrow--;
 			}
 		});
+		{% include 'anketa\contacts.js' %}
 		$("#addRelation").on("click", function()
 		{
 			if(contactsrow<maxContacts)
@@ -60,42 +61,8 @@
 				$("#relationsTable").append(newRow);
 			}
 		});
-		$(document).on("click","button[id*='delContactRow']", function()
-		{
-			if(contactsrow>1)
-			{
-				$(this).parent().parent().remove();
-				contactsrow--;
-			}
-		});
-		$("#addContact").on("click", function()
-		{
-			if(contactsrow<maxContacts)
-			{
-				contactsrow++;
-				var newRow = $('<tr class="info"><td><select id="contacttype" name = "contacttype" class="form-control">{% if contacts_type %}{% for item in contacts_type %}<option value="{{item.id}}">{{item.value}}</option>{% endfor %}{% endif %}</select></td><td><input type="text" class="form-control" name="contactvalue"></td><td><button class="btn btn-default btn-sm" id="delContactRow" type="button">Удалить</button></td></tr>');
-				$("#contactsTable").append(newRow);
-			}
-		});
-		$(document).on("click","button[id*='delExamRow']", function()
-		{
-			if(egerows>1)
-			{
-				$(this).parent().parent().remove();
-				egerows--;
-			}
-		});
-		$("#addExam").on("click", function()
-		{
-			if(egerows<maxExams)
-			{
-				egerows++;
-				var newRow = $('<tr><td><input type="hidden" class="form-control" name="egeDisc"></td><td><input type="text" class="form-control" name="egePoints"></td><td><input type="text" class="form-control" name="egeYear"></td><td><button class="btn btn-default btn-sm" id="delExamRow" type="button">Удалить</button></td></tr>');
-				$("#egeTableBody").append(newRow);
-				initSelect2(newRow.find('input[name^="egeDisc"]'));
-			}
-			
-		});
+
+
 		$(document).on("click","button[id*='save']", function()
 		{
 			$("#currentPage").val(($(this).attr('id').slice('4')));
@@ -107,7 +74,7 @@
 				timeout:500,
 				success:function(data)
 				{
-					if (data==="success")
+					if (data['result']==="success")
 					{
 						$.notify("Сохранено.", "success");
 					}
@@ -115,7 +82,7 @@
 					{
 						$.notify("Что-то пошло не так :(", "error");
 					}
-					
+					console.log('Result is loaded!');
 				},
 				error:function()
 				{
@@ -157,14 +124,7 @@
 				}
 			}
 		};
-		$('input[name^="egeDisc"]').each(function()
-		{
-			initSelect2($(this));
-		});
-		$('#kladrbtn').on('click', function(e){
-			//$('#KladrModal').modal();
-			Kladr($('#street'));
-		});
+		{% include 'anketa\exams.js' %}
 		$('input[type=radio][name=adrsisthesame]').change(function()
 		{
 			if (this.value == "yes")
