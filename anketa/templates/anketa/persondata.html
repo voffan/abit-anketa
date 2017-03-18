@@ -74,7 +74,7 @@
 				timeout:500,
 				success:function(data)
 				{
-					if (data==="success")
+					if (data['result']==="success")
 					{
 						$.notify("Сохранено.", "success");
 					}
@@ -82,7 +82,7 @@
 					{
 						$.notify("Что-то пошло не так :(", "error");
 					}
-					
+					console.log('Result is loaded!');
 				},
 				error:function()
 				{

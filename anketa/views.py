@@ -434,6 +434,7 @@ def AddDataToPerson(request):
 			abit.save()
 		except Exception as e:
 					result['result']=str(e)
+	print('result!')
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def SaveApplication(request):
