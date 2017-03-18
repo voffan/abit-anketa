@@ -698,10 +698,10 @@ def Institute(request):
 def EduName(request):
 	institute = EduOrg.objects.get(pk = request.GET.get('id',''))
 	eduname=institute.education_prog_set.filter(name__icontains=request.GET.get('query',''))
-	eduname=eduname.values('id','name')
+	eduname=eduname.values('id','name', 'qualification__value')
 	result = []
 	for item in eduname:
-		result.append({'id':item['id'], 'text':item['name']})
+		result.append({'id':item['id'], 'text':item['name'] + ' ' + item['qualification__value']})
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def EduProf(request):
@@ -710,7 +710,7 @@ def EduProf(request):
 	eduprof = eduprof.values('id', 'name')
 	result = []
 	for item in eduprof:
-		result.append({'id':item['id'],'text':item['value']})
+		result.append({'id':item['id'],'text':item['name']})
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def EduProfForm(request):

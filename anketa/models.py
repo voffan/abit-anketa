@@ -77,7 +77,7 @@ class Abiturient(Person):
 	token = models.CharField(u'Token',max_length=100, db_index = True, null=True, blank=True)
 	user = models.ForeignKey(User, verbose_name=u'Пользователь', db_index=True)
 	info_progress=models.CharField(u'Progress',max_length=20,null=True,blank=True)#Битовая маска отображающая какие группа в личных данных заполнена, а какая нет.
-	work_duration=models.CharField(u'Трудовой стаж', max_length=100, null=True, db_index=True)
+	work_duration=models.CharField(u'Трудовой стаж', max_length=100, null=True, db_index=True, blank=True)
 
 class Abiturient_attrs(models.Model):
 	abiturient = models.ForeignKey('Abiturient', verbose_name=u'Абитуриент', db_index=True)
@@ -93,7 +93,7 @@ class Application(models.Model):
 	number = models.IntegerField(u'Номер заявления', max_length=10, null=True, blank=True)										#номер в журнале в приемной комиссии
 	budget = models.BooleanField(u'В рамках контрольных цифр приёма', default=False)
 	withfee = models.BooleanField(u'по договорам об оказании платных обр. услуг', default=False)
-	appState = models.ForeignKey('AttrValue',verbose_name=u'Состояние заявления', limit_choices_to={'attribute__name':u'Состояние заявления'}, db_index=True)
+	appState = models.ForeignKey('AttrValue',verbose_name=u'Состояние заявления', limit_choices_to={'attribute__name':u'Статус заявления'}, db_index=True)
 	points = models.IntegerField(u'Кол-во баллов', db_index=True)
 	priority = models.CharField(u'Приоритет',choices=AppPrior, default='В', max_length=10, null= True, blank = True) #Убрать null, blank
 	def __str__(self):
@@ -182,7 +182,7 @@ class Education_Prog(models.Model):
 	duration=models.ForeignKey('AttrValue', verbose_name=u'Срок обучения', limit_choices_to={'attribute__name':u'Срок обучения'}, related_name='duration	', null = True, blank=True)
 	name=models.CharField(u'Направление/специальность', max_length=200, db_index=True)
 	def __str__(self):
-		return self.name
+		return self.name +" "+ self.qualification.value
 
 class Template(models.Model):
 	name=models.CharField(u'Шаблон', max_length=200, db_index=True)
@@ -202,7 +202,7 @@ class Profile(models.Model):
 	edu_prog=models.ForeignKey('Education_Prog')
 	name=models.CharField(u'Профиль', max_length=100, db_index=True)
 	def __str__(self):
-		return self.name
+		return self.name +' '+ self.edu_prog.qualification.value
 
 class ProfileAttrs(models.Model):
 	profile=models.ForeignKey('Profile', db_index=True)
