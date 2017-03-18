@@ -245,6 +245,68 @@ def SaveExam(request, abit):
 			add_exam.save()
 	print('Added!')
 
+def SaveRelation(request, abit):
+	if request.POST.get('adrstype', '') == "perm":
+		adrs_type = u'По прописке'
+	else:
+		adrs_type = u'Фактический'
+	adrs = Address.objects.filter(abiturient=abit).filter(adrs_type__value__icontains=adrs_type).first()
+	if adrs is None:
+		adrs = Address()
+		adrs.abiturient = abit
+	adrs.adrs_type = AttrValue.objects.filter(value__icontains=adrs_type).first()
+	adrs.zipcode = request.POST.get('adrsindex', '')
+	adrs.street = Street.objects.filter(name__icontains=request.POST.get('street', '')).first()
+	adrs.house = request.POST.get('adrshouse', '')
+	adrs.building = request.POST.get('adrsbuilding', '')
+	adrs.flat = request.POST.get('adrsflat', '')
+	if ((request.POST.get('adrsisthesame', '')) == "yes"):
+		adrs.adrs_type_same = True
+		# adrs.adrs_type=AttrValue.objects.filter(value__icontains=u'прописке').first()
+		Address.objects.filter(abiturient=abiturient).delete()
+	else:
+		adrs.adrs_type_same = False
+	adrs.save()
+	if abit.contacts_set.all() is not None:
+		Contacts.objects.filter(person=abit).delete()
+	contacttype = request.POST.getlist('contacttype')
+	contactvalue = request.POST.getlist('contactvalue')
+	for i in range(0, len(contacttype)):
+		if len(contacttype[i]) > 0 and len(contactvalue[i]) > 0:
+			contact = Contacts()
+			contact.person = abit
+			contact.contact_type = AttrValue.objects.filter(pk=contacttype[i]).first()
+			contact.value = contactvalue[i]
+			contact.save()
+	if Relation.objects.filter(abiturient=abit) is not None:
+		Relation.objects.filter(abiturient=abit).delete()
+	relationtype = request.POST.getlist('relationtype')
+	relationcontactvalue = request.POST.getlist('relationcontactvalue')
+	relationFIO = request.POST.getlist('relationFIO')
+	for i in range(0, len(relationtype)):
+		if len(relationtype[i]) > 0 and len(relationcontactvalue[i]) > 0 and len(relationFIO[i]) > 0:
+			relation = Relation()
+			relation.abiturient = abit
+			relation.relType = AttrValue.objects.filter(pk=relationtype[i]).first()
+			relperson = Person()
+			fio = relationFIO[i].split(' ')
+			if fio[0]:
+				relperson.sname = fio[0]
+			if fio[1]:
+				relperson.fname = fio[1]
+			if fio[2]:
+				relperson.mname = fio[2]
+			relperson.sex = "М"
+			relperson.birthdate = datetime.datetime.strptime('15/05/2007', '%d/%m/%Y').strftime('%Y-%m-%d')
+			relperson.save()
+			relation.person = relperson
+			contact = Contacts()
+			contact.person = relperson
+			contact.contact_type = AttrValue.objects.filter(value__icontains=u'телефон').first()
+			contact.value = relationcontactvalue[i]
+			contact.save()
+			relation.save()
+
 def AddDataToPerson(request):
 	result={'result':"success"}
 	#print(request.POST)
@@ -339,66 +401,7 @@ def AddDataToPerson(request):
 				snils.save()
 			
 			if page==3:
-				if request.POST.get('adrstype','')=="perm":
-					adrs_type=u'По прописке'
-				else:
-					adrs_type=u'Фактический'
-				adrs=Address.objects.filter(abiturient=abit).filter(adrs_type__value__icontains=adrs_type).first()
-				if adrs is None:
-					adrs=Address()
-					adrs.abiturient=abit
-				adrs.adrs_type=AttrValue.objects.filter(value__icontains=adrs_type).first()
-				adrs.zipcode=request.POST.get('adrsindex','')
-				adrs.street=Street.objects.filter(name__icontains=request.POST.get('street','')).first()
-				adrs.house=request.POST.get('adrshouse','')
-				adrs.building=request.POST.get('adrsbuilding','')
-				adrs.flat=request.POST.get('adrsflat','')
-				if ((request.POST.get('adrsisthesame','')) == "yes"):
-					adrs.adrs_type_same=True
-					#adrs.adrs_type=AttrValue.objects.filter(value__icontains=u'прописке').first()
-					Address.objects.filter(abiturient=abiturient).delete()
-				else:
-					adrs.adrs_type_same=False
-				adrs.save()
-				if abit.contacts_set.all() is not None:
-					Contacts.objects.filter(person=abit).delete()
-				contacttype = request.POST.getlist('contacttype')
-				contactvalue = request.POST.getlist('contactvalue')
-				for i in range(0, len(contacttype)):
-					if len(contacttype[i])>0 and len(contactvalue[i])>0:
-						contact = Contacts()
-						contact.person = abit
-						contact.contact_type=AttrValue.objects.filter(pk=contacttype[i]).first()
-						contact.value = contactvalue[i]
-						contact.save()
-				if Relation.objects.filter(abiturient=abit) is not None:
-					Relation.objects.filter(abiturient=abit).delete()
-				relationtype = request.POST.getlist('relationtype')
-				relationcontactvalue = request.POST.getlist('relationcontactvalue')
-				relationFIO = request.POST.getlist('relationFIO')
-				for i in range(0, len(relationtype)):
-					if len(relationtype[i])>0 and len(relationcontactvalue[i])>0 and len(relationFIO[i])>0:
-						relation = Relation()
-						relation.abiturient = abit
-						relation.relType = AttrValue.objects.filter(pk=relationtype[i]).first()
-						relperson = Person()
-						fio=relationFIO[i].split(' ')
-						if fio[0]:
-							relperson.sname=fio[0]
-						if fio[1]:
-							relperson.fname=fio[1]
-						if fio[2]:
-							relperson.mname=fio[2]
-						relperson.sex="М"
-						relperson.birthdate=datetime.datetime.strptime('15/05/2007','%d/%m/%Y').strftime('%Y-%m-%d')
-						relperson.save()
-						relation.person=relperson
-						contact = Contacts()
-						contact.person = relperson
-						contact.contact_type=AttrValue.objects.filter(value__icontains=u'телефон').first()
-						contact.value = relationcontactvalue[i]
-						contact.save()
-						relation.save()
+				SaveRelation(request, abit)
 			if page==4:
 				SaveExam(request, abit)
 			"""
