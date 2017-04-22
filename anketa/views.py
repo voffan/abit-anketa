@@ -265,6 +265,7 @@ def AddDataToPerson(request):
 			#progress = abit.info_progress.split()
 			if page==1: #Личные данные
 				#pageIsComplete=True;
+				print('Personal')
 				abit.sname=request.POST.get('sname','')
 				abit.fname=request.POST.get('name','')
 				abit.mname=request.POST.get('mname','')
@@ -408,6 +409,7 @@ def AddDataToPerson(request):
 						contact.save()
 						relation.save()
 			if page==4:
+				print('Exams')
 				SaveExam(request, abit)
 			"""
 			if(page==5):
