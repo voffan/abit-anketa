@@ -21,7 +21,7 @@
 										{% if exams %}
 											{% for item in exams %}
 											<tr class="info">
-												<td><input type="hidden" class="form-control" name="egeDisc" value ="{{item.subject}}"></td>
+												<td><input type="hidden" class="form-control" name="egeDisc" value ="{{item.subject}}"><input type="hidden" name="examId" value ="{{item.id}}"></td>
 												<td><input type="hidden" class="form-control" name="examType" value="{{item.examtype.id}};{{item.examtype.name}}"></td>
 												<td><input type="text" class="form-control" name="egePoints" value ="{{item.points}}"></td>
 												<td><input type="text" class="form-control" name="egeYear"  value ="{{item.year}}"></td>
@@ -30,7 +30,7 @@
 											{% endfor %}
 										{% else %}
 											<tr class="info">
-												<td><input type="hidden" class="form-control" name="egeDisc"></td>
+												<td><input type="hidden" class="form-control" name="egeDisc"><input type="hidden" name="examId" value ="-1"></td>
 												<td><input type="hidden" class="form-control" name="examType"></td>
 												<td><input type="text" class="form-control" name="egePoints"></td>
 												<td><input type="text" class="form-control" name="egeYear"></td>

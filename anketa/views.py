@@ -122,6 +122,7 @@ def PersonData(request):
 		examsList=[]
 		for item in exams:
 			exam={}
+			exam['id']=item.id
 			exam['subject']=item.exam_subjects.id
 			exam['subject_value']=item.exam_subjects.value
 			exam['points']=item.points
@@ -129,7 +130,7 @@ def PersonData(request):
 			exam['examtype']={'id':item.exam_examType.id, 'name':item.exam_examType.value}
 			examsList.append(exam)
 		args['exams']=examsList
-	'''add_exams = person.exams_set.filter(exam_examType__value=u'Вступительный')
+	add_exams = person.exams_set.filter(exam_examType__value=u'Вступительный')
 	if add_exams is not None:
 		specusl= False
 		addExamsList=[]
@@ -140,7 +141,7 @@ def PersonData(request):
 			if item.special and specusl == False:
 				args['specusl']=True
 			addExamsList.append(exam)
-		args['addExams']=addExamsList'''
+		args['addExams']=addExamsList
 	# 7 
 	args['hostel']=person.hostel
 	milit = Milit.objects.filter(abiturient = person).first()
@@ -233,7 +234,7 @@ def SaveExam(request, abit):
 			exam.year = years[i]
 		exam.points = points[i]
 		exam.save()
-	'''if len(request.POST.get('additionalExams', '')) > 0:
+	if len(request.POST.get('additionalExams', '')) > 0:
 		add_exams = request.POST.get('additionalExams', '').split(',')
 		specusl = False
 		if request.POST.get('specusl', '') == "yes":
@@ -249,7 +250,7 @@ def SaveExam(request, abit):
 				pk=item).first()
 			add_exam.year = datetime.date.today().year
 			add_exam.special = specusl
-			add_exam.save()'''
+			add_exam.save()
 	print('Added!')
 
 def AddDataToPerson(request):
