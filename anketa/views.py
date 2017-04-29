@@ -257,7 +257,6 @@ def SaveExam(request, abit):
 			add_exam.save()
 	print('Added!')
 
-@transaction.atomic
 def SaveAddress(request, abit):
 	if len(request.POST.get('street', ''))<1:
 		return
@@ -338,6 +337,7 @@ def SaveContactDetails(request, abit):
 	SaveContacts(request, abit)
 	SaveRelevants(request, abit)
 
+@transaction.atomic
 def AddDataToPerson(request):
 	result={'result':"success"}
 	#print(request.POST)
