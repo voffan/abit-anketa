@@ -122,15 +122,17 @@ def PersonData(request):
 			relations.append(cont)
 		args['relation']=relations
 	# 4
-	exams = person.exams_set.filter(exam_examType__value=u'ЕГЭ')
+	exams = person.exams_set.all()
 	if exams is not None:
 		examsList=[]
 		for item in exams:
 			exam={}
+			exam['id']=item.id
 			exam['subject']=item.exam_subjects.id
 			exam['subject_value']=item.exam_subjects.value
 			exam['points']=item.points
 			exam['year']=item.year
+			exam['examtype']={'id':item.exam_examType.id, 'name':item.exam_examType.value}
 			examsList.append(exam)
 		args['exams']=examsList
 	add_exams = person.exams_set.filter(exam_examType__value=u'Вступительный')
@@ -212,23 +214,29 @@ def GetSelectedApplication(request):
 @transaction.atomic
 def SaveExam(request, abit):
 	print('Saving Exam!!')
-	if abit.exams_set.filter(exam_examType__value=u'ЕГЭ') is not None:
-		Exams.objects.filter(abiturient__id=abit.id).filter(exam_examType__value=u'ЕГЭ').delete()
+	#if abit.exams_set.filter(exam_examType__value=u'ЕГЭ') is not None:
+	#	Exams.objects.filter(abiturient__id=abit.id).filter(exam_examType__value=u'ЕГЭ').delete()
 	# abit.exams_set.all().delete a cho ne rabotaet
-	examtype = AttrValue.objects.filter(attribute__name__icontains=u'Тип экзамена').filter(
-		value__icontains=u'ЕГЭ').first()
+	examtypes = request.POST.getlist('examType')
+	#examtype = AttrValue.objects.filter(attribute__name__icontains=u'Тип экзамена').filter(value__icontains=u'ЕГЭ').first()
+	print(request.POST.getlist('examType'))
 	exams = request.POST.getlist('egeDisc')
 	points = request.POST.getlist('egePoints')
 	years = request.POST.getlist('egeYear')
-	for i in range(0, len(exams)):
+	for i in range(len(exams)):
 		subject = AttrValue.objects.filter(attribute__name__icontains=u'Дисциплина').filter(
 			pk=exams[i]).first()
-		exam = Exams()
-		exam.abiturient = abit
-		exam.exam_examType = examtype
-		exam.exam_subjects = subject
+		examtype = AttrValue.objects.filter(attribute__name__icontains=u'Тип экзамена').filter(
+			pk=examtypes[i]).first()
+		#проверить присутствует ли экзамен по типу, дисциплине и году
+		exam = Exams.objects.filter(abiturient__id = abit.id, exam_examType = examtypes[i], exam_subjects = exams[i], year = years[i]).first()
+		if exam is None:
+			exam = Exams()
+			exam.abiturient = abit
+			exam.exam_examType = examtype
+			exam.exam_subjects = subject
+			exam.year = years[i]
 		exam.points = points[i]
-		exam.year = years[i]
 		exam.save()
 	if len(request.POST.get('additionalExams', '')) > 0:
 		add_exams = request.POST.get('additionalExams', '').split(',')
@@ -262,6 +270,7 @@ def AddDataToPerson(request):
 			#progress = abit.info_progress.split()
 			if page==1: #Личные данные
 				#pageIsComplete=True;
+				print('Personal')
 				abit.sname=request.POST.get('sname','')
 				abit.fname=request.POST.get('name','')
 				abit.mname=request.POST.get('mname','')
@@ -405,6 +414,7 @@ def AddDataToPerson(request):
 						contact.save()
 						relation.save()
 			if page==4:
+				print('Exams')
 				SaveExam(request, abit)
 			"""
 			if(page==5):
@@ -713,6 +723,13 @@ def ExamSubject(request):
 	for item in subjects:
 		result.append({'id':item.id, 'text':item.value})
 	return HttpResponse(json.dumps(result), content_type="application/json")	
+
+def ExamType(request):
+	subjects = AttrValue.objects.filter(attribute__name__icontains=u'Тип экзамена')
+	result = []
+	for item in subjects:
+		result.append({'id':item.id, 'text':item.value})
+	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def Institute(request):
 	institute = EduOrg.objects.filter(name__icontains = request.GET.get('query',''))
