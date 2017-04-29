@@ -210,7 +210,7 @@ class ProfileAttrs(models.Model):
 	eduform = models.CharField(u'Форма обучения',choices=EduForm, default='О', max_length=10, null=True, blank=True)
 	year=models.IntegerField(u'Год')
 	def __str__(self):
-		return self.profile.name
+		return self.profile.name +' '+self.profile.edu_prog.qualification.value +' '+self.eduform
 
 class ApplicationProfiles(models.Model):
 	application = models.ForeignKey(Application, verbose_name=u'Заявление', db_index = True)

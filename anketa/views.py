@@ -34,9 +34,14 @@ def PersonProfile(request):
 	if person is None:
 		return redirect('/staff')
 	args={'currentpage':1}
+	args1=[]
 	applications=Application.objects.filter(abiturient__user=request.user)
 	if applications is not None:
-		args['applications']=applications
+		appProf = ApplicationProfiles.objects.all()
+		for app in applications:
+			prof = appProf.filter(application__id = app.id).first()
+			args1.append({'app':app, 'prof':prof})		
+		args['applications']=args1
 	args.update(csrf(request))
 	return render(request, 'anketa/profile.html', args)
 
@@ -166,12 +171,8 @@ def Applications(request):
 	person=Abiturient.objects.filter(user=request.user).first()
 	if person is None:
 		return redirect('/staff')
-	applications=Application.objects.filter(abiturient__user=request.user)
-	print(applications)
+	applications=Application.objects.filter(abiturient__user=request.user).exclude(appState = AttrValue.objects.filter(attribute__name__icontains=u'Статус заявления').filter(value__icontains = u'Анулированный').first())
 	appProf = ApplicationProfiles.objects.all()
-	print(appProf)
-	#args['appProf'] = appProf
-
 	for app in applications:
 		prof = appProf.filter(application__id = app.id).first()
 		args1.append({'app':app, 'prof':prof})
@@ -191,21 +192,24 @@ def Account(request):
 
 def GetSelectedApplication(request):
 	result={}
-	application =Application.objects.get(pk = request.GET.get('id',''))
-	app_profiles = ApplicationProfiles.objects.filter(application = application)
+	application = Application.objects.select_related().get(pk = request.GET.get('id',''))
+	result['eduprior']=application.priority
+	app_profiles = ApplicationProfiles.objects.select_related().filter(application = application)
 	result['department_id']=application.department.id
 	result['department_name']=application.department.name
-	result['edu_prog_id']=application.edu_prog.edu_prog.id
-	result['edu_prog_name']=application.edu_prog.edu_prog.name+' ' + application.edu_prog.edu_prog.qualification.value
-	result['edu_prog_eduform_id']=application.edu_prog.id
-	result['edu_prog_eduform_name']=[x[1] for x in EduForm if x[0] == application.edu_prog.eduform][0]
+
+	result['edu_prog_id']=app_profiles.first().profile.profile.edu_prog.id
+	result['edu_prog_name']=app_profiles.first().profile.profile.edu_prog.name+' ' + app_profiles.first().profile.profile.edu_prog.qualification.value
+	result['edu_prog_eduform_id']=app_profiles.first().profile.id
+	#result['edu_prog_eduform_name']=[x[1] for x in EduForm if x[0] == app_profiles.first().profile.eduform][0]
 	profiles=[]
 	for item in app_profiles:
-		profiles.append({'id':item.profile.id,'profile':item.profile.name})
+		profiles.append({'id':item.profile.profile.id,'profile':item.profile.profile.name,'eduform':item.profile.eduform, 'prof_attr_id':item.profile.id})
 	result['profiles']=profiles
 	result['profiles_len']=len(profiles)
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
+@transaction.atomic
 def SaveExam(request, abit):
 	print('Saving Exam!!')
 	if abit.exams_set.filter(exam_examType__value=u'ЕГЭ') is not None:
@@ -245,6 +249,7 @@ def SaveExam(request, abit):
 			add_exam.save()
 	print('Added!')
 
+@transaction.atomic
 def AddDataToPerson(request):
 	result={'result':"success"}
 	#print(request.POST)
@@ -437,9 +442,9 @@ def AddDataToPerson(request):
 	print('result!')
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
+@transaction.atomic
 def SaveApplication(request):
-	result = {'result':0, 'error_msg':''}
-	#print(request.POST)
+	result = {'result':0, 'error_msg':''}	
 	if request.method == 'POST':
 		if(int(request.POST.get('facepalm',''))>0):
 			application=Application.objects.get(pk=request.POST.get('facepalm'))
@@ -447,29 +452,37 @@ def SaveApplication(request):
 		else:
 			application = Application()
 		application.abiturient=Abiturient.objects.get(user=request.user)
-		application.department = Department.objects.get(pk = request.POST.get('department',''))
+		application.department = EduOrg.objects.get(pk = request.POST.get('department',''))
 		application.date = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d')
-		application.edu_prog=Education_Prog_Form.objects.get(pk=request.POST.get('eduform',''))
-		application.eduform = application.edu_prog.eduform
+		#application.edu_prog=Education_Prog_Form.objects.get(pk=request.POST.get('eduform',''))
+		#application.eduform = application.edu_prog.eduform
 		application.budget = True
 		application.withfee = False
 		kaketomenyabesit = AttrValue.objects.filter(attribute__name__icontains=u'Статус заявления').filter(value__icontains=u'Подан').first()
 		application.appState = kaketomenyabesit
 		application.points =100
+		application.priority = request.POST.get('eduprior')
 		application.save()
-		if (len(request.POST.get('eduprof'))>0):
-			profs=request.POST.get('eduprof','').split(',')
-			for item in profs:
+		if (len(request.POST.getlist('eduprof'))>0):
+			#profs = request.POST.getlist('eduprof','')
+			forms = request.POST.getlist('eduform','')
+			print(forms)
+			forms = list(set(forms))
+			print(forms)
+			for i in range(len(forms)):
 				appProf = ApplicationProfiles()
-				appProf.application=application
-				appProf.profile=Profile.objects.get(pk=item)
+				appProf.application=application		
+				appProf.profile=ProfileAttrs.objects.get(pk = forms[i])
 				appProf.save()
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
+@transaction.atomic
 def DeleteApplication(request):
 	result = {'result':0, 'error_msg':''}
 	if request.method == 'GET':
-		Application.objects.get(pk=request.GET.get('id')).delete()
+		app = Application.objects.get(pk=request.GET.get('id'))
+		app.appState = AttrValue.objects.filter(attribute__name__icontains=u'Статус заявления').filter(value__icontains = u'Анулированный').first()
+		app.save()
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 @transaction.atomic
@@ -511,6 +524,7 @@ def CreatePerson(request):
 			result['error_msg']="Неправильно введена капча!"
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
+@transaction.atomic
 def AccountInfoChanging(request):
 	print(request.POST)
 	result = {'result':0, 'error_msg':''}
@@ -540,6 +554,7 @@ def AccountInfoChanging(request):
 				result['error_msg']=str(e)#"Что-то пошло не так."
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
+@transaction.atomic
 def GetAddressTypeValues(request):
 	result={}
 	result['success']=0
@@ -718,7 +733,9 @@ def EduName(request):
 
 def EduProf(request):
 	eduname = Education_Prog.objects.get(pk = request.GET.get('id',''))
-	eduprof = eduname.profile_set.filter(name__icontains=request.GET.get('query',''))
+	year = datetime.datetime.strftime(datetime.datetime.today(),"%Y")
+	#eduprof = eduname.profile_set.filter(name__icontains=request.GET.get('query',''))
+	eduprof = eduname.profile_set.filter(name__icontains=request.GET.get('query',''), profileattrs__year = year).distinct()
 	eduprof = eduprof.values('id', 'name')
 	result = []
 	for item in eduprof:
@@ -726,13 +743,16 @@ def EduProf(request):
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def EduProfForm(request):
-	eduname = Education_Prog.objects.get(pk = request.GET.get('id',''))
-	eduprof = eduname.education_prog_form_set.all()
-	eduprof = eduprof.values('id', 'eduform')
+	#eduname = Education_Prog.objects.get(pk = request.GET.get('id',''))
+	#добавить фильтр по году
+	year = datetime.datetime.strftime(datetime.datetime.today(),"%Y")
+	eduprof = Profile.objects.get(pk = request.GET.get('id',''))
+	#eduprof = eduprof.values('id', 'eduform')
 	result = []
-	for item in eduprof:
-		item['eduform'] = [x[1] for x in EduForm if x[0] == item['eduform']][0]
-		result.append({'id':item['id'],'text':item['eduform']})
+	for item in eduprof.profileattrs_set.filter(year = year):
+		#if item.year == int(year):	
+		#item['eduform'] = [x[1] for x in EduForm if x[0] == item['eduform']][0]
+		result.append({'id':item.id,'text':item.eduform})		
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def Privilegies(request):

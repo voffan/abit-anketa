@@ -550,6 +550,28 @@
 		$("#flang").select2('data',{id: '{{flang_id}}', text:"{{flang}}"});
 	{% endif %}
 	});
+function getGlobalVar(name){
+	return localStorage.getItem(name);
+};
+function tabInit(arg){
+		var $lis = document.getElementById("myTabs");
+		var $tabs = document.getElementsByClassName("tab-pane");
+		var $total = $lis.children.length;
+		var $current = arg;
+		var $percent = ($current/$total) * 100;
+		$lis.children[0].className = "";
+		$lis.children[arg-1].className = "active";
+		$tabs[0].className = "tab-pane";
+		$tabs[arg-1].className = "tab-pane active";		
+		document.getElementById("progress-bar").style.width=$percent+'%';
+};
+$(document).ready(function(){
+	var li = getGlobalVar('li');
+	if(li){		
+		tabInit(li);		
+	};
+	localStorage.removeItem('li');	
+});
 </script>
 {% endblock %}
 {% block container %}
@@ -560,7 +582,7 @@
 		<div class="navbar">
 			<div class="navbar-inner">
 				<div class="container">
-					<ul>
+					<ul class="myTabs" id="myTabs">
 						<li><a href="#tab1" data-toggle="tab">Личные данные</a></li>
 						<li><a href="#tab2" data-toggle="tab">Документы</a></li>
 						<li><a href="#tab3" data-toggle="tab">Контактные данные</a></li>
