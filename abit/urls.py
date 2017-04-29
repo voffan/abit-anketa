@@ -42,5 +42,6 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^flang/$', Flang, name = 'flang'),
     url(r'^staff/', include('staff.urls',namespace = 'staff')),
+    url(r'^kladr/', include('kladr.urls',namespace = 'kladr')),
     url(r'^auth/', include('authApp.urls', namespace = 'authapp'))
 )

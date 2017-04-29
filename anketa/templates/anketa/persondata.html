@@ -13,9 +13,9 @@
 <script src="{% static "anketa/js/ru.js" %}"></script>
 <script src="{% static "anketa/js/bootstrap-datetimepicker.min.js" %}"></script>
 <script src="{% static "anketa/select2-3.5.4/select2.min.js" %}"></script>
-<script src="{% static "anketa/js/kladr.js" %}"></script>
 <script src="{% static "anketa/js/notify.js" %}"></script>
 <script>
+	{% include '..\templates\kladr\kladr.js' %}
 	$(document).ready(function() 
 	{
 		$('#adrsfact').hide();
