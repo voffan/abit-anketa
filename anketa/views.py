@@ -245,7 +245,9 @@ def SaveExam(request, abit):
 			add_exam.save()
 	print('Added!')
 
-def SaveRelation(request, abit):
+def SaveAddress(request, abit):
+	if len(request.POST.get('street', ''))<1:
+		return
 	if request.POST.get('adrstype', '') == "perm":
 		adrs_type = u'По прописке'
 	else:
@@ -263,21 +265,32 @@ def SaveRelation(request, abit):
 	if ((request.POST.get('adrsisthesame', '')) == "yes"):
 		adrs.adrs_type_same = True
 		# adrs.adrs_type=AttrValue.objects.filter(value__icontains=u'прописке').first()
-		Address.objects.filter(abiturient=abiturient).delete()
+		Address.objects.filter(abiturient__id=abiturient.id).delete()
 	else:
 		adrs.adrs_type_same = False
 	adrs.save()
+
+def SaveContacts(request, abit):
+	if len(contactvalue) < 1:
+		return
 	if abit.contacts_set.all() is not None:
 		Contacts.objects.filter(person=abit).delete()
 	contacttype = request.POST.getlist('contacttype')
 	contactvalue = request.POST.getlist('contactvalue')
+
 	for i in range(0, len(contacttype)):
 		if len(contacttype[i]) > 0 and len(contactvalue[i]) > 0:
-			contact = Contacts()
-			contact.person = abit
+			contact = Contacts.objects.filter(person__id = abit.id, contact_type = contacttype[i], value = contactvalue[i]).first()
+			if contact is None:
+				contact = Contacts()
+				contact.person = abit
 			contact.contact_type = AttrValue.objects.filter(pk=contacttype[i]).first()
 			contact.value = contactvalue[i]
 			contact.save()
+
+def SaveRelevants(request, abit):
+	if len(request.POST.getlist('relationFIO')) < 1:
+		return
 	if Relation.objects.filter(abiturient=abit) is not None:
 		Relation.objects.filter(abiturient=abit).delete()
 	relationtype = request.POST.getlist('relationtype')
@@ -306,6 +319,11 @@ def SaveRelation(request, abit):
 			contact.value = relationcontactvalue[i]
 			contact.save()
 			relation.save()
+
+def SaveContactDetails(request, abit):
+	SaveAddress(request, abit)
+	SaveContacts(request, abit)
+	SaveRelevants(request, abit)
 
 def AddDataToPerson(request):
 	result={'result':"success"}
@@ -401,7 +419,7 @@ def AddDataToPerson(request):
 				snils.save()
 			
 			if page==3:
-				SaveRelation(request, abit)
+				SaveContactDetails(request, abit)
 			if page==4:
 				SaveExam(request, abit)
 			"""

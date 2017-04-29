@@ -1,8 +1,13 @@
 $('#kladrbtn').on('click', function(e){
 			//$('#KladrModal').modal();
-			Kladr($('#street'));
+			Kladr($('#adrsp'));
 		});
-$(document).on("click","button[id*='delContactRow']", function()
+$('#adrsf_select').on('click', function(e){
+			//$('#KladrModal').modal();
+			Kladr($('#adrsf'));
+		});
+
+$(document).on("click","button[id*='delContactRow']", function(e)
 		{
 			if(contactsrow>1)
 			{
@@ -10,6 +15,14 @@ $(document).on("click","button[id*='delContactRow']", function()
 				contactsrow--;
 			}
 		});
+$('input[name="adrsisthesame"]').on("click", function(e)
+{
+    if ($(this).attr('value').localeCompare("no")==0){
+        $('#adrsfact').show();
+    } else {
+        $('#adrsfact').hide();
+    }
+});
 $("#addContact").on("click", function()
 {
 	if(contactsrow<maxContacts)

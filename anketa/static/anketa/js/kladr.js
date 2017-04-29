@@ -203,8 +203,12 @@ $('#street').select2({
 	language:"ru"
 });
 $('#SaveKladr').on('click',function(e){
+    $('adrsp').text = "fffff";
+
 	$(saveObject).val($('#street').val());
 	$('#KladrModal').modal('hide');
+
+
 });
 $('#region').on("change",function(e){
 	$('#district').select2('val','');
