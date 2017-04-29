@@ -10,17 +10,19 @@
 									<table class="table" id="table">
 										<thead id="tablehead">
 											<tr>
-												<th>Дисциплина</th>
-												<th>Баллы</th>
-												<th>Год</th>
-												<th>Действие</th>
+												<th width="27%">Дисциплина</th>
+												<th width="23%">ЕГЭ</th>
+												<th width="15%">Баллы</th>
+												<th width="15%">Год</th>
+												<th width="20%">Действие</th>
 											</tr>
 										</thead>
 										<tbody id="egeTableBody">
 										{% if exams %}
 											{% for item in exams %}
 											<tr class="info">
-												<td><input type="hidden" class="form-control" name="egeDisc" value ="{{item.subject}}"></td>
+												<td><input type="hidden" class="form-control" name="egeDisc" value ="{{item.subject}}"><input type="hidden" name="examId" value ="{{item.id}}"></td>
+												<td><input type="hidden" class="form-control" name="examType" value="{{item.examtype.id}};{{item.examtype.name}}"></td>
 												<td><input type="text" class="form-control" name="egePoints" value ="{{item.points}}"></td>
 												<td><input type="text" class="form-control" name="egeYear"  value ="{{item.year}}"></td>
 												<td><button class="btn btn-default btn-sm" id="delExamRow" type="button">Удалить</button></td>
@@ -28,7 +30,8 @@
 											{% endfor %}
 										{% else %}
 											<tr class="info">
-												<td><input type="hidden" class="form-control" name="egeDisc"></td>
+												<td><input type="hidden" class="form-control" name="egeDisc"><input type="hidden" name="examId" value ="-1"></td>
+												<td><input type="hidden" class="form-control" name="examType"></td>
 												<td><input type="text" class="form-control" name="egePoints"></td>
 												<td><input type="text" class="form-control" name="egeYear"></td>
 												<td><button class="btn btn-default btn-sm" id="delExamRow" type="button">Удалить</button></td>

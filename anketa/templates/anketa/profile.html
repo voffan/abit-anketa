@@ -106,10 +106,10 @@
 								<tbody>
 									{% for item in applications %}
 										<tr {% if item.appState.value == "Поданно" %} class="info" {% else %} {% if item.appState.value == "Экспортированно" %} class="success" {% else %} class="info" {% endif %} {% endif %}>
-											<td>{{item.id}}</td>
-											<td>{{item.department}}</td>
-											<td>{{item.edu_prog.edu_prog}}</td>
-											<td>{{item.appState.value}}</td>
+											<td>{{item.app.id}}</td>
+											<td>{{item.app.department}}</td>
+											<td>{{item.prof.profile.profile.edu_prog.name}}</td>
+											<td>{{item.app.appState.value}}</td>
 										</tr>
 									{% endfor %}
 								</tbody>
@@ -131,4 +131,20 @@
 <script src="{% static "anketa/js/jquery.bootstrap.wizard.js" %}"></script>
 <script src="{% static "anketa/js/prettify.js" %}"></script>
 <script src="{% static "anketa/js/bootstrap-typeahead.js" %}"></script>
+<script>
+function saveGlobalVar(name, value){
+		localStorage.setItem(name, value);
+	};
+$(document).on("click","input[id='documents']", function(){
+	window.location.href="{% url 'persondata' %}";
+	saveGlobalVar('li',2);
+});
+$(document).on("click","input[id='personData']", function(){
+	window.location.href="{% url 'persondata' %}";
+});
+$(document).on("click", "input[id='contacts']", function(){
+	window.location.href="{% url 'persondata' %}";
+	saveGlobalVar('li',3);
+});
+</script>
 {% endblock %}

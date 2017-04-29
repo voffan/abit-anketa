@@ -111,7 +111,7 @@ def AddEmployee(request):
 		return HttpResponseRedirect(reverse('staff:employee_list'))
 
 	positions = Position.objects.all()
-	departments = Department.objects.all()
+	departments = EduOrg.objects.all()
 	Data={}
 	Data['departments'] = departments
 	Data['positions'] = positions
@@ -122,7 +122,7 @@ def AddEmployee(request):
 @login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def EditEmployee(request, employee_id):
-	departments = Department.objects.all()
+	departments = EduOrg.objects.all()
 	employee = Employee.objects.get(pk=employee_id)
 	positions = Position.objects.all()
 	Data={}
