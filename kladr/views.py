@@ -41,7 +41,7 @@ def get_region(request):
 
 def get_district(request):
 	result=[]
-	region = request.GET.get('region','')
+	region = request.GET.get('code','')
 	query = request.GET.get('query','')
 	if len(region)>0:
 		region_code = region[:2]
@@ -58,11 +58,16 @@ def get_homes(request):
 
 def get_city(request):
 	result=[]
-	region = request.GET.get('region','')
+	region = request.GET.get('code','')
+	district = request.GET.get('district', '')
 	query = request.GET.get('query','')
 	if len(region)>0:
-		region_code = region[:5]
-		cities = Kladr.objects.filter(code__startswith=region_code).exclude(code__endswith='00000000000')
+		if len(district) > 0:
+			district_code = district[:5]
+			cities = Kladr.objects.filter(code__startswith=district_code).filter(code__endswith='00000').exclude(code__endswith='00000000')
+		else:
+			region_code = region[:5]
+			cities = Kladr.objects.filter(code__startswith=region_code).filter(code__endswith='00000').exclude(code__endswith='00000000')
 		if len(query)>0:
 			cities = cities.filter(name__icontains=query)
 		result=[{'id':item.code, 'text':item.name} for item in cities]
@@ -70,14 +75,24 @@ def get_city(request):
 
 def get_village(request):
 	result=[]
+	region = request.GET.get('code', '')
 	district = request.GET.get('district','')
+	city = request.GET.get('city','')
 	query = request.GET.get('query','')
-	if len(district)>0:
-		district_code = district[:5]
-		villages = Kladr.objects.filter(code__startswith=district_code).exclude(code__endswith='00000000')
+	if len(region) > 0:
+		if len(district) < 1 and len(city) < 1:
+			region_code = region[:8]
+			villages = Kladr.objects.filter(code__startswith=region_code).exclude(code__endswith='00000')
+		if len(district) > 0 and len(city) < 1:
+			district_code = district[:8]
+			villages = Kladr.objects.filter(code__startswith=district_code).exclude(code__endswith='00000')
+		if len(district) > 0 and len(city) > 0:
+			city_code = city[:8]
+			villages = Kladr.objects.filter(code__startswith=city_code).exclude(code__endswith='00000')
 		if len(query)>0:
 			villages = villages.filter(name__icontains=query)
-		result=[{'id':item.code, 'text':item.name} for item in villages]
+	result=[{'id':item.code, 'text':item.name} for item in villages]
+
 	return HttpResponse(json.dumps(result), content_type='application/json')
 
 def get_village_by_id(street_id):
