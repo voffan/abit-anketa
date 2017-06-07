@@ -257,6 +257,7 @@ def SaveExam(request, abit):
 			add_exam.save()
 	print('Added!')
 
+@transaction.atomic
 def SaveAddress(request, abit):
 	if len(request.POST.get('street', ''))<1:
 		return
@@ -282,32 +283,32 @@ def SaveAddress(request, abit):
 		adrs.adrs_type_same = False
 	adrs.save()
 
+@transaction.atomic
 def SaveContacts(request, abit):
-	if len(contactvalue) < 1:
+	contacttype = request.POST.getlist('contacttype')
+	contactvalue = request.POST.getlist('contactvalue')
+	if len(contactvalue) < 1 or len(contacttype) < 1:
 		return
 	if abit.contacts_set.all() is not None:
 		Contacts.objects.filter(person=abit).delete()
-	contacttype = request.POST.getlist('contacttype')
-	contactvalue = request.POST.getlist('contactvalue')
 
-	for i in range(0, len(contacttype)):
+	for i in range(len(contacttype)):
 		if len(contacttype[i]) > 0 and len(contactvalue[i]) > 0:
-			contact = Contacts.objects.filter(person__id = abit.id, contact_type = contacttype[i], value = contactvalue[i]).first()
-			if contact is None:
-				contact = Contacts()
-				contact.person = abit
+			#contact = Contacts.objects.filter(person__id = abit.id, contact_type = contacttype[i], value = contactvalue[i]).first()
+			#if contact is None:
+			contact = Contacts()
+			contact.person = abit
 			contact.contact_type = AttrValue.objects.filter(pk=contacttype[i]).first()
 			contact.value = contactvalue[i]
 			contact.save()
 
+@transaction.atomic
 def SaveRelevants(request, abit):
-	if len(request.POST.getlist('relationFIO')) < 1:
-		return
-	if Relation.objects.filter(abiturient=abit) is not None:
-		Relation.objects.filter(abiturient=abit).delete()
 	relationtype = request.POST.getlist('relationtype')
 	relationcontactvalue = request.POST.getlist('relationcontactvalue')
 	relationFIO = request.POST.getlist('relationFIO')
+	if Relation.objects.filter(abiturient=abit) is not None:
+		Relation.objects.filter(abiturient=abit).delete()
 	for i in range(0, len(relationtype)):
 		if len(relationtype[i]) > 0 and len(relationcontactvalue[i]) > 0 and len(relationFIO[i]) > 0:
 			relation = Relation()
@@ -333,11 +334,12 @@ def SaveRelevants(request, abit):
 			relation.save()
 
 def SaveContactDetails(request, abit):
-	SaveAddress(request, abit)
+	#SaveAddress(request, abit)
+	print('saving contacts')
 	SaveContacts(request, abit)
+	print('saving relevants')
 	SaveRelevants(request, abit)
 
-@transaction.atomic
 def AddDataToPerson(request):
 	result={'result':"success"}
 	#print(request.POST)

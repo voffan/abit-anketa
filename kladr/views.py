@@ -21,10 +21,12 @@ import json
 
 def get_street(request):
 	result=[]
-	village = request.GET.get('village','')
+	village = request.GET.get('code','')
 	query = request.GET.get('query','')
+	print (village)
 	if len(village)>0:
 		village_code = village[:11]
+		print (village_code)
 		streets = Street.objects.filter(code__startswith=village_code)
 		if len(query)>0:
 			streets = streets.filter(name__icontains=query)

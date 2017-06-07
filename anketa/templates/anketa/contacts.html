@@ -7,7 +7,7 @@
 							</div>
 							<div class="panel-body">
 								<div class="row">
-									<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
+									<div class="col-xs-12 col-sm-10 col-md-10 col-md-offset-1">
 										<p>
 											<label for="adrsp">Адрес регистрации</label>
 											<div class="input-group">
@@ -21,7 +21,7 @@
 								</div>
 								</br>
 								<div class="row">
-									<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
+									<div class="col-xs-12 col-sm-10 col-md-10 col-md-offset-1">
 										<p>
 											<label for="adrsisthesame">Адрес прописки совпадает с адресом факт. места жительства</label>
 											<br>
@@ -32,7 +32,7 @@
 								</div>
 								<br>
 								<div class="row" id="adrsfact">
-									<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
+									<div class="col-xs-12 col-sm-10 col-md-10 col-md-offset-1">
 										<p>
 											<label for="adrsf">Фактический адрес</label>
 											<div class="input-group">
@@ -130,7 +130,7 @@
 														{% endif %}
 													</select>
 													</td>
-													<td><input type="text" class="form-control" name="relationFIO" value= {{item.fio}}></td>
+													<td><input type="text" class="form-control" name="relationFIO" value= "{{item.fio}} {{item.}}"></td>
 													<td><input type="text" class="form-control" name="relationcontactvalue" value= {{item.value}}></td>
 													<td><button class="btn btn-default btn-sm" id="delRelationRow" type="button">Удалить</button></td>
 												</tr>

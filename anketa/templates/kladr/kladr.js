@@ -12,6 +12,8 @@ function Kladr(object){
 		$('#city').select2('enable',true);
 		$('#district').select2('enable',true);
 		$('#KladrModal').modal();
+		code = []
+		codetype = []
 	} if ($(object).val().length > 1){
 		$.ajax({
 			url:"{% url 'kladr:get_objects_by_id' %}",
@@ -200,8 +202,36 @@ $('#street').select2({
 });
 $('#SaveKladr').on('click',function(e){
     $('adrsp').text = "fffff";
-
-	$(saveObject).val($('#street').val());
+    var address = $('#region').select2('data').text;
+    if ($('#district').select2('data')) {
+        address += ", ";
+        address += $('#district').select2('data').text;
+    }
+    if ($('#city').select2('data')) {
+        address += ", ";
+        address += $('#city').select2('data').text;
+    }
+    if ($('#village').select2('data')) {
+        address += ", ";
+        address += $('#village').select2('data').text;
+    }
+    if ($('#street').select2('data')) {
+        address += ", ";
+        address += $('#street').select2('data').text;
+    }
+    if ($('#adrshouse').val()) {
+        address += ", ";
+        address += $('#adrshouse').val();
+    }
+    if ($('#adrsbuilding').val()) {
+        address += " корпус ";
+        address += $('#adrsbuilding').val();
+    }
+    if ($('#adrsflat').val()) {
+        address += ", кв. ";
+        address += $('#adrsflat').val();
+    }
+	$(saveObject).val(address);
 	$('#KladrModal').modal('hide');
 
 
