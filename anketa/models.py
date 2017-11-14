@@ -138,6 +138,7 @@ class DocAttr(models.Model):
 	def __str__(self):
 		return self.doc.abiturient.fullname+' '+self.doc.docType.value+' '+self.value
 
+#Class that represent document of student
 class Docs(models.Model):
 	abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент')
 	serialno = models.IntegerField(u'Серия документа', max_length=15, db_index=True, blank=True, null=True)
