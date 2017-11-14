@@ -1,4 +1,6 @@
 var saveObject;
+var code = [];
+var codetype = [];
 function Kladr(object){
 	saveObject = object;
 	if($(object).val().length < 1){
@@ -10,6 +12,8 @@ function Kladr(object){
 		$('#city').select2('enable',true);
 		$('#district').select2('enable',true);
 		$('#KladrModal').modal();
+		code = []
+		codetype = []
 	} if ($(object).val().length > 1){
 		$.ajax({
 			url:"{% url 'kladr:get_objects_by_id' %}",
@@ -74,7 +78,7 @@ $('#region').select2({
 	escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
 	minimumInputLength: 1,
 	language:"ru",
-	placeholder:'Выберете регион РФ',
+	placeholder:'Выберите республику, край, область...',
 	allowClear:true
 });
 $('#district').select2({
@@ -83,7 +87,7 @@ $('#district').select2({
 		console.log(callback);
 		callback({'id':'','text':''});
 	},
-	placeholder:'Выберете район',
+	placeholder:'Выберите район',
 	allowClear:true,
 	ajax:{
 		url:"{% url 'kladr:get_district' %}",
@@ -92,7 +96,7 @@ $('#district').select2({
 		data:function(params){
 			return{
 				query: params, // search term
-				region: $('#region').val(),
+				code: code[code.length - 1],
 			};
 		},
 		processResults: function (data, page) {
@@ -116,7 +120,7 @@ $('#city').select2({
 
 		callback({'id':'','text':''});
 	},
-	placeholder:'Выберете город',
+	placeholder:'Выберите город',
 	allowClear:true,
 	ajax:{
 		url:"{% url 'kladr:get_city' %}",
@@ -125,7 +129,7 @@ $('#city').select2({
 		data:function(params){
 			return{
 				query: params, // search term
-				region: $('#region').val(),
+				code: code[code.length - 1],
 			};
 		},
 		processResults: function (data, page) {
@@ -143,7 +147,7 @@ $('#city').select2({
 	language:"ru"
 });
 $('#village').select2({
-	placeholder:'Выберете населенный пункт',
+	placeholder:'Выберите населенный пункт',
 	allowClear:true,
 	ajax:{
 		url:"{% url 'kladr:get_village' %}",
@@ -152,7 +156,7 @@ $('#village').select2({
 		data:function(params){
 			return{
 				query: params, // search term
-				district: $('#district').val(),
+				code: code[code.length - 1],
 			};
 		},
 		processResults: function (data, page) {
@@ -170,22 +174,16 @@ $('#village').select2({
 	language:"ru"
 });
 $('#street').select2({
-	placeholder:'Выберете улицу',
+	placeholder:'Выберите улицу',
 	allowClear:true,
 	ajax:{
 		url:"{% url 'kladr:get_street' %}",
 		dataType: 'json',
 		delay: 250,
 		data:function(params){
-			var obj;
-			if ($('#village').val().length > 0){
-				obj = $('#village').val();
-			}else{
-				obj = $('#city').val();
-			}
 			return{
 				query: params, // search term
-				village: obj,
+				code: code[code.length - 1],
 			};
 		},
 		processResults: function (data, page) {
@@ -204,38 +202,137 @@ $('#street').select2({
 });
 $('#SaveKladr').on('click',function(e){
     $('adrsp').text = "fffff";
-
-	$(saveObject).val($('#street').val());
+    var address = $('#region').select2('data').text;
+    if ($('#district').select2('data')) {
+        address += ", ";
+        address += $('#district').select2('data').text;
+    }
+    if ($('#city').select2('data')) {
+        address += ", ";
+        address += $('#city').select2('data').text;
+    }
+    if ($('#village').select2('data')) {
+        address += ", ";
+        address += $('#village').select2('data').text;
+    }
+    if ($('#street').select2('data')) {
+        address += ", ";
+        address += $('#street').select2('data').text;
+    }
+    if ($('#adrshouse').val()) {
+        address += ", ";
+        address += $('#adrshouse').val();
+    }
+    if ($('#adrsbuilding').val()) {
+        address += " корпус ";
+        address += $('#adrsbuilding').val();
+    }
+    if ($('#adrsflat').val()) {
+        address += ", кв. ";
+        address += $('#adrsflat').val();
+    }
+	$(saveObject).val(address);
 	$('#KladrModal').modal('hide');
 
 
 });
 $('#region').on("change",function(e){
 	$('#district').select2('val','');
+	$('#city').select2('val','');
 	$('#village').select2('val','');
 	$('#street').select2('val','');
-	$('#city').select2('enable',true);
+	if (codetype.indexOf("region") != -1) {
+        code.splice(codetype.indexOf("region"), code.length - codetype.indexOf("region"));
+        codetype.splice(codetype.indexOf("region"), codetype.length - codetype.indexOf("region"));
+    }
+    else if (codetype.indexOf("district") != -1) {
+        code.splice(codetype.indexOf("district"), code.length - codetype.indexOf("district"));
+        codetype.splice(codetype.indexOf("district"), codetype.length - codetype.indexOf("district"));
+    }
+	else if (codetype.indexOf("city") != -1) {
+        code.splice(codetype.indexOf("city"), code.length - codetype.indexOf("city"));
+        codetype.splice(codetype.indexOf("city"), codetype.length - codetype.indexOf("city"));
+    }
+	else if (codetype.indexOf("village") > -1) {
+        code.splice(codetype.indexOf("village"), code.length - codetype.indexOf("village"));
+        codetype.splice(codetype.indexOf("village"), codetype.length - codetype.indexOf("village"));
+    }
+	code.push($(this).select2('data').id);
+	codetype.push("region");
+});
+$('#region').on("select2-removed",function(e){
+	$('#district').select2('val','');
+	$('#city').select2('val','');
+	$('#village').select2('val','');
+	$('#street').select2('val','');
+	if (codetype.indexOf("region") != -1) {
+        code.splice(codetype.indexOf("region"), code.length - codetype.indexOf("region"));
+        codetype.splice(codetype.indexOf("region"), codetype.length - codetype.indexOf("region"));
+    }
 });
 $('#district').on("change",function(e){
+	$('#city').select2('val','');
 	$('#village').select2('val','');
 	$('#street').select2('val','');
-	if (e.val.length > 0)$('#city').select2('enable',false);
+	if (codetype.indexOf("district") != -1) {
+        code.splice(codetype.indexOf("district"), code.length - codetype.indexOf("district"));
+        codetype.splice(codetype.indexOf("district"), codetype.length - codetype.indexOf("district"));
+    }
+	else if (codetype.indexOf("city") != -1) {
+        code.splice(codetype.indexOf("city"), code.length - codetype.indexOf("city"));
+        codetype.splice(codetype.indexOf("city"), codetype.length - codetype.indexOf("city"));
+    }
+	else if (codetype.indexOf("village") > -1) {
+        code.splice(codetype.indexOf("village"), code.length - codetype.indexOf("village"));
+        codetype.splice(codetype.indexOf("village"), codetype.length - codetype.indexOf("village"));
+    }
+	code.push($(this).select2('data').id);
+	codetype.push("district");
 });
 $('#district').on("select2-removed",function(e){
+	$('#city').select2('val','');
 	$('#village').select2('val','');
 	$('#street').select2('val','');
-	$('#city').select2("enable",true);
+	if (codetype.indexOf("district") != -1) {
+        code.splice(codetype.indexOf("district"), code.length - codetype.indexOf("district"));
+        codetype.splice(codetype.indexOf("district"), codetype.length - codetype.indexOf("district"));
+    }
 });
 $('#city').on("change",function(e){
 	$('#village').select2('val','');
 	$('#street').select2('val','');
-	if (e.val.length > 0)$('#district').select2('enable',false);
+	if (codetype.indexOf("city") != -1) {
+        code.splice(codetype.indexOf("city"), code.length - codetype.indexOf("city"));
+        codetype.splice(codetype.indexOf("city"), codetype.length - codetype.indexOf("city"));
+    }
+	else if (codetype.indexOf("village") > -1) {
+        code.splice(codetype.indexOf("village"), code.length - codetype.indexOf("village"));
+        codetype.splice(codetype.indexOf("village"), codetype.length - codetype.indexOf("village"));
+    }
+	code.push($(this).select2('data').id);
+	codetype.push("city");
 });
 $('#city').on("select2-removed",function(e){
 	$('#village').select2('val','');
 	$('#street').select2('val','');
-	$('#district').select2('enable',true);
+	if (codetype.indexOf("city") != -1) {
+        code.splice(codetype.indexOf("city"), code.length - codetype.indexOf("city"));
+        codetype.splice(codetype.indexOf("city"), codetype.length - codetype.indexOf("city"));
+    }
 });
 $('#village').on("change",function(e){
 	$('#street').select2('val','');
+	if (codetype.indexOf("village") > -1) {
+        code.splice(codetype.indexOf("village"), code.length - codetype.indexOf("village"));
+        codetype.splice(codetype.indexOf("village"), codetype.length - codetype.indexOf("village"));
+    }
+	code.push($(this).select2('data').id);
+	codetype.push("village");
+});
+$('#village').on("select2-removed",function(e){
+	$('#street').select2('val','');
+	if (codetype.indexOf("village") > -1) {
+        code.splice(codetype.indexOf("village"), code.length - codetype.indexOf("village"));
+        codetype.splice(codetype.indexOf("village"), codetype.length - codetype.indexOf("village"));
+    }
 });
