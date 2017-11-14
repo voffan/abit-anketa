@@ -32,6 +32,18 @@
 		var egerows = 1;
 		{% endif %}
 		var maxExams = 15;
+
+		{% if exams %}
+			var addrows={{add_exams|length}}
+			{% for item in add_exams %}
+				sub_id.push({{item.subject}});
+				sub_val.push("{{item.subject_value}}");
+			{% endfor %}
+		{% else %}
+		var addrows = 1;
+		{% endif %}
+		var maxAddExams = 15;
+
 		{% if contacts %}
 			var contactsrow = {{contacts|length}};
 		{% else %}
