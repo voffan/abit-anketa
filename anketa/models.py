@@ -151,7 +151,7 @@ class Docs(models.Model):
 		return self.abiturient.fullname+' '+self.docType.value
 
 class Exams(models.Model):
-	abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент', db_index=True)
+	abiturient = models.ForeignKey('Abiturient', verbose_name=u'Абитуриент', db_index=True)
 	exam_examType = models.ForeignKey('AttrValue', verbose_name=u'Тип экзамена', limit_choices_to={'attribute__name':u'Тип экзамена'}, related_name='ExamType')
 	exam_subjects = models.ForeignKey('AttrValue', verbose_name=u'Дисциплина', limit_choices_to={'attribute__name':u'Дисциплина'}, related_name='Exam_Subjects')
 	points = models.IntegerField(u'Кол-во баллов', max_length=3, blank = True, null = True, db_index=True)
