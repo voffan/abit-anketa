@@ -8,6 +8,12 @@
 {% block scripts %}
 <script src="{% static "anketa/select2-3.5.4/select2.min.js" %}"></script>
 <script src="{% static "anketa/js/prettify.js" %}"></script>
+<style>
+
+.palec:hover {
+    cursor: pointer;
+}
+</style>
 <script>
 	var $currentRow=null;
 	var $rowscount=3;
@@ -25,10 +31,12 @@
 			var trs=document.getElementsByClassName('dopTr');
 			for(var i =trs.length; i>0;i--){
 				trs[i-1].remove();
-			}
+			}			
+			$("#add").removeAttr("disabled");		
 		}
 		else
-		{
+		{	
+			$("#add").attr("disabled", "disabled");
 			var id=parseInt($(row).attr('id'), 10);
 			$.ajax({
 				url:{% url 'getapplication' %},
@@ -52,12 +60,16 @@
 					//$("#eduform").select2('data',{id: data['edu_prog_eduform_id'], text:data['edu_prog_eduform_name']});
 
 					//var $poop = $("#ProfileTable").find('input[id=eduprof]');
+					$("#appnum").html("Заявление №"+data['app_num']);
+					$profilerow=0;
 					for(var i =0;i<parseInt(data['profiles_len']);i++){
 						var addedrow = addProfile();
 						addedrow.find('input[id=eduprof]').select2('data',{id:data['profiles'][i]['id'], text:data['profiles'][i]['profile']})
 						addedrow.find('input[id=eduform]').select2('data',{id:data['profiles'][i]['prof_attr_id'], text:data['profiles'][i]['eduform']})
+						addedrow.find('input[id=prof_id]').val(data['profiles'][i]['app_prof_id']);
 						//$("#ProfileTable").find('input[id=eduprof]').select2('data',{id: list[i]['id'],text: list[i]['text']});				
 						//$("#eduprof").select2('data',{id: list[i]['id'],text: list[i]['text']});
+						$profilerow++;
 					}
 					/*
 					var select = document.getElementById("eduprior");
@@ -67,6 +79,17 @@
 							alert(data['eduprior']);
 						}							
 					}*/
+					if(data['budget']==true) $('#budget')[0].checked='checked'
+					else $('#budget')[0].checked=''
+					if(data['withfee']==true) $('#withfee')[0].checked='checked'
+					else $('#withfee')[0].checked=''
+
+					var $track = $('input[type=radio]')
+					for(var i = 0; i<$track.length;i++){
+						if($track[i].value==data['track'].toString())
+							$track[i].checked='checked'
+					}										
+									
 					$('#eduprior').select2("val",data['eduprior']);
 					//$('#eduprior option[value="В"]').attr("choice","choice");
 					//document.getElementsById("eduprior").options[2].selected=true;
@@ -82,15 +105,9 @@
 			});
 		}
 	};
-	$(document).on("click","a[id*='app']", function(e){
+	$(document).on("click","tr[id*='app']", function(e){
 		e.preventDefault();
 		PopUp(this);
-		if($("#add").attr("disabled")){
-			$("#add").removeAttr("disabled");
-		}
-		else
-			$("#add").attr("disabled", "disabled");
-
 	});
 	$(document).on("click","button[id*='ydalit']", function()
 	{
@@ -125,13 +142,16 @@
 		}
 		$currentRow=null;
 	});
-	$("#cancel").on("click", function(){		
+
+	$("#cancel").on("click", function(){
 		select2();
-		if($profilerow>1){
-			var trs=document.getElementsByClassName('dopTr');
-			for(var i =trs.length; i>0;i--){
-				trs[i-1].remove();
-				$profilerow--;
+		var trs=document.getElementsByClassName('dopTr');
+		if(trs.length>1){			
+			for(var i = 0;i<trs.length;i++){
+				trs[i].remove();
+				if($profilerow>1){
+					$profilerow--;
+				}
 			}
 		}
 		$("#applicationBlank").attr('class','panel panel-primary hidden');
@@ -166,10 +186,12 @@
 				}
 				$("#applicationBlank").attr('class','panel panel-primary hidden');
 				*/
-				window.location.replace("{% url 'applicationList' %}");
+				if(data.error_msg!="")				
+					alert(data.error_msg);
+				//window.location.replace("{% url 'applicationList' %}");
 			},
 			error:function()
-			{
+			{				
 				alert("der'mishe");
 			}
 		});
@@ -309,13 +331,7 @@
 		$("#eduform").select2('enable');
 		//открыть дерьмище
 	});
-	$('#eduprof').on("select2-selecting", function(e){
-		if($('#eduprof').val()) {
-			if($selectedprog!=$('#eduprof').select2('data').text) {
-				$('#eduform').select2('val',"");
-			}
-		}
-	});
+	
 	function initSelect2Prior(object){
 		object.select2({
 			language:"ru"
@@ -401,7 +417,7 @@
 		initSelect2Prior($(this));
 	});
 	function addProfile(){		
-			var newRow = $('<tr class="info dopTr"><td><input type="hidden" id="eduprof" name="eduprof"class="form-control"></td><td><input type="hidden" id="eduform" name="eduform" class="form-control"></td><td><button class="btn btn-default btn-sm" id="delProfileRow" type="button">Удалить</button></td></tr>');
+			var newRow = $('<tr class="info dopTr"><td><input type="hidden" name="prof_id" id="prof_id" value="-1"><input type="hidden" id="eduprof" name="eduprof"class="form-control"></td><td><input type="hidden" id="eduform" name="eduform" class="form-control"></td><td><button class="btn btn-default btn-sm" id="delProfileRow" type="button">Удалить</button></td></tr>');
 			$("#ProfileTable").append(newRow);
 			initSelect2Prof(newRow.find('input[id^="eduprof"]'));
 			initSelect2Form(newRow.find('input[id^="eduform"]'));
@@ -420,6 +436,17 @@
 			$profilerow--;
 		}
 	});
+	function getGlobalVar(name){
+	return localStorage.getItem(name);
+	};
+	
+	$(document).ready(function(){
+		var rowId = getGlobalVar('rowId');
+		if(rowId){		
+			PopUp($("tr[id="+rowId+"]"));		
+		};
+		localStorage.removeItem('rowId');	
+	});
 
 </script>
 {% endblock %}
@@ -435,36 +462,44 @@
 					</div>
 					<div class="panel-body">
 						<div class="row">
-							<table class="table" id="table">
-								<thead id="tablehead">
-									<tr>
-										<th>Номер</th>
-										<th>Институт/факультет</th>
-										<th>Направление/специальность</th>
-										<th>Квалификация</th>
-										<th>Профиль</th>
-										<th>Форма обучения</th>
-										<th>Статус</th>
-										<th>Приоритет</th>
-										<th>Действие</th>
-									</tr>
-								</thead>
-								<tbody id="tablebody">
-								{% for item in applications %}
-									<tr {% if item.appState.value == "Поданно" %} class="info" {% else %} {% if item.appState.value == "Экспортированно" %} class="success" {% else %} class="info" {% endif %} {% endif %}>
-										<td>{{item.app.id}}</td>
-										<td>{{item.app.department.name}}</td>
-										<td><a href="" id="{{item.app.id}}app">{{item.prof.profile.profile.edu_prog.name}}</a></td><!--._.-->
-										<td>{{item.prof.profile.profile.edu_prog.qualification.value}}</td>
-										<td>{{item.prof.profile.profile.name}}</td>
-										<td>{% if item.prof.profile.eduform == 'О'%} Очное {% endif %}{% if item.prof.profile.eduform == 'ОЗ'%} Очно-заочное {% endif %}{% if item.prof.profile.eduform == 'З'%} Заочное {% endif %}</td>
-										<td>{{item.app.appState.value}}</td>
-										<td>{{item.app.priority}}</td>
-										<td><button type="button" class="btn btn-danger pull-right" id="{{item.app.id}}ydalit">X</button></td>
-									</tr>
-								{% endfor %}
-								</tbody>
-							</table>
+							<div class="table-responsive">
+								<table class="table table-hover" id="table">
+									<thead id="tablehead">
+										<tr>
+											<th>Номер</th>
+											<th>Институт/факультет</th>
+											<th>Направление/специальность</th>
+											<th>Квалификация</th>
+											<th>Профиль/форма обучения</th>
+											<!--th>Форма обучения</th-->
+											<th>Статус</th>
+											<th>Приоритет</th>
+											<th>Действие</th>
+										</tr>
+									</thead>
+									<tbody id="tablebody">
+									{% for item in applications %}
+										<tr {% if item.app.appState.value == "Поданный" %} class="info palec" {% else %} {% if item.app.appState.value == "Подтвержденный" %} class="success palec" {% else %} class="palec" {% endif %} {% endif %} id="{{item.app.id}}app">
+											<td>{{item.app.id}}</td>
+											<td>{{item.app.department.name}}</td>
+											<td>{% for i in item.prof|slice:":1" %} {{i.profile.profile.edu_prog.name}}{% endfor %}</td><!--._.-->
+											<td>{% for i in item.prof|slice:":1" %}{{i.profile.profile.edu_prog.qualification.value}}{% endfor %}</td>
+											<td>
+												<!--select class="form-control"-->
+													{% for i in item.prof %}
+														<!--option--><p>{{ forloop.counter }}	{{i.profile.profile.name}}{% if i.profile.eduform == 'О'%} Очное {% endif %}{% if i.profile.eduform == 'ОЗ'%} Очно-заочное {% endif %}{% if i.profile.eduform == 'З'%} Заочное {% endif %}</p>
+													{% endfor %}													
+												<!--/select-->
+											</td>
+											<!--td>{% for i in item.prof %} {% if i.profile.eduform == 'О'%} Очное {% endif %}{% if i.profile.eduform == 'ОЗ'%} Очно-заочное {% endif %}{% if i.profile.eduform == 'З'%} Заочное {% endif %} , {% endfor %}</td-->
+											<td>{{item.app.appState.value}}</td>
+											<td>{% if item.app.priority == 'В' %}Высокий{% endif %}{% if item.app.priority == 'С' %}Средний{% endif %}{% if item.app.priority == 'Н' %}Низкий{% endif %}</td>
+											<td><button type="button" class="btn btn-danger pull-right" id="{{item.app.id}}ydalit">X</button></td>
+										</tr>
+									{% endfor %}
+									</tbody>
+								</table>
+							</div>
 						</div>
 						<div class="row">
 							<button class="btn btn-primary btn-block" type="button" id="add">Добавить</button>
@@ -477,7 +512,7 @@
 			<div class="col-md-12 col-xs-10 col-sm-8">
 				<div class="panel panel-primary hidden" id="applicationBlank" name="applicationBlank">
 					<div class="panel-heading">
-						<h3 class="panel-title">Заявление</h3>
+						<h3 class="panel-title" id="appnum">Заявление</h3>
 					</div>
 					<div class="panel-body">
 						<div class="row">
@@ -503,6 +538,24 @@
 							</div>
 						</div>
 						<div class="row">
+							<div class="col-md-11 col-xs-8 col-sm-8">
+								<label for="budget">В рамках контрольных цифр приёма</label>
+								<input type="checkbox" name="budget" id="budget">
+							</br>
+								<label for="withfee">По договорам об оказании платных обр. услуг</label>
+								<input type="checkbox" name="withfee" id="withfee">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-11 col-xs-8 col-sm-8">
+								<label for="track">Отслеживать заявление?</label>
+									<p>
+										<input type = "radio" name= "track" id = "tracktrue"  value = "true">Да
+										<input type = "radio" name= "track" id = "trackfalse"  value = "false">Нет
+									</p>
+							</div>
+						</div>
+						<div class="row">
 							<div class="col-md-11 col-xs-8 col-sm-8">						
 								<table class="table" id="table">
 									<thead id="tablehead">
@@ -515,6 +568,7 @@
 									<tbody id="ProfileTable">
 										<tr>
 											<td>
+												<input type="hidden" name="prof_id" id="prof_id" value="-1">
 												<input type="hidden" id="eduprof" name="eduprof" class="form-control" disabled>
 											</td>
 											<td>
@@ -547,4 +601,23 @@
 		</div>
 	</div>
 </form>
+<script type="text/javascript">
+    var reformalOptions = {
+        project_id: 977752,
+        project_host: "abit-4ino.reformal.ru",
+        tab_orientation: "left",
+        tab_indent: "50%",
+        tab_bg_color: "#F05A00",
+        tab_border_color: "#FFFFFF",
+        tab_image_url: "http://tab.reformal.ru/T9GC0LfRi9Cy0Ysg0Lgg0L%252FRgNC10LTQu9C%252B0LbQtdC90LjRjw==/FFFFFF/2a94cfe6511106e7a48d0af3904e3090/left/1/tab.png",
+        tab_border_width: 2
+    };
+    
+    (function() {
+        var script = document.createElement('script');
+        script.type = 'text/javascript'; script.async = true;
+        script.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'media.reformal.ru/widgets/v3/reformal.js';
+        document.getElementsByTagName('head')[0].appendChild(script);
+    })();
+</script><noscript><a href="http://reformal.ru"><img src="http://media.reformal.ru/reformal.png" /></a><a href="http://abit-4ino.reformal.ru">Oтзывы и предложения для abit-anketa</a></noscript>
 {% endblock %}
