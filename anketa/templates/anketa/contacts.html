@@ -7,26 +7,11 @@
 							</div>
 							<div class="panel-body">
 								<div class="row">
-									<p>
-										<div class="col-xs-6 col-sm-5 col-md-4 col-md-offset-2">
-											<label for="adrstype">Тип адреса</label>
-											<select name="adrstype" id="adrstype" size="1" class="form-control">
-												<option value="perm">По прописке</option>
-												<option value="current">Фактический</option>
-											</select>
-										</div>
-										<div class="col-xs-6 col-sm-5 col-md-4">
-											<label for="adrsindex">Индекс</label>
-											<input type = "text" name="adrsindex" id="adrsindex" class="form-control" placeholder="677000" value="{{zipcode}}">
-										</div>
-									 </p>
-								</div>
-								<div class="row">
-									<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
+									<div class="col-xs-12 col-sm-10 col-md-10 col-md-offset-1">
 										<p>
-											<label for="street">Улица </label>
+											<label for="adrsp">Адрес регистрации</label>
 											<div class="input-group">
-												<input id ="street" name="street" class="form-control" placeholder="Ленина" value="{{street}}">
+												<input id ="adrsp" name="adrsp" class="form-control" placeholder="Выберите адрес" >
 												<span class="input-group-btn">
 													<button class="btn btn-default" type="button" id="kladrbtn">...</button>
 												</span>
@@ -34,30 +19,28 @@
 										</p>
 									</div>
 								</div>
-								<div class="row">
-									<p>
-										<div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-2">
-											<label for="adrshouse">Дом</label>
-											<input type="text" name="adrshouse" id="adrshouse" class="form-control" placeholder="1" value="{{house}}">
-										</div>
-										<div class="col-xs-2 col-sm-2 col-md-2">
-											<label for="adrsbuilding">Корпус</label>
-											<input type="text" name="adrsbuilding" id="adrsbuilding" class="form-control" placeholder="1" value="{{building}}">
-										</div>
-										<div class="col-xs-2 col-sm-2 col-md-2">
-											<label for="adrsflat">Квартира</label>
-											<input type="text" name="adrsflat" id="adrsflat" class="form-control" placeholder="1" value="{{flat}}">
-										</div>
-									</p>
-								</div>
 								</br>
 								<div class="row">
-									<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
+									<div class="col-xs-12 col-sm-10 col-md-10 col-md-offset-1">
 										<p>
 											<label for="adrsisthesame">Адрес прописки совпадает с адресом факт. места жительства</label>
 											<br>
 											<input type="radio" name = "adrsisthesame" value="no">Нет
 											<input type="radio" name = "adrsisthesame" value="yes">Да
+										</p>
+									</div>
+								</div>
+								<br>
+								<div class="row" id="adrsfact">
+									<div class="col-xs-12 col-sm-10 col-md-10 col-md-offset-1">
+										<p>
+											<label for="adrsf">Фактический адрес</label>
+											<div class="input-group">
+												<input id ="adrsf" name="adrsf" class="form-control" placeholder="Выберите адрес" >
+												<span class="input-group-btn">
+													<button class="btn btn-default" type="button" id="adrsf_select">...</button>
+												</span>
+											</div>
 										</p>
 									</div>
 								</div>
@@ -147,7 +130,7 @@
 														{% endif %}
 													</select>
 													</td>
-													<td><input type="text" class="form-control" name="relationFIO" value= {{item.fio}}></td>
+													<td><input type="text" class="form-control" name="relationFIO" value= "{{item.fio}} {{item.}}"></td>
 													<td><input type="text" class="form-control" name="relationcontactvalue" value= {{item.value}}></td>
 													<td><button class="btn btn-default btn-sm" id="delRelationRow" type="button">Удалить</button></td>
 												</tr>

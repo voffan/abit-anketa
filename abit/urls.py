@@ -3,7 +3,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
 
-from anketa.views import StartPage, StartApp, Streets, Territory, District, City, Citizenship, Nation, DocIssuer, PrevEduName, Institute, EduProf, Privilegies, Rank, Flang, CreatePerson, DocType, PersonProfile, Applications, PersonData, Account,EduName, SaveApplication, EduProfForm, GetSelectedApplication,DeleteApplication,AddDataToPerson, EduDocType,GetAddressTypeValues, ExamSubject,AccountInfoChanging
+from anketa.views import StartPage, StartApp, Streets, Territory, District, City, Citizenship, Nation, DocIssuer, PrevEduName, Institute, EduProf, Privilegies, Rank, Flang, CreatePerson, DocType, PersonProfile, Applications, PersonData, Account,EduName, SaveApplication, EduProfForm, GetSelectedApplication,DeleteApplication,AddDataToPerson, EduDocType,GetAddressTypeValues, ExamSubject, ExamType, AccountInfoChanging
 
 
 urlpatterns = patterns('',
@@ -16,7 +16,7 @@ urlpatterns = patterns('',
     url(r'^application/$', StartApp, name = 'application'),
     url(r'^territory/$', Territory, name = 'territory'),
     url(r'^district/$', District, name = 'district'),
-    url(r'^city/$', City , name = 'city'), 
+    url(r'^city/$', City, name = 'city'),
     url(r'^streets/$', Streets, name='streets'),
     url(r'^citizenship/$', Citizenship, name = 'citizenship'),
     url(r'^nation/$', Nation, name = 'nation'),
@@ -28,6 +28,7 @@ urlpatterns = patterns('',
     url(r'^eduname/$',EduName,name='eduname'),
     url(r'^eduprof/$', EduProf, name = 'eduprof'),
     url(r'^examsubject/$', ExamSubject, name = 'examsubject'),
+    url(r'^examtype/$', ExamType, name='examtype'),
     url(r'^eduform/$', EduProfForm, name='eduform'),
     url(r'^privilegies/$', Privilegies, name = 'privilegies'),
     url(r'^create_person/$', CreatePerson, name="create_person"),
@@ -41,5 +42,6 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^flang/$', Flang, name = 'flang'),
     url(r'^staff/', include('staff.urls',namespace = 'staff')),
+    url(r'^kladr/', include('kladr.urls',namespace = 'kladr')),
     url(r'^auth/', include('authApp.urls', namespace = 'authapp'))
 )

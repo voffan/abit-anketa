@@ -5,16 +5,40 @@
 				<h4 class="modal-title" id="KladrLabel">Адрес</h4>
 			</div>
 			<div class="modal-body">
-				<label for="region">Республика/Край/Область...</label>
-				<input type="text" class="form-control" name="region" id="region" hidden>
-				<label for="district">Район/Улус/...</label>
-				<input type="text" class="form-control" name="district" id="district" hidden>
-				<label for="city">Город</label>
-				<input type="text" class="form-control" name="city" id="city" hidden>
-				<label for="village">Населенный пункт</label>
-				<input type="text" class="form-control" name="village" id="village" hidden>
-				<label for="street">Улица</label>
-				<input type="text" class="form-control" name="street" id="street" hidden>
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xs-12 col-md-4">
+							<label for="index">Индекс</label>
+							<input type="text" class="form-control" name="index" id="index" hidden>
+						</div>
+						<div class="col-xs-12 col-md-8">
+							<label for="region">Субъект РФ</label>
+							<input type="text" class="form-control" name="region" id="region" hidden>
+						</div>
+					</div>
+					<label for="district">Район (улус)</label>
+					<input type="text" class="form-control" name="district" id="district" hidden>
+					<label for="city">Город</label>
+					<input type="text" class="form-control" name="city" id="city" hidden>
+					<label for="village">Населенный пункт</label>
+					<input type="text" class="form-control" name="village" id="village" hidden>
+					<label for="street">Улица</label>
+					<input type="text" class="form-control" name="street" id="street" hidden>
+					<div class="row">
+						<div class="col-xs-12 col-md-4">
+							<label for="index">Дом</label>
+							<input type="text" class="form-control" name="adrshouse" id="adrshouse" hidden>
+						</div>
+						<div class="col-xs-12 col-md-4">
+							<label for="index">Корпус</label>
+							<input type="text" class="form-control" name="adrsbuilding" id="adrsbuilding" hidden>
+						</div>
+						<div class="col-xs-12 col-md-4">
+							<label for="index">Квартира</label>
+							<input type="text" class="form-control" name="adrsflat" id="adrsflat" hidden>
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" id="SaveKladr">Сохранить</button>
