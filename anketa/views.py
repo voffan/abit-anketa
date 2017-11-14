@@ -122,7 +122,7 @@ def PersonData(request):
 			relations.append(cont)
 		args['relation']=relations
 	# 4
-	exams = person.exams_set.all()
+	exams = person.exams_set.exclude(exam_examType__value__icontains=u'вступит')
 	if exams is not None:
 		examsList=[]
 		for item in exams:
@@ -141,8 +141,11 @@ def PersonData(request):
 		addExamsList=[]
 		for item in add_exams:
 			exam={}
+			exam['id']=item.id
 			exam['subject']=item.exam_subjects.id
 			exam['subject_value']=item.exam_subjects.value
+			exam['points']=item.points
+			exam['year']=item.year
 			if item.special and specusl == False:
 				args['specusl']=True
 			addExamsList.append(exam)
@@ -746,7 +749,7 @@ def ExamSubject(request):
 	return HttpResponse(json.dumps(result), content_type="application/json")	
 
 def ExamType(request):
-	subjects = AttrValue.objects.filter(attribute__name__icontains=u'Тип экзамена')
+	subjects = AttrValue.objects.filter(attribute__name__icontains=u'Тип экзамена').exclude(name__icontains=u'вступ')
 	result = []
 	for item in subjects:
 		result.append({'id':item.id, 'text':item.value})

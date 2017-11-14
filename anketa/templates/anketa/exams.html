@@ -53,10 +53,35 @@
 							</div>
 							<div class="panel-body">
 								<div class="row">
-									<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
-										<label for="additionalExams">Выберите дисциплины</label>
-										<input type="hidden" id="additionalExams" name="additionalExams" class="form-control">
-									</div>
+									<table class="table" id="tableAdd">
+										<thead id="tableheadAdd">
+											<tr>
+												<th width="27%">Дисциплина</th>
+												<th width="15%">Баллы</th>
+												<th width="15%">Год</th>
+											</tr>
+										</thead>
+										<tbody id="egeTableBodyAdd">
+										{% if exams %}
+											{% for item in add_exams %}
+											<tr class="info">
+												<td><input type="hidden" class="form-control" name="egeDisc" value ="{{item.subject}}"><input type="hidden" name="AddexamId" value ="{{item.id}}"></td>
+												<td><input type="text" class="form-control" name="egePoints" value ="{{item.points}}" readonly></td>
+												<td><input type="text" class="form-control" name="egeYear"  value ="{{item.year}}" readonly></td>
+												</tr>
+											{% endfor %}
+										{% else %}
+											<tr class="info">
+												<td><input type="hidden" class="form-control" name="egeDisc"><input type="hidden" name="examId" value ="-1"></td>
+												<td><input type="text" class="form-control" name="egePoints" readonly></td>
+												<td><input type="text" class="form-control" name="egeYear" readonly></td>
+												</tr>
+										{% endif %}
+										</tbody>
+									</table>
+								</div>
+								<div class="row">
+									<button class="btn btn-primary btn-block" type="button" id="addExam2">Добавить</button>
 								</div>
 								<div class="row">
 									<div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-1">
