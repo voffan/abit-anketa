@@ -129,7 +129,7 @@ class Education(models.Model):
 	level = models.ForeignKey('AttrValue', verbose_name=u'Уровень образования', limit_choices_to={'attribute__name':u'Уровень образования'}, db_index =True)
 	enterDate = models.DateField(u'Дата поступления')
 	def __str__(self):
-		return self.abiturient.fullname+' '+self.contact_type.level
+		return self.abiturient.fullname+' '+str(self.level)
 
 class DocAttr(models.Model):
 	doc = models.ForeignKey('Docs', verbose_name=u'Документ')

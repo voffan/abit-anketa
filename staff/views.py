@@ -25,6 +25,11 @@ def CheckUserIsStaff(user):
 		return True
 	else:
 		return False
+def CheckUserIsSuperuser(user):
+	if user.is_superuser:
+		return True
+	else:
+		return False
 
 @login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
@@ -59,18 +64,18 @@ def logout(request):
 	return redirect('/auth')
 
 @login_required(login_url = '/auth')
-@user_passes_test(CheckUserIsStaff, login_url = '/auth')
+@user_passes_test(CheckUserIsSuperuser, login_url = '/auth')
 def Employee_list(request):
 	if request.method == 'POST':
-		if 'Delete' in request.POST:
-			ids = request.POST.getlist('selected')
+		ids = request.POST.getlist('selected')
+		if 'Delete' in request.POST:			
+			Del_Employee(ids)
 			return HttpResponseRedirect(reverse('staff:employee_list'))
 		elif 'Add' in request.POST:
 			return HttpResponseRedirect(reverse('staff:employee_add'))
-		elif 'test' in request.POST:
-			return HttpResponse('test')
-		else:
-			return HttpResponse('Employee fired')
+		elif 'Fired' in request.POST:
+			Fired_Employee(ids)
+			return HttpResponseRedirect(reverse('staff:employee_list'))
 	employee_manage = Employee.objects.all()
 	data={}
 	data['employee'] = employee_manage
@@ -78,9 +83,37 @@ def Employee_list(request):
 	context.update(csrf(request))
 	return render(request,'staff\employee_manage.html',  context)
 
+@login_required(login_url = '/auth')
+@user_passes_test(CheckUserIsSuperuser, login_url = '/auth')
+@transaction.atomic
+def Fired_Employee(values):
+	if len(values)>0:
+		for item in values:
+			usr = User.objects.select_related('Employee').filter(employee=item).first()
+			if usr.is_staff == True and usr.is_superuser == False:
+				empl = Employee.objects.filter(id = item).first()
+				empl.active = 0
+				usr.is_active = 0
+				empl.save()
+				usr.save()
+
+@login_required(login_url = '/auth')
+@user_passes_test(CheckUserIsSuperuser, login_url = '/auth')
+@transaction.atomic
+def Del_Employee(values):
+	if len(values)>0:
+		for item in values:
+			usr = User.objects.select_related('Employee').filter(employee=item).first()
+			if usr.is_staff == True and usr.is_superuser == False:
+				empl = Employee.objects.filter(id = item)
+				empl.delete()
+				usr.delete() 
+
+#@login_required(login_url = '/auth')
+#@user_passes_test(CheckUserIsSuperuser, login_url = '/auth')
 @transaction.atomic
 def Add_Employee(values):
-	empl_id = values.get('user-id','')
+	empl_id = values.get('user-id','')	
 	if len(empl_id)>0:
 		employee = Employee.objects.get(pk=empl_id)
 		user = employee.user
@@ -88,9 +121,11 @@ def Add_Employee(values):
 		user.save()
 	else:
 		user = User.objects.create_user(values['username'], values['email'],values['password'])
+		user.is_staff = True
+		user.save()
 		employee = Employee()
 		employee.user = user
-	dep = Department.objects.get(pk=values['department'])
+	dep = EduOrg.objects.get(pk=values['department'])
 	posit = Position.objects.get(pk=values['position'])
 	employee.department = dep
 	employee.first_name = values.get('fname','')
@@ -101,7 +136,7 @@ def Add_Employee(values):
 	employee.save()
 
 @login_required(login_url = '/auth')
-@user_passes_test(CheckUserIsStaff, login_url = '/auth')
+@user_passes_test(CheckUserIsSuperuser, login_url = '/auth')
 def AddEmployee(request):
 	if request.method == 'POST':
 		try:
@@ -193,9 +228,9 @@ def Employee_Useraccount(request):
 @login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Application_list (request):
-	applications = Application.objects.all()
+	employee = request.user.employee_set.get()
+	applications = Application.objects.filter(department=employee.department)
 	appProfile = ApplicationProfiles.objects.all()
-	#employee = request.user.employee_set.get()
 	#applications = Application.objects.select_related('Abiturient').filter(department__id = employee.department.id)
 	#profiles = Profile.objects.all()
 	select = '0'
@@ -292,14 +327,10 @@ def Application_list (request):
 			#applications = applications.filter(edu_prog__edu_prog__qualification__id=selectprof)
 			filters['profil'] = int(selectprof)
 
-
 	if 'cancel' in request.GET:
 		return HttpResponseRedirect(reverse('staff:application_list'))
-
-
 	
 	app_pages = Paginator(applications, 4)
-
 	page = request.GET.get('page')
 	try:
 		current_page = app_pages.page(page)
@@ -307,25 +338,15 @@ def Application_list (request):
 		current_page = app_pages.page(1)
 	except EmptyPage:
 		current_page = app_pages.page(app_pages.num_pages)
-
-	applications = current_page.object_list
-	
+	applications = current_page.object_list	
 	abiturients = [app.abiturient.id for app in applications]
-
-	
-	
-
-
 	docs = Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains=u'аттестат')|Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains=u'Диплом')
-	
-
 	apps_with_docs=[]
 	for app in applications:
 		doc = docs.filter(abiturient__id = app.abiturient.id).first()
 		prof = appProfile.filter(application__id=app.id)
 		print(prof)		
-		apps_with_docs.append({'app':app, 'doc':doc, 'prof':prof})
-	
+		apps_with_docs.append({'app':app, 'doc':doc, 'prof':prof})	
 	doctyps = AttrValue.objects.filter(
 		attribute__name__icontains=u'об образовании'
 	).filter(
@@ -333,9 +354,7 @@ def Application_list (request):
 	)|AttrValue.objects.filter(
 		value__icontains=u'Аттестат'
 	)
-
 	profill = AttrValue.objects.filter(attribute__name__icontains=u'Квалификация')
-
 	data={}
 	data['applications'] = apps_with_docs
 	data['docType'] = doctyps
@@ -439,14 +458,14 @@ def Application_review (request, application_id):
 	context.update(csrf(request))
 	return render(request,'staff\\wizardform.html',context)
 
-
+@transaction.atomic
 def attribute_dels(values):
 	dels = values.getlist('selected')
 	for item in dels:
 		attri_bute = Attribute.objects.filter(id=item)
 		attri_bute.delete()
 
-
+@transaction.atomic
 def attrvalue_dels(values):
 	dels = values.getlist('selected')
 	if len(dels)>0:
@@ -454,7 +473,7 @@ def attrvalue_dels(values):
 			attr_value = AttrValue.objects.filter(id=item)
 			attr_value.delete()
 
-
+@transaction.atomic
 def attribute_add(values):
 	if int(values['attr_id'])<0:
 		attri_bute = Attribute(name=values['attr_name'],type_id=values['attrtype'])
@@ -463,7 +482,7 @@ def attribute_add(values):
 		attri_bute.name = values['attr_name']
 	attri_bute.save()
 
-
+@transaction.atomic
 def attrvalue_add(attribute, values):
 	if int(values['attr_value_id'])<0:
 		attr_value_add = AttrValue(value=values['attr_value'], attribute_id=attribute.id)
@@ -475,6 +494,8 @@ def attrvalue_add(attribute, values):
 @login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Catalogs(request):
+	user = User.objects.filter(id = request.user.id).first()
+	print(user) 
 	attribute = Attribute.objects.all()
 	Data={}
 	if request.method == 'POST':
@@ -485,11 +506,13 @@ def Catalogs(request):
 		if 'reset' in request.POST:
 			return HttpResponseRedirect(reverse('staff:catalogs'))
 
-	if 'delete' in request.POST:		
-		attribute_dels(request.POST)
+	if 'delete' in request.POST:
+		if user.is_superuser:		
+			attribute_dels(request.POST)
 
 	if 'save' in request.POST and len(request.POST.get('attr_name',''))>0:
-		attribute_add(request.POST)
+		if user.is_superuser:
+			attribute_add(request.POST)
 	    
 	attribute1 = Attribute.objects.all()    
 	attrvalue = AttrValue.objects.all()
@@ -505,17 +528,20 @@ def Catalogs(request):
 	
 @login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
-def Catalogs_attrvalue(request, attribute_id):    
+def Catalogs_attrvalue(request, attribute_id):
+	user = User.objects.filter(id = request.user.id).first() 
 	attribute = Attribute.objects.get(pk=attribute_id)
 	attrvalue = AttrValue.objects.filter(attribute__id=attribute_id)
 	if 'delete' in request.POST:
-		attrvalue_dels(request.POST)
+		if user.is_superuser:
+			attrvalue_dels(request.POST)
 	error_message = ''
 	if 'save' in request.POST and len(request.POST['attr_value'])>0:
-		try:
-			attrvalue_add(attribute, request.POST)
-		except Exception as e:
-			error_message = str(e)
+		if user.is_superuser:
+			try:
+				attrvalue_add(attribute, request.POST)
+			except Exception as e:
+				error_message = str(e)
 	
 	Data={}
 	Data['attrvalue'] = attrvalue

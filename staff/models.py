@@ -12,6 +12,7 @@ class Employee(models.Model):
 	first_name = models.CharField(u'Фамилия', max_length=100)
 	mid_name = models.CharField(u'Имя', max_length = 100)
 	last_name = models.CharField(u'Отчество', max_length = 100)
+	active = models.BooleanField(u'Активен',default=True)
 	def __str__(self):
 		return self.fullname
 
