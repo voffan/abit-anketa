@@ -60,14 +60,14 @@
 			<th>Профиль</th>
 			<th>Сумма баллов</th>
 			<th>Статус</th>
-			<th>Выделить</th>
+			<th>Номер заявления</th>
 		</tr>
 		</thead>
 		<thead>
 		<tr>
 		<th st-sort="#"></th>
 		<th st-sort="FIO">
-			<input name="fio" class="form-control" placeholder="Фамилия Имя Отчество" value="{{ filters.fio }}"/>
+			<input name="fio" pattern="^[А-Яа-яЁё\s]+$" class="form-control" placeholder="Фамилия Имя Отчество" value="{{ filters.fio }}"/>
 		</th>
 		<th st-sort="Form">
 			<select class="form-control" name="forma" id="forma" placeholder="Форма Обучения">
@@ -113,8 +113,8 @@
 			</select>         
 		</th>
 		<th st-sort="bali" width="8%">
-					<input name="balli1" class="form-control" placeholder=">" value="{{ filters.balli1 }}"/>
-					<input name="balli2" class="form-control" placeholder="<" value="{{ filters.balli2 }}"/>
+					<input pattern="[0-9]{,3}"<--kak pattern propyskaet bykvi?~_~ type="number" name="balli1" class="form-control" placeholder=">123" value="{{ filters.balli1 }}"/>
+					<input pattern="[0-9]{,3}" type="number" <--kak type otmenyaet pattern?~_~ name="balli2" class="form-control" placeholder="<123" value="{{ filters.balli2 }}"/>
 		</th>
 		<th st-sort="state">
 			<select class="form-control" name="status" id="status">
@@ -125,6 +125,7 @@
 			</select>
 		</th>
 		<th>
+			<input type="number" name="appNumb" class="form-control" placeholder="№" value="{% if error_message %} {{ error_message }}{% else %}{{ filters.appNumb }}{% endif %}"/>
 			<button type="submit" class="btn btn-primary" name="cancel" >Сбросить фильтр</button>
 			<button type="submit" class="btn btn-primary" name="apply" >Применить фильтр</button>
 		</th>

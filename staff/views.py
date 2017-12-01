@@ -238,12 +238,14 @@ def Application_list (request):
 	selectnapr = '0'
 	selectdoc = '0'
 	selectcopy = '0'
+	selectNumb = '0'
 	fname = '0'
 	bal1 = '0'
 	bal2 = '0'
 	dategt = '2016-01-01'
 	datelt = '0'
-	selectprof = '0'     
+	selectprof = '0'
+	error_message=''     
 	filters={'apply':''}
 
 	if 'apply' in request.GET:
@@ -315,7 +317,6 @@ def Application_list (request):
 			applications = applications.filter(date__lt=datelt)
 			filters['datedoc2'] = datelt
 
-
 		if 'napravlenie' in request.GET and int(request.GET['napravlenie'])>0:
 			selectnapr = request.GET['napravlenie']
 			applications = applications.filter(edu_prog__edu_prog__id=selectnapr)
@@ -326,6 +327,14 @@ def Application_list (request):
 			applications = app_profil.filter(profile_id=selectprof)
 			#applications = applications.filter(edu_prog__edu_prog__qualification__id=selectprof)
 			filters['profil'] = int(selectprof)
+	
+		if 'appNumb' in request.GET and len(request.GET['appNumb'])>0:
+			selectNumb = request.GET['appNumb']			
+			applications = applications.filter(id=selectNumb)
+			if not applications:
+				error_message = "vibrannoe zayavlenie vne vashei iyrezdikcii" #ne ny po4ti rabotaet
+			filters['appNumb'] = (selectNumb)
+		#kak vse eto rabotaet -_-
 
 	if 'cancel' in request.GET:
 		return HttpResponseRedirect(reverse('staff:application_list'))
@@ -356,6 +365,7 @@ def Application_list (request):
 	)
 	profill = AttrValue.objects.filter(attribute__name__icontains=u'Квалификация')
 	data={}
+	data['errors'] = error_message
 	data['applications'] = apps_with_docs
 	data['docType'] = doctyps
 	data['profill'] = profill
