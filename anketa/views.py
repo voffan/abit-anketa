@@ -829,6 +829,7 @@ def ExamSubject(request):
 
 def ExamType(request):
 	subjects = AttrValue.objects.filter(attribute__name__icontains=u'Тип экзамена').exclude(name__icontains=u'вступ')
+	print(subjects)
 	result = []
 	for item in subjects:
 		result.append({'id':item.id, 'text':item.value})

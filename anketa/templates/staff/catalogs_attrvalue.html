@@ -32,7 +32,7 @@
 						$('#myModalLabel').html('Изменить значение атрибута '+'"'+data[0]['attribut']+'"');
 					},
 					error:function(){
-						alert:('4toto poshlo ne tak');
+						alert('4toto poshlo ne tak');
 					}
 				})			
 			});
@@ -57,13 +57,13 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">Добавить новое значение атрибута "{{ data.attribute.name }}"</h4>
       </div>
-      <div class="modal-body">
-	  	<div class="panel-body">
-	  		<input type="text" name="attr_value_id" id="attr_value_id" hidden value="">
-		<input type="text" class="form-control" name = "attr_value" id="attr_value" placeholder="значение атрибута" value ="">
-		<p></p>			
-	  </div>
-      </div>
+	      <div class="modal-body">
+			  	<div class="panel-body">
+			  		<input type="text" name="attr_value_id" id="attr_value_id" hidden value="">
+					<input type="text" class="form-control" name = "attr_value" id="attr_value" placeholder="значение атрибута" value ="">
+					<p></p>			
+			  	</div>
+	      </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" name="close">Закрыть</button>
         <button type="submit" class="btn btn-primary" name="save">Сохранить</button>

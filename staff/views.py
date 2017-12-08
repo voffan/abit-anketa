@@ -229,7 +229,10 @@ def Employee_Useraccount(request):
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Application_list (request):
 	employee = request.user.employee_set.get()
-	applications = Application.objects.filter(department=employee.department)
+	if request.user.is_superuser:
+		applications = Application.objects.all()
+	else:		
+		applications = Application.objects.filter(department=employee.department)
 	appProfile = ApplicationProfiles.objects.all()
 	#applications = Application.objects.select_related('Abiturient').filter(department__id = employee.department.id)
 	#profiles = Profile.objects.all()
@@ -339,7 +342,7 @@ def Application_list (request):
 	if 'cancel' in request.GET:
 		return HttpResponseRedirect(reverse('staff:application_list'))
 	
-	app_pages = Paginator(applications, 4)
+	app_pages = Paginator(applications, 10)
 	page = request.GET.get('page')
 	try:
 		current_page = app_pages.page(page)
@@ -369,7 +372,6 @@ def Application_list (request):
 	data['applications'] = apps_with_docs
 	data['docType'] = doctyps
 	data['profill'] = profill
-	print(data['profill'])
 	data['Profile'] = Education_Prog.objects.all()
 	data['Docs'] = Docs.objects.all()
 	data['Application'] = AttrValue.objects.filter(attribute__name__icontains=u'статус за')
@@ -380,13 +382,10 @@ def Application_list (request):
 
 @login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
-def Application_review (request, application_id):
-	if request.method =='POST':
-		return HttpResponseRedirect(reverse('staff:application_list'))
+def Application_review (request, application_id):	
+	#return HttpResponseRedirect(reverse('staff:application_list'))
 	application = Application.objects.select_related('Abiturient').get(pk=application_id)	
 	#passp = AttrValue.objects.filter(attribute__id = 6)
-	
-	snils = application.abiturient.docs_set.filter(docType__value__icontains=u'СНИЛС').first()
 	passp = application.abiturient.docs_set.filter(docType__value__icontains=u'Паспорт').first()
 	if passp is None:
 		passp = application.abiturient.docs_set.filter(docType__value__icontains=u'Загран').first()
@@ -408,7 +407,7 @@ def Application_review (request, application_id):
 	snils = application.abiturient.docs_set.filter(docType__value__icontains=u'СНИЛС').first()
 	foreign_lang = AttrValue.objects.filter(attribute__name__icontains=u'Изучаемый язык')
 	docissuer = AttrValue.objects.filter(attribute__name__icontains=u'выдавший ')
-	nationality = AttrValue.objects.filter(attribute__name__icontains=u'национальность')
+	nationality = AttrValue.objects.filter(attribute__name__icontains=u'национальность')	
 	doctype = AttrValue.objects.exclude(value__icontains=u'диплом').exclude(value__icontains=u'аттест').exclude(value__icontains=u'СНИЛС').filter(attribute__name__icontains=u'тип документа')
 	Data['edudoctype'] = AttrValue.objects.filter(value__icontains=u'диплом')|AttrValue.objects.filter(value__icontains=u'аттестат')
 	contactyp = AttrValue.objects.filter(attribute__name__icontains=u'Тип контакта')
@@ -420,7 +419,9 @@ def Application_review (request, application_id):
 		cont_value = Contacts.objects.filter(person__id=item.person.id).first().value
 		cont_type = item.relType
 		relcontacts.append({'id':item.id,'text':text, 'cont':cont_value, 'type':{'name':cont_type.value,'id':cont_type.id}})
-	
+
+	application_profile = ApplicationProfiles.objects.filter(application=application_id)
+
 	Data['relation'] = relcontacts
 	Data['rel_type'] = AttrValue.objects.filter(attribute__name__icontains=u'тип связи')
 	Data['nationality'] = nationality
@@ -431,12 +432,10 @@ def Application_review (request, application_id):
 	Data['foreign_lang'] = foreign_lang
 	Data['passp'] = passp
 	Data['rank'] = rank
-	Data['snils'] = snils
-	
 	Data['application']=application
 	Data['contacts'] = Contacts.objects.filter(person_id=application.abiturient.id)	
 	Data['address'] = Address.objects.filter(pk=application_id)
-	Data['education_prog'] = Education_Prog.objects.filter(pk=application_id)
+	Data['education_prog'] = application_profile
 	Data['exams'] = Exams.objects.filter(pk=application_id)
 	Data['privilegies'] = Privilegies.objects.filter(pk=application_id)
 	Data['depachieves'] = DepAchieves.objects.filter(pk=application_id)
@@ -452,7 +451,6 @@ def Application_review (request, application_id):
 	contacts_type = AttrValue.objects.filter(attribute__name__icontains=u'Тип контакта')
 	if contacts_type is not None:
 		Data['contacts_type']=contacts_type
-	print(application.abiturient.foreign_lang)
 	person_contacts = person.contacts_set.all()
 	if person.contacts_set is not None:
 		contacts=[]
@@ -463,6 +461,15 @@ def Application_review (request, application_id):
 			contacts.append(cont)
 		Data['contacts1']=contacts
 	
+	if request.method =='POST':
+		if 'upvote' in request.POST:
+			application.appState = AttrValue.objects.filter(value=u'Подтвержденный').first()
+			application.save()
+		if 'unvote' in request.POST:
+			application.appState = AttrValue.objects.filter(value=u'Анулированный').first()
+			application.save()
+		if 'backspace' in request.POST:
+			return HttpResponseRedirect(reverse('staff:application_list'))
 
 	context = {'data':Data}
 	context.update(csrf(request))
@@ -505,7 +512,6 @@ def attrvalue_add(attribute, values):
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Catalogs(request):
 	user = User.objects.filter(id = request.user.id).first()
-	print(user) 
 	attribute = Attribute.objects.all()
 	Data={}
 	if request.method == 'POST':
@@ -561,8 +567,195 @@ def Catalogs_attrvalue(request, attribute_id):
 	context.update(csrf(request))
 	return render(request, 'staff\catalogs_attrvalue.html', context)
 
+@login_required(login_url = '/auth')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
+def Edu_orgs(request):
+	user = User.objects.filter(id = request.user.id).first()
+	edu_orgs = EduOrg.objects.all()
+	Data={}
+	if request.method == 'POST':
+		if 'filter' in request.POST:
+			pass
+		if 'reset' in request.POST:
+			pass
+
+	if 'del' in request.POST:
+		if user.is_superuser:
+			edu_org_dels(request.POST)
+	if 'save' in request.POST and len(request.POST.get('edu_org_name',''))>0:
+		if user.is_superuser:
+			edu_org_add(request.POST)
+
+	edu_orgs_type = AttrValue.objects.filter(attribute__name__icontains=u'Тип образовательного')
+
+	Data['edu_orgs'] = edu_orgs
+	Data['edu_orgs_type'] = edu_orgs_type
+	context = {'data':Data}
+	context.update(csrf(request))
+	return render(request, 'staff\edu_orgs.html', context)
+
+@login_required(login_url = '/auth')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
+def Edu_org_progs(request, edu_org_id):
+	user = User.objects.filter(id = request.user.id).first()
+	edu_org = EduOrg.objects.get(pk=edu_org_id)
+	edu_org_progs = Education_Prog.objects.filter(eduorg__id=edu_org_id)
+	Data={}
+	error_message=''
+	if request.method == 'POST':
+		if 'filter' in request.POST:
+			pass
+		if 'reset' in request.POST:
+			pass
+
+	if 'del' in request.POST:
+		if user.is_superuser:
+			edu_org_prog_dels(request.POST)
+	if 'save' in request.POST and len(request.POST.get('edu_org_prog_name',''))>0:
+		if user.is_superuser:
+			try:
+				edu_org_prog_add(edu_org, request.POST)
+			except Exception as e:
+				error_message = str(e)
+
+	edu_orgs_type = AttrValue.objects.filter(attribute__name__icontains=u'Тип образовательного')
+
+	Data['edu_org'] = edu_org
+	Data['edu_org_progs'] = edu_org_progs
+	Data['error_message'] = error_message
+	Data['edu_org_dur'] = AttrValue.objects.filter(attribute__name__icontains=u'Срок обучения')
+	Data['edu_org_qual'] = AttrValue.objects.filter(attribute__name__icontains=u'Квалификация')
+	context = {'data':Data}
+	context.update(csrf(request))
+	return render(request, 'staff\edu_org_progs.html', context)
+
+@login_required(login_url = '/auth')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
+def Edu_org_prog_profs(request, edu_org_prog_id):
+	user = User.objects.filter(id = request.user.id).first()
+	edu_org_prog = Education_Prog.objects.get(pk=edu_org_prog_id)
+	Data={}
+	error_message=''
+	if request.method == 'POST':
+		if 'filter' in request.POST:
+			pass
+		if 'reset' in request.POST:
+			pass
+
+	if 'del' in request.POST:
+		if user.is_superuser:
+			edu_org_prog_profs_dels(request.POST)
+	if 'save' in request.POST and len(request.POST.get('edu_org_prog_name',''))>0:
+		if user.is_superuser:
+			try:
+				edu_org_prog_prof_add(edu_org_prog, request.POST)
+			except Exception as e:
+				error_message = str(e)
+
+	edu_org_prog_profs = Profile.objects.all()
+
+	Data['edu_org_prog_profs'] = edu_org_prog_profs
+	Data['edu_org_prog'] = edu_org_prog
+	Data['error_message'] = error_message
+	context = {'data':Data}
+	context.update(csrf(request))
+	return render(request, 'staff\edu_org_prog_profs.html', context)
+
+@transaction.atomic
+def edu_org_prog_profs_dels(values):
+	dels = values.getlist('selected')
+	for item in dels:
+		edu_org_prog_profs = Profile.objects.filter(id=item)
+		edu_org_prog_profs.delete()
+
+@transaction.atomic
+def edu_org_prog_profs_add(edu_org_prog,values):
+	if int(values['edu_org_prog_prof_id'])<0:
+		edu_org_prog_prof = Profile(name=values['edu_org_prog_prof_name'], edu_prog_id=edu_org_prog.id)
+		if Profile.objects.filter(name=values['edu_org_prog_prof_name'], edu_prog_id=edu_org_prog.id).first() == None:
+			edu_org_prog_prof.save()
+	else:
+		edu_org_prog_prof = Profile.objects.get(pk=values['edu_org_prog_prof_id'])
+		edu_org_prog_prof.name = values['edu_org_prog_prof_name']
+		edu_org_prog_prof.save()
+
+@transaction.atomic
+def edu_org_dels(values):
+	dels = values.getlist('selected')
+	for item in dels:
+		edu_org = EduOrg.objects.filter(id=item)
+		edu_org.delete()
+
+@transaction.atomic
+def edu_org_add(values):
+	if int(values['edu_org_id'])<0:
+		edu_org = EduOrg(name=values['edu_org_name'], orgtype_id=values['edu_org_type'])
+		if EduOrg.objects.filter(name=edu_org.name, orgtype_id=edu_org.orgtype.id).first() == None:
+			edu_org.save()
+	else:
+		edu_org = EduOrg.objects.get(pk=values['edu_org_id'])
+		edu_org.name = values['edu_org_name']
+		edu_org.save()
+
+@transaction.atomic
+def edu_org_prog_dels(values):
+	dels = values.getlist('selected')
+	if len(dels)>0:
+		for item in dels:
+			edu_org_prog = Education_Prog.objects.filter(id=item)
+			edu_org_prog.delete()
+
+@transaction.atomic
+def edu_org_prog_add(edu_org, values):
+	if int(values['edu_org_prog_id'])<0:
+		edu_org_prog_add = Education_Prog(eduorg_id=edu_org.id,name=values['edu_org_prog_name'],qualification_id=values['edu_org_qual'],duration_id=values['edu_org_duration'])		
+		if Education_Prog.objects.filter(eduorg_id=edu_org.id, name=values['edu_org_prog_name'],qualification_id=values['edu_org_qual'],duration_id=values['edu_org_duration']).first() == None:
+			edu_org_prog_add.save()
+		
+	else:
+		edu_org_prog_add = Education_Prog.objects.get(pk=values['edu_org_prog_id'])
+		edu_org_prog_add.name = values['edu_org_prog_name']
+		edu_org_prog_add.duration.id = values['edu_org_duration']
+		edu_org_prog_add.qualification.id = values['edu_org_qual']
+		edu_org_prog_add.save()
+
+
+
+
 #=================================================ajax functions==========================================================
 
+@login_required(login_url = '/auth')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
+def Edu_org_prog_profs_get(request):
+	text = request.GET.get('query','')
+	item = Profile.objects.select_related('Education_Prog').get(pk=text)
+	result=[{'name':item.name, 'edu_prog':item.edu_prog.id}]
+	return HttpResponse(json.dumps(result), content_type="application/json")
+
+
+@login_required(login_url = '/auth')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
+def Edu_orgs_value(request):
+	text = request.GET.get('edu_org_id','')
+	item = EduOrg.objects.select_related('AttrValue').get(pk= text)
+	if item.orgtype:
+		org_type = {'id':item.orgtype.id,'name':item.orgtype.value}
+	else:
+		org_type = {}
+	result = [{ 'name':item.name, 'id':item.id,'type':org_type}]
+	return HttpResponse(json.dumps(result), content_type="application/json")
+
+@login_required(login_url = '/auth')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
+def Edu_org_progs_get(request):
+	text = request.GET.get('query','')
+	item = Education_Prog.objects.select_related('EduOrg').get(pk=text)
+	if item.duration:
+		dur = item.duration.id
+	else:
+		dur = ''
+	result = [{'name':item.name, 'id':item.id, 'eduorg':item.eduorg.name, 'qual':item.qualification.id, 'dur':dur}]
+	return HttpResponse(json.dumps(result),content_type="application/json")
 
 @login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
