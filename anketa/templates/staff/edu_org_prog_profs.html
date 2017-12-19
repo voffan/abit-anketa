@@ -1,0 +1,117 @@
+{% extends 'staff\base.html' %}
+{% block head %}
+	Направления/специальности "{{ data.edu_org_prog.name }}"
+{% endblock %}
+
+{% load staticfiles %}
+
+{% block scripts %}
+	<script>
+		$(document).ready(function(){			
+			
+			$('#edu_org_prog_prof_detail').on('hide.bs.modal',function(event){
+			var button = $(event.relatedTarget)
+				$('#edu_org_prog_prof_details_form').submit();			
+			});
+
+        	$('.change').on('click',function(){	
+            	var $value = $(this).attr('value');
+            	$.ajax({
+					url: "{% url 'staff:edu_org_prog_profs_get' %}",					
+					method: "GET",
+					data: {
+						'query':$value,
+					},
+					dataType: "json",
+					dataProcess:true,
+					success:function(data)
+					{
+						/*
+						$('option:selected').removeAttr('selected');
+						$('#edu_org_prog_id_detail').val(data[0]['id']);
+						$("#edu_org_qual_detail>option[value='"+data[0]['qual']+"']").attr('selected','selected');
+						$("#edu_org_duration_detail>option[value='"+data[0]['dur']+"']").attr('selected','selected');
+						$('#edu_org_prog_name_detail').val(data[0]['name']);
+						$('#edu_org_prog_detail').modal();
+						$('#myModalLabel').html('Изменить направление/специальность '+'"'+data[0]['eduorg']+'"');
+						*/
+					},
+					error:function(){
+						alert('4toto poshlo ne tak');
+					}
+
+				});
+           	});
+           	$('#add').on('click',function(){
+           		//$('#myModalLabel').html("Новое учреждение\\факультет");
+           		$('#edu_org_prog_prof_id_detail').val('-1');
+           		$('#edu_org_prog_prof_detail').modal();
+           	});
+		});
+	</script>
+{% endblock %}
+
+{% block content %}
+	<!-- Modal addtibute detail -->
+	<div class="modal fade" id="edu_org_prog_prof_detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	    	<form action="" method="POST" id="edu_org_prog_prof_details_form">
+	      	{% csrf_token %}
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	        <h4 class="modal-title" id="myModalLabel">Добавить новый профиль в "{{ data.edu_org_prog.name }}"</h4>
+	      </div>
+	      <div class="modal-body">
+	      			<input type="text" name="edu_org_prog_prof_id" id="edu_org_prog_prof_id_detail" value="" hidden>
+					<p></p>
+					<label class="control-label">Название:</label>
+					<input type="text" class="form-control" name = "edu_org_prog_prof_name" id="edu_org_prog_prof_name_detail" value ="" placeholder="Название профиля">
+					<p></p>								
+		  </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal" name="Close">Закрыть</button>
+	        <button type="submit" class="btn btn-primary" name="save">Сохранить</button>
+	      </div>
+	  		</form>
+	    </div>
+	  </div>
+	</div>
+	<!-- End Modal-->
+	
+		<div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2">
+			<div class="panel panel-default">
+				<div class="panel-heading">Список рофилей</div>
+				<div class="panel-body">
+					<form action="" method="POST">
+					{% csrf_token %}
+						<p>
+							<button type="button" class="btn btn-primary btn-ng" id="add">Добавить</button>
+							<button type="submit" class="btn btn-danger" name="del">Удалить</button>
+							<button type="submit" class="btn btn-info" name="return">Назад</button>
+						</p>
+						<table class="table table table-bordered table-hover">
+							<thead>
+								<tr>
+									<th width="3%">№</th>
+									<th>Профиль</th>
+									<th width="2%">v</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for item in data.edu_org_prog_profs %}
+									<tr>
+										<td>{{forloop.counter}}</td>
+										<td>
+											<a href="" class="change" name="edu_org_prog_prof_name" id="edu_org_prog_prof_name_{{item.id}}" value="{{item.id}}" data-toggle="modal">{{ item.name }}</a>
+										</td>
+										<td><input type="checkbox" name="selected" value="{{item.id}}"></td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</form>
+				</div><!--panel body-->
+			</div><!--panel-->
+		</div>
+{% endblock %}

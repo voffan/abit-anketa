@@ -32,6 +32,18 @@
 		var egerows = 1;
 		{% endif %}
 		var maxExams = 15;
+
+		{% if exams %}
+			var addrows={{add_exams|length}}
+			{% for item in add_exams %}
+				sub_id.push({{item.subject}});
+				sub_val.push("{{item.subject_value}}");
+			{% endfor %}
+		{% else %}
+		var addrows = 1;
+		{% endif %}
+		var maxAddExams = 15;
+
 		{% if contacts %}
 			var contactsrow = {{contacts|length}};
 		{% else %}
@@ -799,7 +811,7 @@ $(document).ready(function(){
 										<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
 											<p>
 												<label for="inila">СНИЛС</label>
-												<input id="inila" name="inila" class="form-control" placeholder="123-456-789-00" {% if inila %} value={{inila}} {% endif %}/>
+												<input id="inila" name="inila" class="form-control" placeholder="123-456-789-00" {% if inila %} value="{{inila}}" {% endif %}/>
 											</p>
 										</div>
 									</div>

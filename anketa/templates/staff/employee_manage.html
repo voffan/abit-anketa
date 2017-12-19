@@ -27,7 +27,7 @@
                     </thead>
                     <tbody>
                             {% for employee in data.employee %}
-                            <tr>
+                            <tr {% if employee.active == 0 %} class="danger"{% else %} class="info"{% endif %}>
                               <td>{{ forloop.counter }}</td>
                               <td><a href="{% url 'staff:employee_edit' employee.id %}">{{ employee.fullname }}</a></td>
                               <td>{{ employee.department.name }}</td>
@@ -37,10 +37,10 @@
                             {% endfor %}
                     </tbody>
     </table>
-                    <div class="pull-right">
-                        <button type="submit" class="btn btn-default" name="Delete">Удалить</button>
-                        <button type="submit" class="btn btn-default" name="Add">Добавить</button>
-                        <button type="submit" class="btn btn-default" name="Fired">Уволить</button>
+                    <div class="pull-right">                        
+                        <button type="submit" class="btn btn-info" name="Add">Добавить</button>
+                        <button type="submit" class="btn btn-warning" name="Fired">Уволить</button>
+                        <button type="submit" class="btn btn-danger" name="Delete">Удалить</button>
                     </div>
 </form>
 {% endblock %}

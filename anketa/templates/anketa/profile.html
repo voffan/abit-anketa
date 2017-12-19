@@ -94,7 +94,7 @@
 						</div>
 						<div class="panel-body">
 						{% if applications %}
-							<table class="table">
+							<table class="table table-hover">
 								<thead>
 									<tr>
 										<th>Номер заявления</th>
@@ -105,7 +105,7 @@
 								</thead>
 								<tbody>
 									{% for item in applications %}
-										<tr {% if item.appState.value == "Поданно" %} class="info" {% else %} {% if item.appState.value == "Экспортированно" %} class="success" {% else %} class="info" {% endif %} {% endif %}>
+										<tr {% if item.app.appState.value == "Анулированный" %} class="danger" {% endif %}{% if item.app.appState.value == "Поданный" %} class="info palec" id="{{item.app.id}}app"{% endif %}{% if item.app.appState.value == "Экспортированный" %} class="success palec"{% endif %} {% if item.app.appState.value == "Подтвержденный" %} class="success palec" id="{{item.app.id}}app"{% endif %}>
 											<td>{{item.app.id}}</td>
 											<td>{{item.app.department}}</td>
 											<td>{{item.prof.profile.profile.edu_prog.name}}</td>
@@ -146,5 +146,15 @@ $(document).on("click", "input[id='contacts']", function(){
 	window.location.href="{% url 'persondata' %}";
 	saveGlobalVar('li',3);
 });
+$(document).on("click","tr[id*='app']", function(e){
+		e.preventDefault();
+		window.location.href="{% url 'applicationList' %}"; 
+		saveGlobalVar("rowId",this.id);
+	});
 </script>
+<style>
+.palec:hover {
+    cursor: pointer;
+}
+</style>
 {% endblock %}
