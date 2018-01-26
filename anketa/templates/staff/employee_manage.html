@@ -4,6 +4,13 @@
 Управление сотрудниками
 {% endblock %}
 
+{% block scripts %}
+<script>
+  
+</script>
+
+{% endblock %}
+
 {% block content %}
     {% load staticfiles %}
 <form action = "" method="post">
@@ -14,9 +21,9 @@
                                 <th width="3%">#</th>
                                 <th width="40%">
                                     <div class="input-group">
-                                      <input type="text" class="form-control" name="fio" placeholder="Фамилия имя отчество">
+                                      <input type="text" class="form-control" pattern="^[А-Яа-яЁё\s]+$" name="fio" id="fio" placeholder="Фамилия имя отчество">
                                       <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button">Go!</button>
+                                        <button class="btn btn-default" name="finde" id="finde" type="submit">Go!</button>
                                       </span>
                                     </div>
                                 </th>

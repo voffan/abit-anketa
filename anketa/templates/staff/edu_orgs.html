@@ -39,10 +39,16 @@
 					{
 						$('option:selected').removeAttr('selected');
 						$('#edu_org_id_detail').val(data[0]['id']);
-						$("#edu_org_type_detail>option[value='"+data[0]['type']['id']+"']").attr('selected','selected');
+						$("#edu_org_type_detail>option[value='"+data[0]['type']['id']+"']").attr('selected','selected');						
 						$('#edu_org_name_detail').val(data[0]['name']);
+						$("#edu_org_head_detail>option[value='"+data[0]['head']+"']").attr('selected','selected');
+						$("#edu_org_head_detail>option[value='"+data[0]['id']+"']").attr('disabled','disbled');
 						$('#edu_org_detail').modal();
 						$('#myModalLabel').html('Изменить учреждение '+'"'+data[0]['name']+'"');
+						if(data[0]['error']!=''){
+							$('#alert_eduorg_type').attr('class','alert alert-warning alert-dismissable');
+						}
+						
 					},
 					error:function(){
 						alert('4toto poshlo ne tak');
@@ -54,6 +60,9 @@
            		$('#myModalLabel').html("Новое учреждение\\факультет");
            		$('#edu_org_id_detail').val('-1');
            		$('#edu_org_detail').modal();
+           	});
+           	$('.edu_org_type').change(function(){
+           		$('#alert_eduorg_type').attr("hidden","hidden")
            	});
 		});
 	</script>
@@ -73,9 +82,19 @@
 	      <div class="modal-body">
 	      			<input type="text" name="edu_org_id" id="edu_org_id_detail" value="" hidden>
 	      			<label class="control-label">Тип образовательного учреждения:</label>
-					<select class="form-control" name="edu_org_type" id = "edu_org_type_detail">
+					<select class="form-control edu_org_type" name="edu_org_type" id = "edu_org_type_detail">
 						{% for item in data.edu_orgs_type %}
 							<option value="{{ item.id }}">{{ item.value }}</option>
+						{% endfor %}      
+					</select>
+					<div class="alert alert-warning alert-dismissable hidden" name="alert_eduorg_type" id="alert_eduorg_type" >
+  						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  						<strong>Warning!</strong> Не выбран тип.
+					</div>
+					<label class="control-label">Галавное учреждение</label>
+					<select class="form-control" name="edu_org_head" id = "edu_org_head_detail">
+						{% for item in data.edu_orgs_head %}
+							<option value="{{ item.id }}">{{ item.name }}</option>
 						{% endfor %}      
 					</select>
 					<p></p>

@@ -14,7 +14,7 @@ import json
 from datetime import date
 import datetime
 from staff.models import Employee, Position, Contacts as ContactsStaff
-from anketa.models import ApplicationProfiles, EduOrg, ProfileAttrs, Attribute, AttrType, Relation, Person, Application, Abiturient, Docs, AttrValue, Profile, Contacts, Address, Education_Prog,  Privilegies, Exams, DepAchieves, Milit, DocAttr, Achievements
+from anketa.models import ApplicationProfiles, EduOrg, ProfileAttrs, EduForm, Attribute, AttrType, Relation, Person, Application, Abiturient, Docs, AttrValue, Profile, Contacts, Address, Education_Prog,  Privilegies, Exams, DepAchieves, Milit, DocAttr, Achievements
 from django.contrib.auth.models import User
 
 # Create your views here.
@@ -64,19 +64,26 @@ def logout(request):
 	return redirect('/auth')
 
 @login_required(login_url = '/auth')
-@user_passes_test(CheckUserIsSuperuser, login_url = '/auth')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Employee_list(request):
+	usr = request.user
 	if request.method == 'POST':
 		ids = request.POST.getlist('selected')
-		if 'Delete' in request.POST:			
+		if 'Delete' in request.POST:		
 			Del_Employee(ids)
 			return HttpResponseRedirect(reverse('staff:employee_list'))
 		elif 'Add' in request.POST:
 			return HttpResponseRedirect(reverse('staff:employee_add'))
 		elif 'Fired' in request.POST:
 			Fired_Employee(ids)
-			return HttpResponseRedirect(reverse('staff:employee_list'))
+			return HttpResponseRedirect(reverse('staff:employee_list'))	
+
 	employee_manage = Employee.objects.all()
+	if usr.is_superuser==0:
+		empl = Employee.objects.get(user=usr)
+		employee_manage = employee_manage.filter(department = empl.department)
+	if 'finde' in request.POST and len(request.POST['fio'])>0:
+		employee_manage = employee_manage.filter(fullname__icontains=request.POST['fio'])
 	data={}
 	data['employee'] = employee_manage
 	context = {'data':data}
@@ -86,15 +93,12 @@ def Employee_list(request):
 @login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsSuperuser, login_url = '/auth')
 @transaction.atomic
-def Fired_Employee(values):
+def Fired_Employee(values):	
 	if len(values)>0:
 		for item in values:
 			usr = User.objects.select_related('Employee').filter(employee=item).first()
 			if usr.is_staff == True and usr.is_superuser == False:
-				empl = Employee.objects.filter(id = item).first()
-				empl.active = 0
 				usr.is_active = 0
-				empl.save()
 				usr.save()
 
 @login_required(login_url = '/auth')
@@ -357,7 +361,6 @@ def Application_list (request):
 	for app in applications:
 		doc = docs.filter(abiturient__id = app.abiturient.id).first()
 		prof = appProfile.filter(application__id=app.id)
-		print(prof)		
 		apps_with_docs.append({'app':app, 'doc':doc, 'prof':prof})	
 	doctyps = AttrValue.objects.filter(
 		attribute__name__icontains=u'об образовании'
@@ -580,16 +583,18 @@ def Edu_orgs(request):
 			pass
 
 	if 'del' in request.POST:
-		if user.is_superuser:
-			edu_org_dels(request.POST)
+		if user.is_staff:
+			education_delete(request.POST, 0)
 	if 'save' in request.POST and len(request.POST.get('edu_org_name',''))>0:
-		if user.is_superuser:
+		if user.is_staff:
 			edu_org_add(request.POST)
 
 	edu_orgs_type = AttrValue.objects.filter(attribute__name__icontains=u'Тип образовательного')
+	edu_orgs_head = EduOrg.objects.filter(head=None)
 
 	Data['edu_orgs'] = edu_orgs
 	Data['edu_orgs_type'] = edu_orgs_type
+	Data['edu_orgs_head'] = edu_orgs_head
 	context = {'data':Data}
 	context.update(csrf(request))
 	return render(request, 'staff\edu_orgs.html', context)
@@ -609,14 +614,11 @@ def Edu_org_progs(request, edu_org_id):
 			pass
 
 	if 'del' in request.POST:
-		if user.is_superuser:
-			edu_org_prog_dels(request.POST)
+		if user.is_staff:
+			education_delete(request.POST, 1)
 	if 'save' in request.POST and len(request.POST.get('edu_org_prog_name',''))>0:
-		if user.is_superuser:
-			try:
-				edu_org_prog_add(edu_org, request.POST)
-			except Exception as e:
-				error_message = str(e)
+		if user.is_staff:
+			edu_org_prog_add(edu_org, request.POST)
 
 	edu_orgs_type = AttrValue.objects.filter(attribute__name__icontains=u'Тип образовательного')
 
@@ -643,16 +645,13 @@ def Edu_org_prog_profs(request, edu_org_prog_id):
 			pass
 
 	if 'del' in request.POST:
-		if user.is_superuser:
-			edu_org_prog_profs_dels(request.POST)
-	if 'save' in request.POST and len(request.POST.get('edu_org_prog_name',''))>0:
-		if user.is_superuser:
-			try:
-				edu_org_prog_prof_add(edu_org_prog, request.POST)
-			except Exception as e:
-				error_message = str(e)
+		if user.is_staff:
+			education_delete(request.POST, 2)
+	if 'save' in request.POST and len(request.POST.get('edu_org_prog_prof_name',''))>0:
+		if user.is_staff:
+			edu_org_prog_prof_add(edu_org_prog, request.POST)
 
-	edu_org_prog_profs = Profile.objects.all()
+	edu_org_prog_profs = Profile.objects.filter(edu_prog_id=edu_org_prog_id)
 
 	Data['edu_org_prog_profs'] = edu_org_prog_profs
 	Data['edu_org_prog'] = edu_org_prog
@@ -661,30 +660,88 @@ def Edu_org_prog_profs(request, edu_org_prog_id):
 	context.update(csrf(request))
 	return render(request, 'staff\edu_org_prog_profs.html', context)
 
-@transaction.atomic
-def edu_org_prog_profs_dels(values):
-	dels = values.getlist('selected')
-	for item in dels:
-		edu_org_prog_profs = Profile.objects.filter(id=item)
-		edu_org_prog_profs.delete()
+@login_required(login_url = '/auth')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
+def Edu_org_prog_prof_attr(request, edu_org_prog_prof_id):
+	user = User.objects.filter(id = request.user.id).first()
+	edu_org_prog_prof = Profile.objects.get(pk=edu_org_prog_prof_id)
+	Data={}
+	error_message=''
+	if request.method == 'POST':
+		if 'filter' in request.POST:
+			pass
+		if 'reset' in request.POST:
+			pass
+
+	if 'del' in request.POST:
+		if user.is_staff:
+			education_delete(request.POST, 3)
+	if 'save' in request.POST and len(request.POST.get('edu_org_prog_prof_attr_freespaces',''))>0 and len(request.POST.get('edu_org_prog_prof_attr_year'))>0 and len(request.POST.get('startDate'))>0 and len(request.POST.get('endDate'))>0:
+		if user.is_staff:
+			education_adds(edu_org_prog_prof, request.POST)
+			
+	edu_org_prog_prof_attr = ProfileAttrs.objects.filter(profile_id=edu_org_prog_prof_id)
+	eduform = EduForm
+
+	Data['edu_org_prog_prof'] = edu_org_prog_prof
+	Data['edu_org_prog_prof_attr'] = edu_org_prog_prof_attr
+	Data['error_message'] = error_message
+	Data['eduform'] = eduform
+	context = {'data':Data}
+	context.update(csrf(request))
+	return render(request, 'staff\edu_org_prog_prof_attr.html', context)
 
 @transaction.atomic
-def edu_org_prog_profs_add(edu_org_prog,values):
+def education_adds(attr, values):
+	eduform = EduForm
+	if int(values['edu_org_prog_prof_attr_id'])<0:
+		education_adds = ProfileAttrs()
+		education_adds.profile = attr
+		education_adds.freespaces = int(values['edu_org_prog_prof_attr_freespaces'])
+		education_adds.eduform = values['edu_org_prog_prof_attr_form']
+		education_adds.year = int(values['edu_org_prog_prof_attr_year'])
+		education_adds.startDate = datetime.datetime.strptime(values['startDate'],'%d/%m/%Y').strftime('%Y-%m-%d')
+		education_adds.endDate = datetime.datetime.strptime(values['endDate'],'%d/%m/%Y').strftime('%Y-%m-%d')
+		if ProfileAttrs.objects.filter(profile=attr, freespaces=int(values['edu_org_prog_prof_attr_freespaces']),eduform=values['edu_org_prog_prof_attr_form'], year = int(values['edu_org_prog_prof_attr_year']), startDate=datetime.datetime.strptime(values['startDate'],'%d/%m/%Y').strftime('%Y-%m-%d'), endDate = datetime.datetime.strptime(values['endDate'],'%d/%m/%Y').strftime('%Y-%m-%d')).first() == None:
+			education_adds.save()
+	else:
+		education_adds = ProfileAttrs.objects.get(pk = values['edu_org_prog_prof_attr_id'])
+		education_adds.profile = attr
+		education_adds.freespaces = int(values['edu_org_prog_prof_attr_freespaces'])
+		education_adds.eduform = values['edu_org_prog_prof_attr_form']
+		education_adds.year = int(values['edu_org_prog_prof_attr_year'])
+		education_adds.startDate = datetime.datetime.strptime(values['startDate'],'%d/%m/%Y').strftime('%Y-%m-%d')
+		education_adds.endDate = datetime.datetime.strptime(values['endDate'],'%d/%m/%Y').strftime('%Y-%m-%d')
+		education_adds.save()
+
+@transaction.atomic
+def education_delete(values, attr):
+	dels = values.getlist('selected')
+	if len(dels)>0:
+		for item in dels:
+			if attr == 3:
+				education_delete = ProfileAttrs.objects.filter(id=item)
+			if attr == 2:
+				education_delete = Profile.objects.filter(id=item)		
+			if attr == 1:
+				education_delete = Education_Prog.objects.filter(id=item)
+			if attr == 0:
+				education_delete = EduOrg.objects.filter(id=item)
+			education_delete.delete()
+
+@transaction.atomic
+def edu_org_prog_prof_add(edu_org_prog, values):
 	if int(values['edu_org_prog_prof_id'])<0:
-		edu_org_prog_prof = Profile(name=values['edu_org_prog_prof_name'], edu_prog_id=edu_org_prog.id)
+		edu_org_prog_prof = Profile()
+		edu_org_prog_prof.name = values['edu_org_prog_prof_name']
+		edu_org_prog_prof.edu_prog = edu_org_prog
 		if Profile.objects.filter(name=values['edu_org_prog_prof_name'], edu_prog_id=edu_org_prog.id).first() == None:
 			edu_org_prog_prof.save()
 	else:
 		edu_org_prog_prof = Profile.objects.get(pk=values['edu_org_prog_prof_id'])
 		edu_org_prog_prof.name = values['edu_org_prog_prof_name']
+		edu_org_prog_prof.edu_prog = edu_org_prog
 		edu_org_prog_prof.save()
-
-@transaction.atomic
-def edu_org_dels(values):
-	dels = values.getlist('selected')
-	for item in dels:
-		edu_org = EduOrg.objects.filter(id=item)
-		edu_org.delete()
 
 @transaction.atomic
 def edu_org_add(values):
@@ -698,25 +755,22 @@ def edu_org_add(values):
 		edu_org.save()
 
 @transaction.atomic
-def edu_org_prog_dels(values):
-	dels = values.getlist('selected')
-	if len(dels)>0:
-		for item in dels:
-			edu_org_prog = Education_Prog.objects.filter(id=item)
-			edu_org_prog.delete()
-
-@transaction.atomic
 def edu_org_prog_add(edu_org, values):
 	if int(values['edu_org_prog_id'])<0:
-		edu_org_prog_add = Education_Prog(eduorg_id=edu_org.id,name=values['edu_org_prog_name'],qualification_id=values['edu_org_qual'],duration_id=values['edu_org_duration'])		
+		edu_org_prog_add = Education_Prog()
+		edu_org_prog_add.eduorg=edu_org
+		edu_org_prog_add.name=values['edu_org_prog_name']
+		edu_org_prog_add.qualification = AttrValue.objects.get(pk=values['edu_org_qual'])
+		edu_org_prog_add.duration = AttrValue.objects.get(pk=values['edu_org_duration'])	
 		if Education_Prog.objects.filter(eduorg_id=edu_org.id, name=values['edu_org_prog_name'],qualification_id=values['edu_org_qual'],duration_id=values['edu_org_duration']).first() == None:
 			edu_org_prog_add.save()
 		
 	else:
 		edu_org_prog_add = Education_Prog.objects.get(pk=values['edu_org_prog_id'])
+		edu_org_prog_add.eduorg=edu_org
 		edu_org_prog_add.name = values['edu_org_prog_name']
-		edu_org_prog_add.duration.id = values['edu_org_duration']
-		edu_org_prog_add.qualification.id = values['edu_org_qual']
+		edu_org_prog_add.duration = AttrValue.objects.get(pk=values['edu_org_duration'])
+		edu_org_prog_add.qualification = AttrValue.objects.get(pk=values['edu_org_qual'])
 		edu_org_prog_add.save()
 
 
@@ -726,23 +780,20 @@ def edu_org_prog_add(edu_org, values):
 
 @login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
-def Edu_org_prog_profs_get(request):
-	text = request.GET.get('query','')
-	item = Profile.objects.select_related('Education_Prog').get(pk=text)
-	result=[{'name':item.name, 'edu_prog':item.edu_prog.id}]
-	return HttpResponse(json.dumps(result), content_type="application/json")
-
-
-@login_required(login_url = '/auth')
-@user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Edu_orgs_value(request):
 	text = request.GET.get('edu_org_id','')
 	item = EduOrg.objects.select_related('AttrValue').get(pk= text)
 	if item.orgtype:
 		org_type = {'id':item.orgtype.id,'name':item.orgtype.value}
+		error_message = ''
 	else:
 		org_type = {}
-	result = [{ 'name':item.name, 'id':item.id,'type':org_type}]
+		error_message = 'warning'
+	if item.head:
+		org_head = item.head.id
+	else:
+		org_head=''
+	result = [{ 'name':item.name, 'id':item.id,'type':org_type, 'error':error_message, 'head':org_head}]
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 @login_required(login_url = '/auth')
@@ -754,8 +805,24 @@ def Edu_org_progs_get(request):
 		dur = item.duration.id
 	else:
 		dur = ''
-	result = [{'name':item.name, 'id':item.id, 'eduorg':item.eduorg.name, 'qual':item.qualification.id, 'dur':dur}]
+	result = [{'name':item.name, 'id':item.id, 'eduorg':item.eduorg.name, 'qual':{'id':item.qualification.id,'name':item.qualification.value}, 'dur':dur}]
 	return HttpResponse(json.dumps(result),content_type="application/json")
+
+@login_required(login_url = '/auth')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
+def Edu_org_prog_profs_get(request):
+	text = request.GET.get('query','')
+	item = Profile.objects.select_related('Education_Prog').get(pk=text)
+	result=[{'name':item.name, 'edu_prog':item.edu_prog.id, 'id':item.id}]
+	return HttpResponse(json.dumps(result), content_type="application/json")
+
+@login_required(login_url = '/auth')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
+def Edu_org_prog_prof_attr_get(request):
+	text = request.GET.get('query','')
+	item = ProfileAttrs.objects.select_related('Profile').get(pk=text)
+	result=[{'name':item.profile.name, 'freespaces':item.freespaces, 'eduform':item.eduform, 'id':item.id, 'year':item.year, 'startDate':str(item.startDate), 'endDate':str(item.endDate)}]
+	return HttpResponse(json.dumps(result), content_type="application/json")
 
 @login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
@@ -831,7 +898,6 @@ def Wiz_cont_apply(request):
 
 def AddDataToPerson(request):
 	result="success"
-	#print(request.POST)
 	if request.method == 'POST':
 		try:
 			page=int(request.POST.get('currentPage',''))

@@ -29,11 +29,11 @@
 						
 						$('option:selected').removeAttr('selected');
 						$('#edu_org_prog_id_detail').val(data[0]['id']);
-						$("#edu_org_qual_detail>option[value='"+data[0]['qual']+"']").attr('selected','selected');
+						$("#edu_org_qual_detail>option[value='"+data[0]['qual']['id']+"']").attr('selected','selected');
 						$("#edu_org_duration_detail>option[value='"+data[0]['dur']+"']").attr('selected','selected');
 						$('#edu_org_prog_name_detail').val(data[0]['name']);
 						$('#edu_org_prog_detail').modal();
-						$('#myModalLabel').html('Изменить направление/специальность '+'"'+data[0]['eduorg']+'"');
+						$('#myModalLabel').html('Изменить направление/специальность '+'"'+data[0]['name']+' '+data[0]['qual']['name']+'"');
 						
 					},
 					error:function(){
@@ -47,6 +47,11 @@
            		$('#edu_org_prog_id_detail').val('-1');
            		$('#edu_org_prog_detail').modal();
            	});
+
+           	$('#return').on('click',function(){
+           		history.back();
+           	});
+
 		});
 	</script>
 {% endblock %}
@@ -103,7 +108,7 @@
 						<p>
 							<button type="button" class="btn btn-primary btn-ng" id="add">Добавить</button>
 							<button type="submit" class="btn btn-danger" name="del">Удалить</button>
-							<button type="submit" class="btn btn-info" name="return">Назад</button>
+							<button type="button" class="btn btn-info" name="return" id="return">Назад</button>
 						</p>
 						<table class="table table table-bordered table-hover">
 							<thead>
@@ -119,7 +124,7 @@
 									<tr>
 										<td>{{forloop.counter}}</td>
 										<td>
-											<a href="" class="change" name="edu_org_prog_name" id="edu_org_prog_name_{{item.id}}" value="{{item.id}}" data-toggle="modal">{{ item.name }}</a>
+											<a href="" class="change" name="edu_org_prog_name" id="edu_org_prog_name_{{item.id}}" value="{{item.id}}" data-toggle="modal">{{ item.name }} {{item.qualification.value}}</a>
 										</td>
 										<td><input type="checkbox" name="selected" value="{{item.id}}"></td>
 										<td>
