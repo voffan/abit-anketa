@@ -14,6 +14,7 @@
 {% block scripts %}
 <script src="{% static "anketa/select2-3.5.4/select2.min.js" %}"></script>
 <script src="{% static "anketa/select2-3.5.4/ru.js" %}"></script>
+<script src="{% static "anketa/js/filterTable.v1.0.src.js" %}"></script>
 
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -38,6 +39,8 @@
 		
 		
 	})
+
+	
 </script>
 {% endblock %}
 
@@ -113,8 +116,8 @@
 			</select>         
 		</th>
 		<th st-sort="bali" width="8%">
-					<input pattern="[0-9]{,3}"<--kak pattern propyskaet bykvi?~_~ type="number" name="balli1" class="form-control" placeholder=">123" value="{{ filters.balli1 }}"/>
-					<input pattern="[0-9]{,3}" type="number" <--kak type otmenyaet pattern?~_~ name="balli2" class="form-control" placeholder="<123" value="{{ filters.balli2 }}"/>
+					<input pattern="[0-9]{,3}"<--kak pattern propyskaet bykvi?~_~ type="number" name="balli1" id="digits-from" class="form-control" placeholder=">123" value="{{ filters.balli1 }}"/>
+					<input pattern="[0-9]{,3}" type="number" <--kak type otmenyaet pattern?~_~ name="balli2" id="digits-to" class="form-control" placeholder="<123" value="{{ filters.balli2 }}"/>
 		</th>
 		<th st-sort="state">
 			<select class="form-control" name="status" id="status">

@@ -56,13 +56,10 @@
         <li role="presentation" class="divider"></li>
         <li>
           <a href="{% url 'staff:application_list' %}" >Заявления </a>
-          </li>
-
-        {% if user.is_superuser %}
+          </li>        
         <li>
             <a href="{% url 'staff:employee_list' %}">Сотрудники</a>
-        </li>
-        {% endif %}        
+        </li>      
         <li>
             <a href="{% url 'staff:edu_orgs' %}">УЧП</a>
         </li>

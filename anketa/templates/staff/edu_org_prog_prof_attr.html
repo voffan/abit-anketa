@@ -1,0 +1,170 @@
+{% extends 'staff\base.html' %}
+{% block head %}
+	Направления/специальности "{{ data.edu_org_prog.name }}"
+{% endblock %}
+
+{% load staticfiles %}
+{% block additionalcss %}
+<link href="{% static "anketa/css/prettify.css" %}" rel="stylesheet">
+<link href="{% static "anketa/css/bootstrap-datetimepicker.min.css" %}" rel="stylesheet">
+<link href="{% static "anketa/select2-3.5.4/select2.css" %}" rel="stylesheet">
+<link href="{% static "anketa/select2-3.5.4/select2-bootstrap.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block scripts %}
+	<script>
+		$(document).ready(function(){			
+			
+			$('#edu_org_prog_prof_attr_detail').on('hide.bs.modal',function(event){
+			var button = $(event.relatedTarget)
+				$('#edu_org_prog_prof_attr_details_form').submit();			
+			});
+
+        	$('.change').on('click',function(){	
+            	var $value = $(this).attr('value');
+            	$.ajax({
+					url: "{% url 'staff:edu_org_prog_prof_attr_get' %}",					
+					method: "GET",
+					data: {
+						'query':$value,
+					},
+					dataType: "json",
+					dataProcess:true,
+					success:function(data)
+					{
+						
+						$('option:selected').removeAttr('selected');
+						$('#edu_org_prog_prof_attr_id_detail').val(data[0]['id']);						
+						$('#edu_org_prog_prof_attr_name_detail').val(data[0]['name']);
+						$('#edu_org_prog_prof_attr_year_detail').val(data[0]['year']);
+						$('#edu_org_prog_prof_attr_freespaces_detail').val(data[0]['freespaces']);
+						$("#edu_org_prog_prof_attr_form_detail>option[value='"+data[0]['eduform']+"']").attr('selected','selected');
+						$('#startDateVal').val(data[0]['startDate']);
+						$('#endDateVal').val(data[0]['endDate']);
+						$('#edu_org_prog_prof_attr_detail').modal();
+						$('#myModalLabel').html('Изменить параметры '+'"'+data[0]['name']+'"');
+						
+					},
+					error:function(){
+						alert('4toto poshlo ne tak');
+					}
+
+				});
+           	});
+           	$('#add').on('click',function(){
+           		//$('#myModalLabel').html("Новое учреждение\\факультет");
+           		$('#edu_org_prog_prof_attr_id_detail').val('-1');
+           		$('#edu_org_prog_prof_attr_detail').modal();
+           	});
+           	$('#return').on('click',function(){
+           		history.back();
+           	});
+           	$("#startDate").datetimepicker({
+				format:'DD/MM/YYYY',
+				locale:"ru",
+			defaultDate:''
+			});
+			$("#endDate").datetimepicker({
+				format:'DD/MM/YYYY',
+				locale:"ru",
+			defaultDate:''
+			});
+		});
+	</script>
+	<script src="{% static "anketa/js/jquery.bootstrap.wizard.js" %}"></script>
+	<script src="{% static "anketa/js/prettify.js" %}"></script>
+	<script src="{% static "anketa/js/moment.min.js" %}"></script>
+	<script src="{% static "anketa/js/ru.js" %}"></script>
+	<script src="{% static "anketa/js/bootstrap-datetimepicker.min.js" %}"></script>
+	<script src="{% static "anketa/select2-3.5.4/select2.min.js" %}"></script>
+	<script src="{% static "anketa/js/notify.js" %}"></script>
+{% endblock %}
+
+{% block content %}
+	<!-- Modal addtibute detail -->
+	<div class="modal fade" id="edu_org_prog_prof_attr_detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	    	<form action="" method="POST" id="edu_org_prog_prof_attr_details_form">
+	      	{% csrf_token %}
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	        <h4 class="modal-title" id="myModalLabel">Добавить новые параметры в "{{ data.edu_org_prog_prof.name }}"</h4>
+	      </div>
+	      <div class="modal-body">
+	      			<input type="text" name="edu_org_prog_prof_attr_id" id="edu_org_prog_prof_attr_id_detail" value="" hidden>
+					<p></p>
+					<label class="control-label">КЦП:</label>
+					<input type="number" class="form-control" name = "edu_org_prog_prof_attr_freespaces" id="edu_org_prog_prof_attr_freespaces_detail" value ="" placeholder="Количество мест">
+					<label class="control-label">Форма обучения:</label>
+					<select class="form-control" name="edu_org_prog_prof_attr_form" id = "edu_org_prog_prof_attr_form_detail">
+						{% for item in data.eduform %}
+							<option value="{{ item.0 }}">{{ item.1 }}</option>
+						{% endfor %}      
+					</select>
+
+					<label class="control-label">Год:</label>
+					<input type="number" pattern="[2][0][1-2][0-9]" class="form-control" name = "edu_org_prog_prof_attr_year" id="edu_org_prog_prof_attr_year_detail" value ="" placeholder="Год">
+					
+					<label for="startDate">Дата начала</label>
+					<div class='input-group date' id='startDate'>
+						<input type="text" class="form-control" name="startDate" id="startDateVal" value="" readonly/>
+							<span class="input-group-addon">
+								<span class="glyphicon glyphicon-calendar"></span>
+							</span>
+					</div>					
+					<label for="endDate">Дата окончания</label>
+					<div class='input-group date' id='endDate'>
+						<input type="text" class="form-control" name="endDate" id="endDateVal" value=""/>
+							<span class="input-group-addon">
+								<span class="glyphicon glyphicon-calendar"></span>
+							</span>
+					</div>					
+					<p></p>								
+		  </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal" name="Close">Закрыть</button>
+	        <button type="submit" class="btn btn-primary" name="save">Сохранить</button>
+	      </div>
+	  		</form>
+	    </div>
+	  </div>
+	</div>
+	<!-- End Modal-->
+	
+		<div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2">
+			<div class="panel panel-default">
+				<div class="panel-heading">Список атрибутов профилей</div>
+				<div class="panel-body">
+					<form action="" method="POST">
+					{% csrf_token %}
+						<p>
+							<button type="button" class="btn btn-primary btn-ng" id="add">Добавить</button>
+							<button type="submit" class="btn btn-danger" name="del">Удалить</button>
+							<button type="button" class="btn btn-info" name="return" id="return">Назад</button>
+						</p>
+						<table class="table table table-bordered table-hover">
+							<thead>
+								<tr>
+									<th width="3%">№</th>
+									<th>Профиль</th>
+									<th width="2%">v</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for item in data.edu_org_prog_prof_attr %}
+									<tr>
+										<td>{{forloop.counter}}</td>
+										<td>
+											<a href="" class="change" name="edu_org_prog_prof_attr_name" id="edu_org_prog_prof_attr_name_{{item.id}}" value="{{item.id}}" data-toggle="modal">{{ item.profile.name }} {{ item.year }} {{ item.eduform }}</a>
+										</td>
+										<td><input type="checkbox" name="selected" value="{{item.id}}"></td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</form>
+				</div><!--panel body-->
+			</div><!--panel-->
+		</div>
+{% endblock %}
