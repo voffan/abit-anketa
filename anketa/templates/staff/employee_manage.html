@@ -28,6 +28,7 @@
                                 </th>
                                 <th>Подразделение</th>
                                 <th>Должность</th>
+                                <th>Статус</th>
                                 <th width="7%">Выделить</th>
                             </tr>
                     </thead>
@@ -38,15 +39,18 @@
                               <td><a href="{% url 'staff:employee_edit' employee.empl.id %}">{{ employee.empl.fullname }}</a></td>
                               <td>{{ employee.empl.department.name }}</td>
                               <td>{{ employee.empl.position }}</td>
+                              <td>{% if employee.usr.is_active == True %}Активен{% else %}Не активен{% endif %}</td>
                               <td><input type="checkbox" name="selected" value="{{ employee.empl.id }}"></td>
                             </tr>
                             {% endfor %}
                     </tbody>
     </table>
+                    {% if User.is_superuser %}
                     <div class="pull-right">                        
                         <button type="submit" class="btn btn-info" name="Add">Добавить</button>
                         <button type="submit" class="btn btn-warning" name="Fired">Активировать/Деактивировать</button>
                         <button type="submit" class="btn btn-danger" name="Delete">Удалить</button>
                     </div>
+                    {% endif %}
 </form>
 {% endblock %}

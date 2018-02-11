@@ -87,12 +87,13 @@
       <input type="hidden" class="form-control" name="user-id" id="user-id" placeholder="тссс!" value="{{ data.employee.id }}">      
     </div>
   </div>
-    
+  {% if User.is_superuser %}  
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
       <button type="submit" class="btn btn-primary" name="save">Сохранить</button>
     </div>
   </div>
+  {% endif %}
 </form>
 {% endblock %}
 

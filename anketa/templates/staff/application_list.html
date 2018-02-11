@@ -6,15 +6,41 @@
 	Заявления
 {% endblock %}
 
+
 {% block additionalcss %}
 <link href="{% static "anketa/select2-3.5.4/select2.css" %}" rel="stylesheet">
-<link href="{% static "anketa/select2-3.5.4/select2-bootstrap.css" %}" rel="stylesheet">	
+<link href="{% static "anketa/select2-3.5.4/select2-bootstrap.css" %}" rel="stylesheet">
+<!-- add one of the jQWidgets styles -->
+<link rel="stylesheet" href="{% static "anketa/jqwidgets/styles/jqx.base.css" %}" type="text/css" />
+<link rel="stylesheet" href="{% static "anketa/jqwidgets/styles/jqx.darkblue.css" %}" type="text/css" />	
 {% endblock %}
 
 {% block scripts %}
 <script src="{% static "anketa/select2-3.5.4/select2.min.js" %}"></script>
 <script src="{% static "anketa/select2-3.5.4/ru.js" %}"></script>
 <script src="{% static "anketa/js/filterTable.v1.0.src.js" %}"></script>
+<!-- add jqwidgets scripts -->
+<script type="text/javascript" src="{% static "anketa/jqwidgets/jqxcore.js" %} "></script>
+<script type="text/javascript" src="{% static "anketa/scripts/jquery-1.11.1.min.js" %}"></script>
+<script type="text/javascript" src="{% static "anketa/jqwidgets/jqxdata.js" %}"></script>
+<script type="text/javascript" src="{% static "anketa/jqwidgets/jqxbuttons.js" %}"></script>
+<script type="text/javascript" src="{% static "anketa/jqwidgets/jqxscrollbar.js" %}"></script>
+<script type="text/javascript" src="{% static "anketa/jqwidgets/jqxlistbox.js" %}"></script>
+<script type="text/javascript" src="{% static "anketa/jqwidgets/jqxdropdownlist.js" %}"></script>
+<script type="text/javascript" src="{% static "anketa/jqwidgets/jqxmenu.js" %}"></script>
+<script type="text/javascript" src="{% static "anketa/jqwidgets/jqxinput.js" %}"></script>
+<script type="text/javascript" src="{% static "anketa/jqwidgets/jqxgrid.js" %}"></script>
+<script type="text/javascript" src="{% static "anketa/jqwidgets/jqxgrid.filter.js" %}"></script>
+<script type="text/javascript" src="{% static "anketa/jqwidgets/jqxgrid.sort.js" %}"></script>
+<script type="text/javascript" src="{% static "anketa/jqwidgets/jqxgrid.selection.js" %}"></script>
+<script type="text/javascript" src="{% static "anketa/jqwidgets/jqxpanel.js" %}"></script>
+<script type="text/javascript" src="{% static "anketa/jqwidgets/globalization/globalize.js" %}"></script>
+<script type="text/javascript" src="{% static "anketa/jqwidgets/jqxcalendar.js" %}"></script>
+<script type="text/javascript" src="{% static "anketa/jqwidgets/jqxdatetimeinput.js" %}"></script>
+<script type="text/javascript" src="{% static "anketa/jqwidgets/jqxcheckbox.js" %}"></script>
+<script type="text/javascript" src="{% static "anketa/scripts/demos.js" %}"></script>
+
+
 
 <script type="text/javascript">
 	$(document).ready(function(){
