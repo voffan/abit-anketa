@@ -39,6 +39,7 @@
 <script type="text/javascript" src="{% static "anketa/jqwidgets/jqxcheckbox.js" %}"></script>
 <script type="text/javascript" src="{% static "anketa/jqwidgets/jqx-all.js" %}"></script>
 <script type="text/javascript" src="{% static "anketa/scripts/demos.js" %}"></script>
+<script type="text/javascript" src="{% static "anketa/scripts/localization.js" %}"></script>
 
 <script type="text/javascript">
 		$(document).ready(function () {
@@ -93,10 +94,11 @@
  
 			$("#grid").jqxGrid(
 			{
-				width: getWidth('Grid'),
+				width: 1600,
 				source: adapter,
 				filterable: true,
 				sortable: true,
+				height: 600,
 				ready: function () {
 					addfilter();
 				},
@@ -104,7 +106,7 @@
 				columns: [
 				  { text: 'Fullname', datafield: 'fullname', filtertype: 'list', width: 160 },
 				  { text: 'edu_form', datafield: 'edu_form', filtertype: 'list', width: 70 },
-				  { text: 'date', datafield: 'date', filtertype: 'list', width: 100 }, //, cellsformat: 'dd-MMMM-yyyy'},
+				  { text: 'date', datafield: 'date', filtertype: 'list', width: 100},// , cellsformat: 'MMMM-dd-yyyy'},
 				  { text: 'docType', datafield: 'docType', filtertype: 'list', width: 80 },
 				  { text: 'isCopy', datafield: 'isCopy', filtertype: 'list', width: 70, cellsalign: 'right' },
 				  { text: 'edu_prog', datafield: 'edu_prog', filtertype: 'list',width: 100, cellsalign: 'left', cellsformat: 'c2' },
@@ -137,7 +139,8 @@
 			// show/hide filter icons
 			$('#filtericons').on('change', function (event) {
 				$("#grid").jqxGrid({ autoshowfiltericon: !event.args.checked });
-			});			
+			});
+			$("#grid").jqxGrid('autoresizecolumns');			
 		});
 	</script>
 <!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@END GRID@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
@@ -176,6 +179,8 @@
 
 {% block content %}
 <form action="{% url 'staff:application_list' %}"  method="GET">
+
+	<!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@delete?@@@@@@@@@@@@@@@@@@@@@@@@@
 	<table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-striped table-hover">
 		<thead>
 		<tr class="info">
@@ -331,13 +336,13 @@
 			</table>
 		</div>
 	</div>
-
-	<div >
-		<div id="grid">
+-->
+	<div>
+		<div id="grid" >
 		</div>
 		<div id="eventslog" style="margin-top: 30px;">
 			<div style="width: 200px; float: left; margin-right: 10px;">
-				<input value="Remove Filter" id="clearfilteringbutton" type="button" />
+				<input class="btn btn" value="Удалить фильтры" id="clearfilteringbutton" type="button"  />
 				<div style="margin-top: 10px;" id='filterbackground'>Filter Background</div>
 				<div style="margin-top: 10px;" id='filtericons'>Show All Filter Icons</div>
 			</div>
