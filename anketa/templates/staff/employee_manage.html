@@ -6,7 +6,6 @@
 
 {% block scripts %}
 <script>
-  
 </script>
 
 {% endblock %}
@@ -34,19 +33,19 @@
                     </thead>
                     <tbody>
                             {% for employee in data.employee %}
-                            <tr {% if employee.active == 0 %} class="danger"{% else %} class="info"{% endif %}>
+                            <tr {% if employee.usr.is_active == 0 %} class="danger"{% else %} class="info"{% endif %}>
                               <td>{{ forloop.counter }}</td>
-                              <td><a href="{% url 'staff:employee_edit' employee.id %}">{{ employee.fullname }}</a></td>
-                              <td>{{ employee.department.name }}</td>
-                              <td>{{ employee.position }}</td>
-                              <td><input type="checkbox" name="selected" value="{{ employee.id }}"></td>
+                              <td><a href="{% url 'staff:employee_edit' employee.empl.id %}">{{ employee.empl.fullname }}</a></td>
+                              <td>{{ employee.empl.department.name }}</td>
+                              <td>{{ employee.empl.position }}</td>
+                              <td><input type="checkbox" name="selected" value="{{ employee.empl.id }}"></td>
                             </tr>
                             {% endfor %}
                     </tbody>
     </table>
                     <div class="pull-right">                        
                         <button type="submit" class="btn btn-info" name="Add">Добавить</button>
-                        <button type="submit" class="btn btn-warning" name="Fired">Уволить</button>
+                        <button type="submit" class="btn btn-warning" name="Fired">Активировать/Деактивировать</button>
                         <button type="submit" class="btn btn-danger" name="Delete">Удалить</button>
                     </div>
 </form>

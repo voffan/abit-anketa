@@ -69,40 +69,47 @@ def Employee_list(request):
 	usr = request.user
 	if request.method == 'POST':
 		ids = request.POST.getlist('selected')
-		if 'Delete' in request.POST:		
-			Del_Employee(ids)
-			return HttpResponseRedirect(reverse('staff:employee_list'))
+		if 'Delete' in request.POST:
+			if usr.is_superuser==1:		
+				Del_Employee(ids)
+				return HttpResponseRedirect(reverse('staff:employee_list'))
 		elif 'Add' in request.POST:
 			return HttpResponseRedirect(reverse('staff:employee_add'))
 		elif 'Fired' in request.POST:
-			Fired_Employee(ids)
-			return HttpResponseRedirect(reverse('staff:employee_list'))	
+			if usr.is_superuser==1:
+				Fired_Employee(ids)
+				return HttpResponseRedirect(reverse('staff:employee_list'))	
 
 	employee_manage = Employee.objects.all()
-	if usr.is_superuser==0:
-		empl = Employee.objects.get(user=usr)
-		employee_manage = employee_manage.filter(department = empl.department)
+	#if usr.is_superuser==0: #фильтр видимости для простых сотрудников
+	#	empl = Employee.objects.get(user=usr)
+	#	employee_manage = employee_manage.filter(department = empl.department)
 	if 'finde' in request.POST and len(request.POST['fio'])>0:
 		employee_manage = employee_manage.filter(fullname__icontains=request.POST['fio'])
+
+	empl_usr=[]
+	for item in employee_manage:
+		user = User.objects.select_related('Employee').filter(employee=item.id).first()
+		empl_usr.append({'empl':item,'usr':user})
 	data={}
-	data['employee'] = employee_manage
+	data['employee'] = empl_usr
 	context = {'data':data}
 	context.update(csrf(request))
 	return render(request,'staff\employee_manage.html',  context)
 
-@login_required(login_url = '/auth')
-@user_passes_test(CheckUserIsSuperuser, login_url = '/auth')
 @transaction.atomic
 def Fired_Employee(values):	
 	if len(values)>0:
 		for item in values:
 			usr = User.objects.select_related('Employee').filter(employee=item).first()
 			if usr.is_staff == True and usr.is_superuser == False:
-				usr.is_active = 0
-				usr.save()
+				if usr.is_active == 0:
+					usr.is_active = 1
+					usr.save()
+				else:
+					usr.is_active = 0
+					usr.save()
 
-@login_required(login_url = '/auth')
-@user_passes_test(CheckUserIsSuperuser, login_url = '/auth')
 @transaction.atomic
 def Del_Employee(values):
 	if len(values)>0:
