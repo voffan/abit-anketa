@@ -353,7 +353,7 @@ def Application_list (request):
 	if 'cancel' in request.GET:
 		return HttpResponseRedirect(reverse('staff:application_list'))
 	
-	app_pages = Paginator(applications, 10)
+	app_pages = Paginator(applications, 200)
 	page = request.GET.get('page')
 	try:
 		current_page = app_pages.page(page)

@@ -18,7 +18,6 @@
 {% block scripts %}
 <script src="{% static "anketa/select2-3.5.4/select2.min.js" %}"></script>
 <script src="{% static "anketa/select2-3.5.4/ru.js" %}"></script>
-<script src="{% static "anketa/js/filterTable.v1.0.src.js" %}"></script>
 <!-- add jqwidgets scripts -->
 <script type="text/javascript" src="{% static "anketa/jqwidgets/jqxcore.js" %} "></script>
 <script type="text/javascript" src="{% static "anketa/scripts/jquery-1.11.1.min.js" %}"></script>
@@ -38,8 +37,110 @@
 <script type="text/javascript" src="{% static "anketa/jqwidgets/jqxcalendar.js" %}"></script>
 <script type="text/javascript" src="{% static "anketa/jqwidgets/jqxdatetimeinput.js" %}"></script>
 <script type="text/javascript" src="{% static "anketa/jqwidgets/jqxcheckbox.js" %}"></script>
+<script type="text/javascript" src="{% static "anketa/jqwidgets/jqx-all.js" %}"></script>
 <script type="text/javascript" src="{% static "anketa/scripts/demos.js" %}"></script>
 
+<script type="text/javascript">
+		$(document).ready(function () {
+			var transform = new Array();
+			var $i=0;
+			{% for item in applications %}
+				var $row = {};
+				$row["fullname"] = "{{ item.app.abiturient.fullname }}";
+				$row["edu_form"] = "{{ item.prof.0.profile.eduform }}";
+				$row["date"] = "{{ item.app.date }}";
+				$row["docType"] = "{{ item.doc.docType.value }}";
+				$row["isCopy"] = "{{ item.doc.isCopy }}";
+				$row["edu_prog"] = "{{ item.prof.0.profile.profile.name }}";
+				$row["edu_prof"] = "{{ item.prof.0.profile.profile.edu_prog.qualification.value }}";
+				$row["points"] = "{{ item.app.points }}";
+				$row["appState"] = "{{ item.app.appState.value }}";
+				transform[$i] = $row;
+				$i+=1;
+			{% endfor %}
+			
+			var source =
+			{
+				localdata: transform,
+				datafields:
+                [
+                    { name: 'fullname', type: 'string' },
+                    { name: 'edu_form', type: 'string' },
+                    { name: 'date', type: 'string' },
+                    { name: 'docType', type: 'string' },
+                    { name: 'isCopy', type: 'string' },
+                    { name: 'edu_prog', type: 'string' },
+                    { name: 'edu_prof', type: 'string' },
+                    { name: 'points', type: 'string' },
+                    { name: 'appState', type: 'string' }
+                ],
+				datatype: "array"
+			};
+			var addfilter = function () {
+				var filtergroup = new $.jqx.filter();
+				var filter_or_operator = 1;
+				var filtervalue = 'Andrew';
+				var filtercondition = 'equal';
+				var filter1 = filtergroup.createfilter('stringfilter', filtervalue, filtercondition);
+ 
+				filtergroup.addfilter(filter_or_operator, filter1);
+				// add the filters.
+				$("#grid").jqxGrid('addfilter', 'firstname', filtergroup);
+				// apply the filters.
+				$("#grid").jqxGrid('applyfilters');
+			}
+			var adapter = new $.jqx.dataAdapter(source);
+ 
+			$("#grid").jqxGrid(
+			{
+				width: getWidth('Grid'),
+				source: adapter,
+				filterable: true,
+				sortable: true,
+				ready: function () {
+					addfilter();
+				},
+				autoshowfiltericon: true,
+				columns: [
+				  { text: 'Fullname', datafield: 'fullname', filtertype: 'list', width: 160 },
+				  { text: 'edu_form', datafield: 'edu_form', filtertype: 'list', width: 70 },
+				  { text: 'date', datafield: 'date', filtertype: 'list', width: 100 }, //, cellsformat: 'dd-MMMM-yyyy'},
+				  { text: 'docType', datafield: 'docType', filtertype: 'list', width: 80 },
+				  { text: 'isCopy', datafield: 'isCopy', filtertype: 'list', width: 70, cellsalign: 'right' },
+				  { text: 'edu_prog', datafield: 'edu_prog', filtertype: 'list',width: 100, cellsalign: 'left', cellsformat: 'c2' },
+				  { text: 'edu_prof', datafield: 'edu_prof', filtertype: 'list',width: 100, cellsalign: 'left', cellsformat: 'c2' },
+				  { text: 'points', datafield: 'points', filtertype: 'list',width: 70, cellsalign: 'right', cellsformat: 'c2' },
+				  { text: 'appState', datafield: 'appState', filtertype: 'list', cellsalign: 'right', cellsformat: 'c2' }
+				]
+			});
+			$('#events').jqxPanel({ width: 300, height: 80 });
+			$("#grid").on("filter", function (event) {
+				$("#events").jqxPanel('clearcontent');
+				var filterinfo = $("#grid").jqxGrid('getfilterinformation');
+				var eventData = "Triggered 'filter' event";
+				for (i = 0; i < filterinfo.length; i++) {
+					var eventData = "Filter Column: " + filterinfo[i].filtercolumntext;
+					$('#events').jqxPanel('prepend', '<div style="margin-top: 5px;">' + eventData + '</div>');
+				}
+			});
+			$('#clearfilteringbutton').jqxButton({ height: 25 });
+			$('#filterbackground').jqxCheckBox({ checked: true, height: 25 });
+			$('#filtericons').jqxCheckBox({ checked: false, height: 25 });
+			// clear the filtering.
+			$('#clearfilteringbutton').click(function () {
+				$("#grid").jqxGrid('clearfilters');
+			});
+			// show/hide filter background
+			$('#filterbackground').on('change', function (event) {
+				$("#grid").jqxGrid({ showfiltercolumnbackground: event.args.checked });
+			});
+			// show/hide filter icons
+			$('#filtericons').on('change', function (event) {
+				$("#grid").jqxGrid({ autoshowfiltericon: !event.args.checked });
+			});			
+		});
+	</script>
+<!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@END GRID@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
 
 
 <script type="text/javascript">
@@ -75,7 +176,6 @@
 
 {% block content %}
 <form action="{% url 'staff:application_list' %}"  method="GET">
-	
 	<table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-striped table-hover">
 		<thead>
 		<tr class="info">
@@ -177,7 +277,7 @@
 			</tr>
 			{% endfor %}
 		</tbody>
-	</table> 
+	</table>
 	
 	<div class="col-xs-5 col-sm-5 col-md-5 col-md-offset-4">
 		<div class="row">
@@ -231,7 +331,23 @@
 			</table>
 		</div>
 	</div>
-		 
+
+	<div >
+		<div id="grid">
+		</div>
+		<div id="eventslog" style="margin-top: 30px;">
+			<div style="width: 200px; float: left; margin-right: 10px;">
+				<input value="Remove Filter" id="clearfilteringbutton" type="button" />
+				<div style="margin-top: 10px;" id='filterbackground'>Filter Background</div>
+				<div style="margin-top: 10px;" id='filtericons'>Show All Filter Icons</div>
+			</div>
+			<div style="float: left;">
+				Event Log:
+				<div style="border: none;" id="events">
+				</div>
+			</div>
+		</div>
+	</div>	 
 	</form>
 {% endblock %}
 
