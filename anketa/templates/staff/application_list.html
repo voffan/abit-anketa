@@ -1,45 +1,45 @@
 {% extends 'staff\base.html' %}
 
 {% load staticfiles %}
-
 {% block head %}
 	Заявления
 {% endblock %}
 
 
 {% block additionalcss %}
-<link href="{% static "anketa/select2-3.5.4/select2.css" %}" rel="stylesheet">
-<link href="{% static "anketa/select2-3.5.4/select2-bootstrap.css" %}" rel="stylesheet">
+<!--link href="{% static "anketa/select2-3.5.4/select2.css" %}" rel="stylesheet"-->
+<!--link href="{% static "anketa/css/bootstrap.css" %}" rel="stylesheet"-->
 <!-- add one of the jQWidgets styles -->
-<link rel="stylesheet" href="{% static "anketa/jqwidgets/styles/jqx.base.css" %}" type="text/css" />
-<link rel="stylesheet" href="{% static "anketa/jqwidgets/styles/jqx.darkblue.css" %}" type="text/css" />	
+<link href="{% static "anketa/jqwidgets/styles/jqx.base.css" %}" rel="stylesheet">
+<link href="{% static 'anketa/jqwidgets/styles/jqx.bootstrap.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block scripts %}
-<script src="{% static "anketa/select2-3.5.4/select2.min.js" %}"></script>
-<script src="{% static "anketa/select2-3.5.4/ru.js" %}"></script>
+<!--script src="{% static "anketa/select2-3.5.4/select2.min.js" %}"></script>
+<script src="{% static "anketa/select2-3.5.4/ru.js" %}"></script-->
 <!-- add jqwidgets scripts -->
-<script type="text/javascript" src="{% static "anketa/jqwidgets/jqxcore.js" %} "></script>
-<script type="text/javascript" src="{% static "anketa/scripts/jquery-1.11.1.min.js" %}"></script>
-<script type="text/javascript" src="{% static "anketa/jqwidgets/jqxdata.js" %}"></script>
-<script type="text/javascript" src="{% static "anketa/jqwidgets/jqxbuttons.js" %}"></script>
-<script type="text/javascript" src="{% static "anketa/jqwidgets/jqxscrollbar.js" %}"></script>
-<script type="text/javascript" src="{% static "anketa/jqwidgets/jqxlistbox.js" %}"></script>
-<script type="text/javascript" src="{% static "anketa/jqwidgets/jqxdropdownlist.js" %}"></script>
-<script type="text/javascript" src="{% static "anketa/jqwidgets/jqxmenu.js" %}"></script>
-<script type="text/javascript" src="{% static "anketa/jqwidgets/jqxinput.js" %}"></script>
-<script type="text/javascript" src="{% static "anketa/jqwidgets/jqxgrid.js" %}"></script>
-<script type="text/javascript" src="{% static "anketa/jqwidgets/jqxgrid.filter.js" %}"></script>
-<script type="text/javascript" src="{% static "anketa/jqwidgets/jqxgrid.sort.js" %}"></script>
-<script type="text/javascript" src="{% static "anketa/jqwidgets/jqxgrid.selection.js" %}"></script>
-<script type="text/javascript" src="{% static "anketa/jqwidgets/jqxpanel.js" %}"></script>
-<script type="text/javascript" src="{% static "anketa/jqwidgets/globalization/globalize.js" %}"></script>
-<script type="text/javascript" src="{% static "anketa/jqwidgets/jqxcalendar.js" %}"></script>
-<script type="text/javascript" src="{% static "anketa/jqwidgets/jqxdatetimeinput.js" %}"></script>
-<script type="text/javascript" src="{% static "anketa/jqwidgets/jqxcheckbox.js" %}"></script>
-<script type="text/javascript" src="{% static "anketa/jqwidgets/jqx-all.js" %}"></script>
-<script type="text/javascript" src="{% static "anketa/scripts/demos.js" %}"></script>
-<script type="text/javascript" src="{% static "anketa/scripts/localization.js" %}"></script>
+<script src="{% static "anketa/jqwidgets/jqxcore.js" %}"></script>
+<script src="{% static "anketa/jqwidgets/jqxbuttons.js" %}"></script>
+<script src="{% static "anketa/jqwidgets/jqxinput.js" %}"></script>
+<script src="{% static "anketa/jqwidgets/jqxpasswordinput.js" %}"></script>
+<script src="{% static "anketa/jqwidgets/jqxdata.js" %}"></script>
+<script src="{% static "anketa/jqwidgets/jqxscrollbar.js" %}"></script>
+<script src="{% static "anketa/jqwidgets/jqxlistbox.js" %}"></script>
+<script src="{% static "anketa/jqwidgets/jqxdropdownlist.js" %}"></script>
+<script src="{% static "anketa/jqwidgets/jqxmenu.js" %}"></script>
+<script src="{% static "anketa/jqwidgets/jqxgrid.js" %}"></script>
+<script src="{% static "anketa/jqwidgets/jqxgrid.filter.js" %}"></script>
+<script src="{% static "anketa/jqwidgets/jqxgrid.sort.js" %}"></script>
+<script src="{% static "anketa/jqwidgets/jqxgrid.selection.js" %}"></script>
+<script src="{% static "anketa/jqwidgets/jqxgrid.columnsresize.js" %}"></script>
+<script src="{% static "anketa/jqwidgets/jqxpanel.js" %}"></script>
+<script src="{% static "anketa/jqwidgets/jqxcalendar.js" %}"></script>
+<script src="{% static "anketa/jqwidgets/jqxdatetimeinput.js" %}"></script>
+<script src="{% static "anketa/jqwidgets/jqxcheckbox.js" %}"></script>
+<script src="{% static "anketa/jqwidgets/jqxgrid.pager.js" %}"></script>
+<script src="{% static "anketa/scripts/demos.js" %}"></script>
+<script src="{% static "anketa/jqwidgets/globalization/globalize.js" %}"></script>
+<script src="{% static "anketa/scripts/localizationRU.js" %}"></script>
 
 <script type="text/javascript">
 		$(document).ready(function () {
@@ -47,11 +47,11 @@
 			var $i=0;
 			{% for item in applications %}
 				var $row = {};
-				$row["fullname"] = "{{ item.app.abiturient.fullname }}";
-				$row["edu_form"] = "{{ item.prof.0.profile.eduform }}";
+				$row["fullname"] = "<a href=\"{% url 'staff:application_review' item.app.id %}\">{{ item.app.abiturient.fullname }}</a>";
+				$row["edu_form"] = "{% if item.prof.0.profile.eduform == 'О' %}Очная{% endif %} {% if item.prof.0.profile.eduform == 'З' %}Заочная{% endif %}{% if item.prof.0.profile.eduform == 'ОЗ'%}Очно-Заочная{%endif%}";
 				$row["date"] = "{{ item.app.date }}";
 				$row["docType"] = "{{ item.doc.docType.value }}";
-				$row["isCopy"] = "{{ item.doc.isCopy }}";
+				$row["isCopy"] = "{% if item.doc.isCopy == True %}Оригинал{% else %}Копия{% endif %}";
 				$row["edu_prog"] = "{{ item.prof.0.profile.profile.name }}";
 				$row["edu_prof"] = "{{ item.prof.0.profile.profile.edu_prog.qualification.value }}";
 				$row["points"] = "{{ item.app.points }}";
@@ -63,19 +63,25 @@
 			var source =
 			{
 				localdata: transform,
+				datatype: "array",
 				datafields:
-                [
-                    { name: 'fullname', type: 'string' },
-                    { name: 'edu_form', type: 'string' },
-                    { name: 'date', type: 'string' },
-                    { name: 'docType', type: 'string' },
-                    { name: 'isCopy', type: 'string' },
-                    { name: 'edu_prog', type: 'string' },
-                    { name: 'edu_prof', type: 'string' },
-                    { name: 'points', type: 'string' },
-                    { name: 'appState', type: 'string' }
-                ],
-				datatype: "array"
+				[
+					{ name: 'fullname', type: 'string' },
+					{ name: 'edu_form', type: 'string' },
+					{ name: 'date', type: 'string' },
+					{ name: 'docType', type: 'string' },
+					{ name: 'isCopy', type: 'string' },
+					{ name: 'edu_prog', type: 'string' },
+					{ name: 'edu_prof', type: 'string' },
+					{ name: 'points', type: 'string' },
+					{ name: 'appState', type: 'string' }
+				],
+				pagenum: 1,
+                pagesize: 20,
+                pager: function (pagenum, pagesize, oldpagenum) {
+                    // callback called when a page or page size is changed.
+                }
+				
 			};
 			var addfilter = function () {
 				var filtergroup = new $.jqx.filter();
@@ -91,28 +97,50 @@
 				$("#grid").jqxGrid('applyfilters');
 			}
 			var adapter = new $.jqx.dataAdapter(source);
+			console.log(adapter);
+			console.log(transform);
+
+			var pagerrenderer = function () {
+				var element = $("<div style='margin-top: 5px; width: 100%; height: 100%;'></div>");
+				var paginginfo = $("#jqxgrid").jqxGrid('getpaginginformation');
+				for (i = 0; i < paginginfo.pagescount; i++) {
+					// add anchor tag with the page number for each page.
+					var anchor = $("<a style='padding: 5px;' href='#" + i + "'>" + i + "</a>");
+					anchor.appendTo(element);
+					anchor.click(function (event) {
+						// go to a page.
+						var pagenum = parseInt($(event.target).text());
+						$("#jqxgrid").jqxGrid('gotopage', pagenum);
+					});
+				}
+				return element;
+			}
  
 			$("#grid").jqxGrid(
 			{
-				width: 1600,
+				width: getWidth('Grid'),
 				source: adapter,
+				pageable: true,
 				filterable: true,
 				sortable: true,
-				height: 600,
+				autoheight: true,
+				columnsresize: true,
+				pagermode: 'simple',
+				selectionmode: 'singlecell',
 				ready: function () {
 					addfilter();
 				},
 				autoshowfiltericon: true,
 				columns: [
-				  { text: 'Fullname', datafield: 'fullname', filtertype: 'list', width: 160 },
-				  { text: 'edu_form', datafield: 'edu_form', filtertype: 'list', width: 70 },
-				  { text: 'date', datafield: 'date', filtertype: 'list', width: 100},// , cellsformat: 'MMMM-dd-yyyy'},
-				  { text: 'docType', datafield: 'docType', filtertype: 'list', width: 80 },
-				  { text: 'isCopy', datafield: 'isCopy', filtertype: 'list', width: 70, cellsalign: 'right' },
-				  { text: 'edu_prog', datafield: 'edu_prog', filtertype: 'list',width: 100, cellsalign: 'left', cellsformat: 'c2' },
-				  { text: 'edu_prof', datafield: 'edu_prof', filtertype: 'list',width: 100, cellsalign: 'left', cellsformat: 'c2' },
-				  { text: 'points', datafield: 'points', filtertype: 'list',width: 70, cellsalign: 'right', cellsformat: 'c2' },
-				  { text: 'appState', datafield: 'appState', filtertype: 'list', cellsalign: 'right', cellsformat: 'c2' }
+				  { text: 'Полное Имя', datafield: 'fullname',  width: 160, pinned: true },
+				  { text: 'Форма обучения', datafield: 'edu_form', filtertype: 'checkedlist', width: 70 },
+				  { text: 'Дата', datafield: 'date', filtertype: 'date', width: 100, cellsformat: 'MMMM dd, yyyy'},
+				  { text: 'Тип документа', datafield: 'docType', filtertype: 'list', width: 80 },
+				  { text: 'Копия/оригинал', datafield: 'isCopy', filtertype: 'list', width: 70, cellsalign: 'right' },
+				  { text: 'Направление/специальность', datafield: 'edu_prog', filtertype: 'list',width: 100, cellsalign: 'left', cellsformat: 'c2' },
+				  { text: 'Профиль', datafield: 'edu_prof', filtertype: 'list',width: 100, cellsalign: 'left', cellsformat: 'c2' },
+				  { text: 'Баллы', datafield: 'points', filtertype: 'number',width: 70, cellsalign: 'right', cellsformat: 'c2' },
+				  { text: 'Статус', datafield: 'appState', filtertype: 'list', cellsalign: 'right', cellsformat: 'c2' }
 				]
 			});
 			$('#events').jqxPanel({ width: 300, height: 80 });
@@ -140,7 +168,21 @@
 			$('#filtericons').on('change', function (event) {
 				$("#grid").jqxGrid({ autoshowfiltericon: !event.args.checked });
 			});
-			$("#grid").jqxGrid('autoresizecolumns');			
+
+			
+            // apply localization.
+            $("#grid").jqxGrid('localizestrings', localizationobj);
+
+
+			$("#grid").jqxGrid('autoresizecolumns');
+			$("#input").jqxInput({ theme: "bootstrap" });
+			$("#passwordInput").jqxPasswordInput({ theme: "bootstrap" });
+			$("#button").jqxButton({ theme: "bootstrap" });
+			$(".btn-default").jqxButton({ theme: "bootstrap" });
+			$(".btn-primary").jqxButton({ theme: "bootstrap" });
+			$("#grid").jqxGrid({ theme: "bootstrap" });
+			document.body.style.visibility = "inherit";
+
 		});
 	</script>
 <!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@END GRID@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
@@ -336,15 +378,17 @@
 			</table>
 		</div>
 	</div>
--->
-	<div>
-		<div id="grid" >
+	-->	
+
+
+	<div class="col-xs-10 col-sm-10 col-md-10 col-md-offset-1">
+		<div id="grid">
 		</div>
 		<div id="eventslog" style="margin-top: 30px;">
 			<div style="width: 200px; float: left; margin-right: 10px;">
-				<input class="btn btn" value="Удалить фильтры" id="clearfilteringbutton" type="button"  />
-				<div style="margin-top: 10px;" id='filterbackground'>Filter Background</div>
-				<div style="margin-top: 10px;" id='filtericons'>Show All Filter Icons</div>
+				<input class="btn btn-default"  value="Удалить фильтры" id="clearfilteringbutton" type="button"  />
+				<div style="margin-top: 10px;" id='filterbackground'>Подсветить фон</div>
+				<div style="margin-top: 10px;" id='filtericons'>Показать все иконки</div>
 			</div>
 			<div style="float: left;">
 				Event Log:
@@ -352,7 +396,8 @@
 				</div>
 			</div>
 		</div>
-	</div>	 
+	</div>
+
 	</form>
 {% endblock %}
 

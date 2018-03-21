@@ -242,11 +242,14 @@ def Application_list (request):
 	employee = request.user.employee_set.get()
 	if request.user.is_superuser:
 		applications = Application.objects.all()
+		for ap in applications:
+			print(ap.date)
 	else:		
 		applications = Application.objects.filter(department=employee.department)
 	appProfile = ApplicationProfiles.objects.all()
 	#applications = Application.objects.select_related('Abiturient').filter(department__id = employee.department.id)
 	#profiles = Profile.objects.all()
+	""" starie filtri
 	select = '0'
 	selectform = '1'
 	selectnapr = '0'
@@ -361,14 +364,16 @@ def Application_list (request):
 		current_page = app_pages.page(1)
 	except EmptyPage:
 		current_page = app_pages.page(app_pages.num_pages)
-	applications = current_page.object_list	
+	applications = current_page.object_list
+	"""	
 	abiturients = [app.abiturient.id for app in applications]
 	docs = Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains=u'аттестат')|Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains=u'Диплом')
 	apps_with_docs=[]
 	for app in applications:
 		doc = docs.filter(abiturient__id = app.abiturient.id).first()
 		prof = appProfile.filter(application__id=app.id)
-		apps_with_docs.append({'app':app, 'doc':doc, 'prof':prof})	
+		apps_with_docs.append({'app':app, 'doc':doc, 'prof':prof})
+		print("-----",app.date)	
 	doctyps = AttrValue.objects.filter(
 		attribute__name__icontains=u'об образовании'
 	).filter(
@@ -378,17 +383,16 @@ def Application_list (request):
 	)
 	profill = AttrValue.objects.filter(attribute__name__icontains=u'Квалификация')
 	data={}
-	data['errors'] = error_message
+	#data['errors'] = error_message
 	data['applications'] = apps_with_docs
 	data['docType'] = doctyps
 	data['profill'] = profill
 	data['Profile'] = Education_Prog.objects.all()
 	data['Docs'] = Docs.objects.all()
 	data['Application'] = AttrValue.objects.filter(attribute__name__icontains=u'статус за')
-	data['pages'] = current_page    
-	data['filters'] = filters    
+	#data['pages'] = current_page    
+	#data['filters'] = filters    
 	return render(request,'staff\\application_list.html', data)
-
 
 @login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
