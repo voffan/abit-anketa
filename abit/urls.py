@@ -3,7 +3,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
 
-from anketa.views import StartPage, StartApp, Streets, Territory, District, City, Citizenship, Nation, DocIssuer, PrevEduName, Institute, EduProf, Privilegies, Rank, Flang, CreatePerson, DocType, PersonProfile, Applications, PersonData, Account,EduName, SaveApplication, EduProfForm, GetSelectedApplication,DeleteApplication,AddDataToPerson, EduDocType,GetAddressTypeValues, ExamSubject, ExamType, AccountInfoChanging
+from anketa.views import StartPage, StartApp, Streets, Territory, District, City, Citizenship, Nation, DocIssuer, Achievement, AchievResult, PrivCat, PrivType, PrevEduName, Institute, EduProf, Rank, Flang, CreatePerson, DocType, PersonProfile, Applications, PersonData, Account,EduName, SaveApplication, EduProfForm, GetSelectedApplication,DeleteApplication,AddDataToPerson, EduDocType,GetAddressTypeValues, ExamSubject, ExamType, AccountInfoChanging, api_saveexams
 
 
 urlpatterns = patterns('',
@@ -29,8 +29,11 @@ urlpatterns = patterns('',
     url(r'^eduprof/$', EduProf, name = 'eduprof'),
     url(r'^examsubject/$', ExamSubject, name = 'examsubject'),
     url(r'^examtype/$', ExamType, name='examtype'),
+    url(r'^privcat/$', PrivCat, name='privcat'),
+    url(r'^privtype/$', PrivType, name='privtype'),
+    url(r'^achievement/$', Achievement, name='achievement'),
+    url(r'^achievresult/$', AchievResult, name='achievresult'),
     url(r'^eduform/$', EduProfForm, name='eduform'),
-    url(r'^privilegies/$', Privilegies, name = 'privilegies'),
     url(r'^create_person/$', CreatePerson, name="create_person"),
     url(r'^add_data_to_person/$',AddDataToPerson,name="add_data_to_person"),
     url(r'^save_application/$',SaveApplication,name="save_application"),
@@ -43,5 +46,7 @@ urlpatterns = patterns('',
     url(r'^flang/$', Flang, name = 'flang'),
     url(r'^staff/', include('staff.urls',namespace = 'staff')),
     url(r'^kladr/', include('kladr.urls',namespace = 'kladr')),
-    url(r'^auth/', include('authApp.urls', namespace = 'authapp'))
+    url(r'^auth/', include('authApp.urls', namespace = 'authapp')),
+    #==============API=================================================
+    url(r'saveexams$',api_saveexams, name='api_saveexams')
 )

@@ -16,7 +16,7 @@ from django.shortcuts import render_to_response, render,get_object_or_404, redir
 from django.template import RequestContext
 from kladr.models import Street
 from anketa.models import Person, Address, Attribute, AttrValue, Abiturient, EduOrg, ProfileAttrs, ApplicationProfiles, Education_Prog, Profile, Application, EduForm, ApplicationProfiles, Milit, Docs, Exams, DocAttr,Education, Contacts, Relation,\
-	Exams_needed
+	Exams_needed, Achievements, Privilegies
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -40,7 +40,7 @@ def PersonProfile(request):
 		appProf = ApplicationProfiles.objects.all()
 		for app in applications:
 			prof = appProf.filter(application__id = app.id).first()
-			args1.append({'app':app, 'prof':prof})		
+			args1.append({'app':app, 'prof':prof})
 		args['applications']=args1
 	args.update(csrf(request))
 	return render(request, 'anketa/profile.html', args)
@@ -65,7 +65,7 @@ def PersonData(request):
 	if person.nationality is not None:
 		args['nationality']=person.nationality.value
 		args['nationality_id']=person.nationality.id
-	# 2 
+	# 2
 	doctype = person.docs_set.filter(docType__attribute__name__icontains=u'удостоверяющего личность').first()
 	if doctype is not None:
 		args['doctype']=doctype.docType.value
@@ -122,7 +122,7 @@ def PersonData(request):
 			relations.append(cont)
 		args['relation']=relations
 	# 4
-	exams = person.exams_set.all()
+	exams = person.exams_set.exclude(exam_examType__value=u'Вступительный').all()
 	if exams is not None:
 		examsList=[]
 		for item in exams:
@@ -141,13 +141,40 @@ def PersonData(request):
 		addExamsList=[]
 		for item in add_exams:
 			exam={}
+			exam['id']=item.id
 			exam['subject']=item.exam_subjects.id
 			exam['subject_value']=item.exam_subjects.value
+			exam['points']=item.points
+			exam['year']=item.year
 			if item.special and specusl == False:
 				args['specusl']=True
 			addExamsList.append(exam)
 		args['addExams']=addExamsList
-	# 7 
+	#5
+	privilegies = person.privilegies_set.all()
+	if privilegies is not None:
+		privList = []
+		for item in privilegies:
+			priv={}
+			priv['id']=item.id
+			priv['privcat']={'id':item.category.id, 'name':item.category.value}
+			priv['privtype']={'id':item.priv_type.id, 'name':item.priv_type.value}
+			privList.append(priv)
+		args['privilegies']=privList
+	achievements = person.achievements_set.all()
+	if achievements is not None:
+		achievList = []
+		for item in achievements:
+			achiev = {}
+			achiev['id']=item.id
+			achiev['achievement']={'id':item.contest.id,'name':item.contest.value}
+			achiev['achievresult']={'id':item.result.id, 'name':item.result.value}
+			achiev['achievDoc'] = 0
+			achievList.append(achiev)
+		args['achievements']=achievList
+
+
+	# 7
 	args['hostel']=person.hostel
 	milit = Milit.objects.filter(abiturient = person).first()
 	if milit is not None:
@@ -178,7 +205,7 @@ def Applications(request):
 	for app in applications:
 		prof = appProf.filter(application__id = app.id).first()
 		args1.append({'app':app, 'prof':prof})
-	
+
 	args['applications']=args1
 	return render(request,'anketa/applicationList.html',args)
 
@@ -211,51 +238,98 @@ def GetSelectedApplication(request):
 	result['profiles_len']=len(profiles)
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
+
+#def save_exams
+
+
 @transaction.atomic
 def SaveExam(request, abit):
 	print('Saving Exam!!')
 	#if abit.exams_set.filter(exam_examType__value=u'ЕГЭ') is not None:
 	#	Exams.objects.filter(abiturient__id=abit.id).filter(exam_examType__value=u'ЕГЭ').delete()
 	# abit.exams_set.all().delete a cho ne rabotaet
-	examtypes = request.POST.getlist('examType')
 	#examtype = AttrValue.objects.filter(attribute__name__icontains=u'Тип экзамена').filter(value__icontains=u'ЕГЭ').first()
-	print(request.POST.getlist('examType'))
-	exams = request.POST.getlist('egeDisc')
-	points = request.POST.getlist('egePoints')
-	years = request.POST.getlist('egeYear')
-	for i in range(len(exams)):
-		subject = AttrValue.objects.filter(attribute__name__icontains=u'Дисциплина').filter(
-			pk=exams[i]).first()
-		examtype = AttrValue.objects.filter(attribute__name__icontains=u'Тип экзамена').filter(
-			pk=examtypes[i]).first()
-		#проверить присутствует ли экзамен по типу, дисциплине и году
-		exam = Exams.objects.filter(abiturient__id = abit.id, exam_examType = examtypes[i], exam_subjects = exams[i], year = years[i]).first()
-		if exam is None:
-			exam = Exams()
-			exam.abiturient = abit
-			exam.exam_examType = examtype
-			exam.exam_subjects = subject
-			exam.year = years[i]
-		exam.points = points[i]
-		exam.save()
-	if len(request.POST.get('additionalExams', '')) > 0:
-		add_exams = request.POST.get('additionalExams', '').split(',')
+
+	exam_details = {'ege':list(zip(request.POST.getlist('egeDisc'),request.POST.getlist('examType'), request.POST.getlist('egeYear'), request.POST.getlist('egePoints'), [False]*len(request.POST.getlist('egeDisc'))))}
+	if len(request.POST.getlist('addDisc')) > 0:
 		specusl = False
 		if request.POST.get('specusl', '') == "yes":
 			specusl = True
-		if abit.exams_set.filter(exam_examType__value=u'Вступительный') is not None:
-			Exams.objects.filter(abiturient=abit).filter(exam_examType__value=u'Вступительный').delete()
-		for item in add_exams:
-			add_exam = Exams()
-			add_exam.abiturient = abit
-			add_exam.exam_examType = AttrValue.objects.filter(attribute__name__icontains=u'Тип экзамена').filter(
-				value__icontains=u'Вступительный').first()
-			add_exam.exam_subjects = AttrValue.objects.filter(attribute__name__icontains=u'Дисциплина').filter(
-				pk=item).first()
-			add_exam.year = datetime.date.today().year
-			add_exam.special = specusl
-			add_exam.save()
+		examtype_id = AttrValue.objects.filter(attribute__name__icontains=u'Тип экзамена').filter(
+				value=u'Вступительный').first().id
+		exam_details['add'] = list(zip(request.POST.getlist('addDisc'),[examtype_id]*len(request.POST.getlist('addDisc')), [datetime.date.today().year]*len(request.POST.getlist('addDisc')), [0]*len(request.POST.getlist('addDisc')),[0]*len(request.POST.getlist('addDisc')),[specusl]*len(request.POST.getlist('addDisc'))))
+	print(exam_details)
+	for key in exam_details.keys():
+		for i in range(len(exam_details[key])):
+			subject = AttrValue.objects.filter(attribute__name__icontains=u'Дисциплина').filter(
+				pk=exam_details[key][i][0]).first()
+			examtype = AttrValue.objects.filter(attribute__name__icontains=u'Тип экзамена').filter(
+				pk=exam_details[key][i][1]).first()
+			#проверить присутствует ли экзамен по типу, дисциплине и году
+			exam = Exams.objects.filter(abiturient__id = abit.id, exam_examType__id = exam_details[key][i][1], exam_subjects = exam_details[key][i][0], year = exam_details[key][i][2]).first()
+			if exam is None:
+				exam = Exams()
+				exam.abiturient = abit
+				exam.exam_examType = examtype
+				exam.exam_subjects = subject
+				exam.year = exam_details[key][i][2]
+			exam.special = exam_details[key][i][4]
+			if key!='add':
+				exam.points = exam_details[key][i][3]
+			exam.save()
+	# if len(request.POST.get('additionalExams', '')) > 0:
+	# 	#add_exams = request.POST.get('additionalExams', '').split(',')
+	# 	specusl = False
+	# 	if request.POST.get('specusl', '') == "yes":
+	# 		specusl = True
+	# 	if abit.exams_set.filter(exam_examType__value=u'Вступительный') is not None:
+	# 		Exams.objects.filter(abiturient=abit).filter(exam_examType__value=u'Вступительный').delete()
+	# 	for item in exam_details['add']:
+	# 		add_exam = Exams()
+	# 		add_exam.abiturient = abit
+	# 		add_exam.exam_examType = AttrValue.objects.filter(attribute__name__icontains=u'Тип экзамена').filter(
+	# 			value__icontains=u'Вступительный').first()
+	# 		add_exam.exam_subjects = AttrValue.objects.filter(attribute__name__icontains=u'Дисциплина').filter(
+	# 			pk=item).first()
+	# 		add_exam.year = datetime.date.today().year
+	# 		add_exam.special = specusl
+	# 		add_exam.save()
 	print('Added!')
+	print(exam_details)
+
+@transaction.atomic
+def SavePrivilegies(request, abit):
+	priv_details = list(zip(request.POST.getlist('privcat'), request.POST.getlist('privtype')))
+	achiev_details = list(zip(request.POST.getlist('achievement'), request.POST.getlist('achivresult'), request.POST.getlist('achievDoc')))
+	print(priv_details)
+	print(achiev_details)
+	for i in range(len(priv_details)):
+		privcat = AttrValue.objects.filter(attribute__name__icontains=u'Категория').filter(
+			pk=priv_details[i][0]).first()
+		privtype = AttrValue.objects.filter(attribute__name__icontains=u'Тип привелегии').filter(
+			pk=priv_details[i][1]).first()
+		priv = Privilegies.objects.filter(abiturient__id=abit.id, category__id=priv_details[i][0],priv_type__id =priv_details[i][1]).first()
+		if priv is None:
+			priv = Privilegies()
+			priv.abiturient = abit
+			priv.category = privcat
+			priv.priv_type = privtype
+		priv.save()
+		print('Priv save!')
+
+	for i in range(len(achiev_details)):
+		achievement = AttrValue.objects.filter(attribute__name__icontains=u'Мероприятие').filter(
+			pk=achiev_details[i][0]).first()
+		achivresult = AttrValue.objects.filter(attribute__name__icontains=u'Достигнутый результат').filter(
+			pk=achiev_details[i][1]).first()
+		achiev = Achievements.objects.filter(abiturient__id=abit.id, contest__id=achiev_details[i][0],result__id=achiev_details[i][1]).first()
+		if achiev is None:
+			achiev = Achievements()
+			achiev.abiturient = abit
+			achiev.contest = achievement
+			achiev.result = achivresult
+		achiev.save()
+		print('Achiev save!')
 
 @transaction.atomic
 def SaveAddress(request, abit):
@@ -340,6 +414,7 @@ def SaveContactDetails(request, abit):
 	print('saving relevants')
 	SaveRelevants(request, abit)
 
+
 def AddDataToPerson(request):
 	result={'result':"success"}
 	#print(request.POST)
@@ -423,7 +498,7 @@ def AddDataToPerson(request):
 							else:
 								edudoc.level = AttrValue.objects.filter(attribute__name__icontains=u'Предыдущее образование').filter(value__icontains=u'ВПО').first()
 				edudoc.save()
-				
+
 				snils = abit.docs_set.filter(docType__value__icontains=u'CНИЛС').first()
 				if snils is None:
 					snils = Docs()
@@ -433,15 +508,16 @@ def AddDataToPerson(request):
 					snils.serialno=int(request.POST.get('inila',''))
 				snils.docIssuer=doctype.docIssuer
 				snils.save()
-			
+
 			if page==3:
 				SaveContactDetails(request, abit)
 			if page==4:
 				print('Exams')
 				SaveExam(request, abit)
-			"""
-			if(page==5):
 
+			if(page==5):
+				SavePrivilegies(request, abit)
+			"""
 			if(page==6):
 			"""
 			if page==7:
@@ -477,7 +553,7 @@ def AddDataToPerson(request):
 
 @transaction.atomic
 def SaveApplication(request):
-	result = {'result':0, 'error_msg':''}	
+	result = {'result':0, 'error_msg':''}
 	if request.method == 'POST':
 		if(int(request.POST.get('facepalm',''))>0):
 			application=Application.objects.get(pk=request.POST.get('facepalm'))
@@ -504,7 +580,7 @@ def SaveApplication(request):
 			print(forms)
 			for i in range(len(forms)):
 				appProf = ApplicationProfiles()
-				appProf.application=application		
+				appProf.application=application
 				appProf.profile=ProfileAttrs.objects.get(pk = forms[i])
 				appProf.save()
 	return HttpResponse(json.dumps(result), content_type="application/json")
@@ -531,10 +607,10 @@ def Save_Abiturient(values):
 	abit.save()
 
 def rpHash(person):
-	hash = 5381 
-	value = person.upper() 
-	for caracter in value: 
-		hash = (( np.left_shift(hash, 5) + hash) + ord(caracter)) 
+	hash = 5381
+	value = person.upper()
+	for caracter in value:
+		hash = (( np.left_shift(hash, 5) + hash) + ord(caracter))
 	hash = np.int32(hash)
 	return hash
 
@@ -619,7 +695,7 @@ def GetAddressTypeValues(request):
 		needed_adrs=Address.objects.filter(abiturient=abiturient).filter(adrs_type__value__icontains=needed_adrs_type).first()
 		if needed_adrs is not None:
 			result['success']=1
-			result['index']=needed_adrs.zipcode	
+			result['index']=needed_adrs.zipcode
 			result['street']=needed_adrs.street.name
 			result['house']=needed_adrs.house
 			result['building']=needed_adrs.building
@@ -696,7 +772,7 @@ def Nation(request):
 	for item in trry:
 		result.append({'id':item['id'], 'text':item['value']})
 	return HttpResponse(json.dumps(result), content_type="application/json")
-	
+
 def DocType(request):
 	trry = AttrValue.objects.filter(attribute__name__icontains=u'тип документа удостоверяющего личность')
 	part = request.GET.get('query','')
@@ -745,12 +821,40 @@ def ExamSubject(request):
 	result = []
 	for item in subjects:
 		result.append({'id':item.id, 'text':item.value})
-	return HttpResponse(json.dumps(result), content_type="application/json")	
+	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def ExamType(request):
-	subjects = AttrValue.objects.filter(attribute__name__icontains=u'Тип экзамена')
+	subjects = AttrValue.objects.filter(attribute__name__icontains=u'Тип экзамена').exclude(value__icontains=u'вступ')
 	result = []
 	for item in subjects:
+		result.append({'id':item.id, 'text':item.value})
+	return HttpResponse(json.dumps(result), content_type="application/json")
+
+def PrivCat(request):
+	privileges = AttrValue.objects.filter(attribute__name__icontains=u'Категория')
+	result = []
+	for item in privileges:
+		result.append({'id':item.id, 'text':item.value})
+	return HttpResponse(json.dumps(result), content_type="application/json")
+
+def PrivType(request):
+	privileges = AttrValue.objects.filter(attribute__name__icontains=u'Тип привелегии')
+	result = []
+	for item in privileges:
+		result.append({'id':item.id, 'text':item.value})
+	return HttpResponse(json.dumps(result), content_type="application/json")
+
+def Achievement(request):
+	achievements = AttrValue.objects.filter(attribute__name__icontains=u'Мероприятие')
+	result = []
+	for item in achievements:
+		result.append({'id':item.id, 'text':item.value})
+	return HttpResponse(json.dumps(result), content_type="application/json")
+
+def AchievResult(request):
+	achievements = AttrValue.objects.filter(attribute__name__icontains=u'Достигнутый результат')
+	result = []
+	for item in achievements:
 		result.append({'id':item.id, 'text':item.value})
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
@@ -790,12 +894,12 @@ def EduProfForm(request):
 	#eduprof = eduprof.values('id', 'eduform')
 	result = []
 	for item in eduprof.profileattrs_set.filter(year = year):
-		#if item.year == int(year):	
+		#if item.year == int(year):
 		#item['eduform'] = [x[1] for x in EduForm if x[0] == item['eduform']][0]
-		result.append({'id':item.id,'text':item.eduform})		
+		result.append({'id':item.id,'text':item.eduform})
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
-def Privilegies(request):
+def PrivilegiesFunc(request):
 	trry = AttrValue.objects.filter(attribute__name__icontains=u'выдавший')
 	part = request.GET.get('query','')
 	if len(part)>0:
@@ -818,7 +922,7 @@ def Rank(request):
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def Flang(request):
-	trry = AttrValue.objects.filter(attribute__name__icontains=u'Изучаемый') 
+	trry = AttrValue.objects.filter(attribute__name__icontains=u'Изучаемый')
 	part = request.GET.get('query','')
 	if len(part)>0:
 		trry = trry.filter(value__icontains = part)
@@ -827,3 +931,7 @@ def Flang(request):
 	for item in trry:
 		result.append({'id':item['id'], 'text':item['value']})
 	return HttpResponse(json.dumps(result), content_type="application/json")
+
+
+def api_saveexams(request):
+	pass

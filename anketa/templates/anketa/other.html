@@ -1,0 +1,64 @@
+			<div class="tab-pane" id="tab6">
+				<form id="other" name="other" role="form" method="post">
+					{% csrf_token %}
+					<input name="currentPage" id="currentPage" value="6" type="hidden"/>
+					<div class="container-fluid">
+						 <div class="row">
+							<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
+								<p>
+									<label for="flang">Изучаемый иностранный язык</label>
+									<input type="hidden" name="flang" id="flang" class="form-control" placeholder="Английский">
+								</p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
+								<label for="hostel">Нуждаетесь ли в общежитие?</label>
+								<p>
+									<input type="radio" name = "hostel" value="no" {% if hostel == False %} checked {% endif %}>Нет
+									<input type="radio" name = "hostel" value="yes" {% if hostel == True %} checked {% endif %}>Да
+								</p>
+							</div>
+						</div>
+						<p>
+							<div class="row">
+									<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
+										<label for="liableForMilit">Являетесь ли вы военнообязанным?</label>
+										<p>
+											<input type="radio" name="liableForMilit" value="no" {% if liableForMilit == False %} checked {% endif %}>Невоеннообязанный
+											<input type="radio" name="liableForMilit" value="yes" {% if liableForMilit == True %} checked {% endif %}>Военнообязанный
+										</p>
+									</div>
+							</div>
+						</p>
+						<p>
+							<div class="row" id ="isServedRow" {% if liableForMilit == False %} hidden {% endif %}>
+									<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
+										<label for="isServed">Служили в армии?</label>
+										<p>
+											<input type="radio" name="isServed" value="no" {% if isServed == False %} checked {% endif %}>Нет
+											<input type="radio" name="isServed" value="yes" {% if isServed == True %} checked {% endif %} >Да
+										</p>
+									</div>
+							</div>
+						</p>
+						<p>
+							<div class="row" id="armyRow" {% if isServed == False or liableForMilit == False %} hidden {% endif %}>
+									<div class="col-xs-6 col-sm-5 col-md-4 col-md-offset-2">
+										<label for="yeararmy">Год увольнения из рядов РА</label>
+										<input type="text" name="yeararmy" id="yeararmy" class="form-control" placeholder="2014" {% if yeararmy %} value={{yeararmy}} {% endif %}>
+									</div>
+									<div class="col-xs-6 col-sm-3 col-md-4">
+										<label for="rank">Воинское звание</label>
+										<input type="hidden" name="rank" id="rank" class="form-control">
+									</div>
+							</div>
+						</p>
+						<div class="row">
+							<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
+								<button class="btn btn-primary btn-block" type="button" id="save7">Сохранить</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>

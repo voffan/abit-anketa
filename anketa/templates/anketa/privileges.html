@@ -1,0 +1,135 @@
+			<div class="tab-pane" id="tab5">
+				<form id="privileges" name="privileges" role="form" method="post">
+					{% csrf_token %}
+					<input name="currentPage" id="currentPage" value="5" type="hidden"/>
+					<div class="container-fluid">
+						<div class ="row">
+							<div class="panel panel-primary">
+								<div class="panel-heading">
+									<h3 class="panel-title">Льготы</h3>
+								</div>
+								<div class="panel-body">
+									<div class="row">
+										<table class="table" id="tablePriv">
+											<thead id="tablehead">
+												<tr>
+													<th width="50%">Категория</th>
+													<th width="35%">Тип</th>
+													<th width="15%">Действие</th>
+												</tr>
+											</thead>
+											<tbody id="privelegesTableBoby">
+											{% if privilegies %}
+												{% for item in privilegies %}
+												<tr class="info">
+													<td><input type="hidden" class="form-control" name="privcat" value ="{{item.privcat.id}};{{item.privcat.name}}"><input type="hidden" name="privId" value ="{{item.id}}"></td>
+													<td><input type="hidden" class="form-control" name="privtype" value="{{item.privtype.id}};{{item.privtype.name}}"></td>
+													<td><button class="btn btn-default btn-sm" name="delPrivRow" type="button">Удалить</button></td>
+												</tr>
+												{% endfor %}
+											{% endif %}
+											</tbody>
+										</table>
+									</div>
+									<div class="row">
+										<button class="btn btn-primary btn-block" type="button" id="addPriv">Добавить</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class ="row">
+							<div class="panel panel-primary">
+								<div class="panel-heading">
+									<h3 class="panel-title">Достижения</h3>
+								</div>
+								<div class="panel-body">
+									<div class="row">
+										<table class="table" id="tableAchiev">
+											<thead id="tableheadAchiev">
+												<tr>
+													<th width="35%">Мероприятие</th>
+													<th width="30%">Результат</th>
+													<th width="20%">Документ</th>
+													<th width="15%">Действие</th>
+												</tr>
+											</thead>
+											<tbody id="achievementsTableBoby">
+											{% if achievements %}
+												{% for item in achievements %}
+												<tr class="info">
+													<td><input type="hidden" class="form-control" name="achievement" value ="{{item.achievement.id}};{{item.achievement.name}}"><input type="hidden" name="achievId" value ="{{item.id}}"></td>
+													<td><input type="hidden" class="form-control" name="achievresult" value="{{item.achievresult.id}};{{item.achievresult.name}}"></td>
+													<td><input type="text" class="form-control" name="achievDoc" value="0"></td>
+													<td><button class="btn btn-default btn-sm" name="delPrivRow" type="button">Удалить</button></td>
+												</tr>
+												{% endfor %}
+											{% endif %}
+											</tbody>
+										</table>
+									</div>
+									<div class="row">
+										<button class="btn btn-primary btn-block" type="button" id="addAchiev">Добавить</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
+								<button class="btn btn-primary btn-block" type="button" id="save5">Сохранить</button>
+							</div>
+						</div>
+
+<!--								<label for="privileges">Имеются ли льготы?</label>
+								<p>
+									<input type="radio" name = "privileges" value="no">Нет
+									<input type="radio" name = "privileges" value="yes">Да
+								</p>
+							</div>
+						</div>
+						<div class="row">
+							<p>
+								<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2" id="privcatrow" {% if not privcat %} hidden {% endif %}>
+									<label for="privcat">Категория</label>
+									<input type="hidden" id="privcat" class="form-control">
+								</div>
+							</p>
+						</div>
+						<div class="row">
+							<p>
+								<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2" id="privtyperow" {% if not privtype %} hidden {% endif %}>
+									<label for="privtype">Тип</label>
+									<input type="hidden" id="privtype" class="form-control">
+								</div>
+							</p>
+						</div>
+						</br>
+						<div class="row">
+							<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
+								<label for="persach">Имеются ли достижения?</label>
+								<p>
+									<input type="radio" name = "persach" value="no">Нет
+									<input type="radio" name = "persach" value="yes">Да
+								</p>
+							</div>
+						</div>
+						<div id="achRow" class="row" {% if not achievements %} hidden {% endif %}>
+							<p>
+								<div class="col-xs-6 col-sm-5 col-md-4 col-md-offset-2">
+									<label for="achievement">Наименование достижения</label>
+									<input type="hidden" id="achievement" name="achievement" class="form-control">
+								</div>
+								<div class="col-xs-6 col-sm-5 col-md-4">
+									<label for="achievementDoc">Подтверждающий документ</label>
+									<input type="hidden" id="achievementDoc" name="achievementDoc" class="form-control">
+								</div>
+							</p>
+						</div>
+						</br>
+						<div class="row">
+							<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
+								<button class="btn btn-primary btn-block" type="button" id="save5">Сохранить</button>
+-->
+
+					</div>
+				</form>
+			</div>
