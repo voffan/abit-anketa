@@ -246,7 +246,7 @@ def Application_list (request):
 		applications = Application.objects.filter(department=employee.department)
 	appProfile = ApplicationProfiles.objects.all()
 	#applications = Application.objects.select_related('Abiturient').filter(department__id = employee.department.id)
-	#profiles = Profile.objects.all()
+	profiles = Profile.objects.all()
 	select = '0'
 	selectform = '1'
 	selectnapr = '0'
@@ -259,6 +259,7 @@ def Application_list (request):
 	dategt = '2016-01-01'
 	datelt = '0'
 	selectprof = '0'
+	selectBplace = '0'
 	error_message=''     
 	filters={'apply':''}
 
@@ -298,15 +299,15 @@ def Application_list (request):
 
 		if 'forma' in request.GET:
 			if request.GET['forma'] =='2':
-				applications = applications.filter(profile__eduform__icontains=u'О')
+				applications = applications.filter(applicationprofiles__profile__eduform=u'О')
 				selectform = '2'
 				filters['forma'] = selectform
 			if request.GET['forma'] =='3':
-				applications = applications.filter(profile__eduform__icontains=u'З')
+				applications = applications.filter(applicationprofiles__profile__eduform=u'З')
 				selectform = '3'
 				filters['forma'] = selectform
 			if request.GET['forma'] =='4':
-				applications = applications.filter(profile__eduform__icontains=u'ОЗ')
+				applications = applications.filter(applicationprofiles__profile__eduform=u'ОЗ')
 				selectform = '4'
 				filters['forma'] = selectform
 
@@ -333,13 +334,12 @@ def Application_list (request):
 
 		if 'napravlenie' in request.GET and int(request.GET['napravlenie'])>0:
 			selectnapr = request.GET['napravlenie']
-			applications = applications.filter(edu_prog__edu_prog__id=selectnapr)
+			applications = applications.filter(applicationprofiles__profile__profile__edu_prog__id=selectnapr)
 			filters['napravlenie'] = int(selectnapr)
 
 		if 'profil' in request.GET and int(request.GET['profil'])>0:
 			selectprof = request.GET['profil']
-			applications = app_profil.filter(profile_id=selectprof)
-			#applications = applications.filter(edu_prog__edu_prog__qualification__id=selectprof)
+			applications = applications.filter(applicationprofiles__profile__profile__id=selectprof)
 			filters['profil'] = int(selectprof)
 	
 		if 'appNumb' in request.GET and len(request.GET['appNumb'])>0:
@@ -348,12 +348,16 @@ def Application_list (request):
 			if not applications:
 				error_message = "vibrannoe zayavlenie vne vashei iyrezdikcii" #ne ny po4ti rabotaet
 			filters['appNumb'] = (selectNumb)
-		#kak vse eto rabotaet -_-
+		
+		if 'birthplace' in request.GET and len(request.GET['birthplace'])>0:
+			selectBplace = request.GET['birthplace']
+			applications = applications.filter(abiturient__birthplace__icontains=selectBplace)
+			filters['birthplace'] = (selectBplace)
 
 	if 'cancel' in request.GET:
 		return HttpResponseRedirect(reverse('staff:application_list'))
 	
-	app_pages = Paginator(applications, 10)
+	app_pages = Paginator(applications, 20)
 	page = request.GET.get('page')
 	try:
 		current_page = app_pages.page(page)
@@ -381,8 +385,8 @@ def Application_list (request):
 	data['errors'] = error_message
 	data['applications'] = apps_with_docs
 	data['docType'] = doctyps
-	data['profill'] = profill
-	data['Profile'] = Education_Prog.objects.all()
+	data['profill'] = profiles
+	data['edu_prog'] = Education_Prog.objects.all()
 	data['Docs'] = Docs.objects.all()
 	data['Application'] = AttrValue.objects.filter(attribute__name__icontains=u'статус за')
 	data['pages'] = current_page    

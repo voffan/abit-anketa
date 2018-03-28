@@ -46,9 +46,9 @@
 				$('#attr_details_form').submit();			
 			});
 
-        	$('.change').on('click',function(){	
-            	var $value = $(this).attr('value');
-            	$.ajax({
+			$('.change').on('click',function(){	
+				var $value = $(this).attr('value');
+				$.ajax({
 					url: "{% url 'staff:get_attr' %}",					
 					method: "GET",
 					data: {
@@ -70,12 +70,12 @@
 					}
 
 				});
-           	});
-           	$('#NEW').on('click',function(){
-           		$('#myModalLabel').html('Новый атрибут');
-           		$('#attr_id_detail').val('-1');
-           		$('#attr_detail').modal();
-           	});
+			});
+			$('#NEW').on('click',function(){
+				$('#myModalLabel').html('Новый атрибут');
+				$('#attr_id_detail').val('-1');
+				$('#attr_detail').modal();
+			});
 		});
 		
 		
@@ -90,85 +90,77 @@
 
 <!-- Modal addtibute detail -->
 <div class="modal fade" id="attr_detail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-    	<form action="" method="POST" id="attr_details_form">
-      	{% csrf_token %}
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel"></h4>
-      </div>
-      <div class="modal-body">
-      			<input type="text" name="attr_id" id="attr_id_detail" value="" hidden>
-			  	<label class="control-label">Тип атрибута:</label>
-					<select class="form-control" name="attrtype" id = "attrtype_detail">
-						{% for item in data.attrtype %}
-							<option value="{{ item.id }}">{{ item.name }}</option>
-						{% endfor %}      
-					</select>				
-					<p></p>
-					<label class="control-label">Название:</label>
-					<input type="text" class="form-control" name = "attr_name" id="attr_name_detail" value ="">
-					<p></p>								
-	  </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" name="Close">Закрыть</button>
-        <button type="submit" class="btn btn-primary" name="save">Сохранить</button>
-      </div>
-  		</form>
-    </div>
-  </div>
+  	<div class="modal-dialog">
+		<div class="modal-content">
+			<form action="" method="POST" id="attr_details_form">
+			{% csrf_token %}
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel"></h4>
+		  		</div>
+		  		<div class="modal-body">
+					<input type="text" name="attr_id" id="attr_id_detail" value="" hidden>
+					<label class="control-label">Тип атрибута:</label>
+						<select class="form-control" name="attrtype" id = "attrtype_detail">
+							{% for item in data.attrtype %}
+								<option value="{{ item.id }}">{{ item.name }}</option>
+							{% endfor %}      
+						</select>				
+						<p></p>
+						<label class="control-label">Название:</label>
+						<input type="text" class="form-control" name = "attr_name" id="attr_name_detail" value ="">
+						<p></p>								
+		 		</div>
+		  		<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal" name="Close">Закрыть</button>
+					<button type="submit" class="btn btn-primary" name="save">Сохранить</button>
+		  		</div>
+			</form>
+		</div>
+  	</div>
 </div>
 
 <!--Фильтр по наименованию атрибута-->
-		<div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2">
-		<div class="panel panel-default">
-			<div class="panel-heading">Список Атрибутов</div>
-			<div class="panel-body">
-				<form action=""  method="POST">
-					{% csrf_token %}  
-					<input type = "text" class="form-control" name = "attribute1" id = "attribute1" hidden/>
-					<p></p>
-					<table>
-					<td>
-						<button type="submit" class="btn btn-default" name="filter">Применить фильтр</button>
-					</td>
-					<td>
-						<button type="submit" class="btn btn-default" name="reset">Сбросить фильтр</button><!--dasdasdasdasda-->
-					</td>
-					</table>
-				</form>
+<div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2">
+	<div class="panel panel-default">
+		<div class="panel-heading">Список Атрибутов</div>
+		<div class="panel-body">
+			<form action=""  method="POST">
+				{% csrf_token %}  
+				<input type = "text" class="form-control" name = "attribute1" id = "attribute1" hidden/>
 				<p></p>
-				<form action=""  method="POST">
+				<table>
+					<td><button type="submit" class="btn btn-default" name="filter">Применить фильтр</button></td>
+					<td><button type="submit" class="btn btn-default" name="reset">Сбросить фильтр</button></td>
+				</table>
+			</form>
+			<p></p>
+			<form action=""  method="POST">
 				{% csrf_token %} 
 				<table class="table table table-bordered table-hover ">
 					<thead> 
-							<tr>
-								<th width="3%">#</th>
-								<th>Имя атрибута</th>
-								<th width="2%">v</th>
-								<th width="5%">Детали</th>
-							</tr>
+						<tr>
+							<th width="3%">#</th>
+							<th>Имя атрибута</th>
+							<th width="2%">v</th>
+							<th width="5%">Детали</th>
+						</tr>
 					</thead>
 					<tbody>
-							{% for item in data.attribute %}
-							<tr>
-								<td>{{ forloop.counter }}</td>
-								<td><a href="" class="change" name="attr_ibute_name" id="attr_ibute_name_{{ item.id }}" value="{{ item.id }}" data-toggle="modal">{{ item.name }}</a>
-								</td>								
-								<td><input type="checkbox" name="selected" value="{{ item.id }}"></td>
-								<td>
-								<a href="{% url 'staff:catalogs_attrvalue' item.id %}" class="btn btn-info" role="button" name="{{ item.id }}">>></a>
-								</td>
-							</tr>
-							{% endfor %}
+						{% for item in data.attribute %}
+						<tr>
+							<td>{{ forloop.counter }}</td>
+							<td><a href="" class="change" name="attr_ibute_name" id="attr_ibute_name_{{ item.id }}" value="{{ item.id }}" data-toggle="modal">{{ item.name }}</a></td>								
+							<td><input type="checkbox" name="selected" value="{{ item.id }}"></td>
+							<td><a href="{% url 'staff:catalogs_attrvalue' item.id %}" class="btn btn-info" role="button" name="{{ item.id }}">>></a></td>
+						</tr>
+						{% endfor %}
 					</tbody>
-			</table>			
-			<button type="button" class="btn btn-primary btn-ng" id="NEW">Добавить</button>
-			<button type="submit" class="btn btn-danger" name="delete">Удалить</button>
+				</table>			
+				<button type="button" class="btn btn-primary btn-ng" id="NEW">Добавить</button>
+				<button type="submit" class="btn btn-danger" name="delete">Удалить</button>
 			</form>					 
-			</div>
-		</div>       
 		</div>
-
+	</div>       
+</div>
 {% endblock %}

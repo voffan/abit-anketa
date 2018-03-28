@@ -15,19 +15,19 @@
 {% block content %}
 	<div class="panel panel-default">
 		<div class="panel-heading">Атрибут</div>
-			<div class="panel-body">
-				<label class="control-label">Тип атрибута:</label>
-					<select class="form-control" name="attrtype" id = "attrtype">
-						{% for item in data.attrtype %}
-						<option value="{{item.id}}">{{ item.name }}</option>
-						{% endfor %}      
-					</select>				
-				<p></p>
-				<label class="control-label">Название:</label>
-				<input type="text" class="form-control" name = "attr_name" id="attr_name" value ="{{ data.attribute.name }}">
-				<p></p>
-				<button type="submit" class="btn btn-default" name="save">Сохранить</button>
-			</div>
+		<div class="panel-body">
+			<label class="control-label">Тип атрибута:</label>
+				<select class="form-control" name="attrtype" id = "attrtype">
+					{% for item in data.attrtype %}
+					<option value="{{item.id}}">{{ item.name }}</option>
+					{% endfor %}      
+				</select>				
+			<p></p>
+			<label class="control-label">Название:</label>
+			<input type="text" class="form-control" name = "attr_name" id="attr_name" value ="{{ data.attribute.name }}">
+			<p></p>
+			<button type="submit" class="btn btn-default" name="save">Сохранить</button>
+		</div>
 	</div>
 {% endblock %}
 	            

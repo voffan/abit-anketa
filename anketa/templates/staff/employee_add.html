@@ -10,89 +10,84 @@
 {% load staticfiles %}
 
 <form action="{% url 'staff:employee_add' %}" class="form-horizontal" role="form" method="post">
-    {% csrf_token %}
-  <div class="form-group">
-    <label for="username" class="col-sm-2 control-label">Пользователь:</label>
-      <div class="col-sm-9">      
-      <input type="text" class="form-control" name = "username" id="username" placeholder="Имя пользователя" value = "{{ data.employee.user.username }}"  {% if data.employee %} disabled {% endif %}>
-      <!--select class="form-control">Пользователь</select-->
-    </div>
-      <!--button type="submit" class="btn btn-default"><a href="/admin/" class="add-another" id="add_id_user" onclick="return showAddAnotherPopup(this);"> <img src="/abit-anketa/static/admin/img/icon_addlink.gif" width="10" height="10" alt="Добавить еще"></a></button-->
-  </div>
-  <div class="form-group">
-    <label for="e-mail" class="col-sm-2 control-label">E-mail</label>
-    <div class="col-sm-9">      
-      <input type="text" class="form-control" name = "email" id="email" placeholder="user@yandex.ru" value="{{ data.employee.user.email }}">
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="password" class="col-sm-2 control-label">Пароль:</label>
-    <div class="col-sm-9">      
-      <input type="password" class="form-control" name = "password" id="password" placeholder="пароль" >
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="confirm" class="col-sm-2 control-label">Подтвердите пароль:</label>
-    <div class="col-sm-9">      
-      <input type="password" class="form-control" name = "confirm" id="confirm" placeholder="Подтверждение пароля" >
-    </div>
-  </div>
-    
-
-    
-  <div class="form-group">
-    <label for="inputPassword3" class="col-sm-2 control-label">Подразделение:</label>
-    <div class="col-sm-9">
-      <!--<input type="Подразделение" class="form-control" id="inputPassword3" placeholder="Подразделение">-->
-      <select class="form-control" name="department" id = "department" placeholder="Выберете подразделение">
-        {% for dep in data.departments %}
-            <option value="{{ dep.id }}">{{ dep.name }}</option>
-        {% endfor %}      
-      </select>
-    </div>      
-  </div>
-  <div class="form-group">
-    <label for="inputPassword3" class="col-sm-2 control-label">Фамилия:</label>
-    <div class="col-sm-9">
-      <input type="Фамилия" class="form-control" name = "fname" id="fname" placeholder="Фамилия" value="{{ data.employee.first_name }}">
-    </div>
-  </div> 
-    <div class="form-group">
-    <label for="inputPassword3" class="col-sm-2 control-label">Имя:</label>
-    <div class="col-sm-9">
-      <input type="Имя" class="form-control" name="mname" id="mname" placeholder="Имя" value="{{ data.employee.mid_name }}">
-    </div>
-  </div> 
-    <div class="form-group">
-    <label for="inputPassword3" class="col-sm-2 control-label">Отчество:</label>
-    <div class="col-sm-9">
-      <input type="Отчество" class="form-control" name="lname" id="lname" placeholder="Отчество" value="{{ data.employee.last_name }}">
-    </div>
-  </div>
-    <div class="form-group">
-    <label for="inputPassword3" class="col-sm-2 control-label">Должность:</label>
-    <div class="col-sm-9">
-      <!--<input type="Должность" class="form-control" name="position" id="position" placeholder="Должность" value="{{ data.employee.position }}">-->
-      <select class="form-control" name="position" id = "position" placeholder="должность">
-        {% for dep in data.positions %}
-            <option value="{{ dep.id }}">{{ dep.name }}</option>
-        {% endfor %}      
-      </select>
-    </div>
-  </div> 
-    
-    <div class="form-group">
-    <label for="inputPassword3" class="col-sm-2 control-label"></label>
-    <div class="col-sm-9">
-      <input type="hidden" class="form-control" name="user-id" id="user-id" placeholder="тссс!" value="{{ data.employee.id }}">      
-    </div>
-  </div>
-    
-  <div class="form-group">
-    <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" class="btn btn-primary" name="save">Сохранить</button>
-    </div>
-  </div>
+	{% csrf_token %}
+	<div class="form-group">
+		<label for="username" class="col-sm-2 control-label">Пользователь:</label>
+		<div class="col-sm-9">      
+			<input type="text" class="form-control" name = "username" id="username" placeholder="Имя пользователя" value = "{{ data.employee.user.username }}"  {% if data.employee %} disabled {% endif %}>
+			<!--select class="form-control">Пользователь</select-->
+		</div>
+			<!--button type="submit" class="btn btn-default"><a href="/admin/" class="add-another" id="add_id_user" onclick="return showAddAnotherPopup(this);"> <img src="/abit-anketa/static/admin/img/icon_addlink.gif" width="10" height="10" alt="Добавить еще"></a></button-->
+	</div>
+	<div class="form-group">
+		<label for="e-mail" class="col-sm-2 control-label">E-mail</label>
+		<div class="col-sm-9">      
+			<input type="text" class="form-control" name = "email" id="email" placeholder="user@yandex.ru" value="{{ data.employee.user.email }}">
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="password" class="col-sm-2 control-label">Пароль:</label>
+		<div class="col-sm-9">      
+			<input type="password" class="form-control" name = "password" id="password" placeholder="пароль" >
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="confirm" class="col-sm-2 control-label">Подтвердите пароль:</label>
+		<div class="col-sm-9">      
+			<input type="password" class="form-control" name = "confirm" id="confirm" placeholder="Подтверждение пароля" >
+		</div>
+	</div>		
+	<div class="form-group">
+		<label for="inputPassword3" class="col-sm-2 control-label">Подразделение:</label>
+		<div class="col-sm-9">
+			<!--<input type="Подразделение" class="form-control" id="inputPassword3" placeholder="Подразделение">-->
+			<select class="form-control" name="department" id = "department" placeholder="Выберете подразделение">
+				{% for dep in data.departments %}
+					<option value="{{ dep.id }}">{{ dep.name }}</option>
+				{% endfor %}      
+			</select>
+		</div>      
+	</div>
+	<div class="form-group">
+		<label for="inputPassword3" class="col-sm-2 control-label">Фамилия:</label>
+		<div class="col-sm-9">
+			<input type="Фамилия" class="form-control" name = "fname" id="fname" placeholder="Фамилия" value="{{ data.employee.first_name }}">
+		</div>
+	</div> 
+	<div class="form-group">
+		<label for="inputPassword3" class="col-sm-2 control-label">Имя:</label>
+		<div class="col-sm-9">
+			<input type="Имя" class="form-control" name="mname" id="mname" placeholder="Имя" value="{{ data.employee.mid_name }}">
+		</div>
+	</div> 
+	<div class="form-group">
+		<label for="inputPassword3" class="col-sm-2 control-label">Отчество:</label>
+		<div class="col-sm-9">
+			<input type="Отчество" class="form-control" name="lname" id="lname" placeholder="Отчество" value="{{ data.employee.last_name }}">
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="inputPassword3" class="col-sm-2 control-label">Должность:</label>
+		<div class="col-sm-9">
+			<!--<input type="Должность" class="form-control" name="position" id="position" placeholder="Должность" value="{{ data.employee.position }}">-->
+			<select class="form-control" name="position" id = "position" placeholder="должность">
+				{% for dep in data.positions %}
+					<option value="{{ dep.id }}">{{ dep.name }}</option>
+				{% endfor %}      
+			</select>
+		</div>
+	</div>		
+	<div class="form-group">
+		<label for="inputPassword3" class="col-sm-2 control-label"></label>
+		<div class="col-sm-9">
+			<input type="hidden" class="form-control" name="user-id" id="user-id" placeholder="тссс!" value="{{ data.employee.id }}">      
+		</div>
+	</div>		
+	<div class="form-group">
+		<div class="col-sm-offset-2 col-sm-10">
+			<button type="submit" class="btn btn-primary" name="save">Сохранить</button>
+		</div>
+	</div>
 </form>
 {% endblock %}
 
