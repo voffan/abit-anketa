@@ -96,6 +96,7 @@ class Application(models.Model):
 	appState = models.ForeignKey('AttrValue',verbose_name=u'Состояние заявления', limit_choices_to={'attribute__name':u'Статус заявления'}, db_index=True)
 	points = models.IntegerField(u'Кол-во баллов', db_index=True)
 	priority = models.CharField(u'Приоритет',choices=AppPrior, default='В', max_length=10, null= True, blank = True) #Убрать null, blank
+	track = models.BooleanField(u'Отслеживание',default=True)
 	def __str__(self):
 		return self.abiturient.fullname+' application#'+str(self.id)
 
@@ -128,7 +129,7 @@ class Education(models.Model):
 	level = models.ForeignKey('AttrValue', verbose_name=u'Уровень образования', limit_choices_to={'attribute__name':u'Уровень образования'}, db_index =True)
 	enterDate = models.DateField(u'Дата поступления')
 	def __str__(self):
-		return self.abiturient.fullname+' '+self.contact_type.level
+		return self.abiturient.fullname+' '+str(self.level)
 
 class DocAttr(models.Model):
 	doc = models.ForeignKey('Docs', verbose_name=u'Документ')
@@ -137,6 +138,7 @@ class DocAttr(models.Model):
 	def __str__(self):
 		return self.doc.abiturient.fullname+' '+self.doc.docType.value+' '+self.value
 
+#Class that represent document of student
 class Docs(models.Model):
 	abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент')
 	serialno = models.IntegerField(u'Серия документа', max_length=15, db_index=True, blank=True, null=True)
@@ -149,12 +151,14 @@ class Docs(models.Model):
 		return self.abiturient.fullname+' '+self.docType.value
 
 class Exams(models.Model):
-	abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент', db_index=True)
+	abiturient = models.ForeignKey('Abiturient', verbose_name=u'Абитуриент', db_index=True)
 	exam_examType = models.ForeignKey('AttrValue', verbose_name=u'Тип экзамена', limit_choices_to={'attribute__name':u'Тип экзамена'}, related_name='ExamType')
 	exam_subjects = models.ForeignKey('AttrValue', verbose_name=u'Дисциплина', limit_choices_to={'attribute__name':u'Дисциплина'}, related_name='Exam_Subjects')
 	points = models.IntegerField(u'Кол-во баллов', max_length=3, blank = True, null = True, db_index=True)
 	year = models.IntegerField(u'Год', max_length=4)
 	special = models.BooleanField(u'Особые условия', default = False)
+	def __str__(self):
+		return self.exam_subjects.value+' '+str(self.points)+' '+str(self.year)
 
 """
 class Department(models.Model):
@@ -209,12 +213,15 @@ class ProfileAttrs(models.Model):
 	freespaces=models.IntegerField(u'КЦП')
 	eduform = models.CharField(u'Форма обучения',choices=EduForm, default='О', max_length=10, null=True, blank=True)
 	year=models.IntegerField(u'Год')
+	startDate=models.DateField(u'Дата начала приемной кампании')
+	endDate=models.DateField(u'Дата конца приемной кампании')
 	def __str__(self):
 		return self.profile.name +' '+self.profile.edu_prog.qualification.value +' '+self.eduform
 
 class ApplicationProfiles(models.Model):
 	application = models.ForeignKey(Application, verbose_name=u'Заявление', db_index = True)
 	profile = models.ForeignKey(ProfileAttrs, verbose_name=u'Профиль направления')
+	points = models.IntegerField(u'Кол-во баллов')
 	def __str__(self):
 		return self.application.abiturient.fullname + ' ' +self.profile.profile.name
 
@@ -226,6 +233,8 @@ class Exams_needed(models.Model):
 	profile=models.ForeignKey('Profile', verbose_name=u'Профиль', db_index=True)
 	subject = models.ForeignKey('AttrValue', verbose_name=u'Дисциплина', limit_choices_to={'attribute__name':u'Дисциплина'}, related_name='Subject')
 	min_points=models.IntegerField(u'Мин-ое кол-во баллов')
+	def __str__(self):
+		return self.profile.name+' '+self.subject.value+' '+str(self.min_points)
 
 class Privilegies(models.Model):
 	abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент', db_index=True)

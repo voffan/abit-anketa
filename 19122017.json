@@ -1,0 +1,4733 @@
+[
+{
+    "fields": {
+        "email": "3@3.com",
+        "username": "4ino",
+        "is_superuser": true,
+        "is_staff": true,
+        "last_login": "2016-03-30T07:18:33Z",
+        "date_joined": "2016-03-09T05:46:14Z",
+        "password": "pbkdf2_sha256$15000$0S3c42CSlFVd$o66QHn0scY+WAzvhlKQwufGah8YnRNPRt767qI2DgrY=",
+        "first_name": "",
+        "user_permissions": [],
+        "is_active": true,
+        "last_name": "",
+        "groups": []
+    },
+    "pk": 1,
+    "model": "auth.user"
+},
+{
+    "fields": {
+        "email": "a@a.ru",
+        "username": "a",
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": "2017-11-14T02:41:12Z",
+        "date_joined": "2016-03-09T05:55:41Z",
+        "password": "pbkdf2_sha256$15000$aDFvloJGPyHg$sOdV4eHhCYNC7CtL3i7qtUPGkKR64/2jkFLB14uT8TU=",
+        "first_name": "",
+        "user_permissions": [],
+        "is_active": true,
+        "last_name": "",
+        "groups": []
+    },
+    "pk": 2,
+    "model": "auth.user"
+},
+{
+    "fields": {
+        "email": "w@w.ru",
+        "username": "w",
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": "2016-03-11T15:38:46Z",
+        "date_joined": "2016-03-11T15:38:46Z",
+        "password": "pbkdf2_sha256$15000$IxupvbFUPVbn$HRE+1BL/CAM2SN+db3zRf5DuHh+k6yN0jhIVP84WCPA=",
+        "first_name": "",
+        "user_permissions": [],
+        "is_active": true,
+        "last_name": "",
+        "groups": []
+    },
+    "pk": 4,
+    "model": "auth.user"
+},
+{
+    "fields": {
+        "email": "",
+        "username": "kolya",
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": "2016-03-12T01:29:36Z",
+        "date_joined": "2016-03-12T01:29:36Z",
+        "password": "pbkdf2_sha256$15000$vqmaD3Fb0f7f$dBGdeWTpgxo5mzVHhK41jBBvWsVg5KSzJlXiIQilkjA=",
+        "first_name": "",
+        "user_permissions": [],
+        "is_active": true,
+        "last_name": "",
+        "groups": []
+    },
+    "pk": 5,
+    "model": "auth.user"
+},
+{
+    "fields": {
+        "email": "",
+        "username": "ivan",
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": "2016-03-12T01:37:14Z",
+        "date_joined": "2016-03-12T01:37:14Z",
+        "password": "pbkdf2_sha256$15000$sUsWsdrZ6daK$UzL1U4ihxPUY02cJnSuATcT5u79Nf447/cq7NZaXbh8=",
+        "first_name": "",
+        "user_permissions": [],
+        "is_active": true,
+        "last_name": "",
+        "groups": []
+    },
+    "pk": 6,
+    "model": "auth.user"
+},
+{
+    "fields": {
+        "email": "ana@mail.ru",
+        "username": "ana",
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": "2016-03-12T07:12:52Z",
+        "date_joined": "2016-03-12T07:12:52Z",
+        "password": "pbkdf2_sha256$15000$sXN5blvzOazJ$W+JWgnuqpN3VALSmtMROjQBmDmwrH2f/hW8Vao8F1/Y=",
+        "first_name": "",
+        "user_permissions": [],
+        "is_active": true,
+        "last_name": "",
+        "groups": []
+    },
+    "pk": 11,
+    "model": "auth.user"
+},
+{
+    "fields": {
+        "email": "",
+        "username": "baska",
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": "2016-03-16T02:11:34Z",
+        "date_joined": "2016-03-16T02:11:34Z",
+        "password": "pbkdf2_sha256$15000$KOHBL16DvYZI$EkS4cD0ZQncqKfbQSgc0kKbfB8uPgv5FzT5ECpbpAUQ=",
+        "first_name": "",
+        "user_permissions": [],
+        "is_active": true,
+        "last_name": "",
+        "groups": []
+    },
+    "pk": 12,
+    "model": "auth.user"
+},
+{
+    "fields": {
+        "email": "",
+        "username": "roma",
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": "2016-03-22T08:53:42Z",
+        "date_joined": "2016-03-22T08:53:42Z",
+        "password": "pbkdf2_sha256$15000$DcLvpufyk4ml$wnrQ6EtO4JAC1lnASkJ1lG2f6x6+I7ucvFMv4JPio38=",
+        "first_name": "",
+        "user_permissions": [],
+        "is_active": true,
+        "last_name": "",
+        "groups": []
+    },
+    "pk": 13,
+    "model": "auth.user"
+},
+{
+    "fields": {
+        "email": "fraer@fraer.ru",
+        "username": "fraer",
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": "2016-03-22T16:00:39Z",
+        "date_joined": "2016-03-22T16:00:39Z",
+        "password": "pbkdf2_sha256$15000$Pt0px3TRjaTw$1X2uBP9f/UbZhi0zSHgmgTUMDYvhL9ycKPDKou6daWE=",
+        "first_name": "",
+        "user_permissions": [],
+        "is_active": true,
+        "last_name": "",
+        "groups": []
+    },
+    "pk": 14,
+    "model": "auth.user"
+},
+{
+    "fields": {
+        "email": "d@d.ru",
+        "username": "dnina",
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": "2016-03-29T16:25:49Z",
+        "date_joined": "2016-03-29T16:25:49Z",
+        "password": "pbkdf2_sha256$15000$Oa7Dd1vIrmlm$PDpBqXLQSUsBo5hVsGOoNkB4R1Dhj9njybUWfnEgSgY=",
+        "first_name": "",
+        "user_permissions": [],
+        "is_active": true,
+        "last_name": "",
+        "groups": []
+    },
+    "pk": 15,
+    "model": "auth.user"
+},
+{
+    "fields": {
+        "email": "v\u0432\u044b\u0432\u044b\u0432@mail.ru",
+        "username": "4ino_rp",
+        "is_superuser": true,
+        "is_staff": true,
+        "last_login": "2017-11-19T09:44:28Z",
+        "date_joined": "2016-03-30T07:34:38Z",
+        "password": "pbkdf2_sha256$15000$FpMUoOeYaLEP$H0tpOL2YXonaUy+jqq0njl9jmEsp6ejoy+E/4c/AHRk=",
+        "first_name": "",
+        "user_permissions": [],
+        "is_active": true,
+        "last_name": "",
+        "groups": []
+    },
+    "pk": 20,
+    "model": "auth.user"
+},
+{
+    "fields": {
+        "email": "check@mail.ru",
+        "username": "st-pi",
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": "2016-05-08T15:22:42Z",
+        "date_joined": "2016-05-04T15:12:53Z",
+        "password": "pbkdf2_sha256$15000$6e0fvpeMu31h$C/FU01SmoR9ftkYDy5nwrUQwqaCHgIE5boEzfF1czIs=",
+        "first_name": "",
+        "user_permissions": [],
+        "is_active": true,
+        "last_name": "",
+        "groups": []
+    },
+    "pk": 21,
+    "model": "auth.user"
+},
+{
+    "fields": {
+        "email": "student@mail.ru",
+        "username": "student1",
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": "2016-11-26T04:01:59Z",
+        "date_joined": "2016-11-25T08:51:07Z",
+        "password": "pbkdf2_sha256$15000$6keARXyRWpuB$tJwVWvmOfp9/Q8UHWWhuiyS1N9jdV+0vDT458RckLk4=",
+        "first_name": "",
+        "user_permissions": [],
+        "is_active": true,
+        "last_name": "",
+        "groups": []
+    },
+    "pk": 22,
+    "model": "auth.user"
+},
+{
+    "fields": {
+        "email": "b@b.ru",
+        "username": "b",
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": "2017-02-19T14:58:57Z",
+        "date_joined": "2017-02-19T14:58:57Z",
+        "password": "pbkdf2_sha256$15000$EBWj10gKTLMu$+vDAqduKrYomcWJSHxwhjacgT9kr4rr0Fl8c/FbXxug=",
+        "first_name": "b",
+        "user_permissions": [],
+        "is_active": true,
+        "last_name": "b",
+        "groups": []
+    },
+    "pk": 23,
+    "model": "auth.user"
+},
+{
+    "fields": {
+        "email": "c@c.ru",
+        "username": "c",
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": "2017-05-19T09:28:44Z",
+        "date_joined": "2017-05-19T09:16:55Z",
+        "password": "pbkdf2_sha256$15000$sQFRwa9GdBcz$ow0if1OqcVSUuNcbopGzaBt0qyJcB4LFUPQ3K1c7/sk=",
+        "first_name": "",
+        "user_permissions": [],
+        "is_active": true,
+        "last_name": "",
+        "groups": []
+    },
+    "pk": 24,
+    "model": "auth.user"
+},
+{
+    "fields": {
+        "email": "test1@user.ru",
+        "username": "test1",
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": "2017-11-19T09:56:20Z",
+        "date_joined": "2017-11-19T09:56:20Z",
+        "password": "pbkdf2_sha256$15000$damPz6Zlunx0$2v0hAn68tH1axbLPbc27loSEqSo3rqnBJh2oEyyvZuE=",
+        "first_name": "",
+        "user_permissions": [],
+        "is_active": true,
+        "last_name": "",
+        "groups": []
+    },
+    "pk": 27,
+    "model": "auth.user"
+},
+{
+    "fields": {
+        "email": "test2@user.ru",
+        "username": "test2",
+        "is_superuser": false,
+        "is_staff": false,
+        "last_login": "2017-11-19T09:57:20Z",
+        "date_joined": "2017-11-19T09:57:20Z",
+        "password": "pbkdf2_sha256$15000$RohtOUxGfVvc$IRnq0k+urEC4yy5uxgVwGkloJr5GVbIU7dkA/51ZVGk=",
+        "first_name": "",
+        "user_permissions": [],
+        "is_active": true,
+        "last_name": "",
+        "groups": []
+    },
+    "pk": 28,
+    "model": "auth.user"
+},
+{
+    "fields": {
+        "expire_date": "2016-05-28T03:28:30Z",
+        "session_data": "ZTFkNGE0Yjk2ZmRiMjcwNWNiMmZhNGM4Nzc1OWI0NGRmNWExYjk5Yjp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6MjAsIl9hdXRoX3VzZXJfaGFzaCI6ImI0NTQzYzc2NDhlMjkwNTIzNDdkMDg0MThiNGU1NDY0NjFjMzI1ZDcifQ=="
+    },
+    "pk": "0yyxtcq937x33jjcics0duaz4ngn80l8",
+    "model": "sessions.session"
+},
+{
+    "fields": {
+        "expire_date": "2017-05-23T06:21:10Z",
+        "session_data": "YWMzY2RiZGE3M2E2MTU4OWYwYzJiYjA3YWU1MjcyMTAyN2UwOWExMDp7Il9hdXRoX3VzZXJfaGFzaCI6IjQ2MzBmYTU5YmYxOTgwODY4ZGQwMWEwYTcyMjM1YjZjMGI1NWU2OTYiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOjJ9"
+    },
+    "pk": "1k8v3vge8wfsot5hdwxk6fbko9zk1mjh",
+    "model": "sessions.session"
+},
+{
+    "fields": {
+        "expire_date": "2016-03-23T05:54:52Z",
+        "session_data": "YWExNzVhZDgyM2VkYmY1Y2IwZjljYTQzZmNiY2RhNTZlMGZlYmI5MTp7Il9hdXRoX3VzZXJfaGFzaCI6IjgxYTg1ZmE5NTIwMDcyY2E3YWNlYjU4YjlhOTY1ZDBkY2UyOWI4YzAiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOjF9"
+    },
+    "pk": "22ldpof5xb4jn069i8jskfgntgf3xcaq",
+    "model": "sessions.session"
+},
+{
+    "fields": {
+        "expire_date": "2017-02-06T10:58:40Z",
+        "session_data": "ZWJlMTY5YjFhNzg4OTg2YTA1Zjc0NmZkNmZlY2I1NzdhMDk5ZDljODp7Il9hdXRoX3VzZXJfaGFzaCI6IjQ2MzBmYTU5YmYxOTgwODY4ZGQwMWEwYTcyMjM1YjZjMGI1NWU2OTYiLCJfYXV0aF91c2VyX2lkIjoyLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCJ9"
+    },
+    "pk": "35si2v8r4fmwcp8s8y593sm4zw3iw91e",
+    "model": "sessions.session"
+},
+{
+    "fields": {
+        "expire_date": "2016-05-17T14:36:07Z",
+        "session_data": "Yzg5NTNkZGZmOThkMmQ0MzIzY2IyMGMzOGNiZjk2NDc0ZWYxODY5Mzp7Il9hdXRoX3VzZXJfaWQiOjIwLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaGFzaCI6ImI0NTQzYzc2NDhlMjkwNTIzNDdkMDg0MThiNGU1NDY0NjFjMzI1ZDcifQ=="
+    },
+    "pk": "73zq8qu7s2faft92029uea32tf41hn9z",
+    "model": "sessions.session"
+},
+{
+    "fields": {
+        "expire_date": "2016-05-20T14:44:15Z",
+        "session_data": "ZDc0NmVmMjBmNWI4ZTlkZjQ0NzdmNWJkNDM2ZjdmY2E1NTQxZmE4NTp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiYjQ1NDNjNzY0OGUyOTA1MjM0N2QwODQxOGI0ZTU0NjQ2MWMzMjVkNyIsIl9hdXRoX3VzZXJfaWQiOjIwfQ=="
+    },
+    "pk": "ahdr3zzz2ykhaodzow5pdh6cf6c2ttck",
+    "model": "sessions.session"
+},
+{
+    "fields": {
+        "expire_date": "2016-05-28T03:07:36Z",
+        "session_data": "Yzg5NTNkZGZmOThkMmQ0MzIzY2IyMGMzOGNiZjk2NDc0ZWYxODY5Mzp7Il9hdXRoX3VzZXJfaWQiOjIwLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaGFzaCI6ImI0NTQzYzc2NDhlMjkwNTIzNDdkMDg0MThiNGU1NDY0NjFjMzI1ZDcifQ=="
+    },
+    "pk": "bdbhoapzhoakby5gvfimm7thfd9awp8n",
+    "model": "sessions.session"
+},
+{
+    "fields": {
+        "expire_date": "2017-11-28T02:41:12Z",
+        "session_data": "MWI3NjUzYzJlOWIxZjY0NDMzMThiYWZkZjRkOWQzZDczMmE0ZmRkZTp7Il9hdXRoX3VzZXJfaWQiOjIsIl9hdXRoX3VzZXJfaGFzaCI6IjQ2MzBmYTU5YmYxOTgwODY4ZGQwMWEwYTcyMjM1YjZjMGI1NWU2OTYiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCJ9"
+    },
+    "pk": "f9ni70zieb67kv1swb4r99f6bey82yl6",
+    "model": "sessions.session"
+},
+{
+    "fields": {
+        "expire_date": "2017-07-04T02:08:49Z",
+        "session_data": "MmFhOTEwMTVmY2E5NjdmOWNhM2RlNTlkOGQ5ZjIxMDE4MjNjMGYzYjp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiNDYzMGZhNTliZjE5ODA4NjhkZDAxYTBhNzIyMzViNmMwYjU1ZTY5NiIsIl9hdXRoX3VzZXJfaWQiOjJ9"
+    },
+    "pk": "fj7b92gzildww2f1kyciqnlswlvj6cgz",
+    "model": "sessions.session"
+},
+{
+    "fields": {
+        "expire_date": "2016-05-04T15:15:20Z",
+        "session_data": "ZTFkNGE0Yjk2ZmRiMjcwNWNiMmZhNGM4Nzc1OWI0NGRmNWExYjk5Yjp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6MjAsIl9hdXRoX3VzZXJfaGFzaCI6ImI0NTQzYzc2NDhlMjkwNTIzNDdkMDg0MThiNGU1NDY0NjFjMzI1ZDcifQ=="
+    },
+    "pk": "hf5bxvcrc997p58u903csh6ks34zh139",
+    "model": "sessions.session"
+},
+{
+    "fields": {
+        "expire_date": "2017-06-02T09:28:44Z",
+        "session_data": "MGJkZWQ3ZDEyMTc5OGY3ZjFmYTA0NzZjYzJjNjUwNmI0OGYxZGJiMTp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6MjQsIl9hdXRoX3VzZXJfaGFzaCI6IjdiM2EwNTRiZDk2Y2ZjNjQwNTI5ZGUwNjUwNTMxZmQ4NWI0YTFmZWEifQ=="
+    },
+    "pk": "i4d1so16ab4vvqbk2dn6o3z5cwq8dqzp",
+    "model": "sessions.session"
+},
+{
+    "fields": {
+        "expire_date": "2017-03-07T06:24:54Z",
+        "session_data": "YTg0NzIwZDdkYzFlMmRhMWU2Y2ZkOGIyYzA4YWEyMTNjMjE5ODBmZjp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6MiwiX2F1dGhfdXNlcl9oYXNoIjoiNDYzMGZhNTliZjE5ODA4NjhkZDAxYTBhNzIyMzViNmMwYjU1ZTY5NiJ9"
+    },
+    "pk": "lumc5tg8rrp9m0gpvglb9lb5z2hv2ngf",
+    "model": "sessions.session"
+},
+{
+    "fields": {
+        "expire_date": "2016-05-22T15:22:42Z",
+        "session_data": "OGVkMzQ0YjRkN2I1M2ZiZWI0MDI2OWE3ZDJhOTU4MjFkZjE2OGU0MTp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6MjEsIl9hdXRoX3VzZXJfaGFzaCI6ImY0N2Y0NjdlMjkyNjNjMTUyNDc0NDQzYTMyNjA3OTYwM2FiMDhmMDQifQ=="
+    },
+    "pk": "mn2sqns9cmrmx788up9b0m66n4olkag6",
+    "model": "sessions.session"
+},
+{
+    "fields": {
+        "expire_date": "2016-05-18T15:44:25Z",
+        "session_data": "MGE4MzY4YzY3MmM5MjhlM2NmZDA4NjA1ZGFjMDA2NWQ1MmQyN2MyMjp7Il9hdXRoX3VzZXJfaGFzaCI6ImI0NTQzYzc2NDhlMjkwNTIzNDdkMDg0MThiNGU1NDY0NjFjMzI1ZDciLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOjIwfQ=="
+    },
+    "pk": "qdfu8xh5afruikiddxkrzdwa6gf6di1h",
+    "model": "sessions.session"
+},
+{
+    "fields": {
+        "expire_date": "2016-05-25T13:46:44Z",
+        "session_data": "Yzg5NTNkZGZmOThkMmQ0MzIzY2IyMGMzOGNiZjk2NDc0ZWYxODY5Mzp7Il9hdXRoX3VzZXJfaWQiOjIwLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaGFzaCI6ImI0NTQzYzc2NDhlMjkwNTIzNDdkMDg0MThiNGU1NDY0NjFjMzI1ZDcifQ=="
+    },
+    "pk": "r8b7usd1i2zeucm9rwl5uk0wjlt02841",
+    "model": "sessions.session"
+},
+{
+    "fields": {
+        "expire_date": "2017-05-24T15:35:05Z",
+        "session_data": "MmFhOTEwMTVmY2E5NjdmOWNhM2RlNTlkOGQ5ZjIxMDE4MjNjMGYzYjp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiNDYzMGZhNTliZjE5ODA4NjhkZDAxYTBhNzIyMzViNmMwYjU1ZTY5NiIsIl9hdXRoX3VzZXJfaWQiOjJ9"
+    },
+    "pk": "tou02nol1kemaoopuf7pdb3dmllnb56m",
+    "model": "sessions.session"
+},
+{
+    "fields": {
+        "expire_date": "2017-03-05T14:58:23Z",
+        "session_data": "Yzg5NTNkZGZmOThkMmQ0MzIzY2IyMGMzOGNiZjk2NDc0ZWYxODY5Mzp7Il9hdXRoX3VzZXJfaWQiOjIwLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaGFzaCI6ImI0NTQzYzc2NDhlMjkwNTIzNDdkMDg0MThiNGU1NDY0NjFjMzI1ZDcifQ=="
+    },
+    "pk": "twx60g1p5rcdbr4br40uh12fg3i1x67m",
+    "model": "sessions.session"
+},
+{
+    "fields": {
+        "expire_date": "2016-05-24T15:04:55Z",
+        "session_data": "ZWRkZjJkMGU5OTk5MzM4Y2YyYzg0NWYwNThlYjYwNWQ2MzJkZmYwZjp7Il9hdXRoX3VzZXJfaGFzaCI6ImI0NTQzYzc2NDhlMjkwNTIzNDdkMDg0MThiNGU1NDY0NjFjMzI1ZDciLCJfYXV0aF91c2VyX2lkIjoyMCwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQifQ=="
+    },
+    "pk": "u9qt9mmcn7nq8bukhxpya6gi4s7i5p6g",
+    "model": "sessions.session"
+},
+{
+    "fields": {
+        "expire_date": "2016-05-20T15:22:52Z",
+        "session_data": "ZThlMzU4Y2M5Njc3YjRjODNmMjRjZDA0Y2U1M2U1ZjNiMDNkZWY1OTp7Il9hdXRoX3VzZXJfaWQiOjIwLCJfYXV0aF91c2VyX2hhc2giOiJiNDU0M2M3NjQ4ZTI5MDUyMzQ3ZDA4NDE4YjRlNTQ2NDYxYzMyNWQ3IiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQifQ=="
+    },
+    "pk": "uu4vp53graxm2xsgrzunbx99x08os87h",
+    "model": "sessions.session"
+},
+{
+    "fields": {
+        "expire_date": "2016-04-19T10:49:02Z",
+        "session_data": "OGQ5MzM1MjJkMWMxMzVkZDEyNzFiMmIwODlhZGZlY2RkMjg4NzY2OTp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiMDZlZDdjMjZiYzZiMTk1MDA0MWYxN2ZlYTE3ODQyODMzYTY1OTUwNyIsIl9hdXRoX3VzZXJfaWQiOjIwfQ=="
+    },
+    "pk": "vc39972vg3yopr4wc2ijs3a1nai7dosl",
+    "model": "sessions.session"
+},
+{
+    "fields": {
+        "expire_date": "2017-04-06T06:13:49Z",
+        "session_data": "MmFhOTEwMTVmY2E5NjdmOWNhM2RlNTlkOGQ5ZjIxMDE4MjNjMGYzYjp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiNDYzMGZhNTliZjE5ODA4NjhkZDAxYTBhNzIyMzViNmMwYjU1ZTY5NiIsIl9hdXRoX3VzZXJfaWQiOjJ9"
+    },
+    "pk": "w4dx30nv1am9p8o4j4nlyubbxhx4zypy",
+    "model": "sessions.session"
+},
+{
+    "fields": {
+        "expire_date": "2017-12-03T09:44:29Z",
+        "session_data": "ZThlMzU4Y2M5Njc3YjRjODNmMjRjZDA0Y2U1M2U1ZjNiMDNkZWY1OTp7Il9hdXRoX3VzZXJfaWQiOjIwLCJfYXV0aF91c2VyX2hhc2giOiJiNDU0M2M3NjQ4ZTI5MDUyMzQ3ZDA4NDE4YjRlNTQ2NDYxYzMyNWQ3IiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQifQ=="
+    },
+    "pk": "w8rn6pk4wt43lsq2m35sifb2uidnbb3e",
+    "model": "sessions.session"
+},
+{
+    "fields": {
+        "expire_date": "2017-08-26T08:51:53Z",
+        "session_data": "ZWJlMTY5YjFhNzg4OTg2YTA1Zjc0NmZkNmZlY2I1NzdhMDk5ZDljODp7Il9hdXRoX3VzZXJfaGFzaCI6IjQ2MzBmYTU5YmYxOTgwODY4ZGQwMWEwYTcyMjM1YjZjMGI1NWU2OTYiLCJfYXV0aF91c2VyX2lkIjoyLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCJ9"
+    },
+    "pk": "xwz4o5wocola2e0hl0488y09hi50bcl3",
+    "model": "sessions.session"
+},
+{
+    "fields": {
+        "expire_date": "2017-04-19T06:45:36Z",
+        "session_data": "ZThlMzU4Y2M5Njc3YjRjODNmMjRjZDA0Y2U1M2U1ZjNiMDNkZWY1OTp7Il9hdXRoX3VzZXJfaWQiOjIwLCJfYXV0aF91c2VyX2hhc2giOiJiNDU0M2M3NjQ4ZTI5MDUyMzQ3ZDA4NDE4YjRlNTQ2NDYxYzMyNWQ3IiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQifQ=="
+    },
+    "pk": "z0adcwha0pc8qek1aodmb9zn4jymmuzd",
+    "model": "sessions.session"
+},
+{
+    "fields": {
+        "expire_date": "2016-08-13T16:38:55Z",
+        "session_data": "ZWRkZjJkMGU5OTk5MzM4Y2YyYzg0NWYwNThlYjYwNWQ2MzJkZmYwZjp7Il9hdXRoX3VzZXJfaGFzaCI6ImI0NTQzYzc2NDhlMjkwNTIzNDdkMDg0MThiNGU1NDY0NjFjMzI1ZDciLCJfYXV0aF91c2VyX2lkIjoyMCwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQifQ=="
+    },
+    "pk": "zd9rbksr999hf8a1y88debwkp489katu",
+    "model": "sessions.session"
+},
+{
+    "fields": {
+        "expire_date": "2016-12-12T06:26:22Z",
+        "session_data": "Yzg5NTNkZGZmOThkMmQ0MzIzY2IyMGMzOGNiZjk2NDc0ZWYxODY5Mzp7Il9hdXRoX3VzZXJfaWQiOjIwLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaGFzaCI6ImI0NTQzYzc2NDhlMjkwNTIzNDdkMDg0MThiNGU1NDY0NjFjMzI1ZDcifQ=="
+    },
+    "pk": "zetft928rwifasgki08f3phwvpkim2on",
+    "model": "sessions.session"
+},
+{
+    "fields": {
+        "person": 17,
+        "relType": 66,
+        "abiturient": 13
+    },
+    "pk": 11,
+    "model": "anketa.relation"
+},
+{
+    "fields": {
+        "name": "\u0421\u043f\u0438\u0441\u043e\u043a"
+    },
+    "pk": 1,
+    "model": "anketa.attrtype"
+},
+{
+    "fields": {
+        "name": "\u041d\u0430\u0446\u0438\u043e\u043d\u0430\u043b\u044c\u043d\u043e\u0441\u0442\u044c",
+        "type": 1,
+        "parent": null
+    },
+    "pk": 1,
+    "model": "anketa.attribute"
+},
+{
+    "fields": {
+        "name": "\u0413\u0440\u0430\u0436\u0434\u0430\u043d\u0441\u0442\u0432\u043e",
+        "type": 1,
+        "parent": null
+    },
+    "pk": 2,
+    "model": "anketa.attribute"
+},
+{
+    "fields": {
+        "name": "\u0418\u0437\u0443\u0447\u0430\u0435\u043c\u044b\u0439 \u044f\u0437\u044b\u043a",
+        "type": 1,
+        "parent": null
+    },
+    "pk": 3,
+    "model": "anketa.attribute"
+},
+{
+    "fields": {
+        "name": "\u041a\u0432\u0430\u043b\u0438\u0444\u0438\u043a\u0430\u0446\u0438\u044f",
+        "type": 1,
+        "parent": null
+    },
+    "pk": 4,
+    "model": "anketa.attribute"
+},
+{
+    "fields": {
+        "name": "\u0421\u0442\u0430\u0442\u0443\u0441 \u0437\u0430\u044f\u0432\u043b\u0435\u043d\u0438\u044f",
+        "type": 1,
+        "parent": null
+    },
+    "pk": 5,
+    "model": "anketa.attribute"
+},
+{
+    "fields": {
+        "name": "\u0422\u0438\u043f \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430 \u0443\u0434\u043e\u0441\u0442\u043e\u0432\u0435\u0440\u044f\u044e\u0449\u0435\u0433\u043e \u043b\u0438\u0447\u043d\u043e\u0441\u0442\u044c",
+        "type": 1,
+        "parent": null
+    },
+    "pk": 6,
+    "model": "anketa.attribute"
+},
+{
+    "fields": {
+        "name": "\u0412\u044b\u0434\u0430\u0432\u0448\u0438\u0439 \u043e\u0440\u0433\u0430\u043d",
+        "type": 1,
+        "parent": null
+    },
+    "pk": 7,
+    "model": "anketa.attribute"
+},
+{
+    "fields": {
+        "name": "\u041f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0435\u0435 \u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u043d\u0438\u0435",
+        "type": 1,
+        "parent": null
+    },
+    "pk": 8,
+    "model": "anketa.attribute"
+},
+{
+    "fields": {
+        "name": "\u0422\u0438\u043f \u043a\u043e\u043d\u0442\u0430\u043a\u0442\u0430",
+        "type": 1,
+        "parent": null
+    },
+    "pk": 13,
+    "model": "anketa.attribute"
+},
+{
+    "fields": {
+        "name": "2224",
+        "type": 1,
+        "parent": null
+    },
+    "pk": 14,
+    "model": "anketa.attribute"
+},
+{
+    "fields": {
+        "name": "\u0412\u043e\u0438\u043d\u0441\u043a\u043e\u0435 \u0437\u0432\u0430\u043d\u0438\u0435",
+        "type": 1,
+        "parent": null
+    },
+    "pk": 15,
+    "model": "anketa.attribute"
+},
+{
+    "fields": {
+        "name": "\u0422\u0438\u043f \u0430\u0434\u0440\u0435\u0441\u0430",
+        "type": 1,
+        "parent": null
+    },
+    "pk": 16,
+    "model": "anketa.attribute"
+},
+{
+    "fields": {
+        "name": "\u0414\u0438\u0441\u0446\u0438\u043f\u043b\u0438\u043d\u0430",
+        "type": 1,
+        "parent": null
+    },
+    "pk": 17,
+    "model": "anketa.attribute"
+},
+{
+    "fields": {
+        "name": "\u0422\u0438\u043f \u044d\u043a\u0437\u0430\u043c\u0435\u043d\u0430",
+        "type": 1,
+        "parent": null
+    },
+    "pk": 18,
+    "model": "anketa.attribute"
+},
+{
+    "fields": {
+        "name": "\u0412\u0438\u0434 \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430 \u043e\u0431 \u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u043d\u0438\u0438",
+        "type": 1,
+        "parent": null
+    },
+    "pk": 19,
+    "model": "anketa.attribute"
+},
+{
+    "fields": {
+        "name": "\u041c\u0435\u0434\u0438\u0446\u0438\u043d\u0441\u043a\u0438\u0439 \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442",
+        "type": 1,
+        "parent": null
+    },
+    "pk": 20,
+    "model": "anketa.attribute"
+},
+{
+    "fields": {
+        "name": "\u0422\u0438\u043f \u0441\u0432\u044f\u0437\u0438",
+        "type": 1,
+        "parent": null
+    },
+    "pk": 21,
+    "model": "anketa.attribute"
+},
+{
+    "fields": {
+        "attribute": 1,
+        "value": "ork"
+    },
+    "pk": 1,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 2,
+        "value": "\u0420\u0424"
+    },
+    "pk": 2,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 3,
+        "value": "\u0410\u043d\u0433\u043b\u0438\u0439\u0441\u043a\u0438\u0439"
+    },
+    "pk": 3,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 4,
+        "value": "\u0411\u0430\u043a\u0430\u043b\u0430\u0432\u0440"
+    },
+    "pk": 4,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 5,
+        "value": "\u041f\u043e\u0434\u0430\u043d\u043d\u044b\u0439"
+    },
+    "pk": 5,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 19,
+        "value": "\u0410\u0442\u0442\u0435\u0441\u0442\u0430\u0442"
+    },
+    "pk": 6,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 7,
+        "value": "\u041c\u0411\u041e\u0423 \u0421\u041e\u0428 \u211631 \u041c\u041e \u0413\u043e\u0440\u043e\u0434 \u042f\u043a\u0443\u0442\u0441\u043a"
+    },
+    "pk": 7,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 1,
+        "value": "\u0421\u0430\u0445\u0430"
+    },
+    "pk": 8,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 3,
+        "value": "\u041d\u0435\u043c\u0435\u0446\u043a\u0438\u0439"
+    },
+    "pk": 9,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 3,
+        "value": "\u0424\u0440\u0430\u043d\u0446\u0443\u0437\u043a\u0438\u0439"
+    },
+    "pk": 10,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 3,
+        "value": "\u041a\u0438\u0442\u0430\u0439\u0441\u043a\u0438\u0439"
+    },
+    "pk": 11,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 5,
+        "value": "\u041f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\u043d\u044b\u0439"
+    },
+    "pk": 12,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 5,
+        "value": "\u042d\u043a\u0441\u043f\u043e\u0440\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u044b\u0439"
+    },
+    "pk": 13,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 5,
+        "value": "\u0410\u043d\u0443\u043b\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u044b\u0439"
+    },
+    "pk": 14,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 1,
+        "value": "\u0420\u0443\u0441\u0441\u043a\u0438\u0439"
+    },
+    "pk": 15,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 19,
+        "value": "\u0414\u0438\u043f\u043b\u043e\u043c"
+    },
+    "pk": 16,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 7,
+        "value": "\u041c\u0443\u0445\u043e\u0441\u0440\u0430\u043d\u0441\u043a\u0438\u0439 \u0443\u043d\u0438\u0432\u0435\u0440"
+    },
+    "pk": 17,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 7,
+        "value": "\u041c\u041e\u0423 \u0421\u041e\u0428 \u21167 \u0433.\u042f\u043a\u0443\u0442\u0441\u043a"
+    },
+    "pk": 18,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 7,
+        "value": "\u0421\u041e\u0428 \u0442\u0443\u0440\u0443\u043a\u0442\u0438\u043d\u0441\u043a\u0430\u044f \u044f \u0435\u0431\u0443"
+    },
+    "pk": 19,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 7,
+        "value": "\u041c\u041e\u0423 \u0421\u041e\u0428 \u211617 \u041c\u041e \u0413\u043e\u0440\u043e\u0434 \u042f\u043a\u0443\u0442\u0441\u043a"
+    },
+    "pk": 20,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 8,
+        "value": "\u0421\u041e\u041e"
+    },
+    "pk": 22,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 8,
+        "value": "\u041d\u041f\u041e"
+    },
+    "pk": 23,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 8,
+        "value": "\u0412\u041f\u041e"
+    },
+    "pk": 24,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 8,
+        "value": "\u0421\u041f\u041e"
+    },
+    "pk": 26,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 7,
+        "value": "\u041f\u0435\u0447\u0435\u043d\u044c"
+    },
+    "pk": 27,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 13,
+        "value": "\u0414\u043e\u043c\u0430\u0448\u043d\u0438\u0439 \u0442\u0435\u043b\u0435\u0444\u043e\u043d"
+    },
+    "pk": 34,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 13,
+        "value": "\u0420\u0430\u0431\u043e\u0447\u0438\u0439 \u0442\u0435\u043b\u0435\u0444\u043e\u043d"
+    },
+    "pk": 35,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 13,
+        "value": "\u043c\u043e\u0431\u0438\u043b\u044c\u043d\u044b\u0439"
+    },
+    "pk": 37,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 13,
+        "value": "\u0410\u0434\u0440\u0435\u0441 \u0444\u0430\u043a\u0442\u0438\u0447\u0435\u0441\u043a\u0438\u0439"
+    },
+    "pk": 39,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 13,
+        "value": "vk-id"
+    },
+    "pk": 43,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 6,
+        "value": "\u041f\u0430\u0441\u043f\u043e\u0440\u0442"
+    },
+    "pk": 44,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 20,
+        "value": "\u0421\u041d\u0418\u041b\u0421"
+    },
+    "pk": 45,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 14,
+        "value": "45"
+    },
+    "pk": 54,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 1,
+        "value": "\u0422\u0430\u0442\u0430\u0440"
+    },
+    "pk": 57,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 15,
+        "value": "\u041a\u0430\u043f\u0438\u0442\u0430\u043d"
+    },
+    "pk": 58,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 15,
+        "value": "\u0420\u044f\u0434\u043e\u0432\u043e\u0439"
+    },
+    "pk": 59,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 16,
+        "value": "\u0424\u0430\u043a\u0442\u0438\u0447\u0435\u0441\u043a\u0438\u0439"
+    },
+    "pk": 60,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 16,
+        "value": "\u041f\u043e \u043f\u0440\u043e\u043f\u0438\u0441\u043a\u0435"
+    },
+    "pk": 61,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 17,
+        "value": "\u041c\u0430\u0442\u0435\u043c\u0430\u0442\u0438\u043a\u0430"
+    },
+    "pk": 62,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 17,
+        "value": "\u0420\u0443\u0441\u0441\u043a\u0438\u0439 \u044f\u0437\u044b\u043a"
+    },
+    "pk": 63,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 18,
+        "value": "\u0415\u0413\u042d"
+    },
+    "pk": 64,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 21,
+        "value": "\u041e\u0442\u0435\u0446"
+    },
+    "pk": 65,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 21,
+        "value": "\u041c\u0430\u0442\u044c"
+    },
+    "pk": 66,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 2,
+        "value": "US"
+    },
+    "pk": 67,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 2,
+        "value": "EU"
+    },
+    "pk": 68,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 14,
+        "value": "123123"
+    },
+    "pk": 69,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 15,
+        "value": "\u0413\u043b\u043e\u0431\u0430\u043b\u042d\u043b\u0438\u0442"
+    },
+    "pk": 72,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 14,
+        "value": "\u0432\u0430\u043f"
+    },
+    "pk": 76,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "attribute": 4,
+        "value": "\u041c\u0430\u0433\u0438\u0441\u0442\u0440"
+    },
+    "pk": 77,
+    "model": "anketa.attrvalue"
+},
+{
+    "fields": {
+        "mname": "\u041f\u0435\u0442\u0440\u043e\u0432\u0438\u0447",
+        "fullname": "\u041d\u043e\u0432\u0433\u043e\u0440\u043e\u0434\u043e\u0432\u0422\u044d\u0441\u0442\u0421\u043c\u0435\u043d\u044b\u0418\u043c\u0435\u043d\u04381 \u0422\u0438\u0442 \u041f\u0435\u0442\u0440\u043e\u0432\u0438\u0447",
+        "sex": "\u0416",
+        "fname": "\u0422\u0438\u0442",
+        "sname": "\u041d\u043e\u0432\u0433\u043e\u0440\u043e\u0434\u043e\u0432\u0422\u044d\u0441\u0442\u0421\u043c\u0435\u043d\u044b\u0418\u043c\u0435\u043d\u04381",
+        "birthdate": "1992-03-11"
+    },
+    "pk": 1,
+    "model": "anketa.person"
+},
+{
+    "fields": {
+        "mname": "\u0410\u043d\u0430\u0442\u043e\u043b\u044c\u0435\u0432\u0438\u0447",
+        "fullname": "\u0410\u043d\u0443\u0444\u0440\u0438\u0435\u0432 \u041d\u0438\u043a\u043e\u043b\u0430\u0439 \u0410\u043d\u0430\u0442\u043e\u043b\u044c\u0435\u0432\u0438\u0447",
+        "sex": "\u041c",
+        "fname": "\u041d\u0438\u043a\u043e\u043b\u0430\u0439",
+        "sname": "\u0410\u043d\u0443\u0444\u0440\u0438\u0435\u0432",
+        "birthdate": "1994-03-12"
+    },
+    "pk": 2,
+    "model": "anketa.person"
+},
+{
+    "fields": {
+        "mname": "\u0418\u0432\u0430\u043d\u043e\u0432\u0438\u0447",
+        "fullname": "\u0418\u0432\u0430\u043d\u043e\u0432 \u0418\u0432\u0430\u043d \u0418\u0432\u0430\u043d\u043e\u0432\u0438\u0447",
+        "sex": "\u041c",
+        "fname": "\u0418\u0432\u0430\u043d",
+        "sname": "\u0418\u0432\u0430\u043d\u043e\u0432",
+        "birthdate": "1997-03-12"
+    },
+    "pk": 3,
+    "model": "anketa.person"
+},
+{
+    "fields": {
+        "mname": "\u0427\u0435\u0435\u0432\u0438\u0447",
+        "fullname": "\u0421\u0442\u0440\u0443\u0447\u043a\u043e\u0432 \u0412\u0430\u0441\u0438\u043b\u0438\u0439 \u0427\u0435\u0435\u0432\u0438\u0447",
+        "sex": "\u041c",
+        "fname": "\u0412\u0430\u0441\u0438\u043b\u0438\u0439",
+        "sname": "\u0421\u0442\u0440\u0443\u0447\u043a\u043e\u0432",
+        "birthdate": "1990-03-16"
+    },
+    "pk": 4,
+    "model": "anketa.person"
+},
+{
+    "fields": {
+        "mname": "\u0415\u0432\u0433\u0435\u043d\u044c\u0435\u0432\u0438\u0447",
+        "fullname": "\u0411\u043e\u0431\u0431 \u0420\u043e\u043c\u0430\u043d \u0415\u0432\u0433\u0435\u043d\u044c\u0435\u0432\u0438\u0447",
+        "sex": "\u041c",
+        "fname": "\u0420\u043e\u043c\u0430\u043d",
+        "sname": "\u0411\u043e\u0431\u0431",
+        "birthdate": "1992-09-02"
+    },
+    "pk": 5,
+    "model": "anketa.person"
+},
+{
+    "fields": {
+        "mname": "\u0421\u0435\u0440\u0433\u0435\u0435\u0432\u0438\u0447",
+        "fullname": "\u0421\u0435\u0440\u0433\u0435\u0435\u0432 \u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440 \u0421\u0435\u0440\u0433\u0435\u0435\u0432\u0438\u0447",
+        "sex": "\u041c",
+        "fname": "\u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440",
+        "sname": "\u0421\u0435\u0440\u0433\u0435\u0435\u0432",
+        "birthdate": "1991-05-10"
+    },
+    "pk": 6,
+    "model": "anketa.person"
+},
+{
+    "fields": {
+        "mname": "\u0410\u043d\u0434\u0440\u0435\u0435\u0432\u0438\u0447",
+        "fullname": "\u0420\u0435\u0431\u0440\u043e\u0432 \u0410\u043d\u0434\u0440\u0435\u0439 \u0410\u043d\u0434\u0440\u0435\u0435\u0432\u0438\u0447",
+        "sex": "\u041c",
+        "fname": "\u0410\u043d\u0434\u0440\u0435\u0439",
+        "sname": "\u0420\u0435\u0431\u0440\u043e\u0432",
+        "birthdate": "1993-11-03"
+    },
+    "pk": 7,
+    "model": "anketa.person"
+},
+{
+    "fields": {
+        "mname": "\u041f\u0443\u0442\u0438\u043d",
+        "fullname": "\u041f\u0443\u0442\u0438\u043d \u041f\u0443\u0442\u0438\u043d \u041f\u0443\u0442\u0438\u043d",
+        "sex": "\u041c",
+        "fname": "\u041f\u0443\u0442\u0438\u043d",
+        "sname": "\u041f\u0443\u0442\u0438\u043d",
+        "birthdate": "2016-05-14"
+    },
+    "pk": 8,
+    "model": "anketa.person"
+},
+{
+    "fields": {
+        "mname": "\u0418\u0432\u0430\u043d\u043e",
+        "fullname": "\u0418\u0432\u0430\u043d\u043e\u0432  \u0418\u0432\u0430\u043d \u0418\u0432\u0430\u043d\u043e",
+        "sex": "\u041c",
+        "fname": "\u0418\u0432\u0430\u043d",
+        "sname": "\u0418\u0432\u0430\u043d\u043e\u0432 ",
+        "birthdate": "2016-05-14"
+    },
+    "pk": 9,
+    "model": "anketa.person"
+},
+{
+    "fields": {
+        "mname": "\u0418\u0432\u0430\u043d",
+        "fullname": "\u0418\u0432\u0430\u043d\u043e\u0432 \u0418\u0432\u0430\u043d",
+        "sex": "\u041c",
+        "fname": "",
+        "sname": "\u0418\u0432\u0430\u043d\u043e\u0432",
+        "birthdate": "2000-11-11"
+    },
+    "pk": 10,
+    "model": "anketa.person"
+},
+{
+    "fields": {
+        "mname": "\u041f\u0443\u0442\u0438\u043d",
+        "fullname": "\u041f\u0443\u0442\u0438\u043d \u041f\u0443\u0442\u0438\u043d \u041f\u0443\u0442\u0438\u043d",
+        "sex": "\u041c",
+        "fname": "\u041f\u0443\u0442\u0438\u043d",
+        "sname": "\u041f\u0443\u0442\u0438\u043d",
+        "birthdate": "2000-11-11"
+    },
+    "pk": 11,
+    "model": "anketa.person"
+},
+{
+    "fields": {
+        "mname": "\u043c\u0435\u0434\u0432\u0435\u0434\u0435\u0432",
+        "fullname": "\u043c\u0435\u0434\u0432\u0435\u0434\u0435\u0432 \u043c\u0435\u0434\u0432\u0435\u0434\u0435\u0432 \u043c\u0435\u0434\u0432\u0435\u0434\u0435\u0432",
+        "sex": "\u041c",
+        "fname": "\u043c\u0435\u0434\u0432\u0435\u0434\u0435\u0432",
+        "sname": "\u043c\u0435\u0434\u0432\u0435\u0434\u0435\u0432",
+        "birthdate": "2000-11-11"
+    },
+    "pk": 12,
+    "model": "anketa.person"
+},
+{
+    "fields": {
+        "mname": "\u041f\u0435\u0442\u0440\u043e\u0432\u0438\u0447",
+        "fullname": "\u041d\u043e\u0432\u0433\u043e\u0440\u043e\u0434\u043e\u0432 \u0422\u0438\u0442 \u041f\u0435\u0442\u0440\u043e\u0432\u0438\u0447",
+        "sex": "\u041c",
+        "fname": "\u0422\u0438\u0442",
+        "sname": "\u041d\u043e\u0432\u0433\u043e\u0440\u043e\u0434\u043e\u0432",
+        "birthdate": "1992-06-11"
+    },
+    "pk": 13,
+    "model": "anketa.person"
+},
+{
+    "fields": {
+        "mname": "\u041e\u0442\u0447\u0435\u0441\u0442\u0432\u043e",
+        "fullname": "\u0444\u0430\u043c\u0438\u043b\u0438\u044f \u0418\u043c\u044f \u041e\u0442\u0447\u0435\u0441\u0442\u0432\u043e",
+        "sex": "\u041c",
+        "fname": "\u0418\u043c\u044f",
+        "sname": "\u0444\u0430\u043c\u0438\u043b\u0438\u044f",
+        "birthdate": "2007-05-15"
+    },
+    "pk": 14,
+    "model": "anketa.person"
+},
+{
+    "fields": {
+        "mname": "\u041e\u0442\u0447\u0435\u0441\u0442\u0432\u043e",
+        "fullname": "\u0444\u0430\u043c\u0438\u043b\u0438\u044f \u0418\u043c\u044f \u041e\u0442\u0447\u0435\u0441\u0442\u0432\u043e",
+        "sex": "\u041c",
+        "fname": "\u0418\u043c\u044f",
+        "sname": "\u0444\u0430\u043c\u0438\u043b\u0438\u044f",
+        "birthdate": "2007-05-15"
+    },
+    "pk": 15,
+    "model": "anketa.person"
+},
+{
+    "fields": {
+        "mname": "\u041e\u0442\u0447\u0435\u0441\u0442\u0432\u043e",
+        "fullname": "\u0444\u0430\u043c\u0438\u043b\u0438\u044f \u0418\u043c\u044f \u041e\u0442\u0447\u0435\u0441\u0442\u0432\u043e",
+        "sex": "\u041c",
+        "fname": "\u0418\u043c\u044f",
+        "sname": "\u0444\u0430\u043c\u0438\u043b\u0438\u044f",
+        "birthdate": "2007-05-15"
+    },
+    "pk": 16,
+    "model": "anketa.person"
+},
+{
+    "fields": {
+        "mname": "\u041e\u0442\u0447\u0435\u0441\u0442\u0432\u043e",
+        "fullname": "\u0444\u0430\u043c\u0438\u043b\u0438\u044f \u0418\u043c\u044f \u041e\u0442\u0447\u0435\u0441\u0442\u0432\u043e",
+        "sex": "\u041c",
+        "fname": "\u0418\u043c\u044f",
+        "sname": "\u0444\u0430\u043c\u0438\u043b\u0438\u044f",
+        "birthdate": "2000-11-11"
+    },
+    "pk": 17,
+    "model": "anketa.person"
+},
+{
+    "fields": {
+        "mname": "ot4estvoB",
+        "fullname": "familiyaB imyaB ot4estvoB",
+        "sex": "\u041c",
+        "fname": "imyaB",
+        "sname": "familiyaB",
+        "birthdate": "2000-11-18"
+    },
+    "pk": 18,
+    "model": "anketa.person"
+},
+{
+    "fields": {
+        "mname": "\u0441",
+        "fullname": "\u0441 \u0441 \u0441",
+        "sex": "\u041c",
+        "fname": "\u0441",
+        "sname": "\u0441",
+        "birthdate": "2017-05-01"
+    },
+    "pk": 19,
+    "model": "anketa.person"
+},
+{
+    "fields": {
+        "citizenship": 2,
+        "foreign_lang": 10,
+        "work_duration": null,
+        "nationality": 8,
+        "token": "",
+        "hostel": true,
+        "user": [
+            "a"
+        ],
+        "birthplace": "\u0433.\u042f\u043a\u0443\u0442\u0441\u043a",
+        "info_progress": "000000"
+    },
+    "pk": 1,
+    "model": "anketa.abiturient"
+},
+{
+    "fields": {
+        "citizenship": 2,
+        "foreign_lang": 3,
+        "work_duration": null,
+        "nationality": 15,
+        "token": "",
+        "hostel": true,
+        "user": [
+            "kolya"
+        ],
+        "birthplace": "\u0441.\u0420\u0430\u0437\u0432\u0438\u043b\u043a\u0430",
+        "info_progress": null
+    },
+    "pk": 2,
+    "model": "anketa.abiturient"
+},
+{
+    "fields": {
+        "citizenship": 2,
+        "foreign_lang": 3,
+        "work_duration": null,
+        "nationality": 8,
+        "token": "",
+        "hostel": true,
+        "user": [
+            "ivan"
+        ],
+        "birthplace": "\u0441. \u0418\u0432\u0430\u043d\u043e\u0432\u043e",
+        "info_progress": null
+    },
+    "pk": 3,
+    "model": "anketa.abiturient"
+},
+{
+    "fields": {
+        "citizenship": 2,
+        "foreign_lang": 10,
+        "work_duration": null,
+        "nationality": 8,
+        "token": "",
+        "hostel": false,
+        "user": [
+            "baska"
+        ],
+        "birthplace": "\u0433.\u042f\u043a\u0443\u0442\u0441\u043a",
+        "info_progress": null
+    },
+    "pk": 4,
+    "model": "anketa.abiturient"
+},
+{
+    "fields": {
+        "citizenship": 2,
+        "foreign_lang": 9,
+        "work_duration": null,
+        "nationality": 8,
+        "token": "",
+        "hostel": true,
+        "user": [
+            "roma"
+        ],
+        "birthplace": "\u0433.\u0418\u0440\u043a\u0443\u0442\u0441\u043a",
+        "info_progress": null
+    },
+    "pk": 5,
+    "model": "anketa.abiturient"
+},
+{
+    "fields": {
+        "citizenship": 2,
+        "foreign_lang": 3,
+        "work_duration": null,
+        "nationality": 8,
+        "token": "",
+        "hostel": false,
+        "user": [
+            "4ino"
+        ],
+        "birthplace": "\u0433.\u042f\u043a\u0443\u0442\u0441\u043a",
+        "info_progress": null
+    },
+    "pk": 6,
+    "model": "anketa.abiturient"
+},
+{
+    "fields": {
+        "citizenship": 2,
+        "foreign_lang": 3,
+        "work_duration": null,
+        "nationality": 8,
+        "token": null,
+        "hostel": true,
+        "user": [
+            "st-pi"
+        ],
+        "birthplace": "\u0423\u043d\u0438\u0442\u0430\u0437 \u0431\u043b\u044f\u0442\u044c",
+        "info_progress": null
+    },
+    "pk": 7,
+    "model": "anketa.abiturient"
+},
+{
+    "fields": {
+        "citizenship": 2,
+        "foreign_lang": 11,
+        "work_duration": null,
+        "nationality": 8,
+        "token": null,
+        "hostel": true,
+        "user": [
+            "student1"
+        ],
+        "birthplace": "\u042f\u043a\u0443\u0442\u0441\u043a",
+        "info_progress": "000000"
+    },
+    "pk": 13,
+    "model": "anketa.abiturient"
+},
+{
+    "fields": {
+        "citizenship": 67,
+        "foreign_lang": null,
+        "work_duration": "",
+        "nationality": 15,
+        "token": "",
+        "hostel": false,
+        "user": [
+            "b"
+        ],
+        "birthplace": "",
+        "info_progress": ""
+    },
+    "pk": 18,
+    "model": "anketa.abiturient"
+},
+{
+    "fields": {
+        "citizenship": null,
+        "foreign_lang": null,
+        "work_duration": null,
+        "nationality": null,
+        "token": null,
+        "hostel": false,
+        "user": [
+            "c"
+        ],
+        "birthplace": null,
+        "info_progress": null
+    },
+    "pk": 19,
+    "model": "anketa.abiturient"
+},
+{
+    "fields": {
+        "points": 210,
+        "number": 2,
+        "priority": "\u0412",
+        "track": true,
+        "date": "2016-03-12",
+        "budget": true,
+        "withfee": false,
+        "abiturient": 2,
+        "appState": 12,
+        "department": 2
+    },
+    "pk": 3,
+    "model": "anketa.application"
+},
+{
+    "fields": {
+        "points": 250,
+        "number": 3,
+        "priority": "\u0412",
+        "track": true,
+        "date": "2016-03-12",
+        "budget": true,
+        "withfee": false,
+        "abiturient": 3,
+        "appState": 13,
+        "department": 3
+    },
+    "pk": 4,
+    "model": "anketa.application"
+},
+{
+    "fields": {
+        "points": 260,
+        "number": 4,
+        "priority": "\u0412",
+        "track": true,
+        "date": "2016-03-16",
+        "budget": true,
+        "withfee": false,
+        "abiturient": 4,
+        "appState": 14,
+        "department": 2
+    },
+    "pk": 5,
+    "model": "anketa.application"
+},
+{
+    "fields": {
+        "points": 300,
+        "number": 6,
+        "priority": "\u0412",
+        "track": true,
+        "date": "2016-03-22",
+        "budget": true,
+        "withfee": false,
+        "abiturient": 5,
+        "appState": 12,
+        "department": 2
+    },
+    "pk": 6,
+    "model": "anketa.application"
+},
+{
+    "fields": {
+        "points": 299,
+        "number": 8,
+        "priority": "\u0412",
+        "track": true,
+        "date": "2016-03-22",
+        "budget": true,
+        "withfee": false,
+        "abiturient": 6,
+        "appState": 12,
+        "department": 2
+    },
+    "pk": 7,
+    "model": "anketa.application"
+},
+{
+    "fields": {
+        "points": 100,
+        "number": null,
+        "priority": "\u0412",
+        "track": true,
+        "date": "2016-05-09",
+        "budget": true,
+        "withfee": false,
+        "abiturient": 7,
+        "appState": 5,
+        "department": 2
+    },
+    "pk": 8,
+    "model": "anketa.application"
+},
+{
+    "fields": {
+        "points": 100,
+        "number": null,
+        "priority": "\u0412",
+        "track": true,
+        "date": "2016-11-25",
+        "budget": true,
+        "withfee": false,
+        "abiturient": 13,
+        "appState": 5,
+        "department": 2
+    },
+    "pk": 9,
+    "model": "anketa.application"
+},
+{
+    "fields": {
+        "points": 100,
+        "number": null,
+        "priority": "\u0412",
+        "track": true,
+        "date": "2016-11-25",
+        "budget": true,
+        "withfee": false,
+        "abiturient": 13,
+        "appState": 5,
+        "department": 2
+    },
+    "pk": 10,
+    "model": "anketa.application"
+},
+{
+    "fields": {
+        "points": 600,
+        "number": null,
+        "priority": "\u0412",
+        "track": true,
+        "date": "2017-02-20",
+        "budget": true,
+        "withfee": true,
+        "abiturient": 18,
+        "appState": 5,
+        "department": 2
+    },
+    "pk": 11,
+    "model": "anketa.application"
+},
+{
+    "fields": {
+        "points": 100,
+        "number": null,
+        "priority": "high",
+        "track": true,
+        "date": "2017-04-01",
+        "budget": true,
+        "withfee": false,
+        "abiturient": 1,
+        "appState": 14,
+        "department": 2
+    },
+    "pk": 35,
+    "model": "anketa.application"
+},
+{
+    "fields": {
+        "points": 100,
+        "number": null,
+        "priority": "normal",
+        "track": true,
+        "date": "2016-04-01",
+        "budget": true,
+        "withfee": false,
+        "abiturient": 1,
+        "appState": 5,
+        "department": 2
+    },
+    "pk": 36,
+    "model": "anketa.application"
+},
+{
+    "fields": {
+        "points": 100,
+        "number": null,
+        "priority": "normal",
+        "track": true,
+        "date": "2017-04-05",
+        "budget": true,
+        "withfee": false,
+        "abiturient": 1,
+        "appState": 5,
+        "department": 2
+    },
+    "pk": 37,
+    "model": "anketa.application"
+},
+{
+    "fields": {
+        "points": 100,
+        "number": null,
+        "priority": null,
+        "track": false,
+        "date": "2017-05-09",
+        "budget": true,
+        "withfee": false,
+        "abiturient": 1,
+        "appState": 5,
+        "department": 2
+    },
+    "pk": 54,
+    "model": "anketa.application"
+},
+{
+    "fields": {
+        "points": 100,
+        "number": null,
+        "priority": "low",
+        "track": true,
+        "date": "2017-04-10",
+        "budget": true,
+        "withfee": false,
+        "abiturient": 1,
+        "appState": 14,
+        "department": 2
+    },
+    "pk": 55,
+    "model": "anketa.application"
+},
+{
+    "fields": {
+        "points": 100,
+        "number": null,
+        "priority": "low",
+        "track": true,
+        "date": "2017-04-10",
+        "budget": true,
+        "withfee": false,
+        "abiturient": 1,
+        "appState": 14,
+        "department": 2
+    },
+    "pk": 57,
+    "model": "anketa.application"
+},
+{
+    "fields": {
+        "points": 100,
+        "number": null,
+        "priority": "normal",
+        "track": true,
+        "date": "2017-04-11",
+        "budget": true,
+        "withfee": false,
+        "abiturient": 1,
+        "appState": 14,
+        "department": 2
+    },
+    "pk": 58,
+    "model": "anketa.application"
+},
+{
+    "fields": {
+        "points": 100,
+        "number": null,
+        "priority": "\u0421",
+        "track": true,
+        "date": "2017-04-11",
+        "budget": true,
+        "withfee": false,
+        "abiturient": 1,
+        "appState": 14,
+        "department": 2
+    },
+    "pk": 59,
+    "model": "anketa.application"
+},
+{
+    "fields": {
+        "points": 100,
+        "number": null,
+        "priority": "\u0412",
+        "track": true,
+        "date": "2017-04-18",
+        "budget": true,
+        "withfee": false,
+        "abiturient": 1,
+        "appState": 12,
+        "department": 2
+    },
+    "pk": 60,
+    "model": "anketa.application"
+},
+{
+    "fields": {
+        "points": 100,
+        "number": null,
+        "priority": "\u041d",
+        "track": false,
+        "date": "2017-05-08",
+        "budget": true,
+        "withfee": false,
+        "abiturient": 1,
+        "appState": 5,
+        "department": 2
+    },
+    "pk": 61,
+    "model": "anketa.application"
+},
+{
+    "fields": {
+        "points": 100,
+        "number": null,
+        "priority": "\u0421",
+        "track": true,
+        "date": "2017-05-08",
+        "budget": true,
+        "withfee": false,
+        "abiturient": 1,
+        "appState": 5,
+        "department": 2
+    },
+    "pk": 62,
+    "model": "anketa.application"
+},
+{
+    "fields": {
+        "points": 100,
+        "number": null,
+        "priority": "\u0421",
+        "track": false,
+        "date": "2017-05-08",
+        "budget": true,
+        "withfee": false,
+        "abiturient": 1,
+        "appState": 5,
+        "department": 2
+    },
+    "pk": 81,
+    "model": "anketa.application"
+},
+{
+    "fields": {
+        "points": 100,
+        "number": null,
+        "priority": "\u0412",
+        "track": false,
+        "date": "2017-05-19",
+        "budget": true,
+        "withfee": false,
+        "abiturient": 1,
+        "appState": 5,
+        "department": 2
+    },
+    "pk": 84,
+    "model": "anketa.application"
+},
+{
+    "fields": {
+        "points": 100,
+        "number": null,
+        "priority": "\u041d",
+        "track": true,
+        "date": "2017-05-16",
+        "budget": true,
+        "withfee": false,
+        "abiturient": 1,
+        "appState": 14,
+        "department": 2
+    },
+    "pk": 86,
+    "model": "anketa.application"
+},
+{
+    "fields": {
+        "adrs_type": 61,
+        "adrs_type_same": false,
+        "building": "2",
+        "abiturient": 7,
+        "zipcode": "",
+        "flat": "75",
+        "street": 1,
+        "house": "6"
+    },
+    "pk": 9,
+    "model": "anketa.address"
+},
+{
+    "fields": {
+        "adrs_type": 39,
+        "adrs_type_same": false,
+        "building": "",
+        "abiturient": 7,
+        "zipcode": "",
+        "flat": "",
+        "street": 1,
+        "house": ""
+    },
+    "pk": 10,
+    "model": "anketa.address"
+},
+{
+    "fields": {
+        "adrs_type": 61,
+        "adrs_type_same": false,
+        "building": "",
+        "abiturient": 13,
+        "zipcode": "",
+        "flat": "",
+        "street": 1,
+        "house": ""
+    },
+    "pk": 11,
+    "model": "anketa.address"
+},
+{
+    "fields": {
+        "adrs_type": 39,
+        "adrs_type_same": false,
+        "building": "",
+        "abiturient": 13,
+        "zipcode": "",
+        "flat": "",
+        "street": 1,
+        "house": ""
+    },
+    "pk": 12,
+    "model": "anketa.address"
+},
+{
+    "fields": {
+        "adrs_type": 61,
+        "adrs_type_same": false,
+        "building": "",
+        "abiturient": 1,
+        "zipcode": "",
+        "flat": "",
+        "street": 1,
+        "house": ""
+    },
+    "pk": 13,
+    "model": "anketa.address"
+},
+{
+    "fields": {
+        "adrs_type": 39,
+        "adrs_type_same": false,
+        "building": "",
+        "abiturient": 1,
+        "zipcode": "",
+        "flat": "",
+        "street": 1,
+        "house": ""
+    },
+    "pk": 14,
+    "model": "anketa.address"
+},
+{
+    "fields": {
+        "contact_type": 43,
+        "person": 9,
+        "value": "48484844848"
+    },
+    "pk": 5,
+    "model": "anketa.contacts"
+},
+{
+    "fields": {
+        "contact_type": 34,
+        "person": 8,
+        "value": "89141454949"
+    },
+    "pk": 6,
+    "model": "anketa.contacts"
+},
+{
+    "fields": {
+        "contact_type": 34,
+        "person": 10,
+        "value": "48484844848"
+    },
+    "pk": 10,
+    "model": "anketa.contacts"
+},
+{
+    "fields": {
+        "contact_type": 34,
+        "person": 11,
+        "value": "89141454949"
+    },
+    "pk": 11,
+    "model": "anketa.contacts"
+},
+{
+    "fields": {
+        "contact_type": 34,
+        "person": 12,
+        "value": "12313545"
+    },
+    "pk": 12,
+    "model": "anketa.contacts"
+},
+{
+    "fields": {
+        "contact_type": 37,
+        "person": 2,
+        "value": "12345678912"
+    },
+    "pk": 15,
+    "model": "anketa.contacts"
+},
+{
+    "fields": {
+        "contact_type": 43,
+        "person": 2,
+        "value": "\u0434\u0449\u0434\u0449\u044b\u0440\u0444"
+    },
+    "pk": 16,
+    "model": "anketa.contacts"
+},
+{
+    "fields": {
+        "contact_type": 34,
+        "person": 14,
+        "value": "88005553535"
+    },
+    "pk": 18,
+    "model": "anketa.contacts"
+},
+{
+    "fields": {
+        "contact_type": 34,
+        "person": 15,
+        "value": "88005553535"
+    },
+    "pk": 20,
+    "model": "anketa.contacts"
+},
+{
+    "fields": {
+        "contact_type": 34,
+        "person": 16,
+        "value": "88005553535"
+    },
+    "pk": 22,
+    "model": "anketa.contacts"
+},
+{
+    "fields": {
+        "contact_type": 43,
+        "person": 13,
+        "value": "154654"
+    },
+    "pk": 23,
+    "model": "anketa.contacts"
+},
+{
+    "fields": {
+        "contact_type": 34,
+        "person": 17,
+        "value": "88005553535"
+    },
+    "pk": 24,
+    "model": "anketa.contacts"
+},
+{
+    "fields": {
+        "contact_type": 34,
+        "person": 1,
+        "value": "2321312312"
+    },
+    "pk": 25,
+    "model": "anketa.contacts"
+},
+{
+    "fields": {
+        "contact_type": 43,
+        "person": 1,
+        "value": "312312424"
+    },
+    "pk": 26,
+    "model": "anketa.contacts"
+},
+{
+    "fields": {
+        "contact_type": 35,
+        "person": 1,
+        "value": "34653465"
+    },
+    "pk": 27,
+    "model": "anketa.contacts"
+},
+{
+    "fields": {
+        "enterDate": "2017-02-09",
+        "doc": 14,
+        "level": 22,
+        "abiturient": 1
+    },
+    "pk": 2,
+    "model": "anketa.education"
+},
+{
+    "fields": {
+        "number": 228,
+        "isCopy": true,
+        "docIssuer": 7,
+        "docType": 6,
+        "serialno": 1408,
+        "issueDate": "2006-03-11",
+        "abiturient": 1
+    },
+    "pk": 1,
+    "model": "anketa.docs"
+},
+{
+    "fields": {
+        "number": 228,
+        "isCopy": false,
+        "docIssuer": 17,
+        "docType": 16,
+        "serialno": 1408,
+        "issueDate": "2006-03-12",
+        "abiturient": 2
+    },
+    "pk": 2,
+    "model": "anketa.docs"
+},
+{
+    "fields": {
+        "number": 3535,
+        "isCopy": false,
+        "docIssuer": 18,
+        "docType": 6,
+        "serialno": 8800555,
+        "issueDate": "2012-03-12",
+        "abiturient": 3
+    },
+    "pk": 3,
+    "model": "anketa.docs"
+},
+{
+    "fields": {
+        "number": 228,
+        "isCopy": true,
+        "docIssuer": 18,
+        "docType": 6,
+        "serialno": 1408,
+        "issueDate": "2006-03-16",
+        "abiturient": 4
+    },
+    "pk": 4,
+    "model": "anketa.docs"
+},
+{
+    "fields": {
+        "number": 228,
+        "isCopy": true,
+        "docIssuer": 19,
+        "docType": 6,
+        "serialno": 1408,
+        "issueDate": "2010-03-22",
+        "abiturient": 5
+    },
+    "pk": 5,
+    "model": "anketa.docs"
+},
+{
+    "fields": {
+        "number": 238889,
+        "isCopy": true,
+        "docIssuer": 20,
+        "docType": 6,
+        "serialno": 9806,
+        "issueDate": "2009-06-22",
+        "abiturient": 6
+    },
+    "pk": 6,
+    "model": "anketa.docs"
+},
+{
+    "fields": {
+        "number": 456465,
+        "isCopy": false,
+        "docIssuer": 20,
+        "docType": 44,
+        "serialno": 123,
+        "issueDate": "2016-04-21",
+        "abiturient": 2
+    },
+    "pk": 7,
+    "model": "anketa.docs"
+},
+{
+    "fields": {
+        "number": 358148,
+        "isCopy": false,
+        "docIssuer": 17,
+        "docType": 45,
+        "serialno": 2545,
+        "issueDate": "2016-04-23",
+        "abiturient": 2
+    },
+    "pk": 8,
+    "model": "anketa.docs"
+},
+{
+    "fields": {
+        "number": 123,
+        "isCopy": false,
+        "docIssuer": 17,
+        "docType": 44,
+        "serialno": 123,
+        "issueDate": "2016-05-19",
+        "abiturient": 7
+    },
+    "pk": 9,
+    "model": "anketa.docs"
+},
+{
+    "fields": {
+        "number": null,
+        "isCopy": false,
+        "docIssuer": 17,
+        "docType": 45,
+        "serialno": 123456789,
+        "issueDate": null,
+        "abiturient": 7
+    },
+    "pk": 10,
+    "model": "anketa.docs"
+},
+{
+    "fields": {
+        "number": 123456,
+        "isCopy": false,
+        "docIssuer": 17,
+        "docType": 44,
+        "serialno": 1234,
+        "issueDate": "2014-07-16",
+        "abiturient": 1
+    },
+    "pk": 13,
+    "model": "anketa.docs"
+},
+{
+    "fields": {
+        "number": 123456,
+        "isCopy": false,
+        "docIssuer": 17,
+        "docType": 6,
+        "serialno": 1234,
+        "issueDate": "2017-10-06",
+        "abiturient": 1
+    },
+    "pk": 14,
+    "model": "anketa.docs"
+},
+{
+    "fields": {
+        "points": 96,
+        "exam_subjects": 62,
+        "exam_examType": 64,
+        "year": 2015,
+        "abiturient": 7,
+        "special": false
+    },
+    "pk": 15,
+    "model": "anketa.exams"
+},
+{
+    "fields": {
+        "points": 150,
+        "exam_subjects": 62,
+        "exam_examType": 64,
+        "year": 2012,
+        "abiturient": 13,
+        "special": false
+    },
+    "pk": 18,
+    "model": "anketa.exams"
+},
+{
+    "fields": {
+        "points": 200,
+        "exam_subjects": 63,
+        "exam_examType": 64,
+        "year": 2013,
+        "abiturient": 13,
+        "special": false
+    },
+    "pk": 19,
+    "model": "anketa.exams"
+},
+{
+    "fields": {
+        "points": 151,
+        "exam_subjects": 62,
+        "exam_examType": 64,
+        "year": 1999,
+        "abiturient": 1,
+        "special": false
+    },
+    "pk": 20,
+    "model": "anketa.exams"
+},
+{
+    "fields": {
+        "points": 555,
+        "exam_subjects": 63,
+        "exam_examType": 64,
+        "year": 1998,
+        "abiturient": 1,
+        "special": false
+    },
+    "pk": 21,
+    "model": "anketa.exams"
+},
+{
+    "fields": {
+        "points": 200,
+        "exam_subjects": 62,
+        "exam_examType": 64,
+        "year": 2016,
+        "abiturient": 1,
+        "special": false
+    },
+    "pk": 22,
+    "model": "anketa.exams"
+},
+{
+    "fields": {
+        "points": 100,
+        "exam_subjects": 63,
+        "exam_examType": 64,
+        "year": 2017,
+        "abiturient": 1,
+        "special": false
+    },
+    "pk": 24,
+    "model": "anketa.exams"
+},
+{
+    "fields": {
+        "head": null,
+        "name": "\u0421\u0435\u0432\u0435\u0440\u043e-\u0412\u043e\u0441\u0442\u043e\u0447\u043d\u044b\u0439 \u0444\u0435\u0434\u0435\u0440\u0430\u043b\u044c\u043d\u044b\u0439 \u0443\u043d\u0438\u0432\u0435\u0440\u0441\u0438\u0442\u0435\u0442 \u0438\u043c. \u041c.\u041a. \u0410\u043c\u043c\u043e\u0441\u043e\u0432\u0430",
+        "orgtype": null
+    },
+    "pk": 1,
+    "model": "anketa.eduorg"
+},
+{
+    "fields": {
+        "head": 1,
+        "name": "\u0418\u041c\u0418",
+        "orgtype": null
+    },
+    "pk": 2,
+    "model": "anketa.eduorg"
+},
+{
+    "fields": {
+        "head": 1,
+        "name": "\u0424\u0422\u0418",
+        "orgtype": null
+    },
+    "pk": 3,
+    "model": "anketa.eduorg"
+},
+{
+    "fields": {
+        "name": "\u0424\u0443\u043d\u0434\u0430\u043c\u0435\u043d\u0442\u0430\u043b\u044c\u043d\u0430\u044f \u0438\u043d\u0444\u043e\u0440\u043c\u0430\u0442\u0438\u043a\u0430 \u0438 \u0438\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u043e\u043d\u043d\u044b\u0435 \u0442\u0435\u0445\u043d\u043e\u043b\u043e\u0433\u0438\u0438",
+        "eduorg": 2,
+        "duration": null,
+        "qualification": 4
+    },
+    "pk": 1,
+    "model": "anketa.education_prog"
+},
+{
+    "fields": {
+        "name": "\u0418\u043d\u0444\u043e\u0440\u043c\u0430\u0442\u0438\u043a\u0430 \u0438 \u0432\u044b\u0447\u0438\u0441\u043b\u0438\u0442\u0435\u043b\u044c\u043d\u0430\u044f \u0442\u0435\u0445\u043d\u0438\u043a\u0430",
+        "eduorg": 2,
+        "duration": null,
+        "qualification": 4
+    },
+    "pk": 2,
+    "model": "anketa.education_prog"
+},
+{
+    "fields": {
+        "name": "\u0418\u043d\u0444\u043e\u0440\u043c\u0430\u0442\u0438\u043a\u0430 \u0438 \u0432\u044b\u0447\u0438\u0441\u043b\u0438\u0442\u0435\u043b\u044c\u043d\u0430\u044f \u0442\u0435\u0445\u043d\u0438\u043a\u0430",
+        "eduorg": 2,
+        "duration": null,
+        "qualification": 77
+    },
+    "pk": 3,
+    "model": "anketa.education_prog"
+},
+{
+    "fields": {
+        "name": "\u0422\u0435\u0445\u043d\u043e\u043b\u043e\u0433\u0438 \u0440\u0430\u0437\u0440\u0430\u0431\u043e\u0442\u043a\u0438 \u041f\u041e",
+        "edu_prog": 2
+    },
+    "pk": 1,
+    "model": "anketa.profile"
+},
+{
+    "fields": {
+        "name": "\u0414\u0440\u0443\u0433\u043e\u0439 \u043f\u0440\u043e\u0444\u0438\u043b\u044c",
+        "edu_prog": 2
+    },
+    "pk": 3,
+    "model": "anketa.profile"
+},
+{
+    "fields": {
+        "name": "\u0422\u0435\u0445\u043d\u043e\u043b\u043e\u0433\u0438 \u0440\u0430\u0437\u0440\u0430\u0431\u043e\u0442\u043a\u0438 \u041f\u041e",
+        "edu_prog": 3
+    },
+    "pk": 4,
+    "model": "anketa.profile"
+},
+{
+    "fields": {
+        "freespaces": 24,
+        "year": 2016,
+        "startDate": "2017-06-10",
+        "eduform": "\u041e",
+        "profile": 3,
+        "endDate": "2017-08-10"
+    },
+    "pk": 1,
+    "model": "anketa.profileattrs"
+},
+{
+    "fields": {
+        "freespaces": 100,
+        "year": 2016,
+        "startDate": "2017-06-10",
+        "eduform": "\u041e",
+        "profile": 1,
+        "endDate": "2017-08-10"
+    },
+    "pk": 2,
+    "model": "anketa.profileattrs"
+},
+{
+    "fields": {
+        "freespaces": 20,
+        "year": 2016,
+        "startDate": "2017-06-10",
+        "eduform": "\u0417",
+        "profile": 1,
+        "endDate": "2017-08-10"
+    },
+    "pk": 3,
+    "model": "anketa.profileattrs"
+},
+{
+    "fields": {
+        "freespaces": 45,
+        "year": 2017,
+        "startDate": "2017-04-10",
+        "eduform": "\u041e",
+        "profile": 4,
+        "endDate": "2017-08-10"
+    },
+    "pk": 4,
+    "model": "anketa.profileattrs"
+},
+{
+    "fields": {
+        "freespaces": 854,
+        "year": 2017,
+        "startDate": "2017-04-10",
+        "eduform": "\u041e\u0417",
+        "profile": 4,
+        "endDate": "2017-08-10"
+    },
+    "pk": 5,
+    "model": "anketa.profileattrs"
+},
+{
+    "fields": {
+        "freespaces": 20,
+        "year": 2017,
+        "startDate": "2017-06-10",
+        "eduform": "\u041e",
+        "profile": 1,
+        "endDate": "2017-08-10"
+    },
+    "pk": 6,
+    "model": "anketa.profileattrs"
+},
+{
+    "fields": {
+        "freespaces": 10,
+        "year": 2017,
+        "startDate": "2017-06-05",
+        "eduform": "\u041e\u0417",
+        "profile": 1,
+        "endDate": "2017-08-10"
+    },
+    "pk": 7,
+    "model": "anketa.profileattrs"
+},
+{
+    "fields": {
+        "freespaces": 20,
+        "year": 2017,
+        "startDate": "2017-06-10",
+        "eduform": "\u041e",
+        "profile": 3,
+        "endDate": "2017-08-10"
+    },
+    "pk": 8,
+    "model": "anketa.profileattrs"
+},
+{
+    "fields": {
+        "freespaces": 5,
+        "year": 2017,
+        "startDate": "2017-06-10",
+        "eduform": "\u0417",
+        "profile": 3,
+        "endDate": "2017-08-10"
+    },
+    "pk": 9,
+    "model": "anketa.profileattrs"
+},
+{
+    "fields": {
+        "application": 8,
+        "points": 300,
+        "profile": 1
+    },
+    "pk": 1,
+    "model": "anketa.applicationprofiles"
+},
+{
+    "fields": {
+        "application": 3,
+        "points": 300,
+        "profile": 2
+    },
+    "pk": 3,
+    "model": "anketa.applicationprofiles"
+},
+{
+    "fields": {
+        "application": 35,
+        "points": 300,
+        "profile": 3
+    },
+    "pk": 27,
+    "model": "anketa.applicationprofiles"
+},
+{
+    "fields": {
+        "application": 36,
+        "points": 300,
+        "profile": 1
+    },
+    "pk": 28,
+    "model": "anketa.applicationprofiles"
+},
+{
+    "fields": {
+        "application": 36,
+        "points": 300,
+        "profile": 3
+    },
+    "pk": 29,
+    "model": "anketa.applicationprofiles"
+},
+{
+    "fields": {
+        "application": 37,
+        "points": 300,
+        "profile": 3
+    },
+    "pk": 30,
+    "model": "anketa.applicationprofiles"
+},
+{
+    "fields": {
+        "application": 55,
+        "points": 300,
+        "profile": 1
+    },
+    "pk": 34,
+    "model": "anketa.applicationprofiles"
+},
+{
+    "fields": {
+        "application": 57,
+        "points": 300,
+        "profile": 2
+    },
+    "pk": 35,
+    "model": "anketa.applicationprofiles"
+},
+{
+    "fields": {
+        "application": 57,
+        "points": 300,
+        "profile": 2
+    },
+    "pk": 36,
+    "model": "anketa.applicationprofiles"
+},
+{
+    "fields": {
+        "application": 58,
+        "points": 300,
+        "profile": 4
+    },
+    "pk": 37,
+    "model": "anketa.applicationprofiles"
+},
+{
+    "fields": {
+        "application": 59,
+        "points": 300,
+        "profile": 4
+    },
+    "pk": 38,
+    "model": "anketa.applicationprofiles"
+},
+{
+    "fields": {
+        "application": 60,
+        "points": 300,
+        "profile": 5
+    },
+    "pk": 39,
+    "model": "anketa.applicationprofiles"
+},
+{
+    "fields": {
+        "application": 62,
+        "points": 300,
+        "profile": 7
+    },
+    "pk": 80,
+    "model": "anketa.applicationprofiles"
+},
+{
+    "fields": {
+        "application": 62,
+        "points": 300,
+        "profile": 6
+    },
+    "pk": 81,
+    "model": "anketa.applicationprofiles"
+},
+{
+    "fields": {
+        "application": 61,
+        "points": 300,
+        "profile": 5
+    },
+    "pk": 82,
+    "model": "anketa.applicationprofiles"
+},
+{
+    "fields": {
+        "application": 81,
+        "points": 300,
+        "profile": 5
+    },
+    "pk": 83,
+    "model": "anketa.applicationprofiles"
+},
+{
+    "fields": {
+        "application": 54,
+        "points": 300,
+        "profile": 5
+    },
+    "pk": 94,
+    "model": "anketa.applicationprofiles"
+},
+{
+    "fields": {
+        "application": 84,
+        "points": 906,
+        "profile": 5
+    },
+    "pk": 97,
+    "model": "anketa.applicationprofiles"
+},
+{
+    "fields": {
+        "application": 86,
+        "points": 300,
+        "profile": 5
+    },
+    "pk": 98,
+    "model": "anketa.applicationprofiles"
+},
+{
+    "fields": {
+        "subject": 62,
+        "min_points": 150,
+        "profile": 4
+    },
+    "pk": 1,
+    "model": "anketa.exams_needed"
+},
+{
+    "fields": {
+        "subject": 63,
+        "min_points": 150,
+        "profile": 4
+    },
+    "pk": 2,
+    "model": "anketa.exams_needed"
+},
+{
+    "fields": {
+        "liableForMilit": true,
+        "rank": null,
+        "isServed": false,
+        "yearDismissial": null
+    },
+    "pk": 1,
+    "model": "anketa.milit"
+},
+{
+    "fields": {
+        "liableForMilit": true,
+        "rank": null,
+        "isServed": true,
+        "yearDismissial": null
+    },
+    "pk": 7,
+    "model": "anketa.milit"
+},
+{
+    "fields": {
+        "liableForMilit": false,
+        "rank": null,
+        "isServed": false,
+        "yearDismissial": null
+    },
+    "pk": 13,
+    "model": "anketa.milit"
+},
+{
+    "fields": {
+        "fullname": "\u0424\u0430\u043c\u0438\u043b\u0438\u044f \u0418\u043c\u044f \u041e\u0442\u0447\u0435\u0441\u0442\u0432\u043e",
+        "first_name": "\u0424\u0430\u043c\u0438\u043b\u0438\u044f",
+        "mid_name": "\u0418\u043c\u044f",
+        "user": [
+            "a"
+        ],
+        "position": 2,
+        "last_name": "\u041e\u0442\u0447\u0435\u0441\u0442\u0432\u043e",
+        "department": 2,
+        "uniemployee": 228,
+        "active": true
+    },
+    "pk": 2,
+    "model": "staff.employee"
+},
+{
+    "fields": {
+        "fullname": "\u0421\u0435\u0440\u0433\u0435\u0435\u0432 \u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440 \u0421\u0435\u0440\u0433\u0435\u0435\u0432\u0438\u0447",
+        "first_name": "\u0421\u0435\u0440\u0433\u0435\u0435\u0432",
+        "mid_name": "\u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440",
+        "user": [
+            "4ino_rp"
+        ],
+        "position": 2,
+        "last_name": "\u0421\u0435\u0440\u0433\u0435\u0435\u0432\u0438\u0447",
+        "department": 2,
+        "uniemployee": 0,
+        "active": true
+    },
+    "pk": 4,
+    "model": "staff.employee"
+},
+{
+    "fields": {
+        "fullname": "fraerov fraer fraerovich",
+        "first_name": "fraerov",
+        "mid_name": "fraer",
+        "user": [
+            "fraer"
+        ],
+        "position": 4,
+        "last_name": "fraerovich",
+        "department": 2,
+        "uniemployee": 0,
+        "active": true
+    },
+    "pk": 5,
+    "model": "staff.employee"
+},
+{
+    "fields": {
+        "fullname": "dnina dno donniy",
+        "first_name": "dnina",
+        "mid_name": "dno",
+        "user": [
+            "dnina"
+        ],
+        "position": 3,
+        "last_name": "donniy",
+        "department": 2,
+        "uniemployee": 0,
+        "active": true
+    },
+    "pk": 6,
+    "model": "staff.employee"
+},
+{
+    "fields": {
+        "fullname": "\u0421\u0442\u0440\u0443\u0447\u043a\u043e\u0432 \u0412\u0430\u0441\u0438\u043b\u0438\u0439 \u041a\u0442\u043e\u0435\u0432\u0438\u0447",
+        "first_name": "\u0421\u0442\u0440\u0443\u0447\u043a\u043e\u0432",
+        "mid_name": "\u0412\u0430\u0441\u0438\u043b\u0438\u0439",
+        "user": [
+            "test1"
+        ],
+        "position": 4,
+        "last_name": "\u041a\u0442\u043e\u0435\u0432\u0438\u0447",
+        "department": 3,
+        "uniemployee": 0,
+        "active": true
+    },
+    "pk": 7,
+    "model": "staff.employee"
+},
+{
+    "fields": {
+        "fullname": "\u0410\u043d\u0443\u0444\u0440\u0438\u0435\u0432 \u041d\u0438\u043a\u043e\u043b\u0430\u0439 \u0410\u043d\u0430\u0442\u043e\u043b\u044c\u0447",
+        "first_name": "\u0410\u043d\u0443\u0444\u0440\u0438\u0435\u0432",
+        "mid_name": "\u041d\u0438\u043a\u043e\u043b\u0430\u0439",
+        "user": [
+            "test2"
+        ],
+        "position": 3,
+        "last_name": "\u0410\u043d\u0430\u0442\u043e\u043b\u044c\u0447",
+        "department": 1,
+        "uniemployee": 0,
+        "active": true
+    },
+    "pk": 8,
+    "model": "staff.employee"
+},
+{
+    "fields": {
+        "name": "predsedatel'"
+    },
+    "pk": 1,
+    "model": "staff.position"
+},
+{
+    "fields": {
+        "name": "car'"
+    },
+    "pk": 2,
+    "model": "staff.position"
+},
+{
+    "fields": {
+        "name": "\u041c\u0438\u0434\u0435\u0440"
+    },
+    "pk": 3,
+    "model": "staff.position"
+},
+{
+    "fields": {
+        "name": "fraer"
+    },
+    "pk": 4,
+    "model": "staff.position"
+},
+{
+    "fields": {
+        "contact_type": 37,
+        "employee": 4,
+        "value": "123123123"
+    },
+    "pk": 31,
+    "model": "staff.contacts"
+},
+{
+    "fields": {
+        "contact_type": 39,
+        "employee": 4,
+        "value": "jopamira"
+    },
+    "pk": 40,
+    "model": "staff.contacts"
+},
+{
+    "fields": {
+        "contact_type": 35,
+        "employee": 4,
+        "value": "888888888"
+    },
+    "pk": 41,
+    "model": "staff.contacts"
+},
+{
+    "fields": {
+        "contact_type": 43,
+        "employee": 4,
+        "value": "01"
+    },
+    "pk": 42,
+    "model": "staff.contacts"
+},
+{
+    "fields": {
+        "contact_type": 35,
+        "employee": 4,
+        "value": "88005553535"
+    },
+    "pk": 43,
+    "model": "staff.contacts"
+},
+{
+    "fields": {
+        "contact_type": 37,
+        "employee": 4,
+        "value": "123"
+    },
+    "pk": 44,
+    "model": "staff.contacts"
+},
+{
+    "model": "kladr.kladr",
+    "fields": {
+        "gninmb": "1400",
+        "ocatd": "98000000000",
+        "index": "",
+        "code": "1400000000000",
+        "status": "0",
+        "socr": "\u0420\u0435\u0441\u043f",
+        "uno": "",
+        "name": "\u0421\u0430\u0445\u0430 /\u042f\u043a\u0443\u0442\u0438\u044f/"
+    },
+    "pk": 1
+},
+{
+    "model": "kladr.kladr",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98401554000",
+        "index": "",
+        "code": "1400000000300",
+        "status": "0",
+        "socr": "\u043f",
+        "uno": "1435",
+        "name": "\u0416\u0430\u0442\u0430\u0439"
+    },
+    "pk": 2
+},
+{
+    "model": "kladr.kladr",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98401000000",
+        "index": "",
+        "code": "1400000100000",
+        "status": "2",
+        "socr": "\u0433",
+        "uno": "",
+        "name": "\u042f\u043a\u0443\u0442\u0441\u043a"
+    },
+    "pk": 3
+},
+{
+    "model": "kladr.kladr",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98401000000",
+        "index": "677903",
+        "code": "1400000100300",
+        "status": "0",
+        "socr": "\u043c\u043a\u0440",
+        "uno": "1435",
+        "name": "\u041a\u0430\u043d\u0433\u0430\u043b\u0430\u0441\u0441\u044b"
+    },
+    "pk": 4
+},
+{
+    "model": "kladr.kladr",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98000000000",
+        "index": "",
+        "code": "1400000164400",
+        "status": "0",
+        "socr": "\u0441",
+        "uno": "1435",
+        "name": "\u0425\u0430\u0442\u0430\u0441\u0441\u044b"
+    },
+    "pk": 5
+},
+{
+    "model": "kladr.kladr",
+    "fields": {
+        "gninmb": "1448",
+        "ocatd": "98244000000",
+        "index": "678000",
+        "code": "1403200000000",
+        "status": "0",
+        "socr": "\u0443",
+        "uno": "1431",
+        "name": "\u0425\u0430\u043d\u0433\u0430\u043b\u0430\u0441\u0441\u043a\u0438\u0439"
+    },
+    "pk": 6
+},
+{
+    "model": "kladr.kladr",
+    "fields": {
+        "gninmb": "1448",
+        "ocatd": "98420000000",
+        "index": "",
+        "code": "1403200100000",
+        "status": "1",
+        "socr": "\u0433",
+        "uno": "1431",
+        "name": "\u041f\u043e\u043a\u0440\u043e\u0432\u0441\u043a"
+    },
+    "pk": 7
+},
+{
+    "model": "kladr.kladr",
+    "fields": {
+        "gninmb": "1448",
+        "ocatd": "98244840001",
+        "index": "",
+        "code": "1403200001200",
+        "status": "0",
+        "socr": "\u0441",
+        "uno": "1431",
+        "name": "\u041e\u043a\u0442\u0435\u043c\u0446\u044b"
+    },
+    "pk": 8
+},
+{
+    "model": "kladr.kladr",
+    "fields": {
+        "gninmb": "1448",
+        "ocatd": "98244557000",
+        "index": "678020",
+        "code": "1403200001000",
+        "status": "0",
+        "socr": "\u043f",
+        "uno": "1431",
+        "name": "\u041c\u043e\u0445\u0441\u043e\u0433\u043e\u043b\u043b\u043e\u0445"
+    },
+    "pk": 9
+},
+{
+    "model": "kladr.kladr",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98235000000",
+        "index": "678380",
+        "code": "1401900000000",
+        "status": "0",
+        "socr": "\u0443",
+        "uno": "",
+        "name": "\u041d\u0430\u043c\u0441\u043a\u0438\u0439"
+    },
+    "pk": 10
+},
+{
+    "model": "kladr.kladr",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98235825001",
+        "index": "678380",
+        "code": "1401900000100",
+        "status": "1",
+        "socr": "\u0441",
+        "uno": "1417",
+        "name": "\u041d\u0430\u043c\u0446\u044b"
+    },
+    "pk": 11
+},
+{
+    "model": "kladr.kladr",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98235855001",
+        "index": "678388",
+        "code": "1401900000200",
+        "status": "0",
+        "socr": "\u0441",
+        "uno": "1417",
+        "name": "\u0410\u043f\u043f\u0430\u043d\u044b"
+    },
+    "pk": 12
+},
+{
+    "model": "kladr.kladr",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98235845001",
+        "index": "678397",
+        "code": "1401900000300",
+        "status": "0",
+        "socr": "\u0441",
+        "uno": "1417",
+        "name": "\u0411\u0443\u043b\u0443\u0441"
+    },
+    "pk": 13
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98401554000",
+        "index": "677902",
+        "code": "14000000003000100",
+        "socr": "\u0443\u043b",
+        "uno": "1435",
+        "name": "\u0428\u0430\u0440\u0430\u0431\u043e\u0440\u043e\u0432\u0430"
+    },
+    "pk": 2
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98401554000",
+        "index": "677902",
+        "code": "14000000003000200",
+        "socr": "\u0443\u043b",
+        "uno": "1435",
+        "name": "\u0422\u0440\u0430\u043a\u0442\u043e\u0432\u0430\u044f"
+    },
+    "pk": 3
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98401554000",
+        "index": "677902",
+        "code": "14000000003000300",
+        "socr": "\u0443\u043b",
+        "uno": "1435",
+        "name": "\u041c\u0430\u0442\u0440\u043e\u0441\u043e\u0432\u0430"
+    },
+    "pk": 4
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98401554000",
+        "index": "677902",
+        "code": "14000000003000400",
+        "socr": "\u0443\u043b",
+        "uno": "1435",
+        "name": "\u0412\u043e\u0434\u043d\u0438\u043a\u043e\u0432"
+    },
+    "pk": 5
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98401554000",
+        "index": "677902",
+        "code": "14000000003000500",
+        "socr": "\u0443\u043b",
+        "uno": "1435",
+        "name": "\u0417\u0430\u043f\u0430\u0434\u043d\u0430\u044f"
+    },
+    "pk": 6
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98401000000",
+        "index": "677008",
+        "code": "14000001000000100",
+        "socr": "\u043f\u0435\u0440",
+        "uno": "1435",
+        "name": "\u0410\u043a\u0430\u0434\u0435\u043c\u0438\u0447\u0435\u0441\u043a\u0438\u0439 1-\u0439"
+    },
+    "pk": 7
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98401000000",
+        "index": "677001",
+        "code": "14000001000000200",
+        "socr": "\u0443\u043b",
+        "uno": "1435",
+        "name": "1 \u0411\u0430\u0437\u0430"
+    },
+    "pk": 8
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98401000000",
+        "index": "677001",
+        "code": "14000001000000300",
+        "socr": "\u043f\u0435\u0440",
+        "uno": "1435",
+        "name": "\u0413\u043e\u043b\u044c\u043c\u0438\u043d\u043a\u0430 1-\u0439"
+    },
+    "pk": 9
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98401000000",
+        "index": "677004",
+        "code": "14000001000000400",
+        "socr": "\u0443\u043b",
+        "uno": "1435",
+        "name": "\u0414\u0430\u0440\u043a\u044b\u043b\u0430\u0445\u0441\u043a\u0430\u044f 1-\u044f"
+    },
+    "pk": 10
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98401000000",
+        "index": "677000",
+        "code": "14000001000000500",
+        "socr": "\u0443\u043b",
+        "uno": "1435",
+        "name": "\u0426\u0435\u043d\u0442\u0440\u0430\u043b\u044c\u043d\u0430\u044f"
+    },
+    "pk": 11
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98401000000",
+        "index": "677903",
+        "code": "14000001003000100",
+        "socr": "\u0443\u043b",
+        "uno": "1435",
+        "name": "26 \u043f\u0430\u0440\u0442\u0441\u044a\u0435\u0437\u0434\u0430"
+    },
+    "pk": 12
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98401000000",
+        "index": "677903",
+        "code": "14000001003000200",
+        "socr": "\u0443\u043b",
+        "uno": "1435",
+        "name": "\u0413\u0435\u043e\u043b\u043e\u0433\u0438\u0447\u0435\u0441\u043a\u0430\u044f"
+    },
+    "pk": 13
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98401000000",
+        "index": "677903",
+        "code": "14000001003000300",
+        "socr": "\u043f\u0435\u0440",
+        "uno": "1435",
+        "name": "\u0413\u0435\u043e\u043b\u043e\u0433\u043e\u0432"
+    },
+    "pk": 14
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98401000000",
+        "index": "677903",
+        "code": "14000001003000400",
+        "socr": "\u0443\u043b",
+        "uno": "1435",
+        "name": "\u0414\u0430\u0447\u043d\u0430\u044f"
+    },
+    "pk": 15
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98401000000",
+        "index": "677903",
+        "code": "14000001003000500",
+        "socr": "\u0443\u043b",
+        "uno": "1435",
+        "name": "\u041a\u0430\u043f\u0438\u0442\u043e\u043d\u043e\u0432\u0430"
+    },
+    "pk": 16
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98401816001",
+        "index": "677907",
+        "code": "14000001644000100",
+        "socr": "\u0443\u0447-\u043a",
+        "uno": "1435",
+        "name": "\u0421\u043e\u043b\u043e\u0447\u0447\u0443"
+    },
+    "pk": 17
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98401816001",
+        "index": "677907",
+        "code": "14000001644000200",
+        "socr": "\u0443\u043b",
+        "uno": "1435",
+        "name": "\u041a\u0430\u043b\u0430\u043d\u0434\u0430\u0440\u0430\u0448\u0432\u0438\u043b\u0438"
+    },
+    "pk": 18
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98401816001",
+        "index": "677907",
+        "code": "14000001644000300",
+        "socr": "\u0443\u043b",
+        "uno": "1435",
+        "name": "\u0410\u0440\u0436\u0430\u043a\u043e\u0432\u0430"
+    },
+    "pk": 19
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98401816001",
+        "index": "677907",
+        "code": "14000001644000400",
+        "socr": "\u0443\u043b",
+        "uno": "1435",
+        "name": "\u0414\u0430\u043b\u044c\u043d\u044f\u044f"
+    },
+    "pk": 20
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98401816001",
+        "index": "677907",
+        "code": "14000001644000500",
+        "socr": "\u0443\u043b",
+        "uno": "1435",
+        "name": "60 \u043b\u0435\u0442 \u041f\u043e\u0431\u0435\u0434\u044b"
+    },
+    "pk": 21
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1448",
+        "ocatd": "98420000000",
+        "index": "678000",
+        "code": "14032001000000100",
+        "socr": "\u0443\u043b",
+        "uno": "1431",
+        "name": "\u0410\u043b\u0430\u0441\u043d\u0430\u044f"
+    },
+    "pk": 22
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1448",
+        "ocatd": "98420000000",
+        "index": "678000",
+        "code": "14032001000000200",
+        "socr": "\u043f\u0435\u0440",
+        "uno": "1431",
+        "name": "\u0413\u043b\u0443\u0445\u043e\u0439"
+    },
+    "pk": 23
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1448",
+        "ocatd": "98420000000",
+        "index": "678000",
+        "code": "14032001000000300",
+        "socr": "\u0443\u043b",
+        "uno": "1431",
+        "name": "\u0414\u0430\u0447\u043d\u0430\u044f"
+    },
+    "pk": 24
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1448",
+        "ocatd": "98420000000",
+        "index": "",
+        "code": "14032001000000400",
+        "socr": "\u0443\u043b",
+        "uno": "1431",
+        "name": "\u0417\u0430\u0432\u043e\u0434\u0441\u043a\u0430\u044f"
+    },
+    "pk": 25
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1448",
+        "ocatd": "98420000000",
+        "index": "",
+        "code": "14032001000000500",
+        "socr": "\u0443\u043b",
+        "uno": "1431",
+        "name": "\u041a\u0430\u043b\u0430\u043d\u0434\u0430\u0440\u0430\u0448\u0432\u0438\u043b\u0438"
+    },
+    "pk": 26
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1448",
+        "ocatd": "98244840001",
+        "index": "678011",
+        "code": "14032000012000100",
+        "socr": "\u0443\u043b",
+        "uno": "1431",
+        "name": "\u0415.\u0410\u043d\u0434\u0440\u0435\u0435\u0432\u0430"
+    },
+    "pk": 27
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1448",
+        "ocatd": "98244840001",
+        "index": "678011",
+        "code": "14032000012000200",
+        "socr": "\u0443\u043b",
+        "uno": "1431",
+        "name": "\u0414\u0440\u0443\u0436\u0431\u044b"
+    },
+    "pk": 28
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1448",
+        "ocatd": "98244840001",
+        "index": "678011",
+        "code": "14032000012000300",
+        "socr": "\u0443\u043b",
+        "uno": "1431",
+        "name": "\u041a\u043e\u043d\u043e\u043d\u043e\u0432\u0430"
+    },
+    "pk": 29
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1448",
+        "ocatd": "98244840001",
+        "index": "678011",
+        "code": "14032000012000700",
+        "socr": "\u0443\u043b",
+        "uno": "1431",
+        "name": "\u041c\u0438\u0440\u0430"
+    },
+    "pk": 30
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1448",
+        "ocatd": "98244840001",
+        "index": "678011",
+        "code": "14032000012000800",
+        "socr": "\u0443\u043b",
+        "uno": "1431",
+        "name": "\u041c\u043e\u043b\u043e\u0434\u0435\u0436\u043d\u0430\u044f"
+    },
+    "pk": 31
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1448",
+        "ocatd": "98244557000",
+        "index": "678020",
+        "code": "14032000010000100",
+        "socr": "\u0443\u043b",
+        "uno": "1431",
+        "name": "\u0417\u0430\u0432\u043e\u0434\u0441\u043a\u0430\u044f"
+    },
+    "pk": 32
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1448",
+        "ocatd": "98244557000",
+        "index": "678020",
+        "code": "14032000010000200",
+        "socr": "\u0443\u043b",
+        "uno": "1431",
+        "name": "\u041a\u043e\u043c\u0441\u043e\u043c\u043e\u043b\u044c\u0441\u043a\u0430\u044f"
+    },
+    "pk": 33
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1448",
+        "ocatd": "98244557000",
+        "index": "678020",
+        "code": "14032000010000300",
+        "socr": "\u0443\u043b",
+        "uno": "1431",
+        "name": "\u041c\u0438\u0440\u0430"
+    },
+    "pk": 34
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1448",
+        "ocatd": "98244557000",
+        "index": "678020",
+        "code": "14032000010000400",
+        "socr": "\u0443\u043b",
+        "uno": "1431",
+        "name": "\u041c\u043e\u043b\u043e\u0434\u0435\u0436\u043d\u0430\u044f"
+    },
+    "pk": 35
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1448",
+        "ocatd": "98244557000",
+        "index": "678020",
+        "code": "14032000010000500",
+        "socr": "\u0443\u043b",
+        "uno": "1431",
+        "name": "\u041f\u0438\u043e\u043d\u0435\u0440\u0441\u043a\u0430\u044f"
+    },
+    "pk": 36
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98235825001",
+        "index": "678380",
+        "code": "14019000001000100",
+        "socr": "\u043f\u0435\u0440",
+        "uno": "1417",
+        "name": "30 \u043b\u0435\u0442 \u041f\u043e\u0431\u0435\u0434\u044b"
+    },
+    "pk": 37
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98235825001",
+        "index": "678380",
+        "code": "14019000001000200",
+        "socr": "\u0443\u043b",
+        "uno": "1417",
+        "name": "8 \u041c\u0430\u0440\u0442\u0430"
+    },
+    "pk": 38
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98235825001",
+        "index": "678380",
+        "code": "14019000001000300",
+        "socr": "\u0443\u043b",
+        "uno": "1417",
+        "name": "\u041c.\u0410\u043c\u043c\u043e\u0441\u043e\u0432\u0430"
+    },
+    "pk": 39
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98235825001",
+        "index": "678380",
+        "code": "14019000001000400",
+        "socr": "\u0443\u043b",
+        "uno": "1417",
+        "name": "\u0411\u0430\u0437\u043e\u0432\u0430\u044f"
+    },
+    "pk": 40
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98235825001",
+        "index": "678380",
+        "code": "14019000001000500",
+        "socr": "\u0443\u043b",
+        "uno": "1417",
+        "name": "\u0413.\u041f\u043e\u043f\u043e\u0432\u0430"
+    },
+    "pk": 41
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98235855001",
+        "index": "678388",
+        "code": "14019000002000100",
+        "socr": "\u0443\u043b",
+        "uno": "1417",
+        "name": "30 \u043b\u0435\u0442 \u041f\u043e\u0431\u0435\u0434\u044b"
+    },
+    "pk": 42
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98235855001",
+        "index": "678388",
+        "code": "14019000002000200",
+        "socr": "\u0443\u043b",
+        "uno": "1417",
+        "name": "50 \u043b\u0435\u0442 \u041f\u043e\u0431\u0435\u0434\u044b"
+    },
+    "pk": 43
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98235855001",
+        "index": "678388",
+        "code": "14019000002000300",
+        "socr": "\u0443\u043b",
+        "uno": "1417",
+        "name": "\u0410\u043c\u043c\u043e\u0441\u043e\u0432\u0430"
+    },
+    "pk": 44
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98235855001",
+        "index": "678388",
+        "code": "14019000002000400",
+        "socr": "\u0443\u043b",
+        "uno": "1417",
+        "name": "\u0418.\u0412\u0438\u043d\u043e\u043a\u0443\u0440\u043e\u0432\u0430"
+    },
+    "pk": 45
+},
+{
+    "model": "kladr.street",
+    "fields": {
+        "gninmb": "1447",
+        "ocatd": "98235855001",
+        "index": "678388",
+        "code": "14019000002000500",
+        "socr": "\u0443\u043b",
+        "uno": "1417",
+        "name": "\u0413\u0430\u0433\u0430\u0440\u0438\u043d\u0430"
+    },
+    "pk": 46
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T09:03:39Z",
+        "change_message": "",
+        "object_id": "1",
+        "object_repr": "Kladr object",
+        "content_type": [
+            "kladr",
+            "kladr"
+        ]
+    },
+    "pk": 1
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T09:04:35Z",
+        "change_message": "",
+        "object_id": "2",
+        "object_repr": "Kladr object",
+        "content_type": [
+            "kladr",
+            "kladr"
+        ]
+    },
+    "pk": 2
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T09:05:12Z",
+        "change_message": "",
+        "object_id": "3",
+        "object_repr": "Kladr object",
+        "content_type": [
+            "kladr",
+            "kladr"
+        ]
+    },
+    "pk": 3
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T09:06:16Z",
+        "change_message": "",
+        "object_id": "4",
+        "object_repr": "Kladr object",
+        "content_type": [
+            "kladr",
+            "kladr"
+        ]
+    },
+    "pk": 4
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T09:06:53Z",
+        "change_message": "",
+        "object_id": "5",
+        "object_repr": "Kladr object",
+        "content_type": [
+            "kladr",
+            "kladr"
+        ]
+    },
+    "pk": 5
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T09:08:49Z",
+        "change_message": "",
+        "object_id": "6",
+        "object_repr": "Kladr object",
+        "content_type": [
+            "kladr",
+            "kladr"
+        ]
+    },
+    "pk": 6
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T09:09:53Z",
+        "change_message": "",
+        "object_id": "7",
+        "object_repr": "Kladr object",
+        "content_type": [
+            "kladr",
+            "kladr"
+        ]
+    },
+    "pk": 7
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T09:10:33Z",
+        "change_message": "",
+        "object_id": "8",
+        "object_repr": "Kladr object",
+        "content_type": [
+            "kladr",
+            "kladr"
+        ]
+    },
+    "pk": 8
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T09:11:51Z",
+        "change_message": "",
+        "object_id": "9",
+        "object_repr": "Kladr object",
+        "content_type": [
+            "kladr",
+            "kladr"
+        ]
+    },
+    "pk": 9
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T09:13:16Z",
+        "change_message": "",
+        "object_id": "10",
+        "object_repr": "Kladr object",
+        "content_type": [
+            "kladr",
+            "kladr"
+        ]
+    },
+    "pk": 10
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T09:14:01Z",
+        "change_message": "",
+        "object_id": "11",
+        "object_repr": "Kladr object",
+        "content_type": [
+            "kladr",
+            "kladr"
+        ]
+    },
+    "pk": 11
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T09:14:40Z",
+        "change_message": "",
+        "object_id": "12",
+        "object_repr": "Kladr object",
+        "content_type": [
+            "kladr",
+            "kladr"
+        ]
+    },
+    "pk": 12
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T09:15:13Z",
+        "change_message": "",
+        "object_id": "13",
+        "object_repr": "Kladr object",
+        "content_type": [
+            "kladr",
+            "kladr"
+        ]
+    },
+    "pk": 13
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 3,
+        "action_time": "2017-12-12T09:42:31Z",
+        "change_message": "",
+        "object_id": "1",
+        "object_repr": "\u0425\u0430\u043b\u0442\u0443\u0440\u0438\u043d\u0430",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 14
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T09:47:39Z",
+        "change_message": "",
+        "object_id": "2",
+        "object_repr": "\u0428\u0430\u0440\u0430\u0431\u043e\u0440\u043e\u0432\u0430",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 15
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T09:48:15Z",
+        "change_message": "",
+        "object_id": "3",
+        "object_repr": "\u0422\u0440\u0430\u043a\u0442\u043e\u0432\u0430\u044f",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 16
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T09:48:45Z",
+        "change_message": "",
+        "object_id": "4",
+        "object_repr": "\u041c\u0430\u0442\u0440\u043e\u0441\u043e\u0432\u0430",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 17
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T09:50:02Z",
+        "change_message": "",
+        "object_id": "5",
+        "object_repr": "\u0412\u043e\u0434\u043d\u0438\u043a\u043e\u0432",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 18
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T09:50:38Z",
+        "change_message": "",
+        "object_id": "6",
+        "object_repr": "\u0417\u0430\u043f\u0430\u0434\u043d\u0430\u044f",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 19
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T09:51:50Z",
+        "change_message": "",
+        "object_id": "7",
+        "object_repr": "\u0410\u043a\u0430\u0434\u0435\u043c\u0438\u0447\u0435\u0441\u043a\u0438\u0439 1-\u0439",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 20
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T09:52:17Z",
+        "change_message": "",
+        "object_id": "8",
+        "object_repr": "1 \u0411\u0430\u0437\u0430",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 21
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T09:52:43Z",
+        "change_message": "",
+        "object_id": "9",
+        "object_repr": "\u0413\u043e\u043b\u044c\u043c\u0438\u043d\u043a\u0430 1-\u0439",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 22
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T09:53:17Z",
+        "change_message": "",
+        "object_id": "10",
+        "object_repr": "\u0414\u0430\u0440\u043a\u044b\u043b\u0430\u0445\u0441\u043a\u0430\u044f 1-\u044f",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 23
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T09:53:51Z",
+        "change_message": "",
+        "object_id": "11",
+        "object_repr": "\u0426\u0435\u043d\u0442\u0440\u0430\u043b\u044c\u043d\u0430\u044f",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 24
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T09:57:51Z",
+        "change_message": "",
+        "object_id": "12",
+        "object_repr": "26 \u043f\u0430\u0440\u0442\u0441\u044a\u0435\u0437\u0434\u0430",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 25
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T09:58:32Z",
+        "change_message": "",
+        "object_id": "13",
+        "object_repr": "\u0413\u0435\u043e\u043b\u043e\u0433\u0438\u0447\u0435\u0441\u043a\u0430\u044f",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 26
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T09:59:06Z",
+        "change_message": "",
+        "object_id": "14",
+        "object_repr": "\u0413\u0435\u043e\u043b\u043e\u0433\u043e\u0432",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 27
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T09:59:36Z",
+        "change_message": "",
+        "object_id": "15",
+        "object_repr": "\u0414\u0430\u0447\u043d\u0430\u044f",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 28
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T10:00:06Z",
+        "change_message": "",
+        "object_id": "16",
+        "object_repr": "\u041a\u0430\u043f\u0438\u0442\u043e\u043d\u043e\u0432\u0430",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 29
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T10:01:46Z",
+        "change_message": "",
+        "object_id": "17",
+        "object_repr": "\u0421\u043e\u043b\u043e\u0447\u0447\u0443",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 30
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T10:02:36Z",
+        "change_message": "",
+        "object_id": "18",
+        "object_repr": "\u041a\u0430\u043b\u0430\u043d\u0434\u0430\u0440\u0430\u0448\u0432\u0438\u043b\u0438",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 31
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T10:03:08Z",
+        "change_message": "",
+        "object_id": "19",
+        "object_repr": "\u0410\u0440\u0436\u0430\u043a\u043e\u0432\u0430",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 32
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T10:03:35Z",
+        "change_message": "",
+        "object_id": "20",
+        "object_repr": "\u0414\u0430\u043b\u044c\u043d\u044f\u044f",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 33
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T10:04:06Z",
+        "change_message": "",
+        "object_id": "21",
+        "object_repr": "60 \u043b\u0435\u0442 \u041f\u043e\u0431\u0435\u0434\u044b",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 34
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T10:04:57Z",
+        "change_message": "",
+        "object_id": "22",
+        "object_repr": "\u0410\u043b\u0430\u0441\u043d\u0430\u044f",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 35
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T10:05:23Z",
+        "change_message": "",
+        "object_id": "23",
+        "object_repr": "\u0413\u043b\u0443\u0445\u043e\u0439",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 36
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T10:05:48Z",
+        "change_message": "",
+        "object_id": "24",
+        "object_repr": "\u0414\u0430\u0447\u043d\u0430\u044f",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 37
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T10:06:10Z",
+        "change_message": "",
+        "object_id": "25",
+        "object_repr": "\u0417\u0430\u0432\u043e\u0434\u0441\u043a\u0430\u044f",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 38
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T10:06:33Z",
+        "change_message": "",
+        "object_id": "26",
+        "object_repr": "\u041a\u0430\u043b\u0430\u043d\u0434\u0430\u0440\u0430\u0448\u0432\u0438\u043b\u0438",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 39
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T10:07:34Z",
+        "change_message": "",
+        "object_id": "27",
+        "object_repr": "\u0415.\u0410\u043d\u0434\u0440\u0435\u0435\u0432\u0430",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 40
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T10:08:00Z",
+        "change_message": "",
+        "object_id": "28",
+        "object_repr": "\u0414\u0440\u0443\u0436\u0431\u044b",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 41
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T10:08:37Z",
+        "change_message": "",
+        "object_id": "29",
+        "object_repr": "\u041a\u043e\u043d\u043e\u043d\u043e\u0432\u0430",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 42
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T10:09:03Z",
+        "change_message": "",
+        "object_id": "30",
+        "object_repr": "\u041c\u0438\u0440\u0430",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 43
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T10:09:31Z",
+        "change_message": "",
+        "object_id": "31",
+        "object_repr": "\u041c\u043e\u043b\u043e\u0434\u0435\u0436\u043d\u0430\u044f",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 44
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T10:47:07Z",
+        "change_message": "",
+        "object_id": "32",
+        "object_repr": "\u0417\u0430\u0432\u043e\u0434\u0441\u043a\u0430\u044f",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 45
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T10:47:31Z",
+        "change_message": "",
+        "object_id": "33",
+        "object_repr": "\u041a\u043e\u043c\u0441\u043e\u043c\u043e\u043b\u044c\u0441\u043a\u0430\u044f",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 46
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T10:47:56Z",
+        "change_message": "",
+        "object_id": "34",
+        "object_repr": "\u041c\u0438\u0440\u0430",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 47
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T10:48:17Z",
+        "change_message": "",
+        "object_id": "35",
+        "object_repr": "\u041c\u043e\u043b\u043e\u0434\u0435\u0436\u043d\u0430\u044f",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 48
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T10:48:42Z",
+        "change_message": "",
+        "object_id": "36",
+        "object_repr": "\u041f\u0438\u043e\u043d\u0435\u0440\u0441\u043a\u0430\u044f",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 49
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T10:50:56Z",
+        "change_message": "",
+        "object_id": "37",
+        "object_repr": "30 \u043b\u0435\u0442 \u041f\u043e\u0431\u0435\u0434\u044b",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 50
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T10:51:20Z",
+        "change_message": "",
+        "object_id": "38",
+        "object_repr": "8 \u041c\u0430\u0440\u0442\u0430",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 51
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T10:51:46Z",
+        "change_message": "",
+        "object_id": "39",
+        "object_repr": "\u041c.\u0410\u043c\u043c\u043e\u0441\u043e\u0432\u0430",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 52
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T10:52:08Z",
+        "change_message": "",
+        "object_id": "40",
+        "object_repr": "\u0411\u0430\u0437\u043e\u0432\u0430\u044f",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 53
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T10:52:36Z",
+        "change_message": "",
+        "object_id": "41",
+        "object_repr": "\u0413.\u041f\u043e\u043f\u043e\u0432\u0430",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 54
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T10:53:55Z",
+        "change_message": "",
+        "object_id": "42",
+        "object_repr": "30 \u043b\u0435\u0442 \u041f\u043e\u0431\u0435\u0434\u044b",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 55
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T10:54:19Z",
+        "change_message": "",
+        "object_id": "43",
+        "object_repr": "50 \u043b\u0435\u0442 \u041f\u043e\u0431\u0435\u0434\u044b",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 56
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T10:54:42Z",
+        "change_message": "",
+        "object_id": "44",
+        "object_repr": "\u0410\u043c\u043c\u043e\u0441\u043e\u0432\u0430",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 57
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T10:55:05Z",
+        "change_message": "",
+        "object_id": "45",
+        "object_repr": "\u0418.\u0412\u0438\u043d\u043e\u043a\u0443\u0440\u043e\u0432\u0430",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 58
+},
+{
+    "model": "admin.logentry",
+    "fields": {
+        "user": [
+            "4ino_rp"
+        ],
+        "action_flag": 1,
+        "action_time": "2017-12-12T10:55:38Z",
+        "change_message": "",
+        "object_id": "46",
+        "object_repr": "\u0413\u0430\u0433\u0430\u0440\u0438\u043d\u0430",
+        "content_type": [
+            "kladr",
+            "street"
+        ]
+    },
+    "pk": 59
+}
+]

@@ -1,6 +1,8 @@
 var saveObject;
 var code = [];
 var codetype = [];
+
+
 function Kladr(object){
 	saveObject = object;
 	if($(object).val().length < 1){
@@ -55,6 +57,8 @@ function Kladr(object){
 		});
 	}
 }
+
+
 $('#region').select2({
 	ajax:{
 		url:"{% url 'kladr:get_region' %}",
@@ -81,6 +85,8 @@ $('#region').select2({
 	placeholder:'Выберите республику, край, область...',
 	allowClear:true
 });
+
+
 $('#district').select2({
 	initSelection:function(e,callback){
 		console.log(e);
@@ -232,6 +238,10 @@ $('#SaveKladr').on('click',function(e){
         address += $('#adrsflat').val();
     }
 	$(saveObject).val(address);
+	$('#streetp').val(code[code.length - 1]);
+	$('#housep').val($('#adrshouse').val());
+	$('#buildingp').val($('#adrsbuilding').val());
+	$('#flatp').val($('#adrsflat').val());
 	$('#KladrModal').modal('hide');
 
 
@@ -335,4 +345,8 @@ $('#village').on("select2-removed",function(e){
         code.splice(codetype.indexOf("village"), code.length - codetype.indexOf("village"));
         codetype.splice(codetype.indexOf("village"), codetype.length - codetype.indexOf("village"));
     }
+});
+$('#street').on("change",function(e){
+	code.push($(this).select2('data').id);
+	codetype.push("street");
 });

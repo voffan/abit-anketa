@@ -7,7 +7,7 @@
 5. Установить Django 1.7.11
 В командной строке pip install gjango==1.7.11
 6. Установить MySQL WorkBench 5.2
-Дополнительно в командной строке pip install mysql-connector
+Дополнительно в командной строке pip install mysql-connector==2.1.4
 7. Установить Sybase PowerDesigner 15
 8. Установить Sublime.Text2 или Pycharm
 9. Скачать репозиторий abit-anketa 

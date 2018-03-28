@@ -35,7 +35,7 @@ def PersonProfile(request):
 		return redirect('/staff')
 	args={'currentpage':1}
 	args1=[]
-	applications=Application.objects.filter(abiturient__user=request.user)
+	applications=Application.objects.filter(abiturient__user=request.user).filter(track=True).filter(date__year=datetime.datetime.strftime(datetime.datetime.today(),"%Y"))
 	if applications is not None:
 		appProf = ApplicationProfiles.objects.all()
 		for app in applications:
@@ -197,13 +197,14 @@ def PersonData(request):
 def Applications(request):
 	args={'currentpage':3}
 	args1=[]
+	year = datetime.datetime.strftime(datetime.datetime.today(),"%Y")
 	person=Abiturient.objects.filter(user=request.user).first()
 	if person is None:
 		return redirect('/staff')
-	applications=Application.objects.filter(abiturient__user=request.user).exclude(appState = AttrValue.objects.filter(attribute__name__icontains=u'Статус заявления').filter(value__icontains = u'Анулированный').first())
+	applications=Application.objects.filter(abiturient__user=request.user).filter(date__year=year).exclude(appState = AttrValue.objects.filter(attribute__name__icontains=u'Статус заявления').filter(value__icontains = u'Анулированный').first())
 	appProf = ApplicationProfiles.objects.all()
 	for app in applications:
-		prof = appProf.filter(application__id = app.id).first()
+		prof = appProf.filter(application__id = app.id)
 		args1.append({'app':app, 'prof':prof})
 
 	args['applications']=args1
@@ -222,18 +223,21 @@ def Account(request):
 def GetSelectedApplication(request):
 	result={}
 	application = Application.objects.select_related().get(pk = request.GET.get('id',''))
+	result['app_num'] = application.id
 	result['eduprior']=application.priority
 	app_profiles = ApplicationProfiles.objects.select_related().filter(application = application)
 	result['department_id']=application.department.id
 	result['department_name']=application.department.name
-
+	result['track']=application.track
+	result['budget'] = application.budget
+	result['withfee'] = application.withfee
 	result['edu_prog_id']=app_profiles.first().profile.profile.edu_prog.id
 	result['edu_prog_name']=app_profiles.first().profile.profile.edu_prog.name+' ' + app_profiles.first().profile.profile.edu_prog.qualification.value
 	result['edu_prog_eduform_id']=app_profiles.first().profile.id
 	#result['edu_prog_eduform_name']=[x[1] for x in EduForm if x[0] == app_profiles.first().profile.eduform][0]
 	profiles=[]
 	for item in app_profiles:
-		profiles.append({'id':item.profile.profile.id,'profile':item.profile.profile.name,'eduform':item.profile.eduform, 'prof_attr_id':item.profile.id})
+		profiles.append({'id':item.profile.profile.id,'profile':item.profile.profile.name,'eduform':item.profile.eduform, 'prof_attr_id':item.profile.id,'app_prof_id':item.id})
 	result['profiles']=profiles
 	result['profiles_len']=len(profiles)
 	return HttpResponse(json.dumps(result), content_type="application/json")
@@ -557,32 +561,104 @@ def SaveApplication(request):
 	if request.method == 'POST':
 		if(int(request.POST.get('facepalm',''))>0):
 			application=Application.objects.get(pk=request.POST.get('facepalm'))
-			ApplicationProfiles.objects.filter(application=application).delete()
+			if application.appState == AttrValue.objects.filter(attribute__name__icontains=u'Статус заявления').filter(value__icontains=u'Подтвержденный').first():
+				result = {'result':0, 'error_msg':'zayavlenie yje podtverjdeno nelzya menyat lul'}
+				return HttpResponse(json.dumps(result), content_type="application/json")
 		else:
 			application = Application()
 		application.abiturient=Abiturient.objects.get(user=request.user)
 		application.department = EduOrg.objects.get(pk = request.POST.get('department',''))
-		application.date = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d')
-		#application.edu_prog=Education_Prog_Form.objects.get(pk=request.POST.get('eduform',''))
-		#application.eduform = application.edu_prog.eduform
-		application.budget = True
-		application.withfee = False
-		kaketomenyabesit = AttrValue.objects.filter(attribute__name__icontains=u'Статус заявления').filter(value__icontains=u'Подан').first()
-		application.appState = kaketomenyabesit
+		dateNow = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d')
+		application.date = dateNow
+		#application.budget = True
+		#application.withfee = False
+		app_status = AttrValue.objects.filter(attribute__name__icontains=u'Статус заявления').filter(value__icontains=u'Подан').first()
+		application.appState = app_status
 		application.points =100
 		application.priority = request.POST.get('eduprior')
-		application.save()
+		if request.POST.get('track','') == "false":
+			application.track = False
+		else:
+			application.track = True
+		min1 = 0
+		if request.POST.get('budget',''):
+			application.budget = True
+			min1 += 1
+		else:
+			application.budget = False
+		if request.POST.get('withfee',''):
+			application.withfee = True
+			min1 += 1
+		else:
+			application.withfee = False			
+		if min1 == 0:
+			result = {'result':0, 'error_msg':'minimym 1 chek viberi'}
+			return HttpResponse(json.dumps(result), content_type="application/json")
 		if (len(request.POST.getlist('eduprof'))>0):
-			#profs = request.POST.getlist('eduprof','')
 			forms = request.POST.getlist('eduform','')
-			print(forms)
+			app_prof_id = request.POST.getlist('prof_id','')
+			##############delete################
+			ppc=[x for x in app_prof_id if x != -1]
+			if len(ppc)<len(ApplicationProfiles.objects.filter(application=application)):
+				ApplicationProfiles.objects.filter(application=application).exclude(id__in=ppc).delete()
+			##############delete################			
+			abit_exams = Exams.objects.filter(abiturient=application.abiturient)#EXAMS###########################
+			points_summ=0
+			for i in abit_exams:
+				points_summ+=i.points
 			forms = list(set(forms))
-			print(forms)
 			for i in range(len(forms)):
-				appProf = ApplicationProfiles()
-				appProf.application=application
-				appProf.profile=ProfileAttrs.objects.get(pk = forms[i])
-				appProf.save()
+				profile = ProfileAttrs.objects.get(pk=forms[i])
+				if dateNow >= datetime.datetime.strftime(profile.startDate,'%Y-%m-%d'):
+					if dateNow <= datetime.datetime.strftime(profile.endDate,'%Y-%m-%d'):						
+						application.save()
+						appProf = ApplicationProfiles.objects.filter(pk = app_prof_id[i]).first()
+						if appProf is None:
+							appProf = ApplicationProfiles()
+						appProf.application=application		
+						appProf.profile=ProfileAttrs.objects.get(pk = forms[i])
+						appProf.points=points_summ
+						exams_needed = Exams_needed.objects.filter(profile=appProf.profile.profile)
+						for exam_need in exams_needed:
+							for abit_exam in abit_exams:
+								if abit_exam.exam_subjects==exam_need.subject:
+									if abit_exam.points<exam_need.min_points:
+										result = {'result':0, 'error_msg':'yBbl He xBoTaeT 6aJIJIoB'}
+										return HttpResponse(json.dumps(result), content_type="application/json")
+										#########FIX IT###############										
+								#else:
+									#result = {'result':0, 'error_msg':'yBbl He xBoTaeT Heo6xoDuMblx ek3aMeHoB'}
+						appProf.save()
+					else:
+						result = {'result':0, 'error_msg':'АЛЛО гараж период приема заявлений по направлению '+profile.profile.name+' '+profile.profile.edu_prog.qualification.value+' '+profile.eduform+' уже закончился'}
+				else:
+					result = {'result':0, 'error_msg':'АЛЛО гараж период приема заявлений по направлению '+profile.profile.name+' '+profile.profile.edu_prog.qualification.value+' '+profile.eduform+' еще не начался'}
+			#if profileValid >0:
+				
+			#FIX DELS	#ApplicationProfiles.objects.filter(application=application).delete()
+			"""	
+				for i in range(len(forms)):
+					appProf = ApplicationProfiles.objects.filter(pk = app_prof_id[i]).first()
+					if appProf is None:
+						appProf = ApplicationProfiles()
+					appProf.application=application		
+					appProf.profile=ProfileAttrs.objects.get(pk = forms[i])
+					if (application.date >= datetime.datetime.strftime(appProf.profile.startDate,'%Y-%m-%d')):
+						if (application.date <= datetime.datetime.strftime(appProf.profile.endDate,'%Y-%m-%d')):
+							appProf.save()
+							successProfileCount+=1
+						else:
+							#result = {'result':0, 'error_msg':'АЛЛО гараж дата приема заявлений по направлению '+appProf.profile}
+							print("pozdno")
+					else:
+						#result = {'result':0, 'error_msg':'rano'}	
+						print("rano")
+			"""
+
+		
+		#if successProfileCount>0:
+			#application.save()
+			#application.delete()		
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 @transaction.atomic
@@ -591,6 +667,7 @@ def DeleteApplication(request):
 	if request.method == 'GET':
 		app = Application.objects.get(pk=request.GET.get('id'))
 		app.appState = AttrValue.objects.filter(attribute__name__icontains=u'Статус заявления').filter(value__icontains = u'Анулированный').first()
+		app.track = True
 		app.save()
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
@@ -824,7 +901,8 @@ def ExamSubject(request):
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def ExamType(request):
-	subjects = AttrValue.objects.filter(attribute__name__icontains=u'Тип экзамена').exclude(value__icontains=u'вступ')
+	subjects = AttrValue.objects.filter(attribute__name__icontains=u'Тип экзамена').exclude(name__icontains=u'вступ')
+	print(subjects)
 	result = []
 	for item in subjects:
 		result.append({'id':item.id, 'text':item.value})

@@ -25,4 +25,14 @@ urlpatterns = patterns('',
 	url(r'wiz_cont_dels/',views.Wiz_cont_dels, name='wiz_cont_dels'),
 	url(r'wiz_cont_apply',views.Wiz_cont_apply, name='wiz_cont_apply'),
 	url(r'^add_data_to_person/$',views.AddDataToPerson,name="add_data_to_person"),
+	url(r'^edu_orgs/',views.Edu_orgs, name='edu_orgs'),
+	url(r'^edu_org_progs/(?P<edu_org_id>\d+)',views.Edu_org_progs, name="edu_org_progs"),	
+	url(r'^edu_org_prog_profs/(?P<edu_org_prog_id>\d+)', views.Edu_org_prog_profs, name="edu_org_prog_profs"),
+	url(r'^edu_org_prog_prof_attr/(?P<edu_org_prog_prof_id>\d+)', views.Edu_org_prog_prof_attr, name="edu_org_prog_prof_attr"),
+	url(r'edu_orgs_value/',views.Edu_orgs_value, name="edu_orgs_value"),
+	url(r'edu_org_progs/',views.Edu_org_progs_get, name="edu_org_progs_get"),
+	url(r'edu_org_prog_profs/',views.Edu_org_prog_profs_get, name="edu_org_prog_profs_get"),
+	url(r'edu_org_prog_prof_attr/',views.Edu_org_prog_prof_attr_get, name="edu_org_prog_prof_attr_get"),
+	
+
 					)
