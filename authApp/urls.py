@@ -8,5 +8,7 @@ urlpatterns = [
 	url(r'^logout/$',views.logout_user, name = 'logout'),
 	url(r'^checkUserValid',views.checkUserValid, name='checkUserValid'),
 	url(r'^checkEmailValid',views.checkEmailValid, name='checkEmailValid'),
-	url(r'^register/$', views.register_index, name="register_index")
+	url(r'^register/$', views.register_index, name="register_index"),
+	#=======================mobile===================================
+	url(r'^mlogin/$',views.login_mobile, name = 'login_mobile')
 ]

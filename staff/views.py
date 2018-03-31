@@ -340,6 +340,7 @@ def Application_list (request):
 		if 'profil' in request.GET and int(request.GET['profil'])>0:
 			selectprof = request.GET['profil']
 			applications = applications.filter(applicationprofiles__profile__profile__id=selectprof)
+			appProfile = appProfile.filter(profile__profile__id = selectprof)
 			filters['profil'] = int(selectprof)
 	
 		if 'appNumb' in request.GET and len(request.GET['appNumb'])>0:
