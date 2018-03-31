@@ -1,104 +1,111 @@
             <div class="tab-pane" id="tab4">
-				<div class="container-fluid">
-					<div class="row">
-						<div class="panel panel-primary">
-							<div class="panel-heading">
-								<h3 class="panel-title">Результаты ЕГЭ</h3>
-							</div>
-							<div class="panel-body">
-								<div class="row">
-									<table class="table" id="table">
-										<thead id="tablehead">
-											<tr>
-												<th width="27%">Дисциплина</th>
-												<th width="23%">ЕГЭ</th>
-												<th width="15%">Баллы</th>
-												<th width="15%">Год</th>
-												<th width="20%">Действие</th>
-											</tr>
-										</thead>
-										<tbody id="egeTableBody">
-										{% if exams %}
-											{% for item in exams %}
-											<tr class="info">
-												<td><input type="hidden" class="form-control" name="egeDisc" value ="{{item.subject}}"><input type="hidden" name="examId" value ="{{item.id}}"></td>
-												<td><input type="hidden" class="form-control" name="examType" value="{{item.examtype.id}};{{item.examtype.name}}"></td>
-												<td><input type="text" class="form-control" name="egePoints" value ="{{item.points}}"></td>
-												<td><input type="text" class="form-control" name="egeYear"  value ="{{item.year}}"></td>
-												<td><button class="btn btn-default btn-sm" id="delExamRow" type="button">Удалить</button></td>
-											</tr>
-											{% endfor %}
-										{% else %}
-											<tr class="info">
-												<td><input type="hidden" class="form-control" name="egeDisc"><input type="hidden" name="examId" value ="-1"></td>
-												<td><input type="hidden" class="form-control" name="examType"></td>
-												<td><input type="text" class="form-control" name="egePoints"></td>
-												<td><input type="text" class="form-control" name="egeYear"></td>
-												<td><button class="btn btn-default btn-sm" id="delExamRow" type="button">Удалить</button></td>
-											</tr>
-										{% endif %}
-										</tbody>
-									</table>
+				<form id="exams" name="exams" role="form" method="post">
+					{% csrf_token %}
+					<input name="currentPage" id="currentPage" value="4" type="hidden"/>
+					<div class="container-fluid">
+						<div class="row">
+							<div class="panel panel-primary">
+								<div class="panel-heading">
+									<h3 class="panel-title">Результаты ЕГЭ</h3>
 								</div>
-								<div class="row">
-									<button class="btn btn-primary btn-block" type="button" id="addExam">Добавить</button>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="panel panel-primary">
-							<div class="panel-heading">
-								<h3 class="panel-title">Дополнительные вступительные экзамены</h3>
-							</div>
-							<div class="panel-body">
-								<div class="row">
-									<table class="table" id="tableAdd">
-										<thead id="tableheadAdd">
-											<tr>
-												<th width="27%">Дисциплина</th>
-												<th width="15%">Баллы</th>
-												<th width="15%">Год</th>
-											</tr>
-										</thead>
-										<tbody id="egeTableBodyAdd">
-										{% if exams %}
-											{% for item in add_exams %}
-											<tr class="info">
-												<td><input type="hidden" class="form-control" name="egeDisc" value ="{{item.subject}}"><input type="hidden" name="AddexamId" value ="{{item.id}}"></td>
-												<td><input type="text" class="form-control" name="egePoints" value ="{{item.points}}" readonly></td>
-												<td><input type="text" class="form-control" name="egeYear"  value ="{{item.year}}" readonly></td>
+								<div class="panel-body">
+									<div class="row">
+										<table class="table" id="table">
+											<thead id="tablehead">
+												<tr>
+													<th width="27%">Дисциплина</th>
+													<th width="23%">ЕГЭ</th>
+													<th width="15%">Баллы</th>
+													<th width="15%">Год</th>
+													<th width="20%">Действие</th>
 												</tr>
-											{% endfor %}
-										{% else %}
-											<tr class="info">
-												<td><input type="hidden" class="form-control" name="egeDisc"><input type="hidden" name="examId" value ="-1"></td>
-												<td><input type="text" class="form-control" name="egePoints" readonly></td>
-												<td><input type="text" class="form-control" name="egeYear" readonly></td>
+											</thead>
+											<tbody id="egeTableBody">
+											{% if exams %}
+												{% for item in exams %}
+												<tr class="info">
+													<td><input type="hidden" class="form-control" name="egeDisc" value ="{{item.subject}}"><input type="hidden" name="examId" value ="{{item.id}}"></td>
+													<td><input type="hidden" class="form-control" name="examType" value="{{item.examtype.id}};{{item.examtype.name}}"></td>
+													<td><input type="text" class="form-control" name="egePoints" value ="{{item.points}}"></td>
+													<td><input type="text" class="form-control" name="egeYear"  value ="{{item.year}}"></td>
+													<td><button class="btn btn-default btn-sm" name="delExamRow" type="button">Удалить</button></td>
 												</tr>
-										{% endif %}
-										</tbody>
-									</table>
-								</div>
-								<div class="row">
-									<button class="btn btn-primary btn-block" type="button" id="addExam2">Добавить запрос</button>
-								</div>
-								<div class="row">
-									<div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-1">
-										<p>
-											<label for="specusl">Прошу создать специальные условия при сдаче вступ. исп-й в связи с ограниченными возможностями здоровья></label>
-											<input type="radio" name="specusl" value="no" {% if not specusl %} checked {% endif %}>Нет
-											<input type="radio" name="specusl" value="yes" {% if specusl %} checked {% endif %}>Да
-										</p>
+												{% endfor %}
+											{% else %}
+												<tr class="info">
+													<td><input type="hidden" class="form-control" name="egeDisc"><input type="hidden" name="examId" value ="-1"></td>
+													<td><input type="hidden" class="form-control" name="examType"></td>
+													<td><input type="text" class="form-control" name="egePoints"></td>
+													<td><input type="text" class="form-control" name="egeYear"></td>
+													<td><button class="btn btn-default btn-sm" name="delExamRow" type="button">Удалить</button></td>
+												</tr>
+											{% endif %}
+											</tbody>
+										</table>
+									</div>
+									<div class="row">
+										<button class="btn btn-primary btn-block" type="button" id="addExam">Добавить</button>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-							<button class="btn btn-primary btn-block" type="button" id="save4">Сохранить</button>
+						<div class="row">
+							<div class="panel panel-primary">
+								<div class="panel-heading">
+									<h3 class="panel-title">Дополнительные вступительные экзамены</h3>
+								</div>
+								<div class="panel-body">
+									<div class="row">
+										<table class="table" id="tableAdd">
+											<thead id="tableheadAdd">
+												<tr>
+													<th width="27%">Дисциплина</th>
+													<th width="15%">Баллы</th>
+													<th width="15%">Год</th>
+													<th width="10%">Действие</th>
+												</tr>
+											</thead>
+											<tbody id="egeTableBodyAdd">
+											{% if exams %}
+												{% for item in addExams %}
+													<tr class="info">
+													<td><input type="hidden" class="form-control" name="addDisc" value ="{{item.subject}}"><input type="hidden" name="AddexamId" value ="{{item.id}}"></td>
+													<td><input type="text" class="form-control" name="addPoints" value ="{{item.points}}" readonly></td>
+													<td><input type="text" class="form-control" name="addYear"  value ="{{item.year}}" readonly></td>
+													<td><button class="btn btn-default btn-sm" name="delExamRow2" type="button">Удалить</button></td>
+													</tr>
+												{% endfor %}
+											{% else %}
+												<tr class="info">
+													<td><input type="hidden" class="form-control" name="addDisc"><input type="hidden" name="examId" value ="-1"></td>
+													<td><input type="text" class="form-control" name="addPoints" readonly></td>
+													<td><input type="text" class="form-control" name="addYear" readonly></td>
+													<td><button class="btn btn-default btn-sm" name="delExamRow2" type="button">Удалить</button></td>
+												</tr>
+											{% endif %}
+											</tbody>
+										</table>
+									</div>
+									<div class="row">
+										<button class="btn btn-primary btn-block" type="button" id="addExam2">Добавить</button>
+									</div>
+									<div class="row">
+										<div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-1">
+											<p>
+												<label for="specusl">Прошу создать специальные условия при сдаче вступ. исп-й в связи с ограниченными возможностями здоровья></label>
+												<input type="radio" name="specusl" value="no" {% if not specusl %} checked {% endif %}>Нет
+												<input type="radio" name="specusl" value="yes" {% if specusl %} checked {% endif %}>Да
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
+								<button class="btn btn-primary btn-block" type="button" id="save4">Сохранить</button>
+							</div>
 						</div>
 					</div>
-				</div>
+				</form>
 			</div>

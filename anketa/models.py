@@ -237,7 +237,7 @@ class Exams_needed(models.Model):
 		return self.profile.name+' '+self.subject.value+' '+str(self.min_points)
 
 class Privilegies(models.Model):
-	abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент')
+	abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент', db_index=True)
 	category = models.ForeignKey('AttrValue', verbose_name=u'Категория', limit_choices_to={'attribute__name':u'Категория'}, related_name='Category')
 	priv_type = models.ForeignKey('AttrValue', verbose_name=u'Тип привелегии', limit_choices_to={'attribute__name':u'Тип привелегии'}, related_name='Priv_type')
 
@@ -251,10 +251,10 @@ class Milit(models.Model):
 class DepAchieves(models.Model):
 	profile = models.ForeignKey(Profile, verbose_name = u'Профиль', db_index = True)
 	contest = models.ForeignKey(AttrValue, verbose_name = u'Мероприятие', limit_choices_to={'attribute__name':u'Мероприятие'}, db_index = True, related_name='contest_dep')
-	result = models.ForeignKey(AttrValue, verbose_name = u'Достигнутый результат', limit_choices_to={'attribute__name':u'Результат'}, db_index = True, related_name='contest_result_dep')
+	result = models.ForeignKey(AttrValue, verbose_name = u'Достигнутый результат', limit_choices_to={'attribute__name':u'Достигнутый результат'}, db_index = True, related_name='contest_result_dep')
 	points = models.IntegerField(u'Баллы')
 
 class Achievements(models.Model):
 	abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент', db_index=True)
-	contest = models.ForeignKey(AttrValue, verbose_name = u'Мероприятие', limit_choices_to={'attribute__name':u'Мероприятие'}, db_index = True, related_name='contest_achievement')
-	result = models.ForeignKey(AttrValue, verbose_name = u'Достигнутый результат', limit_choices_to={'attribute__name':u'Результат'}, db_index = True, related_name='contest_result_achievement')
+	contest = models.ForeignKey('AttrValue', verbose_name=u'Мероприятие', limit_choices_to={'attribute__name':u'Мероприятие'}, related_name='contest_achievement')
+	result = models.ForeignKey('AttrValue', verbose_name=u'Достигнутый результат', limit_choices_to={'attribute__name':u'Достигнутый результат'}, related_name='contest_result_achievement')
