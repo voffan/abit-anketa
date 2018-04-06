@@ -10,379 +10,155 @@
 <!--link href="{% static "anketa/select2-3.5.4/select2.css" %}" rel="stylesheet"-->
 <!--link href="{% static "anketa/css/bootstrap.css" %}" rel="stylesheet"-->
 <!-- add one of the jQWidgets styles -->
-<link href="{% static "anketa/jqwidgets/styles/jqx.base.css" %}" rel="stylesheet">
-<link href="{% static 'anketa/jqwidgets/styles/jqx.bootstrap.css' %}" rel="stylesheet">
+<link href="{% static 'anketa/backgrid/backgrid/lib/backgrid.min.css' %}" rel="stylesheet">
+<link href="{% static 'anketa/backgrid/backgrid-paginator.min.css' %}" rel="stylesheet">
+<link href="{% static 'anketa/backgrid/backgrid-filter.min.css' %}" rel="stylesheet">
+<link href="{% static 'anketa/backgrid/backgrid-select-all.css' %}" rel="stylesheet">
+
 {% endblock %}
 
 {% block scripts %}
 <!--script src="{% static "anketa/select2-3.5.4/select2.min.js" %}"></script>
 <script src="{% static "anketa/select2-3.5.4/ru.js" %}"></script-->
-<!-- add jqwidgets scripts -->
-<script src="{% static "anketa/jqwidgets/jqxcore.js" %}"></script>
-<script src="{% static "anketa/jqwidgets/jqxbuttons.js" %}"></script>
-<script src="{% static "anketa/jqwidgets/jqxinput.js" %}"></script>
-<script src="{% static "anketa/jqwidgets/jqxpasswordinput.js" %}"></script>
-<script src="{% static "anketa/jqwidgets/jqxdata.js" %}"></script>
-<script src="{% static "anketa/jqwidgets/jqxscrollbar.js" %}"></script>
-<script src="{% static "anketa/jqwidgets/jqxlistbox.js" %}"></script>
-<script src="{% static "anketa/jqwidgets/jqxdropdownlist.js" %}"></script>
-<script src="{% static "anketa/jqwidgets/jqxmenu.js" %}"></script>
-<script src="{% static "anketa/jqwidgets/jqxgrid.js" %}"></script>
-<script src="{% static "anketa/jqwidgets/jqxgrid.filter.js" %}"></script>
-<script src="{% static "anketa/jqwidgets/jqxgrid.sort.js" %}"></script>
-<script src="{% static "anketa/jqwidgets/jqxgrid.selection.js" %}"></script>
-<script src="{% static "anketa/jqwidgets/jqxgrid.columnsresize.js" %}"></script>
-<script src="{% static "anketa/jqwidgets/jqxpanel.js" %}"></script>
-<script src="{% static "anketa/jqwidgets/jqxcalendar.js" %}"></script>
-<script src="{% static "anketa/jqwidgets/jqxdatetimeinput.js" %}"></script>
-<script src="{% static "anketa/jqwidgets/jqxcheckbox.js" %}"></script>
-<script src="{% static "anketa/jqwidgets/jqxgrid.pager.js" %}"></script>
-<script src="{% static "anketa/scripts/demos.js" %}"></script>
-<script src="{% static "anketa/jqwidgets/globalization/globalize.js" %}"></script>
-<script src="{% static "anketa/scripts/localizationRU.js" %}"></script>
+<script src="{% static "anketa/backgrid/underscore/underscore.js" %}"></script>
+<script src="{% static "anketa/backgrid/backbone/backbone.js" %}"></script>
+<script src="{% static "anketa/backgrid/backbone.paginator.min.js" %}"></script>
+<script src="{% static "anketa/backgrid/backgrid/lib/backgrid.min.js" %}"></script>
+<script src="{% static "anketa/backgrid/backgrid-paginator.min.js" %}"></script>
+<script src="{% static "anketa/backgrid/backgrid-filter.min.js" %}"></script>
+<script src="{% static "anketa/backgrid/backgrid-select-filter.js" %}"></script>
+<script src="{% static "anketa/backgrid/backgrid-select-all.js" %}"></script>
+
 
 <script type="text/javascript">
 		$(document).ready(function () {
-			var transform = new Array();
-			var $i=0;
-			{% for item in applications %}
-				var $row = {};
-				$row["fullname"] = "<a href=\"{% url 'staff:application_review' item.app.id %}\">{{ item.app.abiturient.fullname }}</a>";
-				$row["edu_form"] = "{% if item.prof.0.profile.eduform == 'О' %}Очная{% endif %} {% if item.prof.0.profile.eduform == 'З' %}Заочная{% endif %}{% if item.prof.0.profile.eduform == 'ОЗ'%}Очно-Заочная{%endif%}";
-				$row["date"] = "{{ item.app.date }}";
-				$row["docType"] = "{{ item.doc.docType.value }}";
-				$row["isCopy"] = "{% if item.doc.isCopy == True %}Оригинал{% else %}Копия{% endif %}";
-				$row["edu_prog"] = "{{ item.prof.0.profile.profile.name }}";
-				$row["edu_prof"] = "{{ item.prof.0.profile.profile.edu_prog.qualification.value }}";
-				$row["points"] = "{{ item.app.points }}";
-				$row["appState"] = "{{ item.app.appState.value }}";
-				transform[$i] = $row;
-				$i+=1;
-			{% endfor %}
-			
-			var source =
-			{
-				localdata: transform,
-				datatype: "array",
-				datafields:
-				[
-					{ name: 'fullname', type: 'string' },
-					{ name: 'edu_form', type: 'string' },
-					{ name: 'date', type: 'string' },
-					{ name: 'docType', type: 'string' },
-					{ name: 'isCopy', type: 'string' },
-					{ name: 'edu_prog', type: 'string' },
-					{ name: 'edu_prof', type: 'string' },
-					{ name: 'points', type: 'string' },
-					{ name: 'appState', type: 'string' }
-				],
-				pagenum: 1,
-                pagesize: 20,
-                pager: function (pagenum, pagesize, oldpagenum) {
-                    // callback called when a page or page size is changed.
-                }
-				
-			};
-			var addfilter = function () {
-				var filtergroup = new $.jqx.filter();
-				var filter_or_operator = 1;
-				var filtervalue = 'Andrew';
-				var filtercondition = 'equal';
-				var filter1 = filtergroup.createfilter('stringfilter', filtervalue, filtercondition);
- 
-				filtergroup.addfilter(filter_or_operator, filter1);
-				// add the filters.
-				$("#grid").jqxGrid('addfilter', 'firstname', filtergroup);
-				// apply the filters.
-				$("#grid").jqxGrid('applyfilters');
-			}
-			var adapter = new $.jqx.dataAdapter(source);
-			console.log(adapter);
-			console.log(transform);
 
-			var pagerrenderer = function () {
-				var element = $("<div style='margin-top: 5px; width: 100%; height: 100%;'></div>");
-				var paginginfo = $("#jqxgrid").jqxGrid('getpaginginformation');
-				for (i = 0; i < paginginfo.pagescount; i++) {
-					// add anchor tag with the page number for each page.
-					var anchor = $("<a style='padding: 5px;' href='#" + i + "'>" + i + "</a>");
-					anchor.appendTo(element);
-					anchor.click(function (event) {
-						// go to a page.
-						var pagenum = parseInt($(event.target).text());
-						$("#jqxgrid").jqxGrid('gotopage', pagenum);
-					});
-				}
-				return element;
-			}
- 
-			$("#grid").jqxGrid(
-			{
-				width: getWidth('Grid'),
-				source: adapter,
-				pageable: true,
-				filterable: true,
-				sortable: true,
-				autoheight: true,
-				columnsresize: true,
-				pagermode: 'simple',
-				selectionmode: 'singlecell',
-				ready: function () {
-					addfilter();
+			var data = [{% for item in data.applications %}{"fullname": "{{item.app.abiturient.fullname}}", "edu_form": "{{item.prof.0.profile.eduform}}","date":"{{item.app.date}}","edu_prog":"{{item.prof.0.profile.profile.name}}","edu_prof":"{{item.prof.0.profile.profile.edu_prog.qualification.value}}","points":{{item.app.points}},"appState":"{{item.app.appState.value}}"},{% endfor %}];
+
+			var Application = Backbone.Model.extend({});
+			var Applications = Backbone.PageableCollection.extend({
+				model: Application,
+				url: "{% url 'staff:backgrid_collection' %}",
+				state: {
+    				pageSize: 5
+    				//sortKey: "joined",
+    				//order: 1
+  				},
+  				mode: "client"
+
+			});			
+			
+			var apps = new Applications(data);
+			console.log(apps);			
+
+			var columns = [{
+				name: "fullname", // The key of the model attribute
+				label: "Полное имя", // The name to display in the header
+				editable: false,
+				cell: "uri" // Renders the value in an HTML anchor element ссылка на заявление <a href=""
+			}, {
+				name: "edu_form",
+				label: "Форма обучения",
+				// The cell type can be a reference of a Backgrid.Cell subclass, any Backgrid.Cell subclass instances like *id* above, or a string
+				cell: "string", // This is converted to "StringCell" and a corresponding class in the Backgrid package namespace is looked up
+				editable: false
+			}, {
+				editable: false,
+				name: "date",
+				label: "Дата",
+				cell: "string" // An integer cell is a number cell that displays humanized integers
+			}, {
+				editable: false,
+				name: "edu_prog",
+				label: "Направление/специальность",
+				cell: "string" // A cell type for floating point value, defaults to have a precision 2 decimal numbers
+			}, {
+				editable: false,
+				name: "edu_prof",
+				label: "Профиль",
+				cell: "string"
+			}, {
+				editable: false,
+				name: "points",
+				label: "Баллы",
+				cell: "integer" // Renders the value in an HTML anchor element
+			}, {
+				editable: false,
+				name: "appState",
+				label: "Статус",
+				cell: "string"
+			}];
+
+			// Initialize a new Grid instance
+			var grid = new Backgrid.Grid({
+				columns: [{
+					name: "",
+					cell: "select-row",
+					headerCell: "select-all"
+				}].concat(columns),
+				collection: apps,
+				className: "backgrid table table-bordered table-hover"
+			});
+			// Render the grid and attach the root to your HTML document
+			var $example1 = $("#example-1-result");
+			$example1.append(grid.render().el);
+
+			var paginator = new Backgrid.Extension.Paginator({				
+				collection: apps,
+				goBackFirsstOnSort: false
+			});
+			// Render the paginator
+			$example1.after(paginator.render().el);
+
+			var eduform = [
+				{
+					edu_form: "О",
+					name: "Очная"					
 				},
-				autoshowfiltericon: true,
-				columns: [
-				  { text: 'Полное Имя', datafield: 'fullname',  width: 160, pinned: true },
-				  { text: 'Форма обучения', datafield: 'edu_form', filtertype: 'checkedlist', width: 70 },
-				  { text: 'Дата', datafield: 'date', filtertype: 'date', width: 100, cellsformat: 'MMMM dd, yyyy'},
-				  { text: 'Тип документа', datafield: 'docType', filtertype: 'list', width: 80 },
-				  { text: 'Копия/оригинал', datafield: 'isCopy', filtertype: 'list', width: 70, cellsalign: 'right' },
-				  { text: 'Направление/специальность', datafield: 'edu_prog', filtertype: 'list',width: 100, cellsalign: 'left', cellsformat: 'c2' },
-				  { text: 'Профиль', datafield: 'edu_prof', filtertype: 'list',width: 100, cellsalign: 'left', cellsformat: 'c2' },
-				  { text: 'Баллы', datafield: 'points', filtertype: 'number',width: 70, cellsalign: 'right', cellsformat: 'c2' },
-				  { text: 'Статус', datafield: 'appState', filtertype: 'list', cellsalign: 'right', cellsformat: 'c2' }
-				]
-			});
-			$('#events').jqxPanel({ width: 300, height: 80 });
-			$("#grid").on("filter", function (event) {
-				$("#events").jqxPanel('clearcontent');
-				var filterinfo = $("#grid").jqxGrid('getfilterinformation');
-				var eventData = "Triggered 'filter' event";
-				for (i = 0; i < filterinfo.length; i++) {
-					var eventData = "Filter Column: " + filterinfo[i].filtercolumntext;
-					$('#events').jqxPanel('prepend', '<div style="margin-top: 5px;">' + eventData + '</div>');
+				{					
+					edu_form: "З",
+					name: "Заочная"
+				},
+				{					
+					edu_form: "ОЗ",
+					name: "Очно-заочная"
 				}
-			});
-			$('#clearfilteringbutton').jqxButton({ height: 25 });
-			$('#filterbackground').jqxCheckBox({ checked: true, height: 25 });
-			$('#filtericons').jqxCheckBox({ checked: false, height: 25 });
-			// clear the filtering.
-			$('#clearfilteringbutton').click(function () {
-				$("#grid").jqxGrid('clearfilters');
-			});
-			// show/hide filter background
-			$('#filterbackground').on('change', function (event) {
-				$("#grid").jqxGrid({ showfiltercolumnbackground: event.args.checked });
-			});
-			// show/hide filter icons
-			$('#filtericons').on('change', function (event) {
-				$("#grid").jqxGrid({ autoshowfiltericon: !event.args.checked });
+			];
+
+			// Initialize a client-side filter to filter on the client
+			// mode pageable collection's cache.
+			var filter = new Backgrid.Extension.SelectFilter({				
+				colletcion: apps,				
+				placeholder: "поиск по имени",
+				fields: "edu_form",
+				className: "backgrid-filter form-control",
+				selectOptions: _.union([{label: "All", value: null}],
+	  				_.map(eduform, function(o) {return {label: o.name, value: o.edu_form};}))
 			});
 
-			
-            // apply localization.
-            $("#grid").jqxGrid('localizestrings', localizationobj);
+			$example1.before(filter.render().el);
+
+			apps.fetch({reset: true});
+
+			//$(".backgrid").attr("class","backgrid table table-bordered table-hover");
 
 
-			$("#grid").jqxGrid('autoresizecolumns');
-			$("#input").jqxInput({ theme: "bootstrap" });
-			$("#passwordInput").jqxPasswordInput({ theme: "bootstrap" });
-			$("#button").jqxButton({ theme: "bootstrap" });
-			$(".btn-default").jqxButton({ theme: "bootstrap" });
-			$(".btn-primary").jqxButton({ theme: "bootstrap" });
-			$("#grid").jqxGrid({ theme: "bootstrap" });
-			document.body.style.visibility = "inherit";
+						
+
 
 		});
 	</script>
 <!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@END GRID@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
 
 
-<script type="text/javascript">
-	$(document).ready(function(){
-		$('#napravlenie').select2({
-							language:"ru"
-					});
-		$('#iscopy').select2({
-							language:"ru"
-					});
-		$('#forma').select2({
-							language:"ru"
-					});
-		$('#doctype').select2({
-							language:"ru"
-					});
-		$('#profil').select2({
-							language:"ru"
-					});
-		$('#status').select2({
-							language:"ru"
-					});
-		
-		
-	})
-
-	
-</script>
 {% endblock %}
 
-{% block leftmenu %}
-{% endblock %}
 
 {% block content %}
 <form action="{% url 'staff:application_list' %}"  method="GET">
-
-	<!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@delete?@@@@@@@@@@@@@@@@@@@@@@@@@
-	<table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-striped table-hover">
-		<thead>
-		<tr class="info">
-			<th>№</th>
-			<th>Фамилия Имя Отчество</th>
-			<th>Форма Обучения</th>
-			<th>Дата Подачи Документов</th>
-			<th>Тип документа</th>
-			<th>Копия/Оригинал</th>
-			<th>Направление</th>
-			<th>Профиль</th>
-			<th>Сумма баллов</th>
-			<th>Статус</th>
-			<th>Номер заявления</th>
-		</tr>
-		</thead>
-		<thead>
-		<tr>
-		<th st-sort="#"></th>
-		<th st-sort="FIO">
-			<input name="fio" pattern="^[А-Яа-яЁё\s]+$" class="form-control" placeholder="Фамилия Имя Отчество" value="{{ filters.fio }}"/>
-		</th>
-		<th st-sort="Form">
-			<select class="form-control" name="forma" id="forma" placeholder="Форма Обучения">
-				<option {% if filters.forma == "1" %} selected {% endif %} value="1">Все</option>
-				<option {% if filters.forma == "2" %} selected {% endif %} value="2">Очная</option>
-				<option {% if filters.forma == "3" %} selected {% endif %} value="3">Заочная</option>                
-				<option {% if filters.forma == "4" %} selected {% endif %} value="4">Очно-Заочная</option>
-			</select>
-		</th>
-		<th st-sort="Date" width="8%">          
-				<input type="date" name = "datedoc1" id ="datedoc>" value="{{filters.datedoc1}}" class="form-control">           
-				<input type="date" name = "datedoc2" id ="datedoc<" value="{{filters.datedoc2}}" class="form-control">
-		</th>
-		<th st-sort="Doc_Type">        
-			<select class="form-control" name="doctype" id="doctype" placeholder="Тип документа">
-			<option {% if filters.doctype == "0" %} selected {% endif %} value="0">Все</option>
-			{% for item in docType %}
-			<option {% if filters.doctype == item.id %} selected {% endif %} value="{{ item.id }}">{{item.value}}</option>
-			{% endfor %}            
-			</select>
-		</th>
-		<th st-sort="isCopy" width="10%">
-			<select class="form-control" name="iscopy" id="iscopy" placeholder="Копия/Оригинал">
-				<option {% if filters.iscopy == "0" %} selected {% endif %} value="0">Все</option>
-				<option {% if filters.iscopy == "1" %} selected {% endif %} value="1">Копия</option>
-				<option {% if filters.iscopy == "2" %} selected {% endif %} value="2">Оригинал</option>
-			</select>          
-		</th>
-		<th st-sort="Napravlenie">
-			<select class="form-control" name="napravlenie" id="napravlenie" placeholder="Направление">
-				<option {% if filters.napravlenie == "0" %} selected {% endif %} value="0">Все</option>            
-				{% for item in Profile %}
-					<option {% if filters.napravlenie == item.id %} selected {% endif %} value="{{ item.id }}">{{item.name}}</option>
-				{% endfor %}           
-			</select>         
-		</th>
-		<th st-sort="Profil">
-			<select class="form-control" name="profil" id="profil" placeholder="Профиль">
-			<option {% if filters.profil == "0" %} selected {% endif %} value="0">Все</option>            
-			{% for item in profill %}
-			<option {% if filters.profil == item.id %} selected {% endif %} value="{{ item.id }}">{{item.value}}</option>
-			{% endfor %}           
-			</select>         
-		</th>
-		<th st-sort="bali" width="8%">
-					<input pattern="[0-9]{,3}"<--kak pattern propyskaet bykvi?~_~ type="number" name="balli1" id="digits-from" class="form-control" placeholder=">123" value="{{ filters.balli1 }}"/>
-					<input pattern="[0-9]{,3}" type="number" <--kak type otmenyaet pattern?~_~ name="balli2" id="digits-to" class="form-control" placeholder="<123" value="{{ filters.balli2 }}"/>
-		</th>
-		<th st-sort="state">
-			<select class="form-control" name="status" id="status">
-				<option {% if filters.status == "0" %} selected {% endif %} value="0">Все</option>
-				{% for item in Application %}
-				<option {% if filters.status == item.id %} selected {% endif %} value="{{ item.id }}">{{item.value}}</option>
-				{% endfor %}                
-			</select>
-		</th>
-		<th>
-			<input type="number" name="appNumb" class="form-control" placeholder="№" value="{% if error_message %} {{ error_message }}{% else %}{{ filters.appNumb }}{% endif %}"/>
-			<button type="submit" class="btn btn-primary" name="cancel" >Сбросить фильтр</button>
-			<button type="submit" class="btn btn-primary" name="apply" >Применить фильтр</button>
-		</th>
-		</tr>
-		</thead>
-		<tbody>
-			{% for item in applications %}
-			<tr ng-repeat="row in displayedCollection">
-				<td class="rowl">{{ forloop.counter }}</td>
-				<td class="rowl"><a href="{% url 'staff:application_review' item.app.id %}">{{ item.app.abiturient.fullname }}</a></td>
-				<td class="rowl">{% if item.prof.0.profile.eduform == 'О'%}Очная{% endif %}{% if item.prof.0.profile.eduform == 'З'%}Заочная{%endif%}{% if item.prof.0.profile.eduform == 'ОЗ'%}Очно-Заочная{% endif %}</td>
-				<td class="rowl">{{ item.app.date }}</td>
-				<td class="rowl">{{ item.doc.docType.value }}</td>
-				<td class="rowl">{% if item.doc.isCopy %} Оригинал {% endif %}{% if not item.doc.isCopy %} Копия {% endif %}</td>
-				<td class="rowl">{{ item.prof.0.profile.profile.name }}</td>
-				<td class="rowl">{{ item.prof.0.profile.profile.edu_prog.qualification.value }}</td>
-				<td class="rowl">{{ item.app.points }}</td>
-				<td class="rowl">{{ item.app.appState.value }}</td>
-				<td class="rowl"><div class="col-md-offset-5"><input type="checkbox" name="selected"/></div></td>
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
 	
-	<div class="col-xs-5 col-sm-5 col-md-5 col-md-offset-4">
-		<div class="row">
-			<table class="table" >
-				<tr>
-					<td>
-						<div>
-							<ul class="pagination">
-								{% if pages.has_previous %}
-									<li class="arrow"><a href="{% url 'staff:application_list' %}?page={{ pages.previous_page_number }}{% for key,value in filters.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">&laquo;</a></li>
-								{% else %}
-									<li class="arrow disabled"><a href="">&laquo;</a></li>
-								{% endif %}
-								{% for page in pages.paginator.page_range %}
-									{% if page == pages.number %}
-										<li class="active"><a href="{% url 'staff:application_list' %}?page={{ page }}{% for key,value in filters.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">{{ page }}</a></li>
-									{% else %}
-										<li><a href="{% url 'staff:application_list' %}?page={{ page }}{% for key,value in filters.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">{{ page }}</a></li>
-									{% endif %}
-								{% endfor %}
-								{% if pages.has_next %}
-									<li class="arrow"><a href="{% url 'staff:application_list' %}?page={{ pages.next_page_number }}{% for key,value in filters.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">&raquo;</a></li>
-								{% else %}
-									<li class="arrow disabled"><a href="">&raquo;</a></li>
-								{% endif %}
-							</ul>
-						</div>
-					</td>
-
-					<td>	
-						<div>
-						</br>
-							<div class="btn-group">
-								<button type="submit" class="btn btn-success" name="export">Экспорт</button>
-								<div class="btn-group">
-									<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-											Состояние заявления
-											<span class="caret"></span>
-									</button>
-									<ul class="dropdown-menu">
-										<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Анулированный</a></li>
-										<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Поданный</a></li>
-										<li role="presentation" class="divider"></li>
-										<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Подтвержденный</a></li>
-									</ul>
-								</div>
-							</div>
-						</div>
-					</td>
-				</tr>
-			</table>
-		</div>
-	</div>
-	-->	
-
-
 	<div class="col-xs-10 col-sm-10 col-md-10 col-md-offset-1">
-		<div id="grid">
+		<!--div id="grid">
 		</div>
 		<div id="eventslog" style="margin-top: 30px;">
 			<div style="width: 200px; float: left; margin-right: 10px;">
@@ -395,7 +171,15 @@
 				<div style="border: none;" id="events">
 				</div>
 			</div>
-		</div>
+		</div-->
+		<div class="panel panel-default">
+			<div class="panel-heading">Заявления</div>
+			<div class="panel-body">
+				<div id="example-1-result" class="backgrid-container">			
+				</div>
+			</div>
+		</div><!--end panel->>
+		
 	</div>
 
 	</form>

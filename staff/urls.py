@@ -33,6 +33,8 @@ urlpatterns = patterns('',
 	url(r'edu_org_progs/',views.Edu_org_progs_get, name="edu_org_progs_get"),
 	url(r'edu_org_prog_profs/',views.Edu_org_prog_profs_get, name="edu_org_prog_profs_get"),
 	url(r'edu_org_prog_prof_attr/',views.Edu_org_prog_prof_attr_get, name="edu_org_prog_prof_attr_get"),
+	url(r'backgrid_collection.json', views.Backgrid_collection, name="backgrid_collection"),
+	url(r'test.json', views.testjson, name="testjson")
 	
 
 					)

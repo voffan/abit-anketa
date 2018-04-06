@@ -236,144 +236,71 @@ def Employee_Useraccount(request):
 	context.update(csrf(request))
 	return render(request,'staff\employee_acc.html',context)
 
-@login_required(login_url = '/auth')
-@user_passes_test(CheckUserIsStaff, login_url = '/auth')
-def Application_list (request):
+
+def Application_list(request):
 	employee = request.user.employee_set.get()
 	if request.user.is_superuser:
 		applications = Application.objects.all()
-		for ap in applications:
-			print(ap.date)
 	else:		
 		applications = Application.objects.filter(department=employee.department)
 	appProfile = ApplicationProfiles.objects.all()
 	#applications = Application.objects.select_related('Abiturient').filter(department__id = employee.department.id)
-	#profiles = Profile.objects.all()
-	""" starie filtri
-	select = '0'
-	selectform = '1'
-	selectnapr = '0'
-	selectdoc = '0'
-	selectcopy = '0'
-	selectNumb = '0'
-	fname = '0'
-	bal1 = '0'
-	bal2 = '0'
-	dategt = '2016-01-01'
-	datelt = '0'
-	selectprof = '0'
-	error_message=''     
-	filters={'apply':''}
-
-	if 'apply' in request.GET:
-
-		if 'doctype' in request.GET and int(request.GET['doctype'])>0:
-				selectdoc = request.GET['doctype']
-				docs = Docs.objects.select_related('Abiturient').filter(docType__id=selectdoc)
-				abiturients = [item.abiturient.id for item in docs]
-				applications = Application.objects.filter(abiturient__id__in=abiturients)
-				filters['doctype']=int(selectdoc)
-
-		if 'iscopy' in request.GET:
-			if request.GET['iscopy'] =='1':
-				selectcopy = '1'
-				docs = Docs.objects.select_related('Abiturient').filter(isCopy=0)
-				abiturients = [item.abiturient.id for item in docs]
-				applications = applications.filter(abiturient__id__in=abiturients) 
-				filters['iscopy'] = selectcopy
-
-			elif request.GET['iscopy'] =='2':
-				selectcopy = '2'
-				docs = Docs.objects.select_related('Abiturient').filter(isCopy=1)
-				abiturients = [item.abiturient.id for item in docs]
-				applications = applications.filter(abiturient__id__in=abiturients)
-				filters['iscopy'] = selectcopy
-
-		if 'status' in request.GET and int(request.GET['status'])>0:
-			select = request.GET['status']
-			applications = applications.filter(appState__id=select)
-			filters['status']= int(select)
-
-		if 'fio' in request.GET and len(request.GET['fio'])>0:
-			fname = request.GET['fio']
-			applications=applications.filter(abiturient__fullname__icontains=fname)
-			filters['fio'] = fname
-
-		if 'forma' in request.GET:
-			if request.GET['forma'] =='2':
-				applications = applications.filter(profile__eduform__icontains=u'О')
-				selectform = '2'
-				filters['forma'] = selectform
-			if request.GET['forma'] =='3':
-				applications = applications.filter(profile__eduform__icontains=u'З')
-				selectform = '3'
-				filters['forma'] = selectform
-			if request.GET['forma'] =='4':
-				applications = applications.filter(profile__eduform__icontains=u'ОЗ')
-				selectform = '4'
-				filters['forma'] = selectform
-
-
-		if 'balli1' in request.GET and len(request.GET['balli1'])>0:
-			bal1 = request.GET['balli1']
-			applications = applications.filter(points__gt=bal1)
-			filters['balli1'] = bal1
-
-		if 'balli2' in request.GET and len(request.GET['balli2'])>0:
-			bal2 = request.GET['balli2']
-			applications = applications.filter(points__lt=bal2)
-			filters['balli2'] = bal2
-
-		if 'datedoc1' in request.GET and len(request.GET['datedoc1'])>0:
-			dategt = request.GET['datedoc1']
-			applications = applications.filter(date__gt=dategt)
-			filters['datedoc1'] = dategt
-
-		if 'datedoc2' in request.GET and len(request.GET['datedoc2'])>0:
-			datelt = request.GET['datedoc2']
-			applications = applications.filter(date__lt=datelt)
-			filters['datedoc2'] = datelt
-
-		if 'napravlenie' in request.GET and int(request.GET['napravlenie'])>0:
-			selectnapr = request.GET['napravlenie']
-			applications = applications.filter(edu_prog__edu_prog__id=selectnapr)
-			filters['napravlenie'] = int(selectnapr)
-
-		if 'profil' in request.GET and int(request.GET['profil'])>0:
-			selectprof = request.GET['profil']
-			applications = app_profil.filter(profile_id=selectprof)
-			#applications = applications.filter(edu_prog__edu_prog__qualification__id=selectprof)
-			filters['profil'] = int(selectprof)
-	
-		if 'appNumb' in request.GET and len(request.GET['appNumb'])>0:
-			selectNumb = request.GET['appNumb']			
-			applications = applications.filter(id=selectNumb)
-			if not applications:
-				error_message = "vibrannoe zayavlenie vne vashei iyrezdikcii" #ne ny po4ti rabotaet
-			filters['appNumb'] = (selectNumb)
-		#kak vse eto rabotaet -_-
-
-	if 'cancel' in request.GET:
-		return HttpResponseRedirect(reverse('staff:application_list'))
-	
-	app_pages = Paginator(applications, 200)
-	page = request.GET.get('page')
-	try:
-		current_page = app_pages.page(page)
-	except PageNotAnInteger:
-		current_page = app_pages.page(1)
-	except EmptyPage:
-		current_page = app_pages.page(app_pages.num_pages)
-	applications = current_page.object_list
-	"""	
+	#profiles = Profile.objects.all()	
 	abiturients = [app.abiturient.id for app in applications]
 	docs = Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains=u'аттестат')|Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains=u'Диплом')
 	apps_with_docs=[]
+	result = []
 	for app in applications:
 		doc = docs.filter(abiturient__id = app.abiturient.id).first()
 		prof = appProfile.filter(application__id=app.id)
 		apps_with_docs.append({'app':app, 'doc':doc, 'prof':prof})
-		print("-----",app.date)	
+		result.append({'fullname':app.abiturient.fullname,"edu_form":str(prof[0].profile.eduform),"date":str(app.date),"edu_prog":str(prof[0].profile.profile.name),"edu_prof":str(prof[0].profile.profile.edu_prog.qualification.value),"points":int(app.points),"appState":str(app.appState.value)})
+	
+	doctyps = AttrValue.objects.filter(
+		attribute__name__icontains=u'об образовании'
+	).filter(
+		value__icontains=u'Диплом'
+	)|AttrValue.objects.filter(
+		value__icontains=u'Аттестат'
+	)
+	profill = AttrValue.objects.filter(attribute__name__icontains=u'Квалификация')
+	data={}
+	#data['errors'] = error_message
+	data['applications'] = apps_with_docs
+	data['docType'] = doctyps
+	data['profill'] = EduForm
+	data['Profile'] = Education_Prog.objects.all()
+	data['Docs'] = Docs.objects.all()
+	data['Application'] = AttrValue.objects.filter(attribute__name__icontains=u'статус за')
+	#data['pages'] = current_page    
+	#data['filters'] = filters
+	
+	context = {'data':data}
+	context.update(csrf(request))
+	return render(request,'staff\\application_list.html',context)
+
+@login_required(login_url = '/auth')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
+def Backgrid_collection(request):
+	employee = request.user.employee_set.get()
+	if request.user.is_superuser:
+		applications = Application.objects.all()
+	else:		
+		applications = Application.objects.filter(department=employee.department)
+	appProfile = ApplicationProfiles.objects.all()
+	#applications = Application.objects.select_related('Abiturient').filter(department__id = employee.department.id)
+	#profiles = Profile.objects.all()	
+	abiturients = [app.abiturient.id for app in applications]
+	docs = Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains=u'аттестат')|Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains=u'Диплом')
+	apps_with_docs=[]
+	result = []
+	preress=[]
+	for app in applications:
+		doc = docs.filter(abiturient__id = app.abiturient.id).first()
+		prof = appProfile.filter(application__id=app.id)
+		apps_with_docs.append({'app':app, 'doc':doc, 'prof':prof})
+		preress.append({'fullname':app.abiturient.fullname,"edu_form":str(prof[0].profile.eduform),"date":str(app.date),"edu_prog":str(prof[0].profile.profile.name),"edu_prof":str(prof[0].profile.profile.edu_prog.qualification.value),"points":int(app.points),"appState":str(app.appState.value)})
+	result.append(preress)
 	doctyps = AttrValue.objects.filter(
 		attribute__name__icontains=u'об образовании'
 	).filter(
@@ -391,8 +318,13 @@ def Application_list (request):
 	data['Docs'] = Docs.objects.all()
 	data['Application'] = AttrValue.objects.filter(attribute__name__icontains=u'статус за')
 	#data['pages'] = current_page    
-	#data['filters'] = filters    
-	return render(request,'staff\\application_list.html', data)
+	#data['filters'] = filters
+	
+	
+	return HttpResponse(json.dumps(result), content_type="application/json")    
+	
+def testjson(request):
+	return render(request,'staff\\testjson.json')
 
 @login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
@@ -788,7 +720,6 @@ def edu_org_prog_add(edu_org, values):
 
 
 #=================================================ajax functions==========================================================
-
 @login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Edu_orgs_value(request):
