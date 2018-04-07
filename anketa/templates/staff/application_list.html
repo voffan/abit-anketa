@@ -34,12 +34,11 @@
 		$(document).ready(function () {
 
 
-			var data = [{% for item in data.applications %}{"fullname": "{{item.app.abiturient.fullname}}", "edu_form": "{% if item.prof.0.profile.eduform == 'О' %}Очная{% endif %}{% if item.prof.0.profile.eduform == 'З' %}Заочная{% endif %}{% if item.prof.0.profile.eduform == 'ОЗ' %}Очно-заочная{% endif %}","date":"{{item.app.date}}","edu_prog":"{{item.prof.0.profile.profile.name}}","edu_prof":"{{item.prof.0.profile.profile.edu_prog.qualification.value}}","points":{{item.app.points}},"appState":"{{item.app.appState.value}}"},{% endfor %}];
+			var data = [{% for item in data.applications %}{"fullname": "<a href=\"{% url 'staff:application_review' item.app.id %}\">{{ item.app.abiturient.fullname }}</a>", "edu_form": "{% if item.prof.0.profile.eduform == 'О' %}Очная{% endif %}{% if item.prof.0.profile.eduform == 'З' %}Заочная{% endif %}{% if item.prof.0.profile.eduform == 'ОЗ' %}Очно-заочная{% endif %}","date":"{{item.app.date}}","edu_prog":"{{ item.prof.0.profile.profile.edu_prog.name }} {{item.prof.0.profile.profile.edu_prog.qualification.value}}","edu_prof":"{{item.prof.0.profile.profile.name}}","points":{{item.app.points}},"appState":"{{item.app.appState.value}}"},{% endfor %}];
 
 			var Application = Backbone.Model.extend({});
 			var Applications = Backbone.PageableCollection.extend({
 				model: Application,
-				url: "{% url 'staff:backgrid_collection' %}",
 				state: {
     				pageSize: 15
     				//sortKey: "joined",
@@ -50,7 +49,15 @@
 			});			
 			
 			var apps = new Applications(data);
-			console.log(apps);			
+			console.log(apps);
+
+			var MyUriCell = Backgrid.UriCell.extend({
+				render: function () {
+					this.constructor.__super__.render.apply(this, arguments);
+					this.$("a").attr({href: "{% url 'staff:application_list' %}"});
+					return this;
+				}
+			});			
 
 			var columns = [{
 				name: "fullname", // The key of the model attribute
@@ -110,37 +117,6 @@
 			// Render the paginator
 			$example1.after(paginator.render().el);
 
-			
-			// backgrid filter
-			var eduform = [
-				{
-					edu_form: "О",
-					name: "Очная"					
-				},
-				{					
-					edu_form: "З",
-					name: "Заочная"
-				},
-				{					
-					edu_form: "ОЗ",
-					name: "Очно-заочная"
-				}
-			];
-
-			// Initialize a client-side filter to filter on the client
-			// mode pageable collection's cache.
-			var filter = new Backgrid.Extension.SelectFilter({				
-				colletcion: apps,				
-				placeholder: "поиск по имени",
-				fields: "edu_form",
-				className: "backgrid-filter form-control",
-				selectOptions: _.union([{label: "All", value: null}],
-	  				_.map(eduform, function(o) {return {label: o.name, value: o.edu_form};}))
-			});
-
-			$example1.before(filter.render().el);
-			
-
 			apps.fetch({reset: true});
 
 			//$(".backgrid").attr("class","backgrid table table-bordered table-hover");
@@ -173,88 +149,85 @@
 		    	<div class="row">
 		    		<div class="col-md-3">
 		    			<select class="form-control" name="napravlenie" id="napravlenie" placeholder="Направление">
-							<option {% if filters.napravlenie == "0" %} selected {% endif %} value="0">Направление/Специальность</option>      
-							{% for item in edu_prog %}
-							<option {% if filters.napravlenie == item.id %} selected {% endif %} value="{{ item.id }}">{{item.name}} {{item.qualification.value}}</option>
+							<option {% if data.filters.napravlenie == "0" %} selected {% endif %} value="0">Направление/Специальность</option>      
+							{% for item in data.edu_prog %}
+							<option {% if data.filters.napravlenie == item.id %} selected {% endif %} value="{{ item.id }}">{{item.name}} {{item.qualification.value}}</option>
 							{% endfor %}           
 						</select>
 		    		</div>
 					<div class="col-md-3">
 						<select class="form-control" name="profil" id="profil" placeholder="Профиль">
-							<option {% if filters.profil == "0" %} selected {% endif %} value="0">Профиль</option>       
-							{% for item in profill %}
-							<option {% if filters.profil == item.id %} selected {% endif %} value="{{ item.id }}">{{item.name}} {{item.edu_prog.qualification.value}}</option>
+							<option {% if data.filters.profil == "0" %} selected {% endif %} value="0">Профиль</option>       
+							{% for item in data.profill %}
+							<option {% if data.filters.profil == item.id %} selected {% endif %} value="{{ item.id }}">{{item.name}} {{item.edu_prog.qualification.value}}</option>
 							{% endfor %}           
 						</select>
 					</div>
 					<div class="col-md-3">
 						<select class="form-control" name="forma" id="forma" placeholder="Форма Обучения">
-							<option {% if filters.forma == "1" %} selected {% endif %} value="1">Форма Обучения</option>
-							<option {% if filters.forma == "2" %} selected {% endif %} value="2">Очная</option>
-							<option {% if filters.forma == "3" %} selected {% endif %} value="3">Заочная</option>        
-							<option {% if filters.forma == "4" %} selected {% endif %} value="4">Очно-Заочная</option>
+							<option {% if data.filters.forma == "1" %} selected {% endif %} value="1">Форма Обучения</option>
+							<option {% if data.filters.forma == "2" %} selected {% endif %} value="2">Очная</option>
+							<option {% if data.filters.forma == "3" %} selected {% endif %} value="3">Заочная</option>        
+							<option {% if data.filters.forma == "4" %} selected {% endif %} value="4">Очно-Заочная</option>
 						</select>
 					</div>
 					<div class="col-md-3">
 						<select class="form-control" name="status" id="status">
-							<option {% if filters.status == "0" %} selected {% endif %} value="0">Статус заявления</option>
-							{% for item in Application %}
-							<option {% if filters.status == item.id %} selected {% endif %} value="{{ item.id }}">{{item.value}}</option>
+							<option {% if data.filters.status == "0" %} selected {% endif %} value="0">Статус заявления</option>
+							{% for item in data.Application %}
+							<option {% if data.filters.status == item.id %} selected {% endif %} value="{{ item.id }}">{{item.value}}</option>
 							{% endfor %}                
 						</select>
 					</div>					
 		    	</div><!--end row-->
 		    	<div class="row" style="margin-top: 10px;">
 		    		<div class="col-md-3">
-		    			<input name="fio" pattern="^[А-Яа-яЁё\s]+$" class="form-control" placeholder="Фамилия Имя Отчество" value="{{ filters.fio }}"/>
+		    			<input name="fio" pattern="^[А-Яа-яЁё\s]+$" class="form-control" placeholder="Фамилия Имя Отчество" value="{{ data.filters.fio }}"/>
 		    		</div>
 		    		<div class="col-md-3">
 		    			<div class="row">
 				    		<div class="col-md-6">
-								<input pattern="[0-9]{,3}"<--kak pattern propyskaet bykvi?~_~ type="number" name="balli1" id="digits-from" class="form-control" placeholder=">123" value="{{ filters.balli1 }}"/>
+								<input pattern="[0-9]{,3}"<--kak pattern propyskaet bykvi?~_~ type="number" name="balli1" id="digits-from" class="form-control" placeholder=">123" value="{{ data.filters.balli1 }}"/>
 								</div>
 							<div class="col-md-6">
-								<input pattern="[0-9]{,3}" type="number" <--kak type otmenyaet pattern?~_~ name="balli2" id="digits-to" class="form-control" placeholder="<123" value="{{ filters.balli2 }}"/>
+								<input pattern="[0-9]{,3}" type="number" <--kak type otmenyaet pattern?~_~ name="balli2" id="digits-to" class="form-control" placeholder="<123" value="{{ data.filters.balli2 }}"/>
 							</div>
 						</div>
 					</div>
 					<div class="col-md-3">
 						<div class="row">
 							<div class="col-md-6">
-								<input type="date" name = "datedoc1" id ="datedoc>" value="{{filters.datedoc1}}" class="form-control">
+								<input type="date" name = "datedoc1" id ="datedoc>" value="{{data.filters.datedoc1}}" class="form-control">
 							</div>
 							<div class="col-md-6">          
-								<input type="date" name = "datedoc2" id ="datedoc<" value="{{filters.datedoc2}}" class="form-control">
+								<input type="date" name = "datedoc2" id ="datedoc<" value="{{data.filters.datedoc2}}" class="form-control">
 							</div>
 						</div>
 					</div>
-					<div class="col-md-2">
+					<div class="col-md-3">
 						<div class="row">
-							<div class="col-md-6">
-								<button type="submit" class="btn btn-warning" name="cancel" >Сбросить</button>
+							<div class="col-md-4">
+								<button type="submit" class="btn btn-warning btn-block" name="cancel" >Сбросить</button>
 							</div>
-							<div class="col-md-6">
-								<button type="submit" class="btn btn-primary" name="apply" >Применить</button>
-							</div>	
-						</div>
-					</div>
-					<div class="col-md-1">
-						<div  >
-							<div >
-		    					<input type="button" class="btn btn-default" style="margin-left:28px;" id="advanced_button" onClick="advanced_search()" value="+"/>
+							<div class="col-md-4">
+								<button type="submit" class="btn btn-primary btn-block" name="apply" >Применить</button>
+							</div>
+							<div class="col-md-4">
+								<input type="button" class="btn btn-default btn-block" id="advanced_button" onClick="advanced_search()" value="+"/>
 							</div>
 						</div>
-		    		</div>
+					</div>				
+		    			
 		    	</div><!--end row-->
 		    	<div class="row hidden" id="advanced_row" name="advanced_row" style="margin-top: 10px;">
 	    			<div class="col-md-3">
-	    				<input type="text" name="birthplace" id="birthplace" value="{{filters.birthplace}}" class="form-control" placeholder="Место рождения">
+	    				<input type="text" name="birthplace" id="birthplace" value="{{data.filters.birthplace}}" class="form-control" placeholder="Место рождения">
 	    			</div>
 	    			<div class="col-md-3">
 	    				<select class="form-control" name="doctype" id="doctype" >
-							<option {% if filters.doctype == "0" %} selected {% endif %} value="0">Тип документа</option>
-							{% for item in docType %}
-							<option {% if filters.doctype == item.id %} selected {% endif %} value="{{ item.id }}">{{item.value}}</option>
+							<option {% if data.filters.doctype == "0" %} selected {% endif %} value="0">Тип документа</option>
+							{% for item in data.docType %}
+							<option {% if data.filters.doctype == item.id %} selected {% endif %} value="{{ item.id }}">{{item.value}}</option>
 							{% endfor %} 
 						</select>
 	    			</div>
@@ -284,13 +257,10 @@
 				</div>
 			</div>
 		</div-->
-		<div class="panel panel-default">
-			<div class="panel-heading">Заявления</div>
-			<div class="panel-body">
+		
 				<div id="example-1-result" style="height:100%;" class="backgrid-container">			
 				</div>
-			</div>
-		</div><!--end panel-->
+			
 		
 	</div>
 
