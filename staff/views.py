@@ -298,24 +298,6 @@ def Application_list (request):
 			applications=applications.filter(abiturient__fullname__icontains=fname)
 			filters['fio'] = fname
 
-		if 'forma' in request.GET:
-			if request.GET['forma'] =='2':
-				applications = applications.filter(applicationprofiles__profile__eduform=u'О')
-				selectform = '2'
-				appProfile = appProfile.filter(profile__eduform = u'О')
-				filters['forma'] = selectform
-			if request.GET['forma'] =='3':
-				applications = applications.filter(applicationprofiles__profile__eduform=u'З')
-				selectform = '3'
-				appProfile = appProfile.filter(profile__eduform = u'З')
-				filters['forma'] = selectform
-			if request.GET['forma'] =='4':
-				applications = applications.filter(applicationprofiles__profile__eduform=u'ОЗ')
-				selectform = '4'
-				appProfile = appProfile.filter(profile__eduform = u'ОЗ')
-				filters['forma'] = selectform
-
-
 		if 'balli1' in request.GET and len(request.GET['balli1'])>0:
 			bal1 = int(request.GET['balli1'])
 			applications = applications.filter(points__gt=bal1)
@@ -344,8 +326,29 @@ def Application_list (request):
 		if 'profil' in request.GET and int(request.GET['profil'])>0:
 			selectprof = request.GET['profil']
 			applications = applications.filter(applicationprofiles__profile__profile__id=selectprof)
-			appProfile = appProfile.filter(profile__profile__id = selectprof)
+			if 'forma' not in request.POST:
+				appProfile = appProfile.filter(profile__profile__id = selectprof)
+			else:
+				appProfile = appProfile.filter(profile__profile__id=selectprof, profile__profile__eduform=EduForm[int(request.GET['forma'])-2])
+				filters['forma'] = selectform
 			filters['profil'] = int(selectprof)
+
+		'''if 'forma' in request.GET:
+			if request.GET['forma'] =='2':
+				applications = applications.filter(applicationprofiles__profile__eduform=u'О')
+				selectform = '2'
+				appProfile = appProfile.filter(profile__eduform = u'О')
+				filters['forma'] = selectform
+			if request.GET['forma'] =='3':
+				applications = applications.filter(applicationprofiles__profile__eduform=u'З')
+				selectform = '3'
+				appProfile = appProfile.filter(profile__eduform = u'З')
+				filters['forma'] = selectform
+			if request.GET['forma'] =='4':
+				applications = applications.filter(applicationprofiles__profile__eduform=u'ОЗ')
+				selectform = '4'
+				appProfile = appProfile.filter(profile__eduform = u'ОЗ')
+				filters['forma'] = selectform'''
 	
 		if 'appNumb' in request.GET and len(request.GET['appNumb'])>0:
 			selectNumb = request.GET['appNumb']			

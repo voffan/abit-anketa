@@ -34,7 +34,7 @@
 		$(document).ready(function () {
 
 
-			var data = [{% for item in data.applications %}{"fullname": "<a href=\"{% url 'staff:application_review' item.app.id %}\">{{ item.app.abiturient.fullname }}</a>", "edu_form": "{% if item.prof.0.profile.eduform == 'О' %}Очная{% endif %}{% if item.prof.0.profile.eduform == 'З' %}Заочная{% endif %}{% if item.prof.0.profile.eduform == 'ОЗ' %}Очно-заочная{% endif %}","date":"{{item.app.date}}","edu_prog":"{{ item.prof.0.profile.profile.edu_prog.name }} {{item.prof.0.profile.profile.edu_prog.qualification.value}}","edu_prof":"{{item.prof.0.profile.profile.name}}","points":{{item.app.points}},"appState":"{{item.app.appState.value}}"},{% endfor %}];
+			var data = [{% for item in data.applications %}{"url":"{% url 'staff:application_review' item.app.id %}","fullname": "{{ item.app.abiturient.fullname }}", "edu_form": "{% if item.prof.0.profile.eduform == 'О' %}Очная{% endif %}{% if item.prof.0.profile.eduform == 'З' %}Заочная{% endif %}{% if item.prof.0.profile.eduform == 'ОЗ' %}Очно-заочная{% endif %}","date":"{{item.app.date}}","edu_prog":"{{ item.prof.0.profile.profile.edu_prog.name }} {{item.prof.0.profile.profile.edu_prog.qualification.value}}","edu_prof":"{{item.prof.0.profile.profile.name}}","points":{{item.app.points}},"appState":"{{item.app.appState.value}}"},{% endfor %}];
 
 			var Application = Backbone.Model.extend({});
 			var Applications = Backbone.PageableCollection.extend({
@@ -54,7 +54,7 @@
 			var MyUriCell = Backgrid.UriCell.extend({
 				render: function () {
 					this.constructor.__super__.render.apply(this, arguments);
-					this.$("a").attr({href: "{% url 'staff:application_list' %}"});
+					this.$("a").attr({href: this.model.get("url")});
 					return this;
 				}
 			});			
@@ -63,7 +63,7 @@
 				name: "fullname", // The key of the model attribute
 				label: "Полное имя", // The name to display in the header
 				editable: false,
-				cell: "uri" 
+				cell: MyUriCell
 			}, {
 				name: "edu_form",
 				label: "Форма обучения",				
