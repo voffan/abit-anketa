@@ -301,14 +301,17 @@ def Application_list (request):
 			if request.GET['forma'] =='2':
 				applications = applications.filter(applicationprofiles__profile__eduform=u'О')
 				selectform = '2'
+				appProfile = appProfile.filter(profile__eduform = u'О')
 				filters['forma'] = selectform
 			if request.GET['forma'] =='3':
 				applications = applications.filter(applicationprofiles__profile__eduform=u'З')
 				selectform = '3'
+				appProfile = appProfile.filter(profile__eduform = u'З')
 				filters['forma'] = selectform
 			if request.GET['forma'] =='4':
 				applications = applications.filter(applicationprofiles__profile__eduform=u'ОЗ')
 				selectform = '4'
+				appProfile = appProfile.filter(profile__eduform = u'ОЗ')
 				filters['forma'] = selectform
 
 
