@@ -244,18 +244,15 @@ def Application_list(request):
 	else:		
 		applications = Application.objects.filter(department=employee.department)
 	appProfile = ApplicationProfiles.objects.all()
-	#applications = Application.objects.select_related('Abiturient').filter(department__id = employee.department.id)
+	applications = Application.objects.select_related('Abiturient').filter(department__id = employee.department.id)
 	#profiles = Profile.objects.all()	
 	abiturients = [app.abiturient.id for app in applications]
 	docs = Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains=u'аттестат')|Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains=u'Диплом')
 	apps_with_docs=[]
-	result = []
 	for app in applications:
 		doc = docs.filter(abiturient__id = app.abiturient.id).first()
 		prof = appProfile.filter(application__id=app.id)
 		apps_with_docs.append({'app':app, 'doc':doc, 'prof':prof})
-		result.append({'fullname':app.abiturient.fullname,"edu_form":str(prof[0].profile.eduform),"date":str(app.date),"edu_prog":str(prof[0].profile.profile.name),"edu_prof":str(prof[0].profile.profile.edu_prog.qualification.value),"points":int(app.points),"appState":str(app.appState.value)})
-	
 	doctyps = AttrValue.objects.filter(
 		attribute__name__icontains=u'об образовании'
 	).filter(
@@ -265,20 +262,21 @@ def Application_list(request):
 	)
 	profill = AttrValue.objects.filter(attribute__name__icontains=u'Квалификация')
 	data={}
-	#data['errors'] = error_message
+	data['errors'] = error_message
 	data['applications'] = apps_with_docs
 	data['docType'] = doctyps
 	data['profill'] = EduForm
 	data['Profile'] = Education_Prog.objects.all()
 	data['Docs'] = Docs.objects.all()
 	data['Application'] = AttrValue.objects.filter(attribute__name__icontains=u'статус за')
-	#data['pages'] = current_page    
-	#data['filters'] = filters
+	data['pages'] = current_page    
+	data['filters'] = filters
 	
 	context = {'data':data}
 	context.update(csrf(request))
 	return render(request,'staff\\application_list.html',context)
 
+################################## backgrid collection json ######################################
 @login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Backgrid_collection(request):
@@ -288,7 +286,7 @@ def Backgrid_collection(request):
 	else:		
 		applications = Application.objects.filter(department=employee.department)
 	appProfile = ApplicationProfiles.objects.all()
-	#applications = Application.objects.select_related('Abiturient').filter(department__id = employee.department.id)
+	applications = Application.objects.select_related('Abiturient').filter(department__id = employee.department.id)
 	#profiles = Profile.objects.all()	
 	abiturients = [app.abiturient.id for app in applications]
 	docs = Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains=u'аттестат')|Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains=u'Диплом')
@@ -300,27 +298,7 @@ def Backgrid_collection(request):
 		prof = appProfile.filter(application__id=app.id)
 		apps_with_docs.append({'app':app, 'doc':doc, 'prof':prof})
 		preress.append({'fullname':app.abiturient.fullname,"edu_form":str(prof[0].profile.eduform),"date":str(app.date),"edu_prog":str(prof[0].profile.profile.name),"edu_prof":str(prof[0].profile.profile.edu_prog.qualification.value),"points":int(app.points),"appState":str(app.appState.value)})
-	result.append(preress)
-	doctyps = AttrValue.objects.filter(
-		attribute__name__icontains=u'об образовании'
-	).filter(
-		value__icontains=u'Диплом'
-	)|AttrValue.objects.filter(
-		value__icontains=u'Аттестат'
-	)
-	profill = AttrValue.objects.filter(attribute__name__icontains=u'Квалификация')
-	data={}
-	#data['errors'] = error_message
-	data['applications'] = apps_with_docs
-	data['docType'] = doctyps
-	data['profill'] = profill
-	data['Profile'] = Education_Prog.objects.all()
-	data['Docs'] = Docs.objects.all()
-	data['Application'] = AttrValue.objects.filter(attribute__name__icontains=u'статус за')
-	#data['pages'] = current_page    
-	#data['filters'] = filters
-	
-	
+	result.append(preress)		
 	return HttpResponse(json.dumps(result), content_type="application/json")    
 	
 def testjson(request):
