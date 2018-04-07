@@ -40,7 +40,7 @@
 				model: Application,
 				url: "{% url 'staff:backgrid_collection' %}",
 				state: {
-    				pageSize: 5
+    				pageSize: 10
     				//sortKey: "joined",
     				//order: 1
   				},
@@ -55,23 +55,22 @@
 				name: "fullname", // The key of the model attribute
 				label: "Полное имя", // The name to display in the header
 				editable: false,
-				cell: "uri" // Renders the value in an HTML anchor element ссылка на заявление <a href=""
+				cell: "uri" 
 			}, {
 				name: "edu_form",
-				label: "Форма обучения",
-				// The cell type can be a reference of a Backgrid.Cell subclass, any Backgrid.Cell subclass instances like *id* above, or a string
-				cell: "string", // This is converted to "StringCell" and a corresponding class in the Backgrid package namespace is looked up
+				label: "Форма обучения",				
+				cell: "string", 
 				editable: false
 			}, {
 				editable: false,
 				name: "date",
 				label: "Дата",
-				cell: "string" // An integer cell is a number cell that displays humanized integers
+				cell: "string" 
 			}, {
 				editable: false,
 				name: "edu_prog",
 				label: "Направление/специальность",
-				cell: "string" // A cell type for floating point value, defaults to have a precision 2 decimal numbers
+				cell: "string" 
 			}, {
 				editable: false,
 				name: "edu_prof",
@@ -81,7 +80,7 @@
 				editable: false,
 				name: "points",
 				label: "Баллы",
-				cell: "integer" // Renders the value in an HTML anchor element
+				cell: "integer" 
 			}, {
 				editable: false,
 				name: "appState",
@@ -110,6 +109,8 @@
 			// Render the paginator
 			$example1.after(paginator.render().el);
 
+			
+			/* backgrid filter
 			var eduform = [
 				{
 					edu_form: "О",
@@ -137,13 +138,11 @@
 			});
 
 			$example1.before(filter.render().el);
+			*/
 
 			apps.fetch({reset: true});
 
 			//$(".backgrid").attr("class","backgrid table table-bordered table-hover");
-
-
-						
 
 
 		});
