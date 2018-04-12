@@ -105,19 +105,18 @@
     });
 </script>
 <script>
-    $(document).on("click","button[id*='save']", function()
+    $(document).on("click","button[id='examsSave']", function()
         {
-            $("#currentPage").val(($(this).attr('id').slice('4')));
-
+            
             $.ajax({
-                url:"{% url 'staff:add_data_to_person' %}",
+                url:"{% url 'staff:add_exam_to_person' %}",
                 type:$("#persondata").attr('method'),
                 data:$("#persondata").serialize(),
                 dataProcess:true,
                 timeout:500,
                 success:function(data)
                 {
-                    if (data==="success")
+                    if (data['result']==="success")
                     {
                         $.notify("Сохранено.", "success");
                     }
@@ -134,6 +133,15 @@
             });
         });
 
+    function addField()
+        {
+            
+            var newRow = $('<div class="row" id="newExam"><div class="col-md-4"><select name="subjectExam" id="subjectExam" class="form-control">{% for item in data.exam_subjects %} <option value="{{item}}">{{item}}</option>{% endfor %}</select></div><div class="col-md-4"><select name="ExamType" id="ExamType" class="form-control">{% for item in data.exam_type %} <option value="{{item}}">{{item}}</option>{% endfor %}</select></div><div class="col-md-2"><input name="pointsExam" id="pointsExam" class="form-control"     placeholder="100"value="{{item.points}}"></div><div class="col-md-2"><input name="yearExam" id="yearExam" class="form-control" placeholder="2015" value="{{item.year}}"></div></div><p>');
+            $("#examfield").append(newRow);
+            
+        };
+
+    
 
 </script>
 
@@ -148,14 +156,14 @@
         <div class="navbar-inner">
             <div class="container">
                 <ul>
+                    <li><a href="#tab4" data-toggle="tab">Заявление</a></li>
                     <li><a href="#tab1" data-toggle="tab">Личные данные</a></li>
                     <li><a href="#tab2" data-toggle="tab">Документы</a></li>
                     <li><a href="#tab3" data-toggle="tab">Контактные данные</a></li>                    
                     <li><a href="#tab5" data-toggle="tab">Экзамены</a></li>
                     <li><a href="#tab6" data-toggle="tab">Льготы</a></li>
                     <li><a href="#tab7" data-toggle="tab">Личные достижения</a></li>
-                    <li><a href="#tab8" data-toggle="tab">Прочее</a></li>
-                    <li><a href="#tab4" data-toggle="tab">Заявление</a></li>
+                    <li><a href="#tab8" data-toggle="tab">Прочее</a></li>                    
                 </ul>
             </div>
         </div>
@@ -665,74 +673,110 @@
         </div>
         <div class="tab-pane" id="tab5">
             <div class="container-fluid">
+
                 <div class="row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
-                        <p>
-                           <b>Прошу засчитать рез-ты ЕГЭ</b>
-                        </p>
-                    </div>
-                </div>
-                <div id="parentsubjectId" class="row">
-                    <div>
-                    {% for item in Exams %}
-                        <p>
-                            <div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-3">
-                                <label for="subject[1]">Дисциплина</label>
-                                <input name="subject[1]" id="subject[1]" class="form-control" placeholder="Математика" value="{{item.data.exams.exam_subjects}}">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Экзамены</h3>
                             </div>
-                            <div class="col-xs-2 col-sm-2 col-md-2">
-                                <label for="points[1]">Баллы</label>
-                                <input name="points[1]" id="points[1]" class="form-control"     placeholder="100"value="{{item.data.exams.points}}">
-                            </div>
-                            <div class="col-xs-1 col-sm-1 col-md-1">
-                                <label for="year[1]">Год</label>
-                                <input name="year[1]" id="year[1]" class="form-control" placeholder="2015" value="{{item.data.exams.year}}">
-                            </div>
-                        {% endfor %}
-                        <br>
-                            <a style="" onclick="return deleteField(this)" href="#"><span class="glyphicon glyphicon-minus"></span></a>
-                            <a style="" onclick="return addField()" href="#"><span class="glyphicon glyphicon-plus"></span></a>
-                        </p>
-                    </div>
-                </div>
-            <br>
-            <br>
-                <div class="row">
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
-                        <p>
-                           <b>Также прошу допустить к вступительным испытаниям по следующим предметам</b>
-                        </p>
-                    </div>
-                </div>
-                <div class="row">
-                    <p>
-                        <div id="parentsubjectId" class="row">
-                    <div>
-                    {% for item in Exams %}
-                        <p>
-                            <div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-3">
-                                <label for="subject[1]">Дисциплина</label>
-                                <input name="subject[1]" id="subject[1]" class="form-control" placeholder="Математика" value="{{item.data.exams.exam_subjects}}">
-                            </div>
-                    {% endfor %}
-                        <br>
-                        <a style="" onclick="return deleteField(this)" href="#"><span class="glyphicon glyphicon-minus"></span></a>
-                        <a style="" onclick="return addField()" href="#"><span class="glyphicon glyphicon-plus"></span></a>
-                        </p>
-                    </div>
-                </div>
-                    </p>
-                </div>
-                <div class="row">
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
-                        <p>
-                           <b>Прошу создать специальные условия при сдаче вступ. исп-й в связи с ограниченными возможностями здоровья</b>
-                            <br>
-                            <input type = "radio" name= "option8" value="a51"{% if not data.privilegies.category %} checked {% endif %}>Нет
-                            <input type = "radio" name= "option8" value="a52"{% if data.privilegies.category %} checked {% endif %}>Да
-                        </p>
-                    </div>
-                </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-12">                                    
+                                        <h4>Прошу засчитать рез-ты ЕГЭ</h4>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="subject[1]">Дисциплина</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="subject[1]">Тип экзамена</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="points[1]">Баллы</label>                                            
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="year[1]">Год</label>                                            
+                                    </div>
+                                </div>
+                                
+                                <div id="examfield">
+                                {% for item in data.exams %}
+                                    <div class="row">
+                                    
+                                        <div class="col-md-4">                                            
+                                            <input name="subject[1]" id="subject[1]" class="form-control" placeholder="Математика" value="{{item.exam_subjects}}">
+                                        </div>
+                                        <div class="col-md-4">                                            
+                                            <input name="subject[1]" id="subject[1]" class="form-control" placeholder="Математика" value="{{item.exam_examType}}">
+                                        </div>
+                                        <div class="col-md-2">                                            
+                                            <input name="points[1]" id="points[1]" class="form-control"     placeholder="100"value="{{item.points}}">
+                                        </div>
+                                        <div class="col-md-2">                                            
+                                            <input name="year[1]" id="year[1]" class="form-control" placeholder="2015" value="{{item.year}}">
+                                        </div>
+                                        
+                                    </div>
+                                    <p>
+                                {% endfor %}
+                                </div>
+                                                                    
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <a style="" onclick="return deleteField(this)" href="#"><span class="glyphicon glyphicon-minus"></span></a>
+                                            <a style="" onclick="addField()" href="#"><span class="glyphicon glyphicon-plus"></span></a>
+                                        </div>
+                                        
+                                        <div class="col-md-9 ">
+                                            <div class="pull-right">
+                                                <button class="btn btn-primary" type="button" id="examsSave">Сохранить</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <p>
+                                           <h4>Также прошу допустить к вступительным испытаниям по следующим предметам</h4>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row col-md-12">
+                                    <label for="subject[1]">Дисциплина</label>
+                                </div>
+                                {% for item in data.exams %}
+                                    <div class="row">                                            
+                                        <div class="col-md-12">                                                        
+                                            <input name="subject[1]" id="subject[1]" class="form-control" placeholder="Математика" value="{{item.exam_subjects}}">
+                                        </div>
+                                    </div>
+                                    <p>
+                                {% endfor %}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <br>
+                                        <a style="" onclick="return deleteField(this)" href="#"><span class="glyphicon glyphicon-minus"></span></a>
+                                        <a style="" onclick="return addField()" href="#"><span class="glyphicon glyphicon-plus"></span></a>
+                                        </p>
+                                    </div>                                    
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <p>
+                                           <h4>Прошу создать специальные условия при сдаче вступ. исп-й в связи с ограниченными возможностями здоровья</h4>
+                                            <br>
+                                            <input type = "radio" name= "option8" value="a51"{% if not data.privilegies.category %} checked {% endif %}>Нет
+                                            <input type = "radio" name= "option8" value="a52"{% if data.privilegies.category %} checked {% endif %}>Да
+                                        </p>
+                                    </div>
+                                </div>
+                            </div><!-- edn panel body-->
+                        </div><!--end panel-->
+                    </div><!--end col-col-->
+                </div><!--end row-->                
             </div>
         </div>
         <div class="tab-pane" id="tab6">

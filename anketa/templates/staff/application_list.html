@@ -7,9 +7,6 @@
 
 
 {% block additionalcss %}
-<!--link href="{% static "anketa/select2-3.5.4/select2.css" %}" rel="stylesheet"-->
-<!--link href="{% static "anketa/css/bootstrap.css" %}" rel="stylesheet"-->
-<!-- add one of the jQWidgets styles -->
 <link href="{% static 'anketa/backgrid/backgrid/lib/backgrid.min.css' %}" rel="stylesheet">
 <link href="{% static 'anketa/backgrid/backgrid-paginator.min.css' %}" rel="stylesheet">
 <link href="{% static 'anketa/backgrid/backgrid-filter.min.css' %}" rel="stylesheet">
@@ -18,8 +15,6 @@
 {% endblock %}
 
 {% block scripts %}
-<!--script src="{% static "anketa/select2-3.5.4/select2.min.js" %}"></script>
-<script src="{% static "anketa/select2-3.5.4/ru.js" %}"></script-->
 <script src="{% static "anketa/backgrid/underscore/underscore.js" %}"></script>
 <script src="{% static "anketa/backgrid/backbone/backbone.js" %}"></script>
 <script src="{% static "anketa/backgrid/backbone.paginator.min.js" %}"></script>
@@ -32,7 +27,6 @@
 
 <script type="text/javascript">
 		$(document).ready(function () {
-
 
 			var data = [{% for item in data.applications %}{"url":"{% url 'staff:application_review' item.app.id %}","fullname": "{{ item.app.abiturient.fullname }}", "edu_form": "{% if item.prof.0.profile.eduform == 'О' %}Очная{% endif %}{% if item.prof.0.profile.eduform == 'З' %}Заочная{% endif %}{% if item.prof.0.profile.eduform == 'ОЗ' %}Очно-заочная{% endif %}","date":"{{item.app.date}}","edu_prog":"{{ item.prof.0.profile.profile.edu_prog.name }} {{item.prof.0.profile.profile.edu_prog.qualification.value}}","edu_prof":"{{item.prof.0.profile.profile.name}}","points":{{item.app.points}},"appState":"{{item.app.appState.value}}"},{% endfor %}];
 
@@ -65,11 +59,6 @@
 				editable: false,
 				cell: MyUriCell
 			}, {
-				name: "edu_form",
-				label: "Форма обучения",				
-				cell: "string", 
-				editable: false
-			}, {
 				editable: false,
 				name: "date",
 				label: "Дата",
@@ -84,6 +73,11 @@
 				name: "edu_prof",
 				label: "Профиль",
 				cell: "string"
+			}, {
+				editable: false,
+				name: "edu_form",
+				label: "Форма обучения",				
+				cell: "string"				
 			}, {
 				editable: false,
 				name: "points",
@@ -107,20 +101,17 @@
 				className: "backgrid table table-bordered table-hover"
 			});
 			// Render the grid and attach the root to your HTML document
-			var $example1 = $("#example-1-result");
-			$example1.append(grid.render().el);
+			var $backgrid = $("#backgrid");
+			$backgrid.append(grid.render().el);
 
 			var paginator = new Backgrid.Extension.Paginator({				
 				collection: apps,
 				goBackFirsstOnSort: false
 			});
 			// Render the paginator
-			$example1.after(paginator.render().el);
+			$backgrid.after(paginator.render().el);
 
 			apps.fetch({reset: true});
-
-			//$(".backgrid").attr("class","backgrid table table-bordered table-hover");
-
 
 		});
 		function advanced_search(){
@@ -207,13 +198,15 @@
 					<div class="col-md-3">
 						<div class="row">
 							<div class="col-md-4">
-								<button type="submit" class="btn btn-warning btn-block" name="cancel" >Сбросить</button>
+								<!--button type="submit" class="btn btn-warning " name="cancel" >Сбросить</button-->
+								<input type="submit" class="btn btn-default btn-block" name="cancel" value="Сбросить"/>
 							</div>
 							<div class="col-md-4">
-								<button type="submit" class="btn btn-primary btn-block" name="apply" >Применить</button>
+								<!--button type="submit" class="btn btn-primary " name="apply" >Применить</button-->
+								<input type="submit" class="btn btn-default btn-block" name="apply" value="Применить"/>
 							</div>
 							<div class="col-md-4">
-								<input type="button" class="btn btn-default btn-block" id="advanced_button" onClick="advanced_search()" value="+"/>
+								<input type="button" class="btn btn-default btn-block " id="advanced_button" onClick="advanced_search()" value="+"/>
 							</div>
 						</div>
 					</div>				
@@ -242,28 +235,10 @@
 		</div><!--end panel-->
 	</div>
 	
-	<div class="col-xs-12 col-sm-12 col-md-12">
-		<!--div id="grid">
-		</div>
-		<div id="eventslog" style="margin-top: 30px;">
-			<div style="width: 200px; float: left; margin-right: 10px;">
-				<input class="btn btn-default"  value="Удалить фильтры" id="clearfilteringbutton" type="button"  />
-				<div style="margin-top: 10px;" id='filterbackground'>Подсветить фон</div>
-				<div style="margin-top: 10px;" id='filtericons'>Показать все иконки</div>
-			</div>
-			<div style="float: left;">
-				Event Log:
-				<div style="border: none;" id="events">
-				</div>
-			</div>
-		</div-->
-		
-				<div id="example-1-result" style="height:100%;" class="backgrid-container">			
-				</div>
-			
-		
+	<div class="col-xs-12 col-sm-12 col-md-12">		
+		<div id="backgrid" style="height:100%;" class="backgrid-container">			
+		</div>		
 	</div>
-
-	</form>
+</form>
 {% endblock %}
 

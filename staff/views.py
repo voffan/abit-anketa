@@ -487,7 +487,9 @@ def Application_review (request, application_id):
 	Data['contacts'] = Contacts.objects.filter(person_id=application.abiturient.id)	
 	Data['address'] = Address.objects.filter(pk=application_id)
 	Data['education_prog'] = application_profile
-	Data['exams'] = Exams.objects.filter(pk=application_id)
+	Data['exams'] = Exams.objects.filter(abiturient__id=application.abiturient.id)
+	Data['exam_type'] = AttrValue.objects.filter(attribute__name__icontains=u'Тип экзамена')
+	Data['exam_subjects'] = AttrValue.objects.filter(attribute__name__icontains=u'Дисциплина')
 	Data['privilegies'] = Privilegies.objects.filter(pk=application_id)
 	Data['depachieves'] = DepAchieves.objects.filter(pk=application_id)
 	if hasattr(application.abiturient, 'milit'):
@@ -942,6 +944,37 @@ def Wiz_cont_apply(request):
 		result['error_message'] = str(e)	
 	return HttpResponse(json.dumps(result), content_type="application/json")
 	#attri_bute = Attribute(name=values['attr_name'],type_id=values['attrtype'])
+
+def Add_exam_to_person(request):
+	result={'result':"success"}
+	if request.method =='POST':
+		try:
+			abit=Abiturient.objects.get(id=request.POST.get('wiz_cont_apply_name',''))
+			examsList = request.POST.getlist('subjectExam')
+			examType = request.POST.getlist('ExamType')
+			examPoints = request.POST.getlist('pointsExam')
+			examYear = request.POST.getlist('yearExam')
+			print(examsList)
+			
+			
+			for i in range(0,len(examsList)):				
+				exam = Exams()
+				exam.abiturient = abit
+				exam.exam_subjects = AttrValue.objects.filter(value__icontains=examsList[i].strip('Дисциплина ')).first()
+				exam.exam_examType = AttrValue.objects.filter(value__icontains=examType[i].strip('Тип экзамена ')).first()
+				exam.points = examPoints[i]
+				exam.year = examYear[i]
+				exam.save()
+		
+		except Exception as e:
+					result['result']=str(e)
+		else:
+			pass
+		finally:
+			pass
+	
+	
+	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def AddDataToPerson(request):
 	result="success"
