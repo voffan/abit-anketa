@@ -326,10 +326,11 @@ def Application_list (request):
 		if 'profil' in request.GET and int(request.GET['profil'])>0:
 			selectprof = request.GET['profil']
 			applications = applications.filter(applicationprofiles__profile__profile__id=selectprof)
-			if 'forma' not in request.POST:
+			if 'forma' not in request.GET:
 				appProfile = appProfile.filter(profile__profile__id = selectprof)
 			else:
-				appProfile = appProfile.filter(profile__profile__id=selectprof, profile__profile__eduform=EduForm[int(request.GET['forma'])-2])
+				applications = applications.filter(applicationprofiles__profile__profile__id=selectprof, applicationprofiles__profile__eduform=EduForm[int(request.GET['forma'])-2][0])
+				appProfile = appProfile.filter(profile__profile__id=selectprof, profile__eduform=EduForm[int(request.GET['forma'])-2][0])
 				filters['forma'] = selectform
 			filters['profil'] = int(selectprof)
 
