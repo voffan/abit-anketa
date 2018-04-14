@@ -239,10 +239,10 @@ def Employee_Useraccount(request):
 
 
 @transaction.atomic
-def save_exams(ids, points):
-	for i in range(len(ids)):
-		exam = Exams.objects.get(pk=ids[i])
-		exam.points = points[i]
+def save_exams(exam_data):
+	exams = Exams.objects.filter(pk__in=exam_data.keys())
+	for exam in exams:
+		exam.points = exam_data[exam.id]
 		exam.save()
 
 @login_required(login_url = '/auth')
@@ -251,7 +251,10 @@ def Exam_list(request):
 	data={}
 	filters={}
 	subjects = AttrValue.objects.filter(attribute__name=u'Дисциплина')
-	exams = Exams.objects.filter(exam_examType__value=u'Вступительный')
+	year=datetime.datetime.strftime(datetime.datetime.today(),"%Y")
+	if 'year' in request.POST:
+		year = request.POST['year']
+	exams = Exams.objects.filter(exam_examType__value=u'Вступительный', year=year)
 	select_subject = '0'
 	fname ='0'
 
@@ -271,7 +274,7 @@ def Exam_list(request):
 	if 'save' in request.POST:
 		exams_id = request.POST.getlist('exam_id')
 		exams_points = request.POST.getlist('points')
-		save_exams(exams_id, exams_points)
+		save_exams(dict(zip(exams_id, exams_points)))
 
 	data['subjects'] = subjects
 	data['exams'] = exams
