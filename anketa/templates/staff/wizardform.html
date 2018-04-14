@@ -104,6 +104,8 @@
     {% endif %}
     });
 </script>
+
+
 <script>
     $(document).on("click","button[id='examsSave']", function()
         {
@@ -139,9 +141,7 @@
             var newRow = $('<div class="row" id="newExam"><div class="col-md-4"><select name="subjectExam" id="subjectExam" class="form-control">{% for item in data.exam_subjects %} <option value="{{item}}">{{item}}</option>{% endfor %}</select></div><div class="col-md-4"><select name="ExamType" id="ExamType" class="form-control">{% for item in data.exam_type %} <option value="{{item}}">{{item}}</option>{% endfor %}</select></div><div class="col-md-2"><input name="pointsExam" id="pointsExam" class="form-control"     placeholder="100"value="{{item.points}}"></div><div class="col-md-2"><input name="yearExam" id="yearExam" class="form-control" placeholder="2015" value="{{item.year}}"></div></div><p>');
             $("#examfield").append(newRow);
             
-        };
-
-    
+        };    
 
 </script>
 
@@ -706,16 +706,16 @@
                                     <div class="row">
                                     
                                         <div class="col-md-4">                                            
-                                            <input name="subject[1]" id="subject[1]" class="form-control" placeholder="Математика" value="{{item.exam_subjects}}">
+                                            <input name="subject[1]" id="subject[1]" class="form-control" placeholder="Математика" value="{{item.exam_subjects|cut:'Дисциплина'}}" readonly>
                                         </div>
                                         <div class="col-md-4">                                            
-                                            <input name="subject[1]" id="subject[1]" class="form-control" placeholder="Математика" value="{{item.exam_examType}}">
+                                            <input name="subject[1]" id="subject[1]" class="form-control" placeholder="Математика" value="{{item.exam_examType|cut:'Тип экзамена'}}" readonly>
                                         </div>
                                         <div class="col-md-2">                                            
-                                            <input name="points[1]" id="points[1]" class="form-control"     placeholder="100"value="{{item.points}}">
+                                            <input name="points[1]" id="points[1]" class="form-control" placeholder="100"value="{{item.points}}">
                                         </div>
                                         <div class="col-md-2">                                            
-                                            <input name="year[1]" id="year[1]" class="form-control" placeholder="2015" value="{{item.year}}">
+                                            <input name="year[1]" id="year[1]" class="form-control" placeholder="2015" value="{{item.year}}" readonly>
                                         </div>
                                         
                                     </div>
@@ -724,12 +724,12 @@
                                 </div>
                                                                     
                                     <div class="row">
-                                        <div class="col-md-3">
+                                        <!--div class="col-md-3">
                                             <a style="" onclick="return deleteField(this)" href="#"><span class="glyphicon glyphicon-minus"></span></a>
                                             <a style="" onclick="addField()" href="#"><span class="glyphicon glyphicon-plus"></span></a>
-                                        </div>
+                                        </div-->
                                         
-                                        <div class="col-md-9 ">
+                                        <div class="col-md-12 ">
                                             <div class="pull-right">
                                                 <button class="btn btn-primary" type="button" id="examsSave">Сохранить</button>
                                             </div>
@@ -747,29 +747,31 @@
                                     <label for="subject[1]">Дисциплина</label>
                                 </div>
                                 {% for item in data.exams %}
+                                    {% if item.exam_examType.value == 'Вступительный' %}
                                     <div class="row">                                            
                                         <div class="col-md-12">                                                        
-                                            <input name="subject[1]" id="subject[1]" class="form-control" placeholder="Математика" value="{{item.exam_subjects}}">
+                                            <input name="subject[1]" id="subject[1]" class="form-control" placeholder="Математика" value="{{item.exam_subjects|cut:'Дисциплина' }}" readonly>
                                         </div>
                                     </div>
                                     <p>
+                                    {% endif %}
                                 {% endfor %}
-                                <div class="row">
+                                <!--div class="row">
                                     <div class="col-md-12">
                                         <br>
                                         <a style="" onclick="return deleteField(this)" href="#"><span class="glyphicon glyphicon-minus"></span></a>
                                         <a style="" onclick="return addField()" href="#"><span class="glyphicon glyphicon-plus"></span></a>
                                         </p>
                                     </div>                                    
-                                </div>
+                                </div-->
 
                                 <div class="row">
                                     <div class="col-md-12">
                                         <p>
                                            <h4>Прошу создать специальные условия при сдаче вступ. исп-й в связи с ограниченными возможностями здоровья</h4>
                                             <br>
-                                            <input type = "radio" name= "option8" value="a51"{% if not data.privilegies.category %} checked {% endif %}>Нет
-                                            <input type = "radio" name= "option8" value="a52"{% if data.privilegies.category %} checked {% endif %}>Да
+                                            <input type = "radio" name= "option8" value="a51"{% if not data.privilegies.category %} checked {% endif %} disabled>Нет
+                                            <input type = "radio" name= "option8" value="a52"{% if data.privilegies.category %} checked {% endif %} disabled>Да
                                         </p>
                                     </div>
                                 </div>
