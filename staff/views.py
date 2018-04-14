@@ -10,6 +10,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import transaction
 from django import template
 
+
 import json
 from datetime import date
 import datetime
@@ -236,6 +237,48 @@ def Employee_Useraccount(request):
 	context.update(csrf(request))
 	return render(request,'staff\employee_acc.html',context)
 
+
+@transaction.atomic
+def save_exams(ids, points):
+	for i in range(len(ids)):
+		exam = Exams.objects.get(pk=ids[i])
+		exam.points = points[i]
+		exam.save()
+
+@login_required(login_url = '/auth')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
+def Exam_list(request):
+	data={}
+	filters={}
+	subjects = AttrValue.objects.filter(attribute__name=u'Дисциплина')
+	exams = Exams.objects.filter(exam_examType__value=u'Вступительный')
+	select_subject = '0'
+	fname ='0'
+
+	if 'apply' in request.POST and int(request.POST['subject'])>0:
+		select_subject = request.POST['subject']
+		exams = exams.filter(exam_subjects__id=select_subject)
+		filters['subject_type']=int(select_subject)
+
+	if 'fio' in request.POST and len(request.POST['fio'])>0:
+		fname = request.POST['fio']
+		exams = exams.filter(abiturient__fullname__icontains=fname)
+		filters['fio'] = fname
+
+	if 'cancel' in request.POST:
+		return HttpResponseRedirect(reverse('staff:exam_list'))
+
+	if 'save' in request.POST:
+		exams_id = request.POST.getlist('exam_id')
+		exams_points = request.POST.getlist('points')
+		save_exams(exams_id, exams_points)
+
+	data['subjects'] = subjects
+	data['exams'] = exams
+	data['filters'] = filters
+	context = {'data':data}
+	context.update(csrf(request))
+	return render(request, 'staff\Exam_list.html', context)
 
 @login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
@@ -487,7 +530,7 @@ def Application_review (request, application_id):
 	Data['contacts'] = Contacts.objects.filter(person_id=application.abiturient.id)	
 	Data['address'] = Address.objects.filter(pk=application_id)
 	Data['education_prog'] = application_profile
-	Data['exams'] = Exams.objects.filter(abiturient__id=application.abiturient.id)
+	Data['exams'] = Exams.objects.filter(abiturient__id=application.abiturient.id)#, exam_examType__value=u'ЕГЭ'	
 	Data['exam_type'] = AttrValue.objects.filter(attribute__name__icontains=u'Тип экзамена')
 	Data['exam_subjects'] = AttrValue.objects.filter(attribute__name__icontains=u'Дисциплина')
 	Data['privilegies'] = Privilegies.objects.filter(pk=application_id)
@@ -953,9 +996,7 @@ def Add_exam_to_person(request):
 			examsList = request.POST.getlist('subjectExam')
 			examType = request.POST.getlist('ExamType')
 			examPoints = request.POST.getlist('pointsExam')
-			examYear = request.POST.getlist('yearExam')
-			print(examsList)
-			
+			examYear = request.POST.getlist('yearExam')		
 			
 			for i in range(0,len(examsList)):				
 				exam = Exams()
