@@ -240,33 +240,42 @@ def Employee_Useraccount(request):
 
 @transaction.atomic
 def save_exams(exam_data):
-	exams = Exams.objects.filter(pk__in=exam_data.keys())
+	exams = Exams.objects.filter(pk__in=list(exam_data.keys()))	
 	for exam in exams:
-		exam.points = exam_data[exam.id]
+		exam.points = int(exam_data[str(exam.id)])
 		exam.save()
+		
 
 @login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Exam_list(request):
 	data={}
 	filters={}
-	subjects = AttrValue.objects.filter(attribute__name=u'Дисциплина')
-	year=datetime.datetime.strftime(datetime.datetime.today(),"%Y")
-	if 'year' in request.POST:
-		year = request.POST['year']
-	exams = Exams.objects.filter(exam_examType__value=u'Вступительный', year=year)
-	select_subject = '0'
-	fname ='0'
+	subjects = AttrValue.objects.filter(attribute__name=u'Дисциплина')#spisok disciplin
+	##########vse vstypitel'nie ekzameni dlya poly4eniya vsex godov sda4i############
+	years=[]
+	exams = Exams.objects.filter(exam_examType__value=u'Вступительный')
+	for exam in exams:
+		years.append(exam.year)
+	########################################################################	
+	year=datetime.datetime.strftime(datetime.datetime.today(),"%Y") #tekyshiy god
+	filters['years'] = int(year)
+	if 'years' in request.POST and int(request.POST['years'])>0:
+		year = request.POST['years']
+		exams = exams.filter(year=request.POST['years'])
+		filters['years'] = int(request.POST['years'])
 
-	if 'apply' in request.POST and int(request.POST['subject'])>0:
-		select_subject = request.POST['subject']
-		exams = exams.filter(exam_subjects__id=select_subject)
-		filters['subject_type']=int(select_subject)
+	exams = Exams.objects.filter(exam_examType__value=u'Вступительный', year=year)#spisok ekzamenov na tekyshiy god	
 
-	if 'fio' in request.POST and len(request.POST['fio'])>0:
-		fname = request.POST['fio']
-		exams = exams.filter(abiturient__fullname__icontains=fname)
-		filters['fio'] = fname
+	if 'apply' in request.POST:
+
+		if 'subject' in request.POST and int(request.POST['subject'])>0:
+			exams = exams.filter(exam_subjects__id=request.POST['subject'])
+			filters['subject_type']=int(request.POST['subject'])
+	
+		if 'fio' in request.POST and len(request.POST['fio'])>0:
+			exams = exams.filter(abiturient__fullname__icontains=request.POST['fio'])
+			filters['fio'] = request.POST['fio']
 
 	if 'cancel' in request.POST:
 		return HttpResponseRedirect(reverse('staff:exam_list'))
@@ -279,6 +288,7 @@ def Exam_list(request):
 	data['subjects'] = subjects
 	data['exams'] = exams
 	data['filters'] = filters
+	data['years'] = list(set(years))
 	context = {'data':data}
 	context.update(csrf(request))
 	return render(request, 'staff\Exam_list.html', context)
