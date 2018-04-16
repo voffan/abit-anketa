@@ -1,0 +1,5 @@
+Django==1.7.11
+mysql-connector==2.1.4
+numpy==1.13.1
+python-dateutil==2.6.1
+pytz==2017.3

@@ -6,5 +6,7 @@ __pycache__
 /xx04052016.json
 /11052016.json
 *.rqb
+venv
+venv_e
 .idea
 .vscode

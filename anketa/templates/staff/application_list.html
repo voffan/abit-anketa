@@ -18,26 +18,37 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		$('#napravlenie').select2({
-							language:"ru"
-					});
+			language:"ru",
+		});
 		$('#iscopy').select2({
-							language:"ru"
-					});
+			language:"ru",
+		});
 		$('#forma').select2({
-							language:"ru"
-					});
+			language:"ru"
+		});
 		$('#doctype').select2({
-							language:"ru"
-					});
+			language:"ru"
+		});
 		$('#profil').select2({
-							language:"ru"
-					});
+			language:"ru"
+		});
 		$('#status').select2({
-							language:"ru"
-					});
-		
+			language:"ru"
+		});
 		
 	})
+
+	function advanced_search(){
+		console.log("init");
+		if($('#advanced_row').attr('class')==('row hidden')){
+			$('#advanced_row').attr('class','row');
+			return;
+		}			
+		if($('#advanced_row').attr('class')==('row')){
+			$('#advanced_row').attr('class','row hidden');
+			return;
+		}			
+	};
 </script>
 {% endblock %}
 
@@ -46,110 +57,143 @@
 
 {% block content %}
 <form action="{% url 'staff:application_list' %}"  method="GET">
-	
-	<table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-striped table-hover">
-		<thead>
-		<tr class="info">
-			<th>№</th>
-			<th>Фамилия Имя Отчество</th>
-			<th>Форма Обучения</th>
-			<th>Дата Подачи Документов</th>
-			<th>Тип документа</th>
-			<th>Копия/Оригинал</th>
-			<th>Направление</th>
-			<th>Профиль</th>
-			<th>Сумма баллов</th>
-			<th>Статус</th>
-			<th>Номер заявления</th>
-		</tr>
-		</thead>
-		<thead>
-		<tr>
-		<th st-sort="#"></th>
-		<th st-sort="FIO">
-			<input name="fio" pattern="^[А-Яа-яЁё\s]+$" class="form-control" placeholder="Фамилия Имя Отчество" value="{{ filters.fio }}"/>
-		</th>
-		<th st-sort="Form">
-			<select class="form-control" name="forma" id="forma" placeholder="Форма Обучения">
-				<option {% if filters.forma == "1" %} selected {% endif %} value="1">Все</option>
-				<option {% if filters.forma == "2" %} selected {% endif %} value="2">Очная</option>
-				<option {% if filters.forma == "3" %} selected {% endif %} value="3">Заочная</option>                
-				<option {% if filters.forma == "4" %} selected {% endif %} value="4">Очно-Заочная</option>
-			</select>
-		</th>
-		<th st-sort="Date" width="8%">          
-				<input type="date" name = "datedoc1" id ="datedoc>" value="{{filters.datedoc1}}" class="form-control">           
-				<input type="date" name = "datedoc2" id ="datedoc<" value="{{filters.datedoc2}}" class="form-control">
-		</th>
-		<th st-sort="Doc_Type">        
-			<select class="form-control" name="doctype" id="doctype" placeholder="Тип документа">
-			<option {% if filters.doctype == "0" %} selected {% endif %} value="0">Все</option>
-			{% for item in docType %}
-			<option {% if filters.doctype == item.id %} selected {% endif %} value="{{ item.id }}">{{item.value}}</option>
-			{% endfor %}            
-			</select>
-		</th>
-		<th st-sort="isCopy" width="10%">
-			<select class="form-control" name="iscopy" id="iscopy" placeholder="Копия/Оригинал">
-				<option {% if filters.iscopy == "0" %} selected {% endif %} value="0">Все</option>
-				<option {% if filters.iscopy == "1" %} selected {% endif %} value="1">Копия</option>
-				<option {% if filters.iscopy == "2" %} selected {% endif %} value="2">Оригинал</option>
-			</select>          
-		</th>
-		<th st-sort="Napravlenie">
-			<select class="form-control" name="napravlenie" id="napravlenie" placeholder="Направление">
-				<option {% if filters.napravlenie == "0" %} selected {% endif %} value="0">Все</option>            
-				{% for item in Profile %}
-					<option {% if filters.napravlenie == item.id %} selected {% endif %} value="{{ item.id }}">{{item.name}}</option>
-				{% endfor %}           
-			</select>         
-		</th>
-		<th st-sort="Profil">
-			<select class="form-control" name="profil" id="profil" placeholder="Профиль">
-			<option {% if filters.profil == "0" %} selected {% endif %} value="0">Все</option>            
-			{% for item in profill %}
-			<option {% if filters.profil == item.id %} selected {% endif %} value="{{ item.id }}">{{item.value}}</option>
-			{% endfor %}           
-			</select>         
-		</th>
-		<th st-sort="bali" width="8%">
-					<input pattern="[0-9]{,3}"<--kak pattern propyskaet bykvi?~_~ type="number" name="balli1" class="form-control" placeholder=">123" value="{{ filters.balli1 }}"/>
-					<input pattern="[0-9]{,3}" type="number" <--kak type otmenyaet pattern?~_~ name="balli2" class="form-control" placeholder="<123" value="{{ filters.balli2 }}"/>
-		</th>
-		<th st-sort="state">
-			<select class="form-control" name="status" id="status">
-				<option {% if filters.status == "0" %} selected {% endif %} value="0">Все</option>
-				{% for item in Application %}
-				<option {% if filters.status == item.id %} selected {% endif %} value="{{ item.id }}">{{item.value}}</option>
-				{% endfor %}                
-			</select>
-		</th>
-		<th>
-			<input type="number" name="appNumb" class="form-control" placeholder="№" value="{% if error_message %} {{ error_message }}{% else %}{{ filters.appNumb }}{% endif %}"/>
-			<button type="submit" class="btn btn-primary" name="cancel" >Сбросить фильтр</button>
-			<button type="submit" class="btn btn-primary" name="apply" >Применить фильтр</button>
-		</th>
-		</tr>
-		</thead>
-		<tbody>
-			{% for item in applications %}
-			<tr ng-repeat="row in displayedCollection">
-				<td class="rowl">{{ forloop.counter }}</td>
-				<td class="rowl"><a href="{% url 'staff:application_review' item.app.id %}">{{ item.app.abiturient.fullname }}</a></td>
-				<td class="rowl">{% if item.prof.0.profile.eduform == 'О'%}Очная{% endif %}{% if item.prof.0.profile.eduform == 'З'%}Заочная{%endif%}{% if item.prof.0.profile.eduform == 'ОЗ'%}Очно-Заочная{% endif %}</td>
-				<td class="rowl">{{ item.app.date }}</td>
-				<td class="rowl">{{ item.doc.docType.value }}</td>
-				<td class="rowl">{% if item.doc.isCopy %} Оригинал {% endif %}{% if not item.doc.isCopy %} Копия {% endif %}</td>
-				<td class="rowl">{{ item.prof.0.profile.profile.name }}</td>
-				<td class="rowl">{{ item.prof.0.profile.profile.edu_prog.qualification.value }}</td>
-				<td class="rowl">{{ item.app.points }}</td>
-				<td class="rowl">{{ item.app.appState.value }}</td>
-				<td class="rowl"><div class="col-md-offset-5"><input type="checkbox" name="selected"/></div></td>
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table> 
-	
+	<div class="col-xs-12 col-lg-10 col-lg-offset-1">
+		<div class="panel panel-default">			
+			<div class="panel-body">
+		    	<div class="row">
+		    		<div class="col-md-3">
+		    			<select class="form-control" name="napravlenie" id="napravlenie" placeholder="Направление">
+							<option {% if filters.napravlenie == "0" %} selected {% endif %} value="0">Направление/Специальность</option>      
+							{% for item in edu_prog %}
+							<option {% if filters.napravlenie == item.id %} selected {% endif %} value="{{ item.id }}">{{item.name}} {{item.qualification.value}}</option>
+							{% endfor %}           
+						</select>
+		    		</div>
+					<div class="col-md-3">
+						<select class="form-control" name="profil" id="profil" placeholder="Профиль">
+							<option {% if filters.profil == "0" %} selected {% endif %} value="0">Профиль</option>       
+							{% for item in profill %}
+							<option {% if filters.profil == item.id %} selected {% endif %} value="{{ item.id }}">{{item.name}} {{item.edu_prog.qualification.value}}</option>
+							{% endfor %}           
+						</select>
+					</div>
+					<div class="col-md-3">
+						<select class="form-control" name="forma" id="forma" placeholder="Форма Обучения">
+							<option {% if filters.forma == "1" %} selected {% endif %} value="1">Форма Обучения</option>
+							<option {% if filters.forma == "2" %} selected {% endif %} value="2">Очная</option>
+							<option {% if filters.forma == "3" %} selected {% endif %} value="3">Заочная</option>        
+							<option {% if filters.forma == "4" %} selected {% endif %} value="4">Очно-Заочная</option>
+						</select>
+					</div>
+					<div class="col-md-3">
+						<select class="form-control" name="status" id="status">
+							<option {% if filters.status == "0" %} selected {% endif %} value="0">Статус заявления</option>
+							{% for item in Application %}
+							<option {% if filters.status == item.id %} selected {% endif %} value="{{ item.id }}">{{item.value}}</option>
+							{% endfor %}                
+						</select>
+					</div>					
+		    	</div><!--end row-->
+		    	<div class="row" style="margin-top: 10px;">
+		    		<div class="col-md-3">
+		    			<input name="fio" pattern="^[А-Яа-яЁё\s]+$" class="form-control" placeholder="Фамилия Имя Отчество" value="{{ filters.fio }}"/>
+		    		</div>
+		    		<div class="col-md-3">
+		    			<div class="row">
+				    		<div class="col-md-6">
+								<input pattern="[0-9]{,3}"<--kak pattern propyskaet bykvi?~_~ type="number" name="balli1" id="digits-from" class="form-control" placeholder=">123" value="{{ filters.balli1 }}"/>
+								</div>
+							<div class="col-md-6">
+								<input pattern="[0-9]{,3}" type="number" <--kak type otmenyaet pattern?~_~ name="balli2" id="digits-to" class="form-control" placeholder="<123" value="{{ filters.balli2 }}"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="row">
+							<div class="col-md-6">
+								<input type="date" name = "datedoc1" id ="datedoc>" value="{{filters.datedoc1}}" class="form-control">
+							</div>
+							<div class="col-md-6">          
+								<input type="date" name = "datedoc2" id ="datedoc<" value="{{filters.datedoc2}}" class="form-control">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-2">
+						<div class="row">
+							<div class="col-md-6">
+								<button type="submit" class="btn btn-warning" name="cancel" >Сбросить</button>
+							</div>
+							<div class="col-md-6">
+								<button type="submit" class="btn btn-primary" name="apply" >Применить</button>
+							</div>	
+						</div>
+					</div>
+					<div class="col-md-1">
+						<div  >
+							<div >
+		    					<input type="button" class="btn btn-default" style="margin-left:28px;" id="advanced_button" onClick="advanced_search()" value="+"/>
+							</div>
+						</div>
+		    		</div>
+		    	</div><!--end row-->
+		    	<div class="row hidden" id="advanced_row" name="advanced_row" style="margin-top: 10px;">
+	    			<div class="col-md-3">
+	    				<input type="text" name="birthplace" id="birthplace" value="{{filters.birthplace}}" class="form-control" placeholder="Место рождения">
+	    			</div>
+	    			<div class="col-md-3">
+	    				<select class="form-control" name="doctype" id="doctype" >
+							<option {% if filters.doctype == "0" %} selected {% endif %} value="0">Тип документа</option>
+							{% for item in docType %}
+							<option {% if filters.doctype == item.id %} selected {% endif %} value="{{ item.id }}">{{item.value}}</option>
+							{% endfor %} 
+						</select>
+	    			</div>
+	    			<div class="col-md-3">
+
+	    			</div>
+	    			<div class="col-md-3">
+
+	    			</div>		    		
+		    	</div>
+			</div><!--end panel body-->
+		</div><!--end panel-->
+	</div>
+	<div class="col-xs-12 col-lg-10 col-lg-offset-1">
+		<table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-striped table-hover">
+			<thead>
+				<tr class="info">
+					<th>№</th>
+					<th>Фамилия Имя Отчество</th>
+					<th>Форма Обучения</th>
+					<th>Дата Подачи Документов</th>
+					<!--th>Тип документа</th>
+					<th>Копия/Оригинал</th-->
+					<th>Направление</th>
+					<th>Профиль</th>
+					<th>Сумма баллов</th>
+					<th>Статус</th>
+					<th>Выбрать</th>
+				</tr>
+			</thead>		
+			<tbody>
+				{% for item in applications %}
+				<tr ng-repeat="row in displayedCollection">
+					<td class="rowl">{{ forloop.counter }}</td>
+					<td class="rowl"><a href="{% url 'staff:application_review' item.app.id %}">{{ item.app.abiturient.fullname }}</a></td>
+					<td class="rowl">{% if item.prof.0.profile.eduform == 'О'%}Очная{% endif %}{% if item.prof.0.profile.eduform == 'З'%}Заочная{%endif%}{% if item.prof.0.profile.eduform == 'ОЗ'%}Очно-Заочная{% endif %}</td>
+					<td class="rowl">{{ item.app.date }}</td>
+					<!--td class="rowl">{{ item.doc.docType.value }}</td>
+					<td class="rowl">{% if item.doc.isCopy %} Оригинал {% endif %}{% if not item.doc.isCopy %} Копия {% endif %}</td-->
+					<td class="rowl">{{ item.prof.0.profile.profile.edu_prog.name }} {{item.prof.0.profile.profile.edu_prog.qualification.value}}</td>
+					<td class="rowl">{{ item.prof.0.profile.profile.name }}</td>
+					<td class="rowl">{{ item.app.points }}</td>
+					<td class="rowl">{{ item.app.appState.value }}</td>
+					<td class="rowl"><div class="col-md-offset-5"><input type="checkbox" name="selected"/></div></td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table> 
+	</div>
 	<div class="col-xs-5 col-sm-5 col-md-5 col-md-offset-4">
 		<div class="row">
 			<table class="table" >

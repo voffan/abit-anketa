@@ -44,12 +44,27 @@
 		{% endif %}
 		var maxAddExams = 15;
 
+		{% if privileges %}
+			var privrows={{privileges|length}}
+		{% else %}
+		var privrows = 0;
+		{% endif %}
+		var maxPriv = 15;
+
+        {% if achievement %}
+			var achievrows={{achievement|length}}
+		{% else %}
+		var achievrows = 0;
+		{% endif %}
+		var maxAchiev = 15;
+
 		{% if contacts %}
 			var contactsrow = {{contacts|length}};
 		{% else %}
 		var contactsrow = 1;
 		{% endif %}
 		var maxContacts = 10;
+
 		{% if relations %}
 			var relationsrow = {{relations|length}};
 		{% else %}
@@ -75,33 +90,54 @@
 			}
 		});
 
-
+		function GetTabFormData(){
+		    switch(parseInt($('.myTabs .active').prop('id'))) {
+				case 1:
+                	return $('#abitdata');
+                	break;
+				case 2:
+				    return $('#documents');
+                	break;
+				case 3:
+					return null;//$('#contacts');
+                	break;
+				case 4:
+					return $('#exams');
+                	break;
+				case 5:
+					return $('#privileges');
+                	break;
+				case 6:
+				    return $('#other');
+				    break;
+            }
+		}
 		$(document).on("click","button[id*='save']", function()
 		{
 			$("#currentPage").val(($(this).attr('id').slice('4')));
-			$.ajax({
-				url:{% url 'add_data_to_person' %},
-				type:$("#persondata").attr('method'),
-				data:$("#persondata").serialize(),
-				dataProcess:true,
-				timeout:500,
-				success:function(data)
-				{
-					if (data['result']==="success")
+				$.ajax({
+					url:{% url 'add_data_to_person' %},
+					type:GetTabFormData().attr('method'),
+					data:GetTabFormData().serialize(),
+					dataProcess:true,
+					timeout:500,
+					success:function(data)
 					{
-						$.notify("Сохранено.", "success");
-					}
-					else
+						if (data['result']==="success")
+						{
+							$.notify("Сохранено.", "success");
+						}
+						else
+						{
+							$.notify("Что-то пошло не так :(", "error");
+						}
+						console.log('Result is loaded!');
+					},
+					error:function()
 					{
-						$.notify("Что-то пошло не так :(", "error");
+						$.notify("Отсутствует соединение :(", "error");
 					}
-					console.log('Result is loaded!');
-				},
-				error:function()
-				{
-					$.notify("Отсутствует соединение :(", "error");
-				}
-			});
+				});
 		});
 		function initSelect2(object){
 			object.select2({
@@ -172,30 +208,7 @@
 				$("#armyRow").hide();
 			}
 		});
-		$('input[type=radio][name=privileges]').change(function()
-		{
-			if (this.value == "yes")
-			{
-				$("#privcatrow").show();
-				$("#privtyperow").show();
-			}
-			else
-			{
-				$("#privcatrow").hide();
-				$("#privtyperow").hide();
-			}
-		});
-		$('input[type=radio][name=persach]').change(function()
-		{
-			if (this.value == "yes")
-			{
-				$("#achRow").show();
-			}
-			else
-			{
-				$("#achRow").hide();
-			}
-		});
+        {% include 'anketa/privileges.js' %}
 		$("#adrstype").change(function(){
 		$.ajax({
 			url:{% url 'getaddress' %},
@@ -418,86 +431,6 @@
 		{% endfor %}
 		$("#additionalExams").select2('data',addExamsList);
 	{% endif %}
-	$('#privcat').select2({
-		language:"ru",
-		minimumInputLength: 1,
-		ajax:{
-			url:{% url 'preveduname' %},
-			dataType: 'json',
-			delay: 250,
-			data:function(params){
-				return{
-					query: params
-				};
-			},
-			processResults: function (data, page) {
-				return {
-					results: data
-				};
-			},
-			cache: true
-		}
-	});
-	$('#privtype').select2({
-		language:"ru",
-		minimumInputLength: 1,
-		ajax:{
-			url:{% url 'preveduname' %},
-			dataType: 'json',
-			delay: 250,
-			data:function(params){
-				return{
-					query: params
-				};
-			},
-			processResults: function (data, page) {
-				return {
-					results: data
-				};
-			},
-			cache: true
-		}
-	});
-	$('#achievement').select2({
-		language:"ru",
-		minimumInputLength: 1,
-		ajax:{
-			url:{% url 'preveduname' %},
-			dataType: 'json',
-			delay: 250,
-			data:function(params){
-				return{
-					query: params
-				};
-			},
-			processResults: function (data, page) {
-				return {
-					results: data
-				};
-			},
-			cache: true
-		}
-	});
-	$('#achievementDoc').select2({
-		language:"ru",
-		minimumInputLength: 1,
-		ajax:{
-			url:{% url 'preveduname' %},
-			dataType: 'json',
-			delay: 250,
-			data:function(params){
-				return{
-					query: params
-				};
-			},
-			processResults: function (data, page) {
-				return {
-					results: data
-				};
-			},
-			cache: true
-		}
-	});
 	$('#rank').select2({
 		allowClear:true,
 		placeholder: "Рядовой",
@@ -589,19 +522,19 @@ $(document).ready(function(){
 {% endblock %}
 {% block container %}
 {% include '../templates/kladr/kladr.html' %}
-<form id="persondata" name="persondata" class="form-horizontal" role="form" method="post" >
+<!-- <form id="persondata" name="persondata" class="form-horizontal" role="form" method="post" >-->
 {% csrf_token %}
 	<div id="rootwizard" class="col-md-9 col-xs-12 col-sm-12">
 		<div class="navbar">
 			<div class="navbar-inner">
 				<div class="container">
 					<ul class="myTabs" id="myTabs">
-						<li><a href="#tab1" data-toggle="tab">Личные данные</a></li>
-						<li><a href="#tab2" data-toggle="tab">Документы</a></li>
-						<li><a href="#tab3" data-toggle="tab">Контактные данные</a></li>
-						<li><a href="#tab4" data-toggle="tab">Экзамены</a></li>
-						<li><a href="#tab5" data-toggle="tab">Льготы и достижения</a></li>
-						<li><a href="#tab6" data-toggle="tab">Прочее</a></li>
+						<li id="1"><a href="#tab1" data-toggle="tab">Личные данные</a></li>
+						<li id="2"><a href="#tab2" data-toggle="tab">Документы</a></li>
+						<li id="3"><a href="#tab3" data-toggle="tab">Контактные данные</a></li>
+						<li id="4"><a href="#tab4" data-toggle="tab">Экзамены</a></li>
+						<li id="5"><a href="#tab5" data-toggle="tab">Льготы и достижения</a></li>
+						<li id="6"><a href="#tab6" data-toggle="tab">Прочее</a></li>
 					</ul>
 				</div>
 			</div>
@@ -611,338 +544,12 @@ $(document).ready(function(){
 		</div>
 		<input type="hidden" name="currentPage" id="currentPage">
 		<div class="tab-content">
-			<div class="tab-pane" id="tab1">
-				<div class = "container-fluid">
-					<div class = "row">
-						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-							<p>
-								<label for="sname">Фамилия</label>
-								<input type = "text" name= "sname" id = "sname" class = "form-control" placeholder = "Иванов" value="{{ sname }}">
-							</p>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-							<p>
-								<label for="name">Имя</label>
-								<input type = "text" name= "name" id = "name" class = "form-control" placeholder = "Иван" value="{{ fname }}">
-							</p>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-							<p>
-								<label for="mname">Отчество</label>
-								<input type="text" name = "mname" id ="mname" class="form-control" placeholder="Иванович" value="{{ mname }}">
-							</p>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-6 col-sm-5 col-md-4 col-md-offset-2">
-							<p>
-								<label for="birthday">Дата рождения</label>
-								<div class='input-group date' id='birthday'>
-									<input type="text" class="form-control" name="birthday" />
-										<span class="input-group-addon">
-											<span class="glyphicon glyphicon-calendar"></span>
-										</span>
-								</div>
-							</p>
-						</div>
-						<div class ="col-xs-6 col-sm-5 col-md-3">
-							<label for="sex">Пол</label>
-								<p>
-									<input type="radio" name = "sex" value="М" {% if sex == "М" %} checked {% endif %}>Мужской
-									<input type="radio" name = "sex" value="Ж" {% if sex == "Ж" %} checked {% endif %}>Женский
-								</p>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-							<p>
-								<label for="birthplace">Место рождения</label>
-								<input type="text" name = "birthplace" id ="birthplace" class="form-control" placeholder="Татуин" value ="{{ birthplace }}">
-							</p>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-6 col-sm-5 col-md-4 col-md-offset-2">
-							<p>
-								<label for="nation">Национальность(по желанию)</label>
-								<input type="hidden" class="form-control" id ="nation" name="nation">
-							</p>
-						</div>
-						<div class="col-xs-6 col-sm-5 col-md-4">
-							<p>
-								<label for="citizenship">Гражданство</label>
-								<input type="hidden" id="citizenship" name="citizenship" class="form-control"> 
-							</p>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-							<button class="btn btn-primary btn-block" type="button" id="save1">Сохранить</button>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="tab-pane" id="tab2">
-				<div class = "container-fluid">
-					<div class="panel panel-primary">
-						<div class="panel-heading">
-							<h3 class="panel-title">Документ, удостоверяющий личность</h3>
-						</div>
-						<div class="panel-body">
-							<div class = "row">
-								<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-									<p>
-										<label for="doctype">Вид документа, удостоверяющего личность</label>
-										<input type="hidden" id="doctype" name="doctype" class="form-control">
-									</p>
-								</div>
-							</div>
-							<p>
-								<div class = "row">
-									<div class = "col-xs-2 col-sm-2 col-md-2 col-md-offset-2">
-										<label for="serialdoc">Серия</label>
-										<input type = "text" name = "serialdoc" id = "serialdoc" class = "form-control" placeholder="1234" {% if doctype_serial %} value="{{doctype_serial}}" {% endif %}>
-									</div>
-									<div class = "col-xs-2 col-sm-2 col-md-2">
-										<label for="numberdoc">Номер</label>
-										<input type = "text" name = "numberdoc" id = "numberdoc" class = "form-control" placeholder="123456" {% if doctype_number %} value="{{doctype_number}}" {% endif %}>
-									</div>
-									<div class = "col-xs-2 col-sm-2 col-md-4">
-										<label for="datedoc">Дата выдачи</label>
-										<div class='input-group date' id='datedoc'>
-											<input type="text" class="form-control" name="datedoc" />
-												<span class="input-group-addon">
-													<span class="glyphicon glyphicon-calendar"></span>
-												</span>
-										</div>
-									</div>
-								</div>
-							</p>
-							<div class = "row">
-								<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-									<p>
-										<label for="docissuer">Кем выдан</label>
-										<input type="hidden" name= "docissuer" id = "docissuer" class = "form-control" placeholder = "Отделом УФМС по Российской Федерации, г. Якутск">
-									</p>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="panel panel-primary">
-						<div class="panel-heading">
-							<h3 class="panel-title">Документ об образовании</h3>
-						</div>
-						<div class="panel-body">
-							<div class = "row">
-								<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-									<p>
-										<label for="edudoctype">Вид документа об образовании</label>
-										<input type="hidden" id="edudoctype" name="edudoctype" class="form-control">
-									</p>
-								</div>
-							</div>
-							<p>
-								<div class = "row">
-									<div class = "col-xs-6 col-sm-5 col-md-4 col-md-offset-2">
-										<label for="serialedudoc">Серия</label>
-										<input type = "text" name = "serialedudoc" id = "serialedudoc" class = "form-control" placeholder="1234" {% if edudoctype_serial %} value="{{edudoctype_serial}}" {% endif %}>
-									</div>
-									<div class = "col-xs-6 col-sm-5 col-md-4">
-										<label for="numberedudoc">Номер</label>
-										<input type = "text" name = "numberedudoc" id = "numberedudoc" class = "form-control" placeholder="123456" {% if edudoctype_number %} value="{{edudoctype_number}}" {% endif %}>
-									</div>
-								</div>
-							</p>
-							<div class = "row">
-								<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-									<p>
-										<label for="prevedu">Предыдущие образование</label>
-										<p>
-											<input type = "radio" name= "prevedu" id = "prevedu" {% if prevedu == "СОО" %} checked {% endif %} value = "soo">СОО
-											<input type = "radio" name= "prevedu" id = "prevedu" {% if prevedu == "НПО" %} checked {% endif %} value = "npo">НПО
-											<input type = "radio" name= "prevedu" id = "prevedu" {% if prevedu == "СПО" %} checked {% endif %} value = "spo">СПО
-											<input type = "radio" name= "prevedu" id = "prevedu" {% if prevedu == "ВПО" %} checked {% endif %} value = "vpo">ВПО
-										</p>
-									</p>
-								</div>
-							</div>
-							<p>
-								<div class="row">
-										<div class="col-xs-6 col-sm-5 col-md-4 col-md-offset-2">
-											<label for="datejoining">Дата поступления</label>
-											<div class='input-group date' id='datejoining'>
-												<input type="text" class="form-control" name="datejoining" />
-													<span class="input-group-addon">
-														<span class="glyphicon glyphicon-calendar"></span>
-													</span>
-											</div>
-										</div>
-										<div class="col-xs-6 col-sm-5 col-md-4">
-											<label for="dateexiting">Дата окончания</label>
-											<div class='input-group date' id='dateexiting'>
-												<input type="text" class="form-control" name="dateexiting" />
-													<span class="input-group-addon">
-														<span class="glyphicon glyphicon-calendar"></span>
-													</span>
-											</div>
-										</div>
-								</div>
-							</p>
-							<div class = "row">
-								<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-									<p>
-										<label for="preveduname">Название учебного заведения</label>
-										<input type="hidden" name= "preveduname" id = "preveduname" class = "form-control" placeholder = "МОУ СОШ № 1, г. Якутск">
-									</p>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="panel panel-primary">
-								<div class="panel-heading">
-									<h3 class="panel-title">СНИЛС</h3>
-								</div>
-								<div class="panel-body">
-									<div class="row">
-										<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-											<p>
-												<label for="inila">СНИЛС</label>
-												<input id="inila" name="inila" class="form-control" placeholder="123-456-789-00" {% if inila %} value="{{inila}}" {% endif %}/>
-											</p>
-										</div>
-									</div>
-								</div>
-							</div>
-					<div class="row">
-						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-							<button class="btn btn-primary btn-block" type="button" id="save2">Сохранить</button>
-						</div>
-					</div>
-				</div>
-			</div>
+			{% include 'anketa/abitdata.html' %}
+			{% include 'anketa/documents.html' %}
 			{% include 'anketa/contacts.html' %}
 			{% include 'anketa/exams.html' %}
-			<div class="tab-pane" id="tab5">
-				<div class="container-fluid">
-					<div class ="row">
-						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-							<label for="privileges">Имеются ли льготы?</label>
-							<p>
-								<input type="radio" name = "privileges" value="no">Нет
-								<input type="radio" name = "privileges" value="yes">Да
-							</p>
-						</div>
-					</div>
-					<div class="row">
-						<p>
-							<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2" id="privcatrow" {% if not privcat %} hidden {% endif %}>
-								<label for="privcat">Категория</label>
-								<input type="hidden" id="privcat" class="form-control">
-							</div>
-						</p>
-					</div>
-					<div class="row">
-						<p>
-							<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2" id="privtyperow" {% if not privtype %} hidden {% endif %}>
-								<label for="privtype">Тип</label>
-								<input type="hidden" id="privtype" class="form-control">
-							</div>
-						</p>
-					</div>
-					</br>
-					<div class="row">
-						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-							<label for="persach">Имеются ли достижения?</label>
-							<p>
-								<input type="radio" name = "persach" value="no">Нет
-								<input type="radio" name = "persach" value="yes">Да
-							</p>
-						</div>
-					</div>
-					<div id="achRow" class="row" {% if not achievements %} hidden {% endif %}>
-						<p>
-							<div class="col-xs-6 col-sm-5 col-md-4 col-md-offset-2">
-								<label for="achievement">Наименование достижения</label>
-								<input type="hidden" id="achievement" name="achievement" class="form-control">
-							</div>
-							<div class="col-xs-6 col-sm-5 col-md-4">
-								<label for="achievementDoc">Подтверждающий документ</label>
-								<input type="hidden" id="achievementDoc" name="achievementDoc" class="form-control">
-							</div>
-						</p>
-					</div>
-					</br>
-					<div class="row">
-						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-							<button class="btn btn-primary btn-block" type="button" id="save5">Сохранить</button>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="tab-pane" id="tab6">
-				<div class="container-fluid">
-					 <div class="row">
-						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-							<p>
-								<label for="flang">Изучаемый иностранный язык</label>
-								<input type="hidden" name="flang" id="flang" class="form-control" placeholder="Английский">
-							</p>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-							<label for="hostel">Нуждаетесь ли в общежитие?</label>
-							<p>
-								<input type="radio" name = "hostel" value="no" {% if hostel == False %} checked {% endif %}>Нет
-								<input type="radio" name = "hostel" value="yes" {% if hostel == True %} checked {% endif %}>Да
-							</p>
-						</div>
-					</div>
-					<p>
-						<div class="row">
-								<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-									<label for="liableForMilit">Являетесь ли вы военнообязанным?</label>
-									<p>
-										<input type="radio" name="liableForMilit" value="no" {% if liableForMilit == False %} checked {% endif %}>Невоеннообязанный
-										<input type="radio" name="liableForMilit" value="yes" {% if liableForMilit == True %} checked {% endif %}>Военнообязанный
-									</p>
-								</div>
-						</div>
-					</p>
-					<p>
-						<div class="row" id ="isServedRow" {% if liableForMilit == False %} hidden {% endif %}>
-								<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-									<label for="isServed">Служили в армии?</label>
-									<p>
-										<input type="radio" name="isServed" value="no" {% if isServed == False %} checked {% endif %}>Нет
-										<input type="radio" name="isServed" value="yes" {% if isServed == True %} checked {% endif %} >Да
-									</p>
-								</div>
-						</div>
-					</p>
-					<p>
-						<div class="row" id="armyRow" {% if isServed == False or liableForMilit == False %} hidden {% endif %}>
-								<div class="col-xs-6 col-sm-5 col-md-4 col-md-offset-2">
-									<label for="yeararmy">Год увольнения из рядов РА</label>
-									<input type="text" name="yeararmy" id="yeararmy" class="form-control" placeholder="2014" {% if yeararmy %} value={{yeararmy}} {% endif %}>
-								</div>
-								<div class="col-xs-6 col-sm-3 col-md-4">
-									<label for="rank">Воинское звание</label>
-									<input type="hidden" name="rank" id="rank" class="form-control">
-								</div>
-						</div>
-					</p>
-					<div class="row">
-						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2">
-							<button class="btn btn-primary btn-block" type="button" id="save7">Сохранить</button>
-						</div>
-					</div>
-				</div>
-			</div>
+			{% include 'anketa/privileges.html' %}
+			{% include 'anketa/other.html' %}
 			<ul class="pager wizard">
 				<li class="previous"><a href="javascript:;">Предыдущий</a></li>
 				<li class="next"><a href="javascript:;">Следующий</a></li>
