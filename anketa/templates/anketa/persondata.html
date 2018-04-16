@@ -15,7 +15,7 @@
 <script src="{% static "anketa/select2-3.5.4/select2.min.js" %}"></script>
 <script src="{% static "anketa/js/notify.js" %}"></script>
 <script>
-	{% include '..\templates\kladr\kladr.js' %}
+	{% include '../templates/kladr/kladr.js' %}
 	$(document).ready(function() 
 	{
 		$('#adrsfact').hide();
@@ -64,7 +64,7 @@
 				relationsrow--;
 			}
 		});
-		{% include 'anketa\contacts.js' %}
+		{% include 'anketa/contacts.js' %}
 		$("#addRelation").on("click", function()
 		{
 			if(contactsrow<maxContacts)
@@ -137,7 +137,7 @@
 				}
 			}
 		};
-		{% include 'anketa\exams.js' %}
+		{% include 'anketa/exams.js' %}
 		$('input[type=radio][name=adrsisthesame]').change(function()
 		{
 			if (this.value == "yes")
@@ -588,7 +588,7 @@ $(document).ready(function(){
 </script>
 {% endblock %}
 {% block container %}
-{% include '..\templates\kladr\kladr.html' %}
+{% include '../templates/kladr/kladr.html' %}
 <form id="persondata" name="persondata" class="form-horizontal" role="form" method="post" >
 {% csrf_token %}
 	<div id="rootwizard" class="col-md-9 col-xs-12 col-sm-12">
@@ -824,8 +824,8 @@ $(document).ready(function(){
 					</div>
 				</div>
 			</div>
-			{% include 'anketa\contacts.html' %}
-			{% include 'anketa\exams.html' %}
+			{% include 'anketa/contacts.html' %}
+			{% include 'anketa/exams.html' %}
 			<div class="tab-pane" id="tab5">
 				<div class="container-fluid">
 					<div class ="row">
