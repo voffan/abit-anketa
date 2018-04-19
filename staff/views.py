@@ -1005,20 +1005,13 @@ def Wiz_cont_apply(request):
 def Add_exam_to_person(request):
 	result={'result':"success"}
 	if request.method =='POST':
-		try:
-			abit=Abiturient.objects.get(id=request.POST.get('wiz_cont_apply_name',''))
-			examsList = request.POST.getlist('subjectExam')
-			examType = request.POST.getlist('ExamType')
-			examPoints = request.POST.getlist('pointsExam')
-			examYear = request.POST.getlist('yearExam')		
-			
+		try:			
+			examsList = request.POST.getlist('examId')
+			examPoints = request.POST.getlist('points[1]')
+
 			for i in range(0,len(examsList)):				
-				exam = Exams()
-				exam.abiturient = abit
-				exam.exam_subjects = AttrValue.objects.filter(value__icontains=examsList[i].strip('Дисциплина ')).first()
-				exam.exam_examType = AttrValue.objects.filter(value__icontains=examType[i].strip('Тип экзамена ')).first()
+				exam = Exams.objects.get(pk=examsList[i])				
 				exam.points = examPoints[i]
-				exam.year = examYear[i]
 				exam.save()
 		
 		except Exception as e:

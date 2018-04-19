@@ -683,7 +683,7 @@
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="col-md-12">                                    
-                                        <h4>Прошу засчитать рез-ты ЕГЭ</h4>
+                                        <h4>Результаты ЕГЭ</h4>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -703,10 +703,12 @@
                                 
                                 <div id="examfield">
                                 {% for item in data.exams %}
+                                    {% if item.exam_examType.value == 'ЕГЭ' %}
                                     <div class="row">
                                     
                                         <div class="col-md-4">                                            
                                             <input name="subject[1]" id="subject[1]" class="form-control" placeholder="Математика" value="{{item.exam_subjects|cut:'Дисциплина'}}" readonly>
+                                            <input name="examId" id="examId" value="{{item.id}}" hidden>
                                         </div>
                                         <div class="col-md-4">                                            
                                             <input name="subject[1]" id="subject[1]" class="form-control" placeholder="Математика" value="{{item.exam_examType|cut:'Тип экзамена'}}" readonly>
@@ -720,38 +722,48 @@
                                         
                                     </div>
                                     <p>
+                                    {% endif %}
                                 {% endfor %}
-                                </div>
-                                                                    
-                                    <div class="row">
-                                        <!--div class="col-md-3">
-                                            <a style="" onclick="return deleteField(this)" href="#"><span class="glyphicon glyphicon-minus"></span></a>
-                                            <a style="" onclick="addField()" href="#"><span class="glyphicon glyphicon-plus"></span></a>
-                                        </div-->
-                                        
-                                        <div class="col-md-12 ">
-                                            <div class="pull-right">
-                                                <button class="btn btn-primary" type="button" id="examsSave">Сохранить</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                
+                                </div> 
                                 <div class="row">
                                     <div class="col-md-12">
                                         <p>
-                                           <h4>Также прошу допустить к вступительным испытаниям по следующим предметам</h4>
+                                           <h4>Результаты вступительных испытаний</h4>
                                         </p>
                                     </div>
                                 </div>
-                                <div class="row col-md-12">
-                                    <label for="subject[1]">Дисциплина</label>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="subject[1]">Дисциплина</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="subject[1]">Тип экзамена</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="points[1]">Баллы</label>                                            
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="year[1]">Год</label>                                            
+                                    </div>
                                 </div>
                                 {% for item in data.exams %}
                                     {% if item.exam_examType.value == 'Вступительный' %}
-                                    <div class="row">                                            
-                                        <div class="col-md-12">                                                        
-                                            <input name="subject[1]" id="subject[1]" class="form-control" placeholder="Математика" value="{{item.exam_subjects|cut:'Дисциплина' }}" readonly>
+                                    <div class="row">
+                                    
+                                        <div class="col-md-4">                                            
+                                            <input name="subject[1]" id="subject[1]" class="form-control" placeholder="Математика" value="{{item.exam_subjects|cut:'Дисциплина'}}" readonly>
+                                            <input name="examId" id="examId" value="{{item.id}}" hidden>
                                         </div>
+                                        <div class="col-md-4">                                            
+                                            <input name="subject[1]" id="subject[1]" class="form-control" placeholder="Математика" value="{{item.exam_examType|cut:'Тип экзамена'}}" readonly>
+                                        </div>
+                                        <div class="col-md-2">                                            
+                                            <input name="points[1]" id="points[1]" class="form-control" placeholder="100"value="{{item.points}}">
+                                        </div>
+                                        <div class="col-md-2">                                            
+                                            <input name="year[1]" id="year[1]" class="form-control" placeholder="2015" value="{{item.year}}" readonly>
+                                        </div>
+                                        
                                     </div>
                                     <p>
                                     {% endif %}
@@ -764,6 +776,13 @@
                                         </p>
                                     </div>                                    
                                 </div-->
+                                <div class="row">
+                                    <div class="col-md-12 ">
+                                        <div class="pull-right">
+                                            <button class="btn btn-primary" type="button" id="examsSave">Сохранить</button>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <div class="row">
                                     <div class="col-md-12">
@@ -783,61 +802,81 @@
         </div>
         <div class="tab-pane" id="tab6">
             <div class="container-fluid">
-                <div class="row">
-                    <p>
-                        <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
-                         <label for="privcat">Категория</label>
-                            <select id="privcat" name = "privcat" class="form-control">
-                               
-                            </select> 
+                <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Льготы</h3>
                         </div>
-                    </p>
-                </div>
-                <div class="row">
-                    <p>
-                        <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
-                            <label for="privtype">Тип</label>
-                            <select id="privtype" name = "privtype" class="form-control">
-                               
-                            </select> 
-                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <p>
+                                    <div class="col-md-12">
+                                     <label for="privcat">Категория</label>
+                                        <select id="privcat" name = "privcat" class="form-control">
+                                           
+                                        </select> 
+                                    </div>
+                                </p>
+                            </div>
+                            <div class="row">
+                                <p>
+                                    <div class="col-md-12">
+                                        <label for="privtype">Тип</label>
+                                        <select id="privtype" name = "privtype" class="form-control">
+                                           
+                                        </select> 
+                                    </div>
 
-                    </p>
-                </div>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>                
             </div>
         </div>
         <div class="tab-pane" id="tab7">
             <div class="container-fluid">
-                <div class="row">
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
-                        <label for="persach">Имеются ли достижения?</label>
-                        <p>
-                            <input type = "radio" name= "persach" value="a1"{% if not data.DepAchieves.profile  %} checked {% endif %}>Нет</label>
-                            <input type = "radio" name= "persach" value="a2"{% if data.DepAchieves.profile %} checked {% endif %}>Да</label>
-                        </p>
+                <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-3">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Личные достижения</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="persach">Имеются ли достижения?</label>
+                                    <p>
+                                        <input type = "radio" name= "persach" value="a1"{% if not data.DepAchieves.profile  %} checked {% endif %}>Нет</input disabled>
+                                        <input type = "radio" name= "persach" value="a2"{% if data.DepAchieves.profile %} checked {% endif %} disabled>Да</input>
+                                    </p>
+                                </div>
+                            </div>
+                            <div id="parentpersachId" class="row">
+                                <div>
+                                    <p>
+                                        <div class="col-md-4">
+                                            <label for="achievname[1]">Наименование достижения</label>
+                                            <input name="achievname[1]" readonly id="achievname[1]" class="form-control" placeholder="По жизни чемпион" value="{{data.achievements.result}}">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="proof[1]">Подтверждающие документы</label>
+                                            <input name="proof[1]" id="proof[1]" class="form-control" placeholder="Я тебе говорю" value="{{data.docattr.value}}" readonly/>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="numbofpoints[1]" >Причисляемый балл</label>
+                                            <input name="numbofpoints[1]"   readonly  id="numbofpoints[1]" class="form-control" placeholder="+100" value="{{data.depachieves.points}}"/>
+                                        </div>
+                                        <!--/br>
+                                        <a style="" onclick="return deleteFieldPersach(this)" href="#"><span class="glyphicon glyphicon-minus"></span></a>
+                                        <a style="" onclick="return addFieldPersach()" href="#"><span class="glyphicon glyphicon-plus"></span></a-->
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
-                <div id="parentpersachId" class="row">
-                    <div>
-                        <p>
-                            <div class="col-xs-2 col-sm-2 col-md-2 col-md-offset-3">
-                                <label for="achievname[1]">Наименование достижения</label>
-                                <input name="achievname[1]" {% if not data.DepAchieves.profile  %} disabled {% endif %}  id="achievname[1]" class="form-control" placeholder="По жизни чемпион" value="{{data.achievements.result}}">
-                            </div>
-                            <div class="col-xs-2 col-sm-2 col-md-2">
-                                <label for="proof[1]" hidden/>Подтверждающие документы</label>
-                                <input name="proof[1]" id="proof[1]" class="form-control" placeholder="Я тебе говорю" value="{{data.docattr.value}}" hidden/></input>
-                            </div>
-                            <div class="col-xs-2 col-sm-2 col-md-2">
-                                <label for="numbofpoints[1]" >Причисляемый балл</label>
-                                <input name="numbofpoints[1]"   disabled  id="numbofpoints[1]" class="form-control" placeholder="+100" value="{{data.depachieves.points}}">
-                            </div>
-                            </br>
-                            <a style="" onclick="return deleteFieldPersach(this)" href="#"><span class="glyphicon glyphicon-minus"></span></a>
-                            <a style="" onclick="return addFieldPersach()" href="#"><span class="glyphicon glyphicon-plus"></span></a>
-                        </p>
-                    </div>
-                </div>
+                
             </div>
         </div>
         <div class="tab-pane" id="tab8">
