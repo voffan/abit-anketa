@@ -18,6 +18,11 @@ AppPrior = (
 	(u'Н',u'Низкий')
 	)
 
+
+def Images_Dir():
+	return 'c:\\images'
+
+
 class Relation(models.Model):
 	person=models.ForeignKey('Person',verbose_name=u'Родственник', related_name="RelationPerson") # ??????
 	abiturient=models.ForeignKey('Abiturient',verbose_name=u'Абитуриент', related_name="RelationAbiturient", db_index=True)# ??????# ??????# ??????# ??????# ??????# ??????# ??????# ??????# ??????
@@ -149,6 +154,12 @@ class Docs(models.Model):
 	docIssuer = models.ForeignKey('AttrValue', verbose_name=u'Орган выдавший документ', limit_choices_to={'attribute__name':u'Орган выдавший документ'}, related_name='DocIssuer')
 	def __str__(self):
 		return self.abiturient.fullname+' '+self.docType.value
+
+
+'''class DocsImages(models.Model):
+	doc = models.ForeignKey('Docs', verbose_name='Документ', db_index=True)
+	image = models.ImageField(upload_to=Images_Dir)'''
+
 
 class Exams(models.Model):
 	abiturient = models.ForeignKey('Abiturient', verbose_name=u'Абитуриент', db_index=True)
