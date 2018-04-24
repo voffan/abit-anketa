@@ -491,7 +491,7 @@ def testjson(request):
 	return render(request,'staff\\testjson.json')
 
 @login_required(login_url = '/auth')
-@user_passes_test(CheckUserIsStaff, login_url = '/auth')
+@user_passes_test(login_url = '/auth')
 def Application_review (request, application_id):	
 	#return HttpResponseRedirect(reverse('staff:application_list'))
 	application = Application.objects.select_related('Abiturient').get(pk=application_id)	
@@ -1444,3 +1444,59 @@ def AddDataToPerson(request):
 					result=str(e)
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
+	'''wb = Workbook()
+	ws = wb.active;
+	ws.title = u'Операции магазина'
+	ws['A1'] = u'Операции магазина ' + shop.name
+
+	_row = 2
+	_column = 1
+	if 'filters' in request.session and 'operations' in request.session['filters']:
+		if 'op_date' in request.session['filters']['operations']:
+			ws.cell(row=_row, column=_column).value = u'На дату: ' + request.session['filters']['operations']['op_date']
+			_row += 1
+		if 'oper' in request.session['filters']['operations']:
+			ws.cell(row=_row, column=_column).value = u'По операции: ' + Operation.objects.get(
+				pk=request.session['filters']['operations']['oper']).name
+			_row += 1
+		if 'order' in request.session['filters']['operations']:
+			ws.cell(row=_row, column=_column).value = u'По номеру заказа: ' + request.session['filters']['operations'][
+				'order']
+			_row += 1
+		if 'employee' in request.session['filters']['operations']:
+			ws.cell(row=_row, column=_column).value = u'По сотруднику' + ShopStaff.objects.get(
+				person__pk=request.session['filters']['operations']['employee']).person.name
+			_row += 1
+		if 'item' in request.session['filters']['operations']:
+			ws.cell(row=_row, column=_column).value = u'' + Items.objects.get(
+				pk=request.session['filters']['operations']['item']).name
+			_row += 1
+
+	_row += 2
+	ws.cell(row=_row, column=1).value = u'№'
+	ws.cell(row=_row, column=2).value = u'Дата'
+	ws.cell(row=_row, column=3).value = u'Операция'
+	ws.cell(row=_row, column=4).value = u'Заказ'
+	ws.cell(row=_row, column=5).value = u'Сотрудник'
+	ws.cell(row=_row, column=6).value = u'Товар'
+	ws.cell(row=_row, column=7).value = u'Кол-во'
+	ws.cell(row=_row, column=8).value = u'Стоимость'
+	i = 1
+	_row += 1
+	for operation in operations:
+		ws.cell(row=_row, column=1).value = i
+		ws.cell(row=_row, column=2).value = operation.operation_date.strftime('%d.%m.%Y')
+		ws.cell(row=_row, column=3).value = operation.operation.name
+		if operation.order is not None:
+			ws.cell(row=_row, column=4).value = operation.order.id
+		ws.cell(row=_row, column=5).value = operation.user.person.name
+		ws.cell(row=_row, column=6).value = operation.item.name
+		ws.cell(row=_row, column=7).value = operation.item_vol
+		ws.cell(row=_row, column=8).value = operation.item_sum
+		_row += 1
+		i += 1
+
+	response = HttpResponse(content=save_virtual_workbook(wb),#save_virtual_workbook находится в openpyxl
+							content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+	response['Content-Disposition'] = 'attachment; filename=opertions.xlsx'
+	return response'''
