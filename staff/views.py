@@ -12,6 +12,8 @@ from django import template
 
 
 import json
+import xlrd
+from xlutils.copy import copy as xlcopy
 from datetime import date
 import datetime
 from staff.models import Employee, Position, Contacts as ContactsStaff
@@ -580,10 +582,213 @@ def Application_review (request, application_id):
 			application.save()
 		if 'backspace' in request.POST:
 			return HttpResponseRedirect(reverse('staff:application_list'))
+		if 'print' in request.POST:
+
+			""" VNIMANIE ZAKROITE VASHI GLAZA """
+
+			source = "anketa\\static\\anketa\\Anketa SVFU.xls"
+			read_book = xlrd.open_workbook(source, formatting_info=True)
+			outbook = xlcopy(read_book)
+			outsheet = outbook.get_sheet(0)
+			#####################бюджет что-ли или нет
+			budget = ''
+			withfee = ''
+			if application.budget:
+				budget = 'V'
+			setOutCell(outsheet, 10,8, budget) 
+			if application.withfee:
+				withfee = 'V'			
+			setOutCell(outsheet, 25,8, withfee)
+			#####################институт факультет			
+			for i in range(len(application.department.name)):
+				setOutCell(outsheet, i+5,10, application.department.name[i])
+			#####################нфправление специальность
+			for i in range(len(application_profile[0].profile.profile.edu_prog.name)):
+				j=11
+				r=0
+				if i >= 23:
+					j=12
+					r=23
+				setOutCell(outsheet, i+3-r,j, application_profile[0].profile.profile.edu_prog.name[i])			
+			#####################профиль
+			printform1=''
+			printform2=''
+			printform3=''
+			j=13	
+			for item in application_profile:
+				for i in range(len(item.profile.profile.name)):
+					r=0
+					if i==23:
+						j+=1
+						r=23
+					setOutCell(outsheet, i+3-r,j, item.profile.profile.name[i])
+				j+=1
+			#####################форма тутже
+				if item.profile.eduform=='О':
+					printform1 = 'V'
+				if item.profile.eduform=='З':
+					printform2 = 'V'
+				if item.profile.eduform=='ОЗ':
+					printform3 = 'V' 
+				setOutCell(outsheet, 3,19, printform1)
+				setOutCell(outsheet, 6,19, printform2)
+				setOutCell(outsheet, 9,19, printform3)
+			#####################экзамены ЕГЭ
+			printSpecial=''
+			j=22
+			for item in Data['exams']:
+				if j > 25:
+					break
+				if item.exam_examType.value=='ЕГЭ':
+					setOutCell(outsheet, 3,j, item.exam_subjects.value)
+					setOutCell(outsheet, 16,j, item.year)
+					setOutCell(outsheet, 22,j, item.points)
+					j+=1
+				if item.special:
+					printSpecial='V'
+					print(item)
+			#####################экзамены вступительные испытания
+			j=29
+			for item in Data['exams']:
+				if j > 32:
+					break
+				if item.exam_examType.value=='Вступительный':
+					setOutCell(outsheet, 3,j, item.exam_subjects.value)
+					setOutCell(outsheet, 16,j, item.exam_examType.value)
+					j+=1
+				if item.special:
+					printSpecial='V'
+					print(item)
+			setOutCell(outsheet, 25,34, printSpecial)
+			#####################подпись лол
+			setOutCell(outsheet, 20,35,'вася пупкин')#???????????????
+			#####################Личные данные
+			for i in (range(len(person.sname))):
+				if i<24:
+					setOutCell(outsheet, i+2,37, person.sname[i])#фамилия
+			for i in (range(len(person.fname))):
+				if i<24:
+					setOutCell(outsheet, i+2,38, person.fname[i])#имя
+			for i in (range(len(person.mname))):
+				if i<24:
+					setOutCell(outsheet, i+2,39, person.mname[i])#отчество
+			if person.sex=="М":				
+				setOutCell(outsheet, 3,40, 'V')#пол
+			else:
+				setOutCell(outsheet, 5,40, 'V')#пол
+			printBday = str(datetime.datetime.strftime(person.birthdate,'%d%m%Y'))
+			printBday = printBday[:4]+printBday[-2:]
+			for i in range(len(printBday)):
+				setOutCell(outsheet, i+12,40, int(printBday[i]))#день рождения
+			j=41
+			r=0
+			for i in range(len(application.abiturient.birthplace)):
+				if i>25:
+					j+=1
+					r=25
+				setOutCell(outsheet, i+4-r,j, application.abiturient.birthplace[i])#место рождения
+			for i in range (len(passp.docType.value)):
+				if i <14:
+					setOutCell(outsheet,i+11,43,passp.docType.value[i])#документ подтверждающий личность
+			for i in range(len(str(passp.serialno))):
+				setOutCell(outsheet, i+2,44,int(str(passp.serialno)[i]))#серия
+			for i in range(6):
+				setOutCell(outsheet, i+9,44,int(str(passp.number)[i]))#номер
+			printPassIssDate = str(datetime.datetime.strftime(passp.issueDate,'%d%m%Y'))
+			printPassIssDate = printPassIssDate[:4]+printPassIssDate[-2:]
+			for i in range(6):
+				setOutCell(outsheet, i+20,44, int(printPassIssDate[i]))#дата выдачи
+			j=45
+			r=0
+			for i in range(len(passp.docIssuer.value)):
+				if i >23:
+					j=46
+					r=24
+				if i >47:						#;0
+					j=47
+					r=48
+				setOutCell(outsheet, i+2-r,j, passp.docIssuer.value[i])#кем выдан
+			for i in range(len(application.abiturient.nationality.value)):
+				setOutCell(outsheet, i+4,48, application.abiturient.nationality.value[i])#национальность
+			for i in range(len(application.abiturient.citizenship.value)):
+				setOutCell(outsheet, i+4,49, application.abiturient.citizenship.value[i])#гражданство
+			for i in range(len(application.abiturient.user.email)):
+				setOutCell(outsheet, i+7,50, application.abiturient.user.email[i])#мыло
+			r=7
+			for i in range(len(str(snils.serialno))):
+				if i != 0:
+					if i % 3 == 0:
+						r+=1
+				setOutCell(outsheet, i+r,52, str(snils.serialno)[i])#снилс
+			
+
+
+			outbook.save("anketa\\static\\anketa\\Anketa SVFU"+person.fullname+str(person.id)+'_'+str(application.id)+".xls")
+
+			""" AMEN """
 
 	context = {'data':Data}
 	context.update(csrf(request))
 	return render(request,'staff\\wizardform.html',context)
+
+def _getOutCell(outSheet, colIndex, rowIndex):
+	""" HACK: Extract the internal xlwt cell representation. """
+	row = outSheet._Worksheet__rows.get(rowIndex)
+	if not row: return None
+
+	cell = row._Row__cells.get(colIndex)
+	return cell
+
+def setOutCell(outSheet, col, row, value):
+	""" Change cell value without changing formatting. """
+	# HACK to retain cell style.
+	previousCell = _getOutCell(outSheet, col, row)
+	# END HACK, PART I
+	outSheet.write(row, col, value)
+	# HACK, PART II
+	if previousCell:
+		newCell = _getOutCell(outSheet, col, row)
+		if newCell:
+			newCell.xf_idx = previousCell.xf_idx
+	# END HACK
+
+def Report_print(request):
+	result={'result':"success"}
+	if request.method == 'POST':
+		try:
+			source = "anketa\\static\\anketa\\Anketa SVFU.xls"
+			read_book = xlrd.open_workbook(source, formatting_info=True)
+			outbook = xlcopy(read_book)
+			outsheet = outbook.get_sheet(0)
+			#####################бюджет что-ли или нет
+			budget = ''
+			withfee = ''
+			if request.POST.get('option1')=='true':
+				budget = 'V'
+			setOutCell(outsheet, 10,8, budget) 
+			if request.POST.get('option2')=='true':
+				withfee = 'V'			
+			setOutCell(outsheet, 25,8, withfee)
+			
+			#####################институт факультет			
+			for i in range(len(request.POST.get('inst'))):
+				setOutCell(outsheet, i+5,10, request.POST.get('inst')[i])
+
+
+			outbook.save("anketa\\static\\anketa\\AJAX Anketa SVFU"+request.POST.get('sname')+request.POST.get('wiz_cont_apply_name')+'_'+request.POST.get('apply_id')+".xls")
+		
+		except Exception as e:
+			result['result']=str(e)
+		else:
+			pass
+		finally:
+			pass
+		
+	
+	return HttpResponse(json.dumps(result), content_type="application/json")
+
+
+
 
 @transaction.atomic
 def attribute_dels(values):
@@ -639,7 +844,7 @@ def Catalogs(request):
 	if 'save' in request.POST and len(request.POST.get('attr_name',''))>0:
 		if user.is_superuser:
 			attribute_add(request.POST)
-	    
+		
 	attribute1 = Attribute.objects.all()    
 	attrvalue = AttrValue.objects.all()
 	attrtype = AttrType.objects.all()
