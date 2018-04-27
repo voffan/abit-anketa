@@ -37,7 +37,6 @@ urlpatterns = patterns('',
 	url(r'exam_list/',views.Exam_list, name="exam_list"),
 	url(r'backgrid_collection.json', views.Backgrid_collection, name="backgrid_collection"),
 	url(r'test.json', views.testjson, name="testjson"),
-	url(r'print_report', views.Report_print, name="print_report")
 	
 
 					)

@@ -144,34 +144,6 @@
         };      
 
 </script>
-<script>
-    $(document).on("click","button[id='printAJAX']", function()
-        {            
-            $.ajax({
-                url:"{% url 'staff:print_report' %}",
-                type:$("#persondata").attr('method'),
-                data:$("#persondata").serialize(),
-                dataProcess:true,
-                timeout:500,
-                success:function(data)
-                {
-                    if (data['result']==="success")
-                    {
-                        $.notify("Сохранено.", "success");
-                    }
-                    else
-                    {
-                        $.notify("Что-то пошло не так :(", "error");
-                    }
-                    
-                },
-                error:function()
-                {
-                    $.notify("Что-то пошло не так2 :(", "error");
-                }
-            });
-        });
-</script>
 
 {% endblock %}
 
@@ -743,7 +715,7 @@
                                             <input name="subject[1]" id="subject[1]" class="form-control" placeholder="Математика" value="{{item.exam_examType|cut:'Тип экзамена'}}" readonly>
                                         </div>
                                         <div class="col-md-2">                                            
-                                            <input name="points[1]" id="points[1]" class="form-control" placeholder="100"value="{{item.points}}">
+                                            <input name="points[1]" id="points[1]" {% if not user.is_staff %}readonly{% endif %} class="form-control" placeholder="100"value="{{item.points}}">
                                         </div>
                                         <div class="col-md-2">                                            
                                             <input name="year[1]" id="year[1]" class="form-control" placeholder="2015" value="{{item.year}}" readonly>
@@ -787,7 +759,7 @@
                                             <input name="subject[1]" id="subject[1]" class="form-control" placeholder="Математика" value="{{item.exam_examType|cut:'Тип экзамена'}}" readonly>
                                         </div>
                                         <div class="col-md-2">                                            
-                                            <input name="points[1]" id="points[1]" class="form-control" placeholder="100"value="{{item.points}}">
+                                            <input name="points[1]" id="points[1]" class="form-control" {% if not user.is_staff %}readonly{% endif %} placeholder="100"value="{{item.points}}">
                                         </div>
                                         <div class="col-md-2">                                            
                                             <input name="year[1]" id="year[1]" class="form-control" placeholder="2015" value="{{item.year}}" readonly>
@@ -805,6 +777,7 @@
                                         </p>
                                     </div>                                    
                                 </div-->
+                                {% if user.is_staff %}
                                 <div class="row">
                                     <div class="col-md-12 ">
                                         <div class="pull-right">
@@ -812,6 +785,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                {% endif %}
 
                                 <div class="row">
                                     <div class="col-md-12">
@@ -875,8 +849,8 @@
                                 <div class="col-md-12">
                                     <label for="persach">Имеются ли достижения?</label>
                                     <p>
-                                        <input type = "radio" name= "persach" value="a1"{% if not data.DepAchieves.profile  %} checked {% endif %}>Нет</input disabled>
-                                        <input type = "radio" name= "persach" value="a2"{% if data.DepAchieves.profile %} checked {% endif %} disabled>Да</input>
+                                        <input type = "radio" name= "persach" value="a1"{% if not data.depAchieves.profile  %} checked {% endif %}>Нет</input disabled>
+                                        <input type = "radio" name= "persach" value="a2"{% if data.depAchieves.profile %} checked {% endif %} disabled>Да</input>
                                     </p>
                                 </div>
                             </div>
@@ -993,9 +967,10 @@
                 <div class="pull-right">
                     <button class="btn btn-info btn-sm" type="submit" id="backspace" name="backspace">Назад</button>
                     <button class="btn btn-primary btn-sm" type="submit" id="print" name="print">Печать</button>
-                    <button class="btn btn-primary btn-sm" type="button" id="printAJAX">ПечатьAJAX</button>
+                    {% if user.is_staff %}
                     <button class="btn btn-success btn-sm" type="submit" id="upvote" name="upvote">Подтвердить</button>
                     <button class="btn btn-warning btn-sm" type="submit" id="unvote" name="unvote">Анулировать</button>
+                    {% endif %}
                 </div>
             </div> 
     
