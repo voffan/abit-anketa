@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 from django.db import models
 from django.contrib.auth.models import User
 from kladr.models import Street
@@ -19,8 +20,8 @@ AppPrior = (
 	)
 
 
-def Images_Dir():
-	return 'c:\\images'
+def DocImagePath(instance, filename):
+	return os.path.join('docimages', str(instance.doc.abiturient.id), str(instance.doc.id), filename)
 
 
 class Relation(models.Model):
@@ -156,9 +157,9 @@ class Docs(models.Model):
 		return self.abiturient.fullname+' '+self.docType.value
 
 
-'''class DocsImages(models.Model):
+class DocImages(models.Model):
 	doc = models.ForeignKey('Docs', verbose_name='Документ', db_index=True)
-	image = models.ImageField(upload_to=Images_Dir)'''
+	image = models.ImageField(upload_to=DocImagePath)
 
 
 class Exams(models.Model):
