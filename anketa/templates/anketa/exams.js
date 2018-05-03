@@ -82,7 +82,7 @@ $("#addExam").on("click", function()
 				                <td><input type="hidden" class="form-control" name="examType"></td>\
 				                <td><input type="text" class="form-control" name="egePoints"></td>\
 				                <td><input type="text" class="form-control" name="egeYear"></td>\
-				                <td><button class="btn btn-default btn-sm" name="delExamRow" type="button">Удалить</button></td>\
+				                <td><button class="btn btn-default btn-sm" name="delExamRow" type="button" id="-1">Удалить</button></td>\
 				                </tr>');
 				$("#egeTableBody").append(newRow);
 				initSelect2(newRow.find('input[name^="egeDisc"]'));
@@ -99,7 +99,7 @@ $("#addExam2").on("click", function()
 								<td><input type="hidden" class="form-control" name="addDisc"><input type="hidden" name="examId" value ="-1"></td>\
 								<td><input type="text" class="form-control" name="addPoints" readonly></td>\
 								<td><input type="text" class="form-control" name="addYear" readonly></td>\
-								<td><button class="btn btn-default btn-sm" name="delExamRow2" type="button">Удалить</button></td>\
+								<td><button class="btn btn-default btn-sm" name="delExamRow2" type="button" id="-1">Удалить</button></td>\
 								</tr>');
 				$("#egeTableBodyAdd").append(newRow);
 				initSelect2(newRow.find('input[name^="addDisc"]'));
@@ -108,7 +108,38 @@ $("#addExam2").on("click", function()
 		});
 $(document).on("click","button[name*='delExamRow']", function()
 		{
-			if(egerows>1)
+		    /*console.log($(this).attr('id'));
+		    console.log($(this));*/
+			if ((egerows>1) && (parseInt($(this).attr('id')) >= 0))
+			{
+			    $.ajax({
+			        url:{% url 'apiexams' %},
+			        type:'POST',
+			        data:{'id':$(this).attr('id'), 'csrfmiddlewaretoken': '{{ csrf_token }}', 'action':'delete' },
+			        //headers: { "X-CSRFToken": getCookie("csrftoken") },
+			        dataProcess:true,
+					timeout:500,
+					success:function(data)
+					{
+						if (parseInt(data['result'])==1)
+						{
+							$('#egeTableBody').find('button[id = "'+data['id']+'"]').parent().parent().remove();
+				            egerows--;
+							$.notify("Удалено.", "success");
+
+						}
+						else
+						{
+							$.notify("Ошибка при удалении :(", "error");
+						}
+						console.log('Result is loaded!');
+					},
+					error:function()
+					{
+						$.notify("Отсутствует соединение :(", "error");
+					},
+			    });
+			}else
 			{
 				$(this).parent().parent().remove();
 				egerows--;
@@ -116,7 +147,36 @@ $(document).on("click","button[name*='delExamRow']", function()
 		});
 $(document).on("click","button[name*='delExamRow2']", function()
 		{
-			if(addrows>1)
+			if ((addrows>1) && (parseInt($(this).attr('id')) >= 0))
+			{
+			    $.ajax({
+			        url:{% url 'apiexams' %},
+			        type:'POST',
+			        data:{'id':$(this).attr('id'), 'csrfmiddlewaretoken': '{{ csrf_token }}', 'action':'delete' },
+			        //headers: { "X-CSRFToken": getCookie("csrftoken") },
+			        dataProcess:true,
+					timeout:500,
+					success:function(data)
+					{
+						if (parseInt(data['result'])==1)
+						{
+							$('#egeTableBodyAdd').find('button[id = "'+data['id']+'"]').parent().parent().remove();
+				            addrows--;
+							$.notify("Удалено.", "success");
+
+						}
+						else
+						{
+							$.notify("Ошибка при удалении :(", "error");
+						}
+						console.log('Result is loaded!');
+					},
+					error:function()
+					{
+						$.notify("Отсутствует соединение :(", "error");
+					},
+			    });
+			}else
 			{
 				$(this).parent().parent().remove();
 				addrows--;

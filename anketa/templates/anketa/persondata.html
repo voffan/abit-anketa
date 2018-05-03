@@ -152,28 +152,7 @@
 				$("#adrstype").prop('disabled',false);
 			}
 		});
-		$('input[type=radio][name=liableForMilit]').change(function()
-		{
-			if (this.value == "yes")
-			{
-				$("#isServedRow").show();
-			}
-			else
-			{
-				$("#isServedRow").hide();
-			}
-		});
-		$('input[type=radio][name=isServed]').change(function()
-		{
-			if (this.value == "yes")
-			{
-				$("#armyRow").show();
-			}
-			else
-			{
-				$("#armyRow").hide();
-			}
-		});
+		{% include 'anketa\other.js' %}
         {% include 'anketa\privileges.js' %}
 		$("#adrstype").change(function(){
 		$.ajax({
@@ -397,46 +376,7 @@
 		{% endfor %}
 		$("#additionalExams").select2('data',addExamsList);
 	{% endif %}
-	$('#rank').select2({
-		allowClear:true,
-		placeholder: "Рядовой",
-		language:"ru",
-		ajax:{
-			url:{% url 'rank' %},
-			dataType: 'json',
-			delay: 250,
-			data:function(params){
-				return{
-					query: params
-				};
-			},
-			processResults: function (data, page) {
-				return {
-					results: data
-				};
-			},
-			cache: true
-		}
-	});
-	$('#flang').select2({
-		language:"ru",
-		ajax:{
-			url:{% url 'flang' %},
-			dataType: 'json',
-			delay: 250,
-			data:function(params){
-				return{
-					query: params
-				};
-			},
-			processResults: function (data, page) {
-				return {
-					results: data
-				};
-			},
-			cache: true
-		}
-	});
+
 	{% if nationality != None  %}
 		$("#nation").select2('data',{id: '{{nationality_id}}', text:"{{nationality}}"});
 	{% endif %}

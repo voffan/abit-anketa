@@ -304,7 +304,7 @@ def SaveExam(request, abit):
 @transaction.atomic
 def SavePrivilegies(request, abit):
 	priv_details = list(zip(request.POST.getlist('privcat'), request.POST.getlist('privtype')))
-	achiev_details = list(zip(request.POST.getlist('achievement'), request.POST.getlist('achivresult'), request.POST.getlist('achievDoc')))
+	achiev_details = list(zip(request.POST.getlist('achievement'), request.POST.getlist('achievresult'), request.POST.getlist('achievDoc')))
 	print(priv_details)
 	print(achiev_details)
 	for i in range(len(priv_details)):
@@ -324,14 +324,14 @@ def SavePrivilegies(request, abit):
 	for i in range(len(achiev_details)):
 		achievement = AttrValue.objects.filter(attribute__name__icontains=u'Мероприятие').filter(
 			pk=achiev_details[i][0]).first()
-		achivresult = AttrValue.objects.filter(attribute__name__icontains=u'Достигнутый результат').filter(
+		achievresult = AttrValue.objects.filter(attribute__name__icontains=u'Достигнутый результат').filter(
 			pk=achiev_details[i][1]).first()
 		achiev = Achievements.objects.filter(abiturient__id=abit.id, contest__id=achiev_details[i][0],result__id=achiev_details[i][1]).first()
 		if achiev is None:
 			achiev = Achievements()
 			achiev.abiturient = abit
 			achiev.contest = achievement
-			achiev.result = achivresult
+			achiev.result = achievresult
 		achiev.save()
 		print('Achiev save!')
 
@@ -410,6 +410,32 @@ def SaveRelevants(request, abit):
 			contact.value = relationcontactvalue[i]
 			contact.save()
 			relation.save()
+
+@transaction.atomic
+def SaveOther(request,abit):
+	if (len(request.POST.get('hostel', ''))) > 0:
+		abit.hostel = False
+		if (request.POST.get('hostel', '') == "yes"):
+			abit.hostel = True
+	if (len(request.POST.get('flang', ''))) > 0:
+		abit.foreign_lang = AttrValue.objects.get(pk=request.POST.get('flang', ''))
+
+	if Milit.objects.filter(abiturient=abit).first() is not None:
+		Milit.objects.filter(abiturient=abit).first().delete()
+	milit = Milit()
+	milit.abiturient = abit
+	if (len(request.POST.get('liableForMilit', ''))) > 0:
+		if request.POST.get('liableForMilit', '') == "yes":
+			milit.liableForMilit = True
+			if (len(request.POST.get('isServed', ''))) > 0:
+				if request.POST.get('isServed', '') == "yes":
+					milit.isServed = True
+					if (len(request.POST.get('rank', ''))) > 0:
+						milit.rank = AttrValue.objects.get(pk=request.POST.get('rank'))
+					if (len(request.POST.get('yeararmy', ''))) > 0:
+						milit.yearDismissial = int(request.POST.get('yeararmy', ''))
+				# АХАХАХАХАХ ХКАКОЙ ККРАСИВЫЙ КОД АХАХАХАХАХХААХХА
+	milit.save()
 
 def SaveContactDetails(request, abit):
 	#SaveAddress(request, abit)
@@ -521,33 +547,9 @@ def AddDataToPerson(request):
 
 			if(page==5):
 				SavePrivilegies(request, abit)
-			"""
-			if(page==6):
-			"""
-			if page==7:
-				if(len(request.POST.get('hostel','')))>0:
-					abit.hostel=False
-					if(request.POST.get('hostel','')=="yes"):
-						abit.hostel=True
-				if(len(request.POST.get('flang','')))>0:
-					abit.foreign_lang=AttrValue.objects.get(pk=request.POST.get('flang',''))
 
-				if Milit.objects.filter(abiturient = abit).first() is not None:
-					Milit.objects.filter(abiturient = abit).first().delete()
-				milit = Milit()
-				milit.abiturient=abit
-				if (len(request.POST.get('liableForMilit','')))>0:
-					if request.POST.get('liableForMilit','')=="yes":
-						milit.liableForMilit=True
-						if (len(request.POST.get('isServed','')))>0:
-							if request.POST.get('isServed','')=="yes":
-								milit.isServed=True
-								if(len(request.POST.get('rank','')))>0:
-									milit.rank=AttrValue.objects.get(pk=request.POST.get('rank'))
-								if (len(request.POST.get('yeararmy','')))>0:
-									milit.yearDismissial=int(request.POST.get('yeararmy',''))
-									# АХАХАХАХАХ ХКАКОЙ ККРАСИВЫЙ КОД АХАХАХАХАХХААХХА
-				milit.save()
+			if(page==6):
+				SaveOther(request, abit)
 
 			abit.save()
 		except Exception as e:
@@ -901,7 +903,7 @@ def ExamSubject(request):
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def ExamType(request):
-	subjects = AttrValue.objects.filter(attribute__name__icontains=u'Тип экзамена').exclude(name__icontains=u'вступ')
+	subjects = AttrValue.objects.filter(attribute__name__icontains=u'Тип экзамена').exclude(value__icontains=u'вступ')
 	print(subjects)
 	result = []
 	for item in subjects:
@@ -1011,5 +1013,38 @@ def Flang(request):
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 
-def api_saveexams(request):
-	pass
+def api_exams(request):
+	result = {'result': 0, 'msg': ''}
+	if request.method == 'POST':
+		if request.POST['action'] == 'delete':
+			try:
+				Exams.objects.filter(pk=request.POST['id']).delete()
+				result['result'] = 1
+				result['id'] = request.POST['id']
+			except Exception as e:
+				result['msg'] = str(e)
+	return HttpResponse(json.dumps(result), content_type="application/json")
+
+def api_privileges(request):
+	result = {'result': 0, 'msg': ''}
+	if request.method == 'POST':
+		if request.POST['action'] == 'delete':
+			try:
+				Privilegies.objects.filter(pk=request.POST['id']).delete()
+				result['result'] = 1
+				result['id'] = request.POST['id']
+			except Exception as e:
+				result['msg'] = str(e)
+	return HttpResponse(json.dumps(result), content_type="application/json")
+
+def api_achievs(request):
+	result = {'result': 0, 'msg': ''}
+	if request.method == 'POST':
+		if request.POST['action'] == 'delete':
+			try:
+				Achievements.objects.filter(pk=request.POST['id']).delete()
+				result['result'] = 1
+				result['id'] = request.POST['id']
+			except Exception as e:
+				result['msg'] = str(e)
+	return HttpResponse(json.dumps(result), content_type="application/json")
