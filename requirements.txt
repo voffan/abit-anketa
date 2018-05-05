@@ -1,9 +1,5 @@
-cycler==0.10.0
 Django==1.7.11
-matplotlib==2.1.1
 mysql-connector==2.1.4
-numpy==1.13.3
-pyparsing==2.2.0
+numpy==1.13.1
 python-dateutil==2.6.1
 pytz==2017.3
-six==1.11.0

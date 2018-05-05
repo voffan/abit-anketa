@@ -15,7 +15,7 @@
 <script src="{% static "anketa/select2-3.5.4/select2.min.js" %}"></script>
 <script src="{% static "anketa/js/notify.js" %}"></script>
 <script>
-	{% include '..\templates\kladr\kladr.js' %}
+	{% include '../templates/kladr/kladr.js' %}
 	$(document).ready(function() 
 	{
 		$('#adrsfact').hide();
@@ -79,7 +79,7 @@
 				relationsrow--;
 			}
 		});
-		{% include 'anketa\contacts.js' %}
+		{% include 'anketa/contacts.js' %}
 		$("#addRelation").on("click", function()
 		{
 			if(contactsrow<maxContacts)
@@ -139,7 +139,41 @@
 					}
 				});
 		});
-		{% include 'anketa\exams.js' %}
+		function initSelect2(object){
+			object.select2({
+				language:"ru",
+				allowClear:true,
+				ajax:{
+					url:{% url 'examsubject' %},
+					dataType:'json',
+					delay:250,
+					data:function(params){
+						return{
+							query:params
+						};
+					},
+					processResults:function(data,page)
+					{
+						return{
+							results:data
+						};
+					},
+					cache:true
+				}
+			});
+			if($(object).val() != "")
+			{
+				for (var i = 0; i<sub_id.length;i++)
+				{
+					if(sub_id[i]===parseInt($(object).val()))
+					{
+						object.select2('data',{id:sub_id[i], text:sub_val[i]});
+						return;
+					}
+				}
+			}
+		};
+		{% include 'anketa/exams.js' %}
 		$('input[type=radio][name=adrsisthesame]').change(function()
 		{
 			if (this.value == "yes")
@@ -153,7 +187,7 @@
 			}
 		});
 		{% include 'anketa\other.js' %}
-        {% include 'anketa\privileges.js' %}
+        {% include 'anketa/privileges.js' %}
 		$("#adrstype").change(function(){
 		$.ajax({
 			url:{% url 'getaddress' %},
@@ -427,7 +461,7 @@ $(document).ready(function(){
 </script>
 {% endblock %}
 {% block container %}
-{% include '..\templates\kladr\kladr.html' %}
+{% include '../templates/kladr/kladr.html' %}
 <!-- <form id="persondata" name="persondata" class="form-horizontal" role="form" method="post" >-->
 {% csrf_token %}
 	<div id="rootwizard" class="col-md-9 col-xs-12 col-sm-12">
@@ -450,12 +484,12 @@ $(document).ready(function(){
 		</div>
 		<input type="hidden" name="currentPage" id="currentPage">
 		<div class="tab-content">
-			{% include 'anketa\abitdata.html' %}
-			{% include 'anketa\documents.html' %}
-			{% include 'anketa\contacts.html' %}
-			{% include 'anketa\exams.html' %}
-			{% include 'anketa\privileges.html' %}
-			{% include 'anketa\other.html' %}
+			{% include 'anketa/abitdata.html' %}
+			{% include 'anketa/documents.html' %}
+			{% include 'anketa/contacts.html' %}
+			{% include 'anketa/exams.html' %}
+			{% include 'anketa/privileges.html' %}
+			{% include 'anketa/other.html' %}
 			<ul class="pager wizard">
 				<li class="previous"><a href="javascript:;">Предыдущий</a></li>
 				<li class="next"><a href="javascript:;">Следующий</a></li>

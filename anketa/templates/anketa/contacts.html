@@ -1,174 +1,183 @@
-            <div class="tab-pane" id="tab3">
-				<div class="container-fluid">
-					<div class="row">
-						<div class="panel panel-primary">
-							<div class="panel-heading">
-								<h3 class="panel-title">Адресная информация</h3>
-							</div>
-							<div class="panel-body">
-								<div class="row">
-									<div class="col-xs-12 col-sm-10 col-md-10 col-md-offset-1">
-										<p>
-											<label for="adrsp">Адрес регистрации</label>
-											<div class="input-group">
-												<input id="adrsp" name="adrsp" class="form-control" placeholder="Выберите адрес" readonly>
-												<span class="input-group-btn">
-													<button class="btn btn-default" type="button" id="kladrbtn">...</button>
-												</span>
-											</div>
+<div class="tab-pane" id="tab3">
+    <form id="exams" name="exams" class="form-horizontal" role="form" method="post">
+    	{% csrf_token %}
+    	<div class="container-fluid">
+			<div class="row">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">Адресная информация</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-xs-12 col-sm-10 col-md-10 col-md-offset-1">
+								<p>
+									<label for="adrsp">Адрес регистрации</label>
+									<div class="input-group">
+										<input id="adrsp" name="adrsp" class="form-control" placeholder="Выберите адрес" readonly>
+										<span class="input-group-btn">
+											<button class="btn btn-default" type="button" id="kladrbtn">...</button>
+										</span>
+									</div>
 
-                        					<input id="streetp" name="streetp" hidden autocomplete="off">
-                        					<input id="housep" name="housep" hidden autocomplete="off">
-                        					<input id="buildingp" name="buildingp" hidden autocomplete="off">
-                        					<input id="flatp" name="flatp" hidden autocomplete="off">
-										</p>
-									</div>
-								</div>
-								</br>
-								<div class="row">
-									<div class="col-xs-12 col-sm-10 col-md-10 col-md-offset-1">
-										<p>
-											<label for="adrsisthesame">Адрес прописки совпадает с адресом факт. места жительства</label>
-											<br>
-											<input type="radio" name = "adrsisthesame" value="no">Нет
-											<input type="radio" name = "adrsisthesame" value="yes">Да
-										</p>
-									</div>
-								</div>
-								<br>
-								<div class="row" id="adrsfact">
-									<div class="col-xs-12 col-sm-10 col-md-10 col-md-offset-1">
-										<p>
-											<label for="adrsf">Фактический адрес</label>
-											<div class="input-group">
-												<input id ="adrsf" name="adrsf" class="form-control" placeholder="Выберите адрес" >
-												<span class="input-group-btn">
-													<button class="btn btn-default" type="button" id="adrsf_select">...</button>
-												</span>
-											</div>
-										</p>
-									</div>
-								</div>
+                   					<input id="streetp" name="streetp" hidden autocomplete="off">
+                   					<input id="housep" name="housep" hidden autocomplete="off">
+                   					<input id="buildingp" name="buildingp" hidden autocomplete="off">
+                   					<input id="flatp" name="flatp" hidden autocomplete="off">
+								</p>
 							</div>
 						</div>
-					</div>
-					<div class="row">
-						<div class="panel panel-primary">
-							<div class="panel-heading">
-								<h3 class="panel-title">Контакты</h3>
-							</div>
-							<div class="panel-body">
-								<div class="row">
-									<table class="table" id="table">
-										<thead id="tablehead">
-											<tr>
-												<th>Тип контакта</th>
-												<th>Номер</th>
-											</tr>
-										</thead>
-										<tbody id="contactsTable">
-											{% if contacts %}
-												{% for item in contacts %}
-												<tr>
-													<td>
-													<select id="contacttype" name = "contacttype" class="form-control">
-														{% if contacts_type %}
-															{% for item2 in contacts_type %}
-																<option value="{{item2.id}}" {% if item.type.id == item2.id %} selected {% endif %}>{{item2.value}}</option>
-															{% endfor %}
-														{% endif %}
-													</select>
-													</td>
-													<td><input type="text" class="form-control" name="contactvalue" value= {{item.value}}></td>
-													<td><button class="btn btn-default btn-sm" id="delContactRow" type="button">Удалить</button></td>
-												</tr>
-												{% endfor %}
-											{% else %}
-											<tr>
-												<td>
-													<select id="contacttype" name = "contacttype" class="form-control">
-														{% if contacts_type %}
-															{% for item in contacts_type %}
-																<option value="{{item.id}}">{{item.value}}</option>
-															{% endfor %}
-														{% endif %}
-													</select>
-												</td>
-												<td><input type="text" class="form-control" name="contactvalue"></td>
-												<td><button class="btn btn-default btn-sm" id="delContactRow" type="button">Удалить</button></td>
-											</tr>
-											{% endif %}
-										</tbody>
-									</table>
-								</div>
-								<div class="row">
-									<button class="btn btn-primary btn-block" type="button" id="addContact">Добавить контакт</button>
-								</div>
+						</br>
+						<div class="row">
+							<div class="col-xs-12 col-sm-10 col-md-10 col-md-offset-1">
+								<p>
+									<label for="adrsisthesame">Адрес прописки совпадает с адресом факт. места жительства</label>
+									<br>
+									<input type="radio" name = "adrsisthesame" value="no">Нет
+									<input type="radio" name = "adrsisthesame" value="yes">Да
+								</p>
 							</div>
 						</div>
-					</div>
-					<div class="row">
-						<div class="panel panel-primary">
-							<div class="panel-heading">
-								<h3 class="panel-title">Родственники</h3>
+						<br>
+						<div class="row" id="adrsfact">
+							<div class="col-xs-12 col-sm-10 col-md-10 col-md-offset-1">
+								<p>
+									<label for="adrsf">Фактический адрес</label>
+									<div class="input-group">
+										<input id ="adrsf" name="adrsf" class="form-control" placeholder="Выберите адрес" readonly>
+										<span class="input-group-btn">
+											<button class="btn btn-default" type="button" id="adrsf_select">...</button>
+										</span>
+									</div>
+
+									<input id="streetf" name="streetf" hidden autocomplete="off">
+                   					<input id="housef" name="housef" hidden autocomplete="off">
+                   					<input id="buildingf" name="buildingf" hidden autocomplete="off">
+                   					<input id="flatf" name="flatf" hidden autocomplete="off">
+								</p>
 							</div>
-							<div class="panel-body">
-								<div class="row">
-									<table class="table" id="table">
-										<thead id="tablehead">
-											<tr>
-												<th>Родственник</th>
-												<th>ФИО</th>
-												<th>Номер телефона</th>
-											</tr>
-										</thead>
-										<tbody id="relationsTable">
-											{% if relation %}
-												{% for item in relation %}
-												<tr>
-													<td>
-													<select id="relationtype" name = "relationtype" class="form-control">
-														{% if relation_type %}
-															{% for item2 in relation_type %}
-																<option value="{{item2.id}}" {% if item.type.id == item2.id %} selected {% endif %}>{{item2.value}}</option>
-															{% endfor %}
-														{% endif %}
-													</select>
-													</td>
-													<td><input type="text" class="form-control" name="relationFIO" value= "{{item.fio}} {{item.}}"></td>
-													<td><input type="text" class="form-control" name="relationcontactvalue" value= {{item.value}}></td>
-													<td><button class="btn btn-default btn-sm" id="delRelationRow" type="button">Удалить</button></td>
-												</tr>
-												{% endfor %}
-											{% else %}
-											<tr>
-												<td>
-													<select id="relationtype" name = "relationtype" class="form-control">
-														{% if relation_type %}
-															{% for item in relation_type %}
-																<option value="{{item.id}}">{{item.value}}</option>
-															{% endfor %}
-														{% endif %}
-													</select>
-												</td>
-												<td><input type="text" class="form-control" name="relationFIO"></td>
-												<td><input type="text" class="form-control" name="relationcontactvalue"></td>
-												<td><button class="btn btn-default btn-sm" id="delRelationRow" type="button">Удалить</button></td>
-											</tr>
-											{% endif %}
-										</tbody>
-									</table>
-								</div>
-								<div class="row">
-									<button class="btn btn-primary btn-block" type="button" id="addRelation">Добавить родственника</button>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2 col-sm-offset-1">
-							<button class="btn btn-primary btn-block" type="button" id="save3">Сохранить</button>
 						</div>
 					</div>
 				</div>
 			</div>
+			<div class="row">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">Контакты</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<table class="table" id="table">
+								<thead id="tablehead">
+									<tr>
+										<th>Тип контакта</th>
+										<th>Номер</th>
+									</tr>
+								</thead>
+								<tbody id="contactsTable">
+									{% if contacts %}
+										{% for item in contacts %}
+										<tr>
+											<td>
+											<select id="contacttype" name = "contacttype" class="form-control">
+												{% if contacts_type %}
+													{% for item2 in contacts_type %}
+														<option value="{{item2.id}}" {% if item.type.id == item2.id %} selected {% endif %}>{{item2.value}}</option>
+													{% endfor %}
+												{% endif %}
+											</select>
+											</td>
+											<td><input type="text" class="form-control" name="contactvalue" value= {{item.value}}></td>
+											<td><button class="btn btn-default btn-sm" id="delContactRow" type="button">Удалить</button></td>
+										</tr>
+										{% endfor %}
+									{% else %}
+									<tr>
+										<td>
+											<select id="contacttype" name = "contacttype" class="form-control">
+												{% if contacts_type %}
+													{% for item in contacts_type %}
+														<option value="{{item.id}}">{{item.value}}</option>
+													{% endfor %}
+												{% endif %}
+											</select>
+										</td>
+										<td><input type="text" class="form-control" name="contactvalue"></td>
+										<td><button class="btn btn-default btn-sm" id="delContactRow" type="button">Удалить</button></td>
+									</tr>
+									{% endif %}
+								</tbody>
+							</table>
+						</div>
+						<div class="row">
+							<button class="btn btn-primary btn-block" type="button" id="addContact">Добавить контакт</button>
+								</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">Родственники</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<table class="table" id="table">
+								<thead id="tablehead">
+									<tr>
+										<th>Родственник</th>
+										<th>ФИО</th>
+										<th>Номер телефона</th>
+									</tr>
+								</thead>
+								<tbody id="relationsTable">
+									{% if relation %}
+										{% for item in relation %}
+										<tr>
+											<td>
+											<select id="relationtype" name = "relationtype" class="form-control">
+												{% if relation_type %}
+													{% for item2 in relation_type %}
+														<option value="{{item2.id}}" {% if item.type.id == item2.id %} selected {% endif %}>{{item2.value}}</option>
+													{% endfor %}
+												{% endif %}
+											</select>
+											</td>
+											<td><input type="text" class="form-control" name="relationFIO" value= "{{item.fio}} {{item.}}"></td>
+											<td><input type="text" class="form-control" name="relationcontactvalue" value= {{item.value}}></td>
+											<td><button class="btn btn-default btn-sm" id="delRelationRow" type="button">Удалить</button></td>
+										</tr>
+										{% endfor %}
+									{% else %}
+									<tr>
+										<td>
+											<select id="relationtype" name = "relationtype" class="form-control">
+												{% if relation_type %}
+													{% for item in relation_type %}
+														<option value="{{item.id}}">{{item.value}}</option>
+													{% endfor %}
+												{% endif %}
+											</select>
+										</td>
+										<td><input type="text" class="form-control" name="relationFIO"></td>
+										<td><input type="text" class="form-control" name="relationcontactvalue"></td>
+										<td><button class="btn btn-default btn-sm" id="delRelationRow" type="button">Удалить</button></td>
+									</tr>
+									{% endif %}
+								</tbody>
+							</table>
+						</div>
+						<div class="row">
+							<button class="btn btn-primary btn-block" type="button" id="addRelation">Добавить родственника</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2 col-sm-offset-1">
+					<button class="btn btn-primary btn-block" type="button" id="save3">Сохранить</button>
+				</div>
+			</div>
+		</div>
+    </form>
+</div>
+				

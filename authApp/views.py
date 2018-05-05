@@ -42,6 +42,7 @@ def login_web(request):
 		args.update(csrf(request))
 		return render(request,'auth/auth.html', args)
 
+
 def register_index(request):
 	return render(request, 'auth/register.html')
 
@@ -53,7 +54,7 @@ def checkEmailValid(request):
 	if check is not None:
 		result['result']=1
 		result['error_msg']='e-mail занят! Выберете другой'
-	
+
 	return HttpResponse(json.dumps(result), content_type='application/json')
 
 def checkUserValid(request):
@@ -69,4 +70,15 @@ def checkUserValid(request):
 
 def checkPassword(request):
 	result={'result':0,'error_msg':''}
-	
+	return HttpResponse(json.dumps(result), content_type='application/json')
+
+
+def login_mobile(request):
+	res = {'result':0, 'err_msg':''}
+	user = login_user(request)
+	if user is not None:
+		#login success
+		pass
+	else:
+		res['err_msg'] = 'Authentification filed'
+	return HttpResponse(json.dumps(res), content_type='application/json')

@@ -207,6 +207,16 @@ $('#street').select2({
 	language:"ru"
 });
 $('#SaveKladr').on('click',function(e){
+	if ($('#street').val() === "") {
+		alert("Выберите улицу");
+		return;
+	}
+
+	if ($('#adrshouse').val() === "") {
+		alert("Введите номер дома");
+		return;
+	}
+
     $('adrsp').text = "fffff";
     var address = $('#region').select2('data').text;
     if ($('#district').select2('data')) {
@@ -238,13 +248,18 @@ $('#SaveKladr').on('click',function(e){
         address += $('#adrsflat').val();
     }
 	$(saveObject).val(address);
-	$('#streetp').val(code[code.length - 1]);
-	$('#housep').val($('#adrshouse').val());
-	$('#buildingp').val($('#adrsbuilding').val());
-	$('#flatp').val($('#adrsflat').val());
+	if (saveObject.selector === "#adrsp") {
+		$('#streetp').val(code[code.length - 1]);
+		$('#housep').val($('#adrshouse').val());
+		$('#buildingp').val($('#adrsbuilding').val());
+		$('#flatp').val($('#adrsflat').val());
+	} else {
+		$('#streetf').val(code[code.length - 1]);
+		$('#housef').val($('#adrshouse').val());
+		$('#buildingf').val($('#adrsbuilding').val());
+		$('#flatf').val($('#adrsflat').val());
+	}
 	$('#KladrModal').modal('hide');
-
-
 });
 $('#region').on("change",function(e){
 	$('#district').select2('val','');

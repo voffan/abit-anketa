@@ -22,8 +22,10 @@ from django.contrib.auth.models import User
 from django.db import transaction
 from django.contrib.auth.decorators import login_required
 
+
 def StartPage(request):
 	return render(request,'anketa/start.html')
+
 
 def StartApp(request):
 	return render(request, 'anketa/wizardform.html')
@@ -338,29 +340,34 @@ def SavePrivilegies(request, abit):
 
 @transaction.atomic
 def SaveAddress(request, abit):
-	if len(request.POST.get('street', ''))<1:
-		return
-	if request.POST.get('adrstype', '') == "perm":
+	print('Saving Address')
+	if request.POST.get('adrsisthesame', '') == "yes":
 		adrs_type = u'По прописке'
+		adrs_fields = ['indexp', 'streetp', 'housep', 'buildingp', 'flatp']
 	else:
 		adrs_type = u'Фактический'
+		adrs_fields = ['indexf', 'streetf', 'housef', 'buildingf', 'flatf']
+	if len(request.POST.get(adrs_fields[1], ''))<1:
+		print ('returned')
+		return
 	adrs = Address.objects.filter(abiturient=abit).filter(adrs_type__value__icontains=adrs_type).first()
 	if adrs is None:
 		adrs = Address()
 		adrs.abiturient = abit
 	adrs.adrs_type = AttrValue.objects.filter(value__icontains=adrs_type).first()
-	adrs.zipcode = request.POST.get('adrsindex', '')
-	adrs.street = Street.objects.filter(name__icontains=request.POST.get('street', '')).first()
-	adrs.house = request.POST.get('adrshouse', '')
-	adrs.building = request.POST.get('adrsbuilding', '')
-	adrs.flat = request.POST.get('adrsflat', '')
+	adrs.zipcode = request.POST.get(adrs_fields[0], '')
+	adrs.street = Street.objects.filter(code=request.POST.get(adrs_fields[1], '')).first()
+	adrs.house = request.POST.get(adrs_fields[2], '')
+	adrs.building = request.POST.get(adrs_fields[3], '')
+	adrs.flat = request.POST.get(adrs_fields[4], '')
 	if ((request.POST.get('adrsisthesame', '')) == "yes"):
 		adrs.adrs_type_same = True
 		# adrs.adrs_type=AttrValue.objects.filter(value__icontains=u'прописке').first()
-		Address.objects.filter(abiturient__id=abiturient.id).delete()
+		Address.objects.filter(abiturient__id=abit.id).delete()
 	else:
 		adrs.adrs_type_same = False
 	adrs.save()
+	print('Address saved')
 
 @transaction.atomic
 def SaveContacts(request, abit):
@@ -439,7 +446,7 @@ def SaveOther(request,abit):
 	milit.save()
 
 def SaveContactDetails(request, abit):
-	#SaveAddress(request, abit)
+	SaveAddress(request, abit)
 	print('saving contacts')
 	SaveContacts(request, abit)
 	print('saving relevants')
