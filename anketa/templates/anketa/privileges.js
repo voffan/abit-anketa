@@ -236,8 +236,10 @@ $("#addPriv").on("click", function()
 		{
 		privrows++;
 			var newRow = $('<tr>\
-			                <td><input type="hidden" class="form-control" name="privcat" value =""><input type="hidden" name="privId" value ="-1"></td>\
-							<td><input type="hidden" class="form-control" name="privtype" value=""></td>\
+			                <td><input type="hidden" class="form-control" name="privcat"><input type="hidden" name="privId" value ="-1"></td>\
+							<td><input type="hidden" class="form-control" name="privtype"></td>\
+							<td><input type="text" class="form-control" name="privdocSeria"></td>\
+							<td><input type="text" class="form-control" name="privdocNomer"></td>\
 							<td><button class="btn btn-default btn-sm" name="delPrivRow" type="button">Удалить</button></td>\
 						    </tr>');
 			$("#privelegesTableBoby").append(newRow);
@@ -262,9 +264,71 @@ $("#addAchiev").on("click", function()
 	});
 $(document).on("click","button[name*='delPrivRow']", function()
 	{
+			if (parseInt($(this).attr('id')) >= 0)
+			{
+			    console.log($(this).attr('id'));
+			    $.ajax({
+			        url:{% url 'apiprivileges' %},
+			        type:'POST',
+			        data:{'id':$(this).attr('id'), 'csrfmiddlewaretoken': '{{ csrf_token }}', 'action':'delete' },
+			        //headers: { "X-CSRFToken": getCookie("csrftoken") },
+			        dataProcess:true,
+					timeout:500,
+					success:function(data)
+					{
+						if (parseInt(data['result'])==1)
+						{
+							$('#privelegesTableBoby').find('button[id = "'+data['id']+'"]').parent().parent().remove();
+				            privrows--;
+							$.notify("Удалено.", "success");
+
+						}
+						else
+						{
+							$.notify("Ошибка при удалении :(", "error");
+						}
+						console.log('Result is loaded!');
+					},
+					error:function()
+					{
+						$.notify("Отсутствует соединение :(", "error");
+					},
+			    });
+			}else
 			$(this).parent().parent().remove();
 	});
 $(document).on("click","button[name*='delAchievRow']", function()
 	{
+			if (parseInt($(this).attr('id')) >= 0)
+			{
+			    console.log($(this).attr('id'));
+			    $.ajax({
+			        url:{% url 'apiachievs' %},
+			        type:'POST',
+			        data:{'id':$(this).attr('id'), 'csrfmiddlewaretoken': '{{ csrf_token }}', 'action':'delete' },
+			        //headers: { "X-CSRFToken": getCookie("csrftoken") },
+			        dataProcess:true,
+					timeout:500,
+					success:function(data)
+					{
+						if (parseInt(data['result'])==1)
+						{
+							$('#achievementsTableBoby').find('button[id = "'+data['id']+'"]').parent().parent().remove();
+				            achievrows--;
+							$.notify("Удалено.", "success");
+
+						}
+						else
+						{
+							$.notify("Ошибка при удалении :(", "error");
+						}
+						console.log('Result is loaded!');
+					},
+					error:function()
+					{
+						$.notify("Отсутствует соединение :(", "error");
+					},
+			    });
+			}else
 			$(this).parent().parent().remove();
 	});
