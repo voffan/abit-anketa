@@ -13,8 +13,10 @@
 										<table class="table" id="tablePriv">
 											<thead id="tablehead">
 												<tr>
-													<th width="50%">Категория</th>
-													<th width="35%">Тип</th>
+													<th width="35%">Категория</th>
+													<th width="30%">Тип</th>
+													<th width="15%">Серия документа</th>
+													<th width="15%">Номер документа</th>>
 													<th width="15%">Действие</th>
 												</tr>
 											</thead>
@@ -24,6 +26,8 @@
 												<tr class="info">
 													<td><input type="hidden" class="form-control" name="privcat" value ="{{item.privcat.id}};{{item.privcat.name}}"><input type="hidden" name="privId" value ="{{item.id}}"></td>
 													<td><input type="hidden" class="form-control" name="privtype" value="{{item.privtype.id}};{{item.privtype.name}}"></td>
+													<td><input type="text" class="form-control" name="privdocSeria" value=""></td>
+													<td><input type="text" class="form-control" name="privdocNomer" value=""></td>
 													<td><button class="btn btn-default btn-sm" name="delPrivRow" type="button" id="{{item.id}}">Удалить</button></td>
 												</tr>
 												{% endfor %}

@@ -72,6 +72,32 @@ function initSelect2_examType(object){
 				object.select2('data',{id:v[0], text:v[1]});
 			}
 		};
+
+$(document).on('change', 'input[name^=egePoints]', function(){
+    if (parseInt($(this).val())>100){
+        alert("Вы не можете установить кол-во баллов больше 100!");
+        $(this).val(0);
+    }
+    if (parseInt($(this).val())<0){
+        alert("Вы не можете установить кол-во баллов меньше 0!");
+        $(this).val(0);
+    }
+});
+
+$(document).on('change', 'input[name^=egeYear]', function(){
+    var dyear = new Date();
+    var year = parseInt(dyear.getFullYear());
+    if (parseInt($(this).val())>year){
+        alert("Вы не можете указать год позже "+year+"!");
+        $(this).val(2018);
+    }
+    year = year -4;
+    if (parseInt($(this).val())<year){
+        alert("Вы не можете установить год раньше "+year+"!");
+        $(this).val(2014);
+    }
+});
+
 $("#addExam").on("click", function()
 		{
 			if(egerows<maxExams)

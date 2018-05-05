@@ -236,8 +236,10 @@ $("#addPriv").on("click", function()
 		{
 		privrows++;
 			var newRow = $('<tr>\
-			                <td><input type="hidden" class="form-control" name="privcat" value =""><input type="hidden" name="privId" value ="-1"></td>\
-							<td><input type="hidden" class="form-control" name="privtype" value=""></td>\
+			                <td><input type="hidden" class="form-control" name="privcat"><input type="hidden" name="privId" value ="-1"></td>\
+							<td><input type="hidden" class="form-control" name="privtype"></td>\
+							<td><input type="text" class="form-control" name="privdocSeria"></td>\
+							<td><input type="text" class="form-control" name="privdocNomer"></td>\
 							<td><button class="btn btn-default btn-sm" name="delPrivRow" type="button">Удалить</button></td>\
 						    </tr>');
 			$("#privelegesTableBoby").append(newRow);

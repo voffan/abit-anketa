@@ -312,12 +312,13 @@ def SavePrivilegies(request, abit):
 			pk=priv_details[i][0]).first()
 		privtype = AttrValue.objects.filter(attribute__name__icontains=u'Тип привелегии').filter(
 			pk=priv_details[i][1]).first()
-		priv = Privilegies.objects.filter(abiturient__id=abit.id, category__id=priv_details[i][0],priv_type__id =priv_details[i][1]).first()
+		priv = Privilegies.objects.filter(abiturient__id=abit.id, category__id=priv_details[i][0],priv_type__id =priv_details[i][1],).first()
 		if priv is None:
 			priv = Privilegies()
 			priv.abiturient = abit
 			priv.category = privcat
 			priv.priv_type = privtype
+
 		priv.save()
 		print('Priv save!')
 
@@ -541,6 +542,7 @@ def AddDataToPerson(request):
 
 			if page==3:
 				SaveContactDetails(request, abit)
+
 			if page==4:
 				print('Exams')
 				SaveExam(request, abit)
