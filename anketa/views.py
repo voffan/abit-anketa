@@ -596,9 +596,10 @@ def AddDataToPerson(request):
                 SavePrivilegies(request, abit)
 
             if page == 6:
-				SaveOther(request, abit)
+                SaveOther(request, abit)
 
             abit.save()
+
         except Exception as e:
             result['result'] = str(e)
     print('result!')
