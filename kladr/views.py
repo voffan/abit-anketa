@@ -30,7 +30,7 @@ def get_street(request):
 		streets = Street.objects.filter(code__startswith=village_code)
 		if len(query)>0:
 			streets = streets.filter(name__icontains=query)
-		result=[{'id':item.code, 'text':item.name} for item in streets]
+		result=[{'id':item.code, 'text':(item.socr + '. ' + item.name)} for item in streets]
 	return HttpResponse(json.dumps(result), content_type='application/json')
 
 def get_region(request):
@@ -38,7 +38,7 @@ def get_region(request):
 	query = request.GET.get('query','')
 	if len(query)>0:
 		regions = regions.filter(name__icontains=query)
-	result=[{'id':item.code, 'text':item.name} for item in regions]
+	result=[{'id':item.code, 'text':(item.name + ' ' + item.socr + '.')} for item in regions]
 	return HttpResponse(json.dumps(result), content_type='application/json')
 
 def get_district(request):
@@ -50,7 +50,7 @@ def get_district(request):
 		district = Kladr.objects.filter(code__startswith=region_code).filter(code__endswith='00000000').exclude(code__iendswith='00000000000')
 		if len(query)>0:
 			district = district.filter(name__icontains=query)
-		result=[{'id':item.code, 'text':item.name} for item in district]
+		result=[{'id':item.code, 'text':(item.name + ' ' + item.socr + '.')} for item in district]
 	return HttpResponse(json.dumps(result), content_type='application/json')
 
 def get_homes(request):
@@ -72,7 +72,7 @@ def get_city(request):
 			cities = Kladr.objects.filter(code__startswith=region_code).filter(code__endswith='00000').exclude(code__endswith='00000000')
 		if len(query)>0:
 			cities = cities.filter(name__icontains=query)
-		result=[{'id':item.code, 'text':item.name} for item in cities]
+		result=[{'id':item.code, 'text':(item.socr + '. ' + item.name)} for item in cities]
 	return HttpResponse(json.dumps(result), content_type='application/json')
 
 def get_village(request):
@@ -93,7 +93,7 @@ def get_village(request):
 			villages = Kladr.objects.filter(code__startswith=city_code).exclude(code__endswith='00000')
 		if len(query)>0:
 			villages = villages.filter(name__icontains=query)
-	result=[{'id':item.code, 'text':item.name} for item in villages]
+	result=[{'id':item.code, 'text':(item.socr + '. ' + item.name)} for item in villages]
 
 	return HttpResponse(json.dumps(result), content_type='application/json')
 

@@ -1,6 +1,7 @@
 <div class="tab-pane" id="tab3">
     <form id="exams" name="exams" class="form-horizontal" role="form" method="post">
     	{% csrf_token %}
+        <input name="currentPage" id="currentPage" value="3" type="hidden">
     	<div class="container-fluid">
 			<div class="row">
 				<div class="panel panel-primary">

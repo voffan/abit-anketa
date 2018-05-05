@@ -392,7 +392,7 @@ def Application_list (request):
 	data['Application'] = AttrValue.objects.filter(attribute__name__icontains=u'статус за')
 	data['pages'] = current_page    
 	data['filters'] = filters    
-	return render(request,'staff\\application_list.html', data)
+	return render(request, 'staff/application_list.html', data)
 
 
 @login_required(login_url = '/auth')

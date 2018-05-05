@@ -31,15 +31,15 @@ class Flat(models.Model):
         return self.name
 
 class Kladr(models.Model):
-    name = models.CharField(u'Наименование',max_length = 40, db_index = True)
-    socr = models.CharField(u'Сокращенное наименование типа объекта',max_length = 10)
-    code = models.CharField(u'Код',max_length = 13, db_index = True)
-    index = models.CharField(u'Почтовый индекс',max_length = 6, null=True, blank=True, db_index = True)
-    gninmb = models.CharField(u'Код ИФНС',max_length = 4, null=True, blank=True, db_index = True)
-    uno = models.CharField(u'Код терр-го участка ИФНС',max_length = 4, null=True, blank=True, db_index = True)
-    ocatd = models.CharField(u'ОКАТО',max_length = 11, null=True, blank=True, db_index = True)
-    status = models.CharField(u'Статус объекта',max_length = 1, db_index = True)
-    def __unicode__(self):
+    name = models.CharField('Наименование', max_length=40, db_index=True)
+    socr = models.CharField('Сокращенное наименование типа объекта', max_length=10)
+    code = models.CharField('Код', max_length=13, db_index=True)
+    index = models.CharField('Почтовый индекс', max_length=6, null=True, blank=True, db_index=True)
+    gninmb = models.CharField('Код ИФНС', max_length=4, null=True, blank=True, db_index=True)
+    uno = models.CharField('Код терр-го участка ИФНС', max_length=4, null=True, blank=True, db_index=True)
+    ocatd = models.CharField('ОКАТО', max_length=11, null=True, blank=True, db_index=True)
+    status = models.CharField('Статус объекта', max_length=1, db_index=True)
+    def __str__(self):
         return self.name
 
 class Socrbase(models.Model):
@@ -51,12 +51,12 @@ class Socrbase(models.Model):
         return self.scname
 
 class Street(models.Model):
-    name = models.CharField(u'Наименование',max_length = 40, db_index = True)
-    socr = models.CharField(u'Сокращенное наименование тип объекта',max_length = 10)
-    code = models.CharField(u'Код',max_length = 17, db_index = True)
-    index = models.CharField(u'Почтовый индекс',max_length = 6, null=True, blank=True, db_index = True)
-    gninmb = models.CharField(u'Код ИФНС',max_length = 4, null=True, blank=True, db_index = True)
-    uno = models.CharField(u'Код терр-го участка ИФНС',max_length = 4, null=True, blank=True, db_index = True)
-    ocatd = models.CharField(u'ОКАТО',max_length = 11, null=True, blank=True, db_index = True)
+    name = models.CharField('Наименование', max_length=40, db_index=True)
+    socr = models.CharField('Сокращенное наименование тип объекта', max_length=10)
+    code = models.CharField('Код', max_length = 17, db_index=True)
+    index = models.CharField('Почтовый индекс', max_length=6, null=True, blank=True, db_index=True)
+    gninmb = models.CharField('Код ИФНС', max_length=4, null=True, blank=True, db_index=True)
+    uno = models.CharField('Код терр-го участка ИФНС', max_length=4, null=True, blank=True, db_index=True)
+    ocatd = models.CharField('ОКАТО',max_length=11, null=True, blank=True, db_index=True)
     def __str__(self):
         return self.name
