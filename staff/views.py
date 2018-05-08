@@ -505,6 +505,7 @@ def Application_review (request, application_id):
 		passp = application.abiturient.docs_set.filter(docType__value__icontains=u'Военн').first()
 	
 	Data={}
+	edu_doc = None
 	if application.abiturient.education_set.filter().first() is not None:
 		education = application.abiturient.education_set.get()
 	
@@ -599,10 +600,11 @@ def Application_review (request, application_id):
 				withfee = 'V'
 			ws.cell(row=9, column=26).value = withfee
 
-			if edu_doc.docType.value == 'Диплом':
-				ws.cell(row=10,column=20).value = 'V'
-			if edu_doc.docType.value == 'Аттестат':
-				ws.cell(row=10,column=9).value = 'V'				
+			if edu_doc is not None:
+				if edu_doc.docType.value == 'Диплом':
+					ws.cell(row=10,column=20).value = 'V'
+				if edu_doc.docType.value == 'Аттестат':
+					ws.cell(row=10,column=9).value = 'V'
 			
 			#####################институт факультет			
 			for i in range(len(application.department.name)):
@@ -696,7 +698,7 @@ def Application_review (request, application_id):
 					ws.cell(row=44,column=i+12).value = passp.docType.value[i]#документ подтверждающий личность
 			for i in range(len(str(passp.serialno))):
 				ws.cell(row=45,column=i+3).value = int(str(passp.serialno)[i])#серия
-			for i in range(6):
+			for i in range(len(str(passp.number))):
 				ws.cell(row=45,column=i+10).value = int(str(passp.number)[i])#номер
 			printPassIssDate = str(datetime.datetime.strftime(passp.issueDate,'%d%m%Y'))
 			printPassIssDate = printPassIssDate[:4]+printPassIssDate[-2:]
@@ -723,53 +725,57 @@ def Application_review (request, application_id):
 						r+=1
 				ws.cell(row=53,column=i+r).value = str(snils.serialno)[i]#снилс
 			###################page2
-			if edu_doc.isCopy == True:
-				ws.cell(row=59,column=7).value = u'Копия'#dokement ob obrazovanii
-			else:
-				ws.cell(row=59,column=7).value = u'Оригинал'#dokement ob obrazovanii
+			if edu_doc is not None:
+				if edu_doc.isCopy == True:
+					ws.cell(row=59,column=7).value = u'Копия'#dokement ob obrazovanii
+				else:
+					ws.cell(row=59,column=7).value = u'Оригинал'#dokement ob obrazovanii
 
 			Today=datetime.datetime.strftime(datetime.datetime.today(),"%d%m%Y") #tekyshaya data
 			Today = Today[:4]+Today[-2:]
 			for i in range(6):
 				ws.cell(row=59,column=i+21).value = int(Today[i])#Дата
-			
-			for i in range(len(edu_doc.docType.value)):
-				ws.cell(row=61,column=i+3).value = edu_doc.docType.value[i]#tip dokymenta
-			for i in range(len(str(edu_doc.serialno))):
-				ws.cell(row=61,column=i+13).value = int(str(edu_doc.serialno)[i])#lolo
-			for i in range(len(str(edu_doc.number))):
-				ws.cell(row=62,column=i+13).value = int(str(edu_doc.number)[i])#lolo
-			if education.level.value == 'СОО':
-				ws.cell(row=64,column=9).value = 'V'
-			if education.level.value == 'НПО':
-				ws.cell(row=64,column=12).value = 'V'
-			if education.level.value == 'СПО':
-				ws.cell(row=64,column=5).value = 'V'
-			if education.level.value == 'ВО':
-				ws.cell(row=64,column=18).value = 'V'
-			eduEnterDate = str(datetime.datetime.strftime(education.enterDate,'%d%m%Y'))
-			for i in range(len(eduEnterDate)):
-				ws.cell(row=66,column=i+5).value = int(eduEnterDate[i])
-			eduLeaveDate = str(datetime.datetime.strftime(edu_doc.issueDate, '%d%m%Y'))
-			for i in range(len(eduLeaveDate)):
-				ws.cell(row=66,column=i+19).value = int(eduLeaveDate[i])
-			if len(edu_doc.docIssuer.value)>70:
-				eduName1 = edu_doc.docIssuer.value[:70]
-				ws.cell(row=68,column=8).value = eduName1
-				eduName2 = edu_doc.docIssuer.value[70:]
-				ws.cell(row=69,column=8).value = eduName2
-			else:
-				ws.cell(row=68,column=8).value = edu_doc.docIssuer.value#Nazvanie y4ebnogo zavedeniya
+
+			if edu_doc is not None:
+				for i in range(len(edu_doc.docType.value)):
+					ws.cell(row=61,column=i+3).value = edu_doc.docType.value[i]#tip dokymenta
+				for i in range(len(str(edu_doc.serialno))):
+					ws.cell(row=61,column=i+13).value = int(str(edu_doc.serialno)[i])#lolo
+				for i in range(len(str(edu_doc.number))):
+					ws.cell(row=62,column=i+13).value = int(str(edu_doc.number)[i])#lolo
+				if education.level.value == 'СОО':
+					ws.cell(row=64,column=9).value = 'V'
+				if education.level.value == 'НПО':
+					ws.cell(row=64,column=12).value = 'V'
+				if education.level.value == 'СПО':
+					ws.cell(row=64,column=5).value = 'V'
+				if education.level.value == 'ВО':
+					ws.cell(row=64,column=18).value = 'V'
+				eduEnterDate = str(datetime.datetime.strftime(education.enterDate,'%d%m%Y'))
+				for i in range(len(eduEnterDate)):
+					ws.cell(row=66,column=i+5).value = int(eduEnterDate[i])
+				eduLeaveDate = str(datetime.datetime.strftime(edu_doc.issueDate, '%d%m%Y'))
+				for i in range(len(eduLeaveDate)):
+					ws.cell(row=66,column=i+19).value = int(eduLeaveDate[i])
+				if len(edu_doc.docIssuer.value)>70:
+					eduName1 = edu_doc.docIssuer.value[:70]
+					ws.cell(row=68,column=8).value = eduName1
+					eduName2 = edu_doc.docIssuer.value[70:]
+					ws.cell(row=69,column=8).value = eduName2
+				else:
+					ws.cell(row=68,column=8).value = edu_doc.docIssuer.value#Nazvanie y4ebnogo zavedeniya
 
 			#army
-			if application.abiturient.milit.liableForMilit:
-				ws.cell(row=102,column=10).value = 'V'
-			else:
-				ws.cell(row=102,column=18).value = 'V'
-			if application.abiturient.milit.isServed:
-				ws.cell(row=103,column=7).value = 'V'
-				for i in range(3):
-					ws.cell(row=103,column=i+15).value = int(str(application.abiturient.milit.yearDismissial[i]))
+			if hasattr(application.abiturient, 'milit'):
+				if application.abiturient.milit.liableForMilit:
+					ws.cell(row=102,column=10).value = 'V'
+				else:
+					ws.cell(row=102,column=18).value = 'V'
+				if application.abiturient.milit.isServed:
+					ws.cell(row=103,column=7).value = 'V'
+					if application.abiturient.milit.yearDismissial is not None:
+						for i in range(3):
+							ws.cell(row=103,column=i+15).value = int(str(application.abiturient.milit.yearDismissial[i]))
 			if application.abiturient.hostel:
 				ws.cell(row=106,column=10).value = 'V'
 			else:
@@ -800,7 +806,7 @@ def Application_review (request, application_id):
 
 
 			response = HttpResponse(content=save_virtual_workbook(wb),content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-			response['Content-Disposition'] = 'attachment; filename=Anketa SVFU_'+str(application.id)+'.xlsx'
+			response['Content-Disposition'] = 'attachment; filename=Anketa_SVFU_'+str(application.id)+'.xlsx'
 			return response
 
 			""" AMEN """
