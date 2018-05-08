@@ -144,11 +144,69 @@
         };      
 
 </script>
+<style>
+
+.palec:hover {
+    cursor: pointer;
+}
+</style>
+<script>
+    
+    $('.passpImg').on('click',function(){
+        $('#myModalLabel').html('Паспорт');
+        {% for i in data.passpIn %}
+            var newImg = $('<img class="img-thumbnail" width="100%" height="auto" src="{% static "anketa/images/" %}{{i.img.pic}}" alt="Паспорт"/>');            
+            $('.modal-body').append(newImg);
+        {% endfor %}
+        $('#images_views').modal();
+    });
+    
+    $('.edudImg').on('click',function(){
+        $('#myModalLabel').html('Документ об образовании');
+        {% for i in data.edud %}
+            var newImg = $('<img class="img-thumbnail" width="100%" height="auto" src="{% static "anketa/images/" %}{{i.img.pic}}" alt="Документ об образовании"/>');            
+            $('.modal-body').append(newImg);
+        {% endfor %}        
+        $('#images_views').modal();
+    });
+
+    $('.snilsImg').on('click',function(){
+        $('#myModalLabel').html('Снилс');
+        {% for i in data.snilsImg %}
+            var newImg = $('<img class="img-thumbnail" width="100%" height="auto" src="{% static "anketa/images/" %}{{i.image}}" alt="Документ об образовании"/>');            
+            $('.modal-body').append(newImg);
+        {% endfor %}        
+        $('#images_views').modal();
+    });
+
+    $('#images_views').on('hidden.bs.modal', function () {
+        $('.modal-body').find('img').remove();
+    });
+
+</script>
+
 
 {% endblock %}
 
 {% block content %}
 {% include '..\templates\kladr\kladr.html' %}
+<!-- Modal addtibute detail -->
+<div class="modal fade" id="images_views" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <form action="" method="POST" id="images_views_form">
+        {% csrf_token %}
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body">
+            </div>
+        </form>
+    </div>
+  </div>
+</div>
+
 <form id="persondata" name="persondata" class="form-horizontal" role="form" method="post" >
 {% csrf_token %}
 <div id = "rootwizard">
@@ -257,40 +315,42 @@
                             <div class="panel-heading">
                                 <h3 class="panel-title">Документ, удостоверяющий личность</h3>
                             </div>
-                            <div class="panel-body">
-                                <div class = "row">
-                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                            <div class="panel-body">                                
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <img class="img-thumbnail passpImg palec" style="height:265px;" src="{% static "anketa/images/" %}{{data.passpIn.0.img.pic}}" alt="Паспорт"/>
+                                    </div>                                
+                                    <div class="col-xs-9 col-sm-9 col-md-9">
                                         <p>
                                             <label for="doctype">Вид документа, удостоверяющего личность</label>
-                                            <input type="text" name="doctype" id="doctype" class="form-control" value="{{data.passp.docType.value}}"readonly>
+                                            <input type="text" name="doctype" id="doctype" class="form-control" value="{{data.passpIn.0.doc.docType.value}}"readonly>
                                         </p>
                                     </div>
-                                </div>                                
-                                <p>
-                                    <div class = "row">
-                                        <div class="col-xs-12 col-sm-12 col-md-12">
+                                    
+                                    <div class="col-xs-4 col-sm-4 col-md-4">
+                                        <p>
                                             <label for="serialdoc">Серия</label>
-                                            <input type = "text" name = "serialdoc" id = "serialdoc" class = "form-control" placeholder="1234" value="{{data.passp.serialno}}"readonly>
-                                        </div>
-                                        <div class = "col-xs-6 col-sm-6 col-md-6 ">
+                                            <input type = "text" name = "serialdoc" id = "serialdoc" class = "form-control" placeholder="1234" value="{{data.passpIn.0.doc.serialno}}"readonly>
+                                        </p>
+                                    </div>
+                                    <div class = "col-xs-4 col-sm-4 col-md-5 ">
+                                        <p>
                                             <label for="numberdoc">Номер</label>
-                                            <input type = "text" name = "numberdoc" id = "numberdoc" class = "form-control" placeholder="123456" value="{{data.passp.number}}"readonly>
-                                        </div>
-                                        <div class="col-xs-6 col-sm-6 col-md-6">
+                                            <input type = "text" name = "numberdoc" id = "numberdoc" class = "form-control" placeholder="12344" value="{{data.passpIn.0.doc.number}}"readonly>
+                                        </p>
+                                    </div>                                    
+                                    <div class="col-xs-4 col-sm-4 col-md-4">
+                                        <p>
                                             <label for="numberdoc">Дата выдачи</label>
-                                            <input type="text" id='docde' class="form-control" value="{{data.passp.issueDate|date:'d-m-Y'}}" readonly/>
-                                        </div>
+                                            <input type="text" id='docde' class="form-control" value="{{data.passpIn.0.doc.issueDate|date:'d-m-Y'}}" readonly/>
+                                        </p>
                                     </div>
-                                </p>
-                                
-                                <p>
-                                    <div class = "row">
-                                        <div class="col-xs-12 col-sm-12 col-md-12">
-                                            <label for="docissuer">Кем выдан</label>                
-                                            <input id="docissuer" name="docissuer" class="form-control" placeholder="ТП УФМС РС(Я)" value="{{data.passp.docIssuer.value}}"readonly/> 
-                                        </div>
+                                    
+                                    <div class="col-xs-9 col-sm-9 col-md-9">
+                                        <label for="docissuer">Кем выдан</label>                
+                                        <input id="docissuer" name="docissuer" class="form-control" placeholder="ТП УФМС РС(Я)" value="{{data.passpIn.0.doc.docIssuer.value}}"readonly/> 
                                     </div>
-                                </p>
+                                </div>
                             </div><!--panel passp body-->
                         </div><!--panel passp-->
                     </div>
@@ -302,56 +362,55 @@
                                 <h3 class="panel-title">Документ об образовании</h3>
                             </div>
                             <div class="panel-body">
-                                <div class = "row">
-                                    <div class="col-xs-12 col-sm-12 col-md-12 ">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <img class="img-thumbnail edudImg palec" style="height:265px;" src="{% static "anketa/images/" %}{{data.edud.0.img.pic}}" alt="Паспорт"/>
+                                    </div>
+                                    <p>
+                                    <div class="col-xs-4 col-sm-4 col-md-4 ">
                                         <p>
                                             <label for="edudoctype">Вид документа об образовании</label>
-                                            <input name="edudoctype" id="edudoctype" class="form-control" value="{{ data.edud.docType.value}}"readonly>
+                                            <input name="edudoctype" id="edudoctype" class="form-control" value="{{ data.edud.0.doc.docType.value}}"readonly>
+                                        </p>
+                                    </div>                                                      
+                                    <div class="col-xs-5 col-sm-5 col-md-5 ">
+                                        <p>
+                                            <label for="preveduname">Название учебного заведения</label>                                          
+                                            <input id="preveduname" name="preveduname" class="form-control" placeholder="СВФУ им. Аммосова" value="{{data.edud.0.doc.docIssuer.value}}" readonly>
                                         </p>
                                     </div>
-                                </div>
-                                <p>
-                                    <div class = "row">
-                                        <div class = "col-xs-6 col-sm-6 col-md-6 ">
+                                    </p>                      
+                                    <div class = "col-xs-4 col-sm-4 col-md-4 ">
+                                        <p>
                                             <label for="serialedudoc">Серия</label>
-                                            <input type = "text" name = "serialedudoc" id = "serialedudoc" class = "form-control" placeholder="1234" value="{{data.edud.serialno}}"readonly>
-                                        </div>
-                                        <div class = "col-xs-6 col-sm-6 col-md-6 ">
-                                            <label for="numberedudoc">Номер</label>
-                                            <input type = "text" name = "numberedudoc" id = "numberedudoc" class = "form-control" placeholder="123456" value="{{data.edud.number}}"readonly>
-                                        </div>
-                                    </div>
-                                </p>
-                                <div class = "row">
-                                    <div class="col-xs-12 col-sm-12 col-md-12 ">
-                                        <p>
-                                            <label for="prevedu">Уровень образования</label>
-                                            <p>
-                                                <input type = "radio" name= "prevedu" value="soo"{% if data.education.level.value == "СОО" %} checked {% endif %}disabled>СОО 
-                                                <input type = "radio" name= "prevedu" value="npo"{% if data.education.level.value == "НПО" %} checked {% endif %}disabled>НПО 
-                                                <input type = "radio" name= "prevedu" value="spo"{% if data.education.level.value == "СПО" %} checked {% endif %}disabled>СПО 
-                                                <input type = "radio" name= "prevedu" value="vpo"{% if data.education.level.value == "ВПО" %} checked {% endif %}disabled>ВПО
-                                            </p>
+                                            <input type = "text" name = "serialedudoc" id = "serialedudoc" class = "form-control" placeholder="1234" value="{{data.edud.0.doc.serialno}}"readonly>
                                         </p>
                                     </div>
-                                </div>
-                                <p>
-                                    <div class="row">
-                                        <div class="col-xs-6 col-sm-6 col-md-6 ">
-                                            <label for="numberdoc">Дата поступления</label>                                            
-                                            <input type='text' class="form-control" value="{{data.education.enterDate|date:'d-m-Y'}}" readonly/>                                                    
-                                        </div>
-                                        <div class="col-xs-6 col-sm-6 col-md-6 ">
-                                            <label for="numberdoc">Дата окончания</label>
-                                            <input type='text' class="form-control" name="dateexiting" value='{{data.edud.issueDate|date:"d-m-Y"}}' readonly/>                                            
-                                        </div>
-                                    </div>
-                                </p>
-                                <div class = "row">
-                                    <div class="col-xs-12 col-sm-12 col-md-12 ">
+                                    <div class = "col-xs-5 col-sm-5 col-md-5 ">
                                         <p>
-                                            <label for="preveduname">Название учебного заведения</label>                                            
-                                            <input id="preveduname" name="preveduname" class="form-control" placeholder="СВФУ им. Аммосова" value="{{data.edud.docIssuer.value}}" readonly>     
+                                            <label for="numberedudoc">Номер</label>
+                                            <input type = "text" name = "numberedudoc" id = "numberedudoc" class = "form-control" placeholder="123456" value="{{data.edud.0.doc.number}}"readonly>
+                                        </p>
+                                    </div>                       
+                                    <div class="col-xs-4 col-sm-4 col-md-4 ">
+                                        <p>
+                                            <label for="numberdoc">Дата поступления</label>                                            
+                                            <input type='text' class="form-control" value="{{data.edud.0.education.enterDate|date:'d-m-Y'}}" readonly/>
+                                        </p>
+                                    </div>
+                                    <div class="col-xs-5 col-sm-5 col-md-5 ">
+                                        <p>
+                                            <label for="numberdoc">Дата окончания</label>
+                                            <input type='text' class="form-control" name="dateexiting" value='{{data.edud.0.doc.issueDate|date:"d-m-Y"}}' readonly/>
+                                        </p>                                       
+                                    </div>
+                                    <div class="col-xs-9 col-sm-9 col-md-9 ">
+                                        <label for="prevedu">Уровень образования</label>
+                                        <p>
+                                            <input type = "radio" name= "prevedu" value="soo"{% if data.edud.0.education.level.value == "СОО" %} checked {% endif %}disabled>СОО 
+                                            <input type = "radio" name= "prevedu" value="npo"{% if data.edud.0.education.level.value == "НПО" %} checked {% endif %}disabled>НПО 
+                                            <input type = "radio" name= "prevedu" value="spo"{% if data.edud.0.education.level.value == "СПО" %} checked {% endif %}disabled>СПО 
+                                            <input type = "radio" name= "prevedu" value="vpo"{% if data.edud.0.education.level.value == "ВПО" %} checked {% endif %}disabled>ВПО
                                         </p>
                                     </div>
                                 </div>
@@ -367,10 +426,13 @@
                         </div>
                         <div class="panel-body">
                             <div class = "row">
-                                <div class="col-xs-12 col-sm-12 col-md-12 ">        
+                                <div class="col-md-3">
+                                        <img class="img-thumbnail snilsImg palec" style="height:265px;" src="{% static "anketa/images/" %}{{data.snilsImg.0.image}}" alt="Паспорт"/>
+                                </div>
+                                <div class="col-xs-9 col-sm-9 col-md-9 ">        
                                     <p>
                                         <label for="inila">СНИЛС</label>
-                                        <input id="inila" name="inila" class="form-control" placeholder="123-456-789-00"  value="{{ data.snils.serialno }}" readonly/>
+                                        <input id="inila" name="inila" class="form-control" placeholder="111-222-333-00"  value="{% for item in data.snils %}{{item}}{% endfor %}" readonly/>
                                     </p>
                                 </div>
                             </div>

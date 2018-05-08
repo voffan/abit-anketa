@@ -17,7 +17,7 @@ import json
 from datetime import date
 import datetime
 from staff.models import Employee, Position, Contacts as ContactsStaff
-from anketa.models import ApplicationProfiles, EduOrg, ProfileAttrs, EduForm, Attribute, AttrType, Relation, Person, Application, Abiturient, Docs, AttrValue, Profile, Contacts, Address, Education_Prog,  Privilegies, Exams, DepAchieves, Milit, DocAttr, Achievements
+from anketa.models import ApplicationProfiles, DocImages, EduOrg, ProfileAttrs, EduForm, Attribute, AttrType, Relation, Person, Application, Abiturient, Docs, AttrValue, Profile, Contacts, Address, Education_Prog,  Privilegies, Exams, DepAchieves, Milit, DocAttr, Achievements
 from django.contrib.auth.models import User
 
 # Create your views here.
@@ -494,8 +494,7 @@ def testjson(request):
 #@user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Application_review (request, application_id):	
 	#return HttpResponseRedirect(reverse('staff:application_list'))
-	application = Application.objects.select_related('Abiturient').get(pk=application_id)	
-	#passp = AttrValue.objects.filter(attribute__id = 6)
+	application = Application.objects.select_related('Abiturient').get(pk=application_id)
 	passp = application.abiturient.docs_set.filter(docType__value__icontains=u'Паспорт').first()
 	if passp is None:
 		passp = application.abiturient.docs_set.filter(docType__value__icontains=u'Загран').first()
@@ -503,25 +502,41 @@ def Application_review (request, application_id):
 		passp = application.abiturient.docs_set.filter(docType__value__icontains=u'Водит').first()
 	if passp is None:
 		passp = application.abiturient.docs_set.filter(docType__value__icontains=u'Военн').first()
+	passpImg = DocImages.objects.filter(doc__id=passp.id)
+	passpIn = []
+	for img in passpImg:
+		passpIn.append({'id':passp.id,'doc':passp,'img':{'id':img.id,'pic':img.image}})
 	
 	Data={}
 	if application.abiturient.education_set.filter().first() is not None:
 		education = application.abiturient.education_set.get()
-	
-		edu_doc = education.doc #application.abiturient.docs_set.filter(docType__value__icontains=u'Аттестат').first()
-		Data['education'] = education
-		Data['edud'] = edu_doc
+		eduImg = DocImages.objects.filter(doc__id=education.doc.id)
+		edudIn = []
+		for img in eduImg:
+			edudIn.append({'education':education,'id':education.doc.id,'doc':education.doc,'img':{'id':img.id,'pic':img.image}})
+		Data['edud'] = edudIn
 
 	adrtype = AttrValue.objects.filter(attribute__name__icontains=u'Тип адреса')
 	rank = AttrValue.objects.filter(attribute__name__icontains=u'Воинское звание')
 	snils = application.abiturient.docs_set.filter(docType__value__icontains=u'СНИЛС').first()
+	snilsImg = DocImages.objects.filter(doc__id=snils.id)
+	Data['snilsImg']=snilsImg
+	snils1=[]#####ЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫnaidesh ly4she sdelaem ly4she
+	if len(str(snils.serialno))>10:
+		for i in range(len(str(snils.serialno))):
+			if i % 3 == 0 and i != 0:
+				snils1+='-'
+			snils1+=str(snils.serialno)[i]
+		Data['snils'] = snils1
+	else:
+		Data['snils'] = snils.serialno
+
 	foreign_lang = AttrValue.objects.filter(attribute__name__icontains=u'Изучаемый язык')
 	docissuer = AttrValue.objects.filter(attribute__name__icontains=u'выдавший ')
 	nationality = AttrValue.objects.filter(attribute__name__icontains=u'национальность')	
 	doctype = AttrValue.objects.exclude(value__icontains=u'диплом').exclude(value__icontains=u'аттест').exclude(value__icontains=u'СНИЛС').filter(attribute__name__icontains=u'тип документа')
 	Data['edudoctype'] = AttrValue.objects.filter(value__icontains=u'диплом')|AttrValue.objects.filter(value__icontains=u'аттестат')
 	contactyp = AttrValue.objects.filter(attribute__name__icontains=u'Тип контакта')
-	#abiturient = application.abiturien_set.filter(attribute__name__icontains=u'Тип контакта')
 	relation = Relation.objects.filter(abiturient__id=application.abiturient.id)
 	relcontacts=[]
 	for item in relation:
@@ -532,15 +547,16 @@ def Application_review (request, application_id):
 
 	application_profile = ApplicationProfiles.objects.filter(application=application_id)
 
+
+
 	Data['relation'] = relcontacts
 	Data['rel_type'] = AttrValue.objects.filter(attribute__name__icontains=u'тип связи')
 	Data['nationality'] = nationality
 	Data['docType'] = doctype
 	Data['docissuer'] = docissuer
-	Data['adrtype'] = adrtype
-	Data['snils'] = snils
+	Data['adrtype'] = adrtype	
 	Data['foreign_lang'] = foreign_lang
-	Data['passp'] = passp
+	Data['passpIn'] = passpIn
 	Data['rank'] = rank
 	Data['application']=application
 	Data['contacts'] = Contacts.objects.filter(person_id=application.abiturient.id)	
@@ -599,9 +615,9 @@ def Application_review (request, application_id):
 				withfee = 'V'
 			ws.cell(row=9, column=26).value = withfee
 
-			if edu_doc.docType.value == 'Диплом':
+			if education.doc.docType.value == 'Диплом':
 				ws.cell(row=10,column=20).value = 'V'
-			if edu_doc.docType.value == 'Аттестат':
+			if education.doc.docType.value == 'Аттестат':
 				ws.cell(row=10,column=9).value = 'V'				
 			
 			#####################институт факультет			
@@ -723,7 +739,7 @@ def Application_review (request, application_id):
 						r+=1
 				ws.cell(row=53,column=i+r).value = str(snils.serialno)[i]#снилс
 			###################page2
-			if edu_doc.isCopy == True:
+			if education.doc.isCopy == True:
 				ws.cell(row=59,column=7).value = u'Копия'#dokement ob obrazovanii
 			else:
 				ws.cell(row=59,column=7).value = u'Оригинал'#dokement ob obrazovanii
@@ -733,12 +749,12 @@ def Application_review (request, application_id):
 			for i in range(6):
 				ws.cell(row=59,column=i+21).value = int(Today[i])#Дата
 			
-			for i in range(len(edu_doc.docType.value)):
-				ws.cell(row=61,column=i+3).value = edu_doc.docType.value[i]#tip dokymenta
-			for i in range(len(str(edu_doc.serialno))):
-				ws.cell(row=61,column=i+13).value = int(str(edu_doc.serialno)[i])#lolo
-			for i in range(len(str(edu_doc.number))):
-				ws.cell(row=62,column=i+13).value = int(str(edu_doc.number)[i])#lolo
+			for i in range(len(education.doc.docType.value)):
+				ws.cell(row=61,column=i+3).value = education.doc.docType.value[i]#tip dokymenta
+			for i in range(len(str(education.doc.serialno))):
+				ws.cell(row=61,column=i+13).value = int(str(education.doc.serialno)[i])#lolo
+			for i in range(len(str(education.doc.number))):
+				ws.cell(row=62,column=i+13).value = int(str(education.doc.number)[i])#lolo
 			if education.level.value == 'СОО':
 				ws.cell(row=64,column=9).value = 'V'
 			if education.level.value == 'НПО':
@@ -750,16 +766,16 @@ def Application_review (request, application_id):
 			eduEnterDate = str(datetime.datetime.strftime(education.enterDate,'%d%m%Y'))
 			for i in range(len(eduEnterDate)):
 				ws.cell(row=66,column=i+5).value = int(eduEnterDate[i])
-			eduLeaveDate = str(datetime.datetime.strftime(edu_doc.issueDate, '%d%m%Y'))
+			eduLeaveDate = str(datetime.datetime.strftime(education.doc.issueDate, '%d%m%Y'))
 			for i in range(len(eduLeaveDate)):
 				ws.cell(row=66,column=i+19).value = int(eduLeaveDate[i])
-			if len(edu_doc.docIssuer.value)>70:
-				eduName1 = edu_doc.docIssuer.value[:70]
+			if len(education.doc.docIssuer.value)>70:
+				eduName1 = education.doc.docIssuer.value[:70]
 				ws.cell(row=68,column=8).value = eduName1
-				eduName2 = edu_doc.docIssuer.value[70:]
+				eduName2 = education.doc.docIssuer.value[70:]
 				ws.cell(row=69,column=8).value = eduName2
 			else:
-				ws.cell(row=68,column=8).value = edu_doc.docIssuer.value#Nazvanie y4ebnogo zavedeniya
+				ws.cell(row=68,column=8).value = education.doc.docIssuer.value#Nazvanie y4ebnogo zavedeniya
 
 			#army
 			if application.abiturient.milit.liableForMilit:
