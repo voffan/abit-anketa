@@ -61,7 +61,6 @@
 
 					//var $poop = $("#ProfileTable").find('input[id=eduprof]');
 					$("#appnum").html("Заявление №"+data['app_num']);
-					$("#reviewLink").attr("href","{% url 'staff:application_review' 104 %}");
 					$profilerow=0;
 					for(var i =0;i<parseInt(data['profiles_len']);i++){
 						var addedrow = addProfile();

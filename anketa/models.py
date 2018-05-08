@@ -147,7 +147,7 @@ class DocAttr(models.Model):
 #Class that represent document of student
 class Docs(models.Model):
 	abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент')
-	serialno = models.IntegerField(u'Серия документа', max_length=15, db_index=True, blank=True, null=True)
+	serialno = models.BigIntegerField(u'Серия документа', max_length=15, db_index=True, blank=True, null=True)
 	number = models.IntegerField(u'Номер документа', max_length=15, db_index=True, blank=True, null=True)
 	issueDate = models.DateField(u'Дата выдачи', blank=True, null=True)
 	isCopy = models.BooleanField(u'Оригинал документа', default=False)
@@ -160,6 +160,8 @@ class Docs(models.Model):
 class DocImages(models.Model):
 	doc = models.ForeignKey('Docs', verbose_name='Документ', db_index=True)
 	image = models.ImageField(upload_to=DocImagePath)
+	def __str__(self):
+		return self.doc.abiturient.fullname+' '+self.doc.docType.value
 
 
 class Exams(models.Model):
