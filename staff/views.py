@@ -509,12 +509,14 @@ def Application_review (request, application_id):
 	
 	Data={}
 	edu_doc = None
+	print(application.abiturient.education_set.filter().first())
 	if application.abiturient.education_set.filter().first() is not None:
 		education = application.abiturient.education_set.get()
 		eduImg = DocImages.objects.filter(doc__id=education.doc.id)
 		edudIn = []
 		for img in eduImg:
 			edudIn.append({'education':education,'id':education.doc.id,'doc':education.doc,'img':{'id':img.id,'pic':img.image}})
+		print(edudIn)
 		Data['edud'] = edudIn
 
 	adrtype = AttrValue.objects.filter(attribute__name__icontains=u'Тип адреса')
@@ -530,7 +532,7 @@ def Application_review (request, application_id):
 			snils1+=str(snils.serialno)[i]
 		Data['snils'] = snils1
 	else:
-		Data['snils'] = snils.serialno
+		Data['snils'] = str(snils.serialno)
 
 	foreign_lang = AttrValue.objects.filter(attribute__name__icontains=u'Изучаемый язык')
 	docissuer = AttrValue.objects.filter(attribute__name__icontains=u'выдавший ')
@@ -573,7 +575,7 @@ def Application_review (request, application_id):
 	Data['docattr'] = DocAttr.objects.filter(pk=application_id)
 	Data['achievements'] = Achievements.objects.filter(pk=application_id)	
 	Data['contactyp'] = contactyp
-
+	print(Data)
 
 
 	person=Abiturient.objects.filter(person_ptr__id=application.abiturient.id).first()

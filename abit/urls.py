@@ -1,6 +1,8 @@
 from django.conf.urls import patterns, include, url
 
 from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
 admin.autodiscover()
 
 from anketa.views import StartPage, StartApp, Streets, Territory, District, City, Citizenship, Nation, DocIssuer, PrevEduName, Institute, EduProf, Privilegies, Rank, Flang, CreatePerson, DocType, PersonProfile, Applications, PersonData, Account,EduName, SaveApplication, EduProfForm, GetSelectedApplication,DeleteApplication,AddDataToPerson, EduDocType,GetAddressTypeValues, ExamSubject, ExamType, AccountInfoChanging
@@ -44,4 +46,4 @@ urlpatterns = patterns('',
     url(r'^staff/', include('staff.urls',namespace = 'staff')),
     url(r'^kladr/', include('kladr.urls',namespace = 'kladr')),
     url(r'^auth/', include('authApp.urls', namespace = 'authapp'))
-)
+) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

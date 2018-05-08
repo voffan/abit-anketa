@@ -155,7 +155,7 @@
     $('.passpImg').on('click',function(){
         $('#myModalLabel').html('Паспорт');
         {% for i in data.passpIn %}
-            var newImg = $('<img class="img-thumbnail" width="100%" height="auto" src="{% static "anketa/images/" %}{{i.img.pic}}" alt="Паспорт"/>');            
+            var newImg = $('<img class="img-thumbnail" width="100%" height="auto" src="{% static "/images/" %}{{i.img.pic}}" alt="Паспорт"/>');
             $('.modal-body').append(newImg);
         {% endfor %}
         $('#images_views').modal();
@@ -164,7 +164,7 @@
     $('.edudImg').on('click',function(){
         $('#myModalLabel').html('Документ об образовании');
         {% for i in data.edud %}
-            var newImg = $('<img class="img-thumbnail" width="100%" height="auto" src="{% static "anketa/images/" %}{{i.img.pic}}" alt="Документ об образовании"/>');            
+            var newImg = $('<img class="img-thumbnail" width="100%" height="auto" src="{{i.img.pic.url}}" alt="Документ об образовании"/>');
             $('.modal-body').append(newImg);
         {% endfor %}        
         $('#images_views').modal();
@@ -173,7 +173,7 @@
     $('.snilsImg').on('click',function(){
         $('#myModalLabel').html('Снилс');
         {% for i in data.snilsImg %}
-            var newImg = $('<img class="img-thumbnail" width="100%" height="auto" src="{% static "anketa/images/" %}{{i.image}}" alt="Документ об образовании"/>');            
+            var newImg = $('<img class="img-thumbnail" width="100%" height="auto" src="{% static "/images/" %}{{i.image}}" alt="Документ об образовании"/>');
             $('.modal-body').append(newImg);
         {% endfor %}        
         $('#images_views').modal();
@@ -318,39 +318,44 @@
                             <div class="panel-body">                                
                                 <div class="row">
                                     <div class="col-md-3">
-                                        <img class="img-thumbnail passpImg palec" style="height:265px;" src="{% static "anketa/images/" %}{{data.passpIn.0.img.pic}}" alt="Паспорт"/>
-                                    </div>                                
-                                    <div class="col-xs-9 col-sm-9 col-md-9">
-                                        <p>
-                                            <label for="doctype">Вид документа, удостоверяющего личность</label>
-                                            <input type="text" name="doctype" id="doctype" class="form-control" value="{{data.passpIn.0.doc.docType.value}}"readonly>
-                                        </p>
+                                        <img class="img-thumbnail passpImg palec" style="height:265px;" src="{% static "/images/" %}{{data.passpIn.0.img.pic}}" alt="Паспорт"/>
                                     </div>
-                                    
-                                    <div class="col-xs-4 col-sm-4 col-md-4">
-                                        <p>
-                                            <label for="serialdoc">Серия</label>
-                                            <input type = "text" name = "serialdoc" id = "serialdoc" class = "form-control" placeholder="1234" value="{{data.passpIn.0.doc.serialno}}"readonly>
-                                        </p>
-                                    </div>
-                                    <div class = "col-xs-4 col-sm-4 col-md-5 ">
-                                        <p>
-                                            <label for="numberdoc">Номер</label>
-                                            <input type = "text" name = "numberdoc" id = "numberdoc" class = "form-control" placeholder="12344" value="{{data.passpIn.0.doc.number}}"readonly>
-                                        </p>
-                                    </div>                                    
-                                    <div class="col-xs-4 col-sm-4 col-md-4">
-                                        <p>
-                                            <label for="numberdoc">Дата выдачи</label>
-                                            <input type="text" id='docde' class="form-control" value="{{data.passpIn.0.doc.issueDate|date:'d-m-Y'}}" readonly/>
-                                        </p>
-                                    </div>
-                                    
-                                    <div class="col-xs-9 col-sm-9 col-md-9">
-                                        <label for="docissuer">Кем выдан</label>                
-                                        <input id="docissuer" name="docissuer" class="form-control" placeholder="ТП УФМС РС(Я)" value="{{data.passpIn.0.doc.docIssuer.value}}"readonly/> 
-                                    </div>
-                                </div>
+                                    <div class="col-xs-9">
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                                    <p>
+                                                        <label for="doctype">Вид документа, удостоверяющего личность</label>
+                                                        <input type="text" name="doctype" id="doctype" class="form-control" value="{{data.passpIn.0.doc.docType.value}}"readonly>
+                                                    </p>
+                                                </div>
+                                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                                    <p>
+                                                        <label for="serialdoc">Серия</label>
+                                                        <input type = "text" name = "serialdoc" id = "serialdoc" class = "form-control" placeholder="1234" value="{{data.passpIn.0.doc.serialno}}"readonly>
+                                                    </p>
+                                                </div>
+                                                <div class = "col-xs-6 col-sm-6 col-md-6">
+                                                    <p>
+                                                        <label for="numberdoc">Номер</label>
+                                                        <input type = "text" name = "numberdoc" id = "numberdoc" class = "form-control" placeholder="12344" value="{{data.passpIn.0.doc.number}}"readonly>
+                                                    </p>
+                                                </div>
+                                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                                    <p>
+                                                        <label for="numberdoc">Дата выдачи</label>
+                                                        <input type="text" id='docde' class="form-control" value="{{data.passpIn.0.doc.issueDate|date:'d-m-Y'}}" readonly/>
+                                                    </p>
+                                                </div>
+
+                                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                                    <label for="docissuer">Кем выдан</label>
+                                                    <input id="docissuer" name="docissuer" class="form-control" placeholder="ТП УФМС РС(Я)" value="{{data.passpIn.0.doc.docIssuer.value}}"readonly/>
+                                                </div>
+                                            </div>
+                                        </div><!--end container-->
+                                    </div><!--col-xs-9-->
+                                </div> <!--row-->
                             </div><!--panel passp body-->
                         </div><!--panel passp-->
                     </div>
@@ -364,7 +369,7 @@
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="col-md-3">
-                                        <img class="img-thumbnail edudImg palec" style="height:265px;" src="{% static "anketa/images/" %}{{data.edud.0.img.pic}}" alt="Паспорт"/>
+                                        <img class="img-thumbnail edudImg palec" style="height:265px;" src="{{data.edud.0.img.pic.url}}" alt="Паспорт"/>
                                     </div>
                                     <p>
                                     <div class="col-xs-4 col-sm-4 col-md-4 ">
@@ -427,7 +432,7 @@
                         <div class="panel-body">
                             <div class = "row">
                                 <div class="col-md-3">
-                                        <img class="img-thumbnail snilsImg palec" style="height:265px;" src="{% static "anketa/images/" %}{{data.snilsImg.0.image}}" alt="Паспорт"/>
+                                        <img class="img-thumbnail snilsImg palec" style="height:265px;" src="{% static "images/" %}{{data.snilsImg.0.image}}" alt="Паспорт"/>
                                 </div>
                                 <div class="col-xs-9 col-sm-9 col-md-9 ">        
                                     <p>
