@@ -134,7 +134,6 @@ def PersonData(request):
     address = person.address_set.filter(adrs_type__value__icontains='По прописке').first()
     if address is not None:
         args['adrsp'] = get_full_address(address.street.code, address.house, address.building, address.flat)
-        args['indexp'] = address.zipcode
         args['streetp'] = address.street.code
         args['housep'] = address.house
         args['buildingp'] = address.building
@@ -146,7 +145,6 @@ def PersonData(request):
     address = person.address_set.filter(adrs_type__value__icontains='Фактический').first()
     if address is not None:
         args['adrsf'] = get_full_address(address.street.code, address.house, address.building, address.flat)
-        args['indexf'] = address.zipcode
         args['streetf'] = address.street.code
         args['housef'] = address.house
         args['buildingf'] = address.building
@@ -154,13 +152,11 @@ def PersonData(request):
 
     args_to_print = [
         'adrsp',
-        'indexp',
         'streetp',
         'housep',
         'buildingp',
         'flatp',
         'adrsf',
-        'indexf',
         'streetf',
         'housef',
         'buildingf',
@@ -439,7 +435,6 @@ def SaveAddress(request, abit):
     address = Address()
     address.abiturient = abit
     address.adrs_type = AttrValue.objects.filter(value__icontains=address_type).first()
-    address.zipcode = request.POST.get('indexp', '')
     address.street = Street.objects.filter(code=request.POST.get('streetp', '')).first()
     address.house = request.POST.get('housep', '')
     address.building = request.POST.get('buildingp', '')
@@ -454,7 +449,6 @@ def SaveAddress(request, abit):
         address = Address()
         address.abiturient = abit
         address.adrs_type = AttrValue.objects.filter(value__icontains=address_type).first()
-        address.zipcode = request.POST.get('indexf', '')
         address.street = Street.objects.filter(code=request.POST.get('streetf', '')).first()
         address.house = request.POST.get('housef', '')
         address.building = request.POST.get('buildingf', '')
