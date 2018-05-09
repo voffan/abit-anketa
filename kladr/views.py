@@ -112,53 +112,41 @@ def get_objects_by_id(request):
 		object_id = query[:2]+'00000000000'
 		region = Kladr.objects.filter(code=object_id).first()
 		if region is not None:
-			result.append({'data':{'region':{'id':region.code, 'text':region.name},'district':{'id':'','text':''},'city':{'id':'','text':''},'village':{'id':'','text':''},'street':{'id':'','text':''}}})
-			object_id = query[2:5]
-			if object_id != '000':
-				object_id = query[:5]+'00000000'
+			result.append({'data':{'region':{'id':region.code, 'text':(region.name + ' ' + region.socr + '.')},'district':{'id':'','text':''},'city':{'id':'','text':''},'village':{'id':'','text':''},'street':{'id':'','text':''}}})
+			if query[2:5] != '000':
+				object_id = query[:5] + '00000000'
 				district = Kladr.objects.filter(code=object_id).first()
 				if district is not None:
-					result[0]['data']['district']['id']=district.code
-					result[0]['data']['district']['text']=district.name
-					village = get_village_by_id(query)
-					if village is not None:
-						result[0]['data']['village']['id']=village.code
-						result[0]['data']['village']['text']=village.name
-						street = Street.objects.filter(code=query).first()
-						if street is not None:
-							result[0]['data']['street']['id']=street.code
-							result[0]['data']['street']['text']=street.name
-						else:
-							error_message = 'Для данного id не соответствует ни одна улица!'
-							success = 0
-					else:
-						error_message = 'Для данного id не соответствует ни один нас. пункт!'
-						success = 0
+					result[0]['data']['district']['id'] = district.code
+					result[0]['data']['district']['text'] = district.name + ' ' + district.socr + '.'
 				else:
-					error_message = 'Для данного id не соответствует никакой район!'
+					error_message = "Для данного ID не соответствует ни один район"
 					success = 0
-			else:
-				object_id = query[:8]+'00000'
+			if query[5:8] != '000':
+				object_id = query[:8] + '00000'
 				city = Kladr.objects.filter(code=object_id).first()
 				if city is not None:
-					result[0]['data']['city']['id']=city.code
-					result[0]['data']['city']['text']=city.name
-					village_id = query[8:11]
-					if village_id != '000':
-						village = get_village_by_id(query)
-						if village is not None:
-							result[0]['data']['village']['id']=village.code
-							result[0]['data']['village']['text']=village.name
-					street = Street.objects.filter(code=query).first()
-					if street is not None:
-						result[0]['data']['street']['id']=street.code
-						result[0]['data']['street']['text']=street.name
-					else:
-						error_message = 'Для данного id не соответствует ни одна улица!'
-						success = 0
+					result[0]['data']['city']['id'] = city.code
+					result[0]['data']['city']['text'] = city.socr + '. ' + city.name
 				else:
-					error_message = 'Для данного id не соответствует никакой город!'
+					error_message = "Для данного ID не соответствует ни один город"
 					success = 0
+			if query[8:11] != '000':
+				object_id = query[:11] + '00'
+				village = Kladr.objects.filter(code=object_id).first()
+				if village is not None:
+					result[0]['data']['village']['id'] = village.code
+					result[0]['data']['village']['text'] = village.socr + '. ' + village.name
+				else:
+					error_message = "Для данного ID не соответствует ни один населенный пункт"
+					success = 0
+			street = Street.objects.filter(code=query).first()
+			if street is not None:
+				result[0]['data']['street']['id'] = street.code
+				result[0]['data']['street']['text'] = street.socr + '. ' + street.name
+			else:
+				error_message = 'Для данного ID не соответствует ни одна улица!'
+				success = 0
 		else:
 			error_message = 'Данного региона не существует!'
 			success = 0

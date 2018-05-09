@@ -26,8 +26,54 @@ function Kladr(object) {
 			success:function(data){
 				//console.log(data);
 				console.log('success!');
-				if (data[0]['success'] === '1') {
+				console.log(data);
+				if (data[0]['success'] === 1) {
 					console.log('should print');
+					code = [];
+					codetype = [];
+					$('#region').select2('val', '');
+					$('#district').select2('val', '');
+					$('#city').select2('val', '');
+					$('#village').select2('val', '');
+					$('#street').select2('val', '');
+					$('#region').select2('enable', true);
+					$('#region').select2('data', data[0]['data']['region']);
+					code.push(data[0]['data']['region']['id']);
+					codetype.push("region");
+					if (data[0]['data']['district']['text'].length > 0) {
+						$('#district').select2('enable', true);
+						$('#district').select2('data', data[0]['data']['district']);
+						code.push(data[0]['data']['district']['id']);
+						codetype.push("district");
+					}
+					if (data[0]['data']['city']['text'].length > 0) {
+						$('#city').select2('enable', true);
+						$('#city').select2('data', data[0]['data']['city']);
+						code.push(data[0]['data']['city']['id']);
+						codetype.push("city");
+					}
+					if (data[0]['data']['village']['text'].length > 0) {
+						$('#village').select2('enable', true);
+						$('#village').select2('data', data[0]['data']['village']);
+						code.push(data[0]['data']['village']['id']);
+						codetype.push("village");
+					}
+					$('#street').select2('enable', true);
+					$('#street').select2('data', data[0]['data']['street']);
+					code.push(data[0]['data']['street']['id']);
+					codetype.push("street");
+					if (saveObject.selector === "#streetp") {
+						$('#adrshouse').val($('#housep').val());
+						$('#adrsbuilding').val($('#buildingp').val());
+						$('#adrsflat').val($('#flatp').val());
+                    }
+                    else {
+						$('#adrshouse').val($('#housef').val());
+						$('#adrsbuilding').val($('#buildingf').val());
+						$('#adrsflat').val($('#flatf').val());
+					}
+
+					/*
 					$('#city').select2('enable', true);
 					$('#district').select2('enable', true);
 					$('#region').select2('data', data[0]['data']['region']);
@@ -49,10 +95,10 @@ function Kladr(object) {
 					else {
                         $('#village').select2('val', '');
                     }
-					$('#street').select2('data', data[0]['data']['street']);
+					$('#street').select2('data', data[0]['data']['street']); */
 					$('#KladrModal').modal();
 				} else {
-					alert(data[0][['error']]);
+					alert('Ошибка');
 				}
 			},
 			error: function() {
