@@ -1,5 +1,5 @@
 <div class="tab-pane" id="tab3">
-    <form id="exams" name="exams" class="form-horizontal" role="form" method="post">
+    <form id="contacts" name="contacts" class="form-horizontal" role="form" method="post">
     	{% csrf_token %}
         <input name="currentPage" id="currentPage" value="3" type="hidden">
     	<div class="container-fluid">
@@ -14,16 +14,16 @@
 								<p>
 									<label for="adrsp">Адрес регистрации</label>
 									<div class="input-group">
-										<input id="adrsp" name="adrsp" class="form-control" placeholder="Выберите адрес" readonly>
+										<input id="adrsp" name="adrsp" class="form-control" placeholder="Выберите адрес" {% if adrsp %} value="{{ adrsp }}" {% endif %} readonly>
 										<span class="input-group-btn">
 											<button class="btn btn-default" type="button" id="kladrbtn">...</button>
 										</span>
 									</div>
 
-                   					<input id="streetp" name="streetp" hidden autocomplete="off">
-                   					<input id="housep" name="housep" hidden autocomplete="off">
-                   					<input id="buildingp" name="buildingp" hidden autocomplete="off">
-                   					<input id="flatp" name="flatp" hidden autocomplete="off">
+                   					<input id="streetp" name="streetp" autocomplete="off" value="{{ streetp }}">
+                   					<input id="housep" name="housep" autocomplete="off" value="{{ housep }}">
+                   					<input id="buildingp" name="buildingp" autocomplete="off" value="{{ buildingp }}">
+                   					<input id="flatp" name="flatp" autocomplete="off" value="{{ flatp }}">
 								</p>
 							</div>
 						</div>
@@ -31,10 +31,15 @@
 						<div class="row">
 							<div class="col-xs-12 col-sm-10 col-md-10 col-md-offset-1">
 								<p>
-									<label for="adrsisthesame">Адрес прописки совпадает с адресом факт. места жительства</label>
+									<label id="adrsisthesame" for="adrsisthesame">Адрес прописки совпадает с адресом факт. места жительства</label>
 									<br>
-									<input type="radio" name = "adrsisthesame" value="no">Нет
-									<input type="radio" name = "adrsisthesame" value="yes">Да
+                                    {% if adrsisthesame == 'no' %}
+                                        <input type="radio" name="adrsisthesame" id="adrsisthesame" value="no" checked>Нет
+                                        <input type="radio" name="adrsisthesame" id="adrsisthesame" value="yes">Да
+                                    {% else %}
+                                        <input type="radio" name="adrsisthesame" id="adrsisthesame" value="no">Нет
+                                        <input type="radio" name="adrsisthesame" id="adrsisthesame" value="yes" checked>Да
+                                    {% endif %}
 								</p>
 							</div>
 						</div>
@@ -44,16 +49,16 @@
 								<p>
 									<label for="adrsf">Фактический адрес</label>
 									<div class="input-group">
-										<input id ="adrsf" name="adrsf" class="form-control" placeholder="Выберите адрес" readonly>
+										<input id ="adrsf" name="adrsf" class="form-control" placeholder="Выберите адрес" {% if adrsf %} value="{{ adrsf }}" {% endif %} readonly>
 										<span class="input-group-btn">
 											<button class="btn btn-default" type="button" id="adrsf_select">...</button>
 										</span>
 									</div>
 
-									<input id="streetf" name="streetf" hidden autocomplete="off">
-                   					<input id="housef" name="housef" hidden autocomplete="off">
-                   					<input id="buildingf" name="buildingf" hidden autocomplete="off">
-                   					<input id="flatf" name="flatf" hidden autocomplete="off">
+									<input id="streetf" name="streetf" autocomplete="off" value="{{ streetf }}">
+                   					<input id="housef" name="housef" autocomplete="off" value="{{ housef }}">
+                   					<input id="buildingf" name="buildingf" autocomplete="off" value="{{ buildingf }}">
+                   					<input id="flatf" name="flatf" autocomplete="off" value="{{ flatf }}">
 								</p>
 							</div>
 						</div>

@@ -106,7 +106,7 @@ def get_village_by_id(street_id):
 #Сперва определяем регион, затем район или город, затем нас. пункт и улицу
 def get_objects_by_id(request):
 	result = []
-	query = request.GET.get('id','')
+	query = request.GET.get('id', '')
 	success = 1
 	if len(query)>0:
 		object_id = query[:2]+'00000000000'

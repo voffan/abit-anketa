@@ -3,9 +3,9 @@ var code = [];
 var codetype = [];
 
 
-function Kladr(object){
+function Kladr(object) {
 	saveObject = object;
-	if($(object).val().length < 1){
+	if($(object).val().length < 1) {
 		$('#region').select2('val', '');
 		$('#district').select2('val', '');
 		$('#city').select2('val', '');
@@ -251,13 +251,14 @@ $('#SaveKladr').on('click',function(e){
         address += ", кв. ";
         address += $('#adrsflat').val();
     }
-	$(saveObject).val(address);
-	if (saveObject.selector === "#adrsp") {
+	if (saveObject.selector === "#streetp") {
+		$('#adrsp').val(address);
 		$('#streetp').val(code[code.length - 1]);
 		$('#housep').val($('#adrshouse').val());
 		$('#buildingp').val($('#adrsbuilding').val());
 		$('#flatp').val($('#adrsflat').val());
 	} else {
+    	$('#adrsf').val(address);
 		$('#streetf').val(code[code.length - 1]);
 		$('#housef').val($('#adrshouse').val());
 		$('#buildingf').val($('#adrsbuilding').val());

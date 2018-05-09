@@ -1,10 +1,11 @@
-$('#kladrbtn').on('click', function(e){
+$('#kladrbtn').on('click', function(e) {
 	//$('#KladrModal').modal();
-	Kladr($('#adrsp'));});
+	Kladr($('#streetp'));
+});
 
-$('#adrsf_select').on('click', function(e){
+$('#adrsf_select').on('click', function(e) {
 	//$('#KladrModal').modal();
-	Kladr($('#adrsf'));
+	Kladr($('#streetf'));
 });
 
 $(document).on("click","button[id*='delContactRow']", function(e) {
@@ -13,6 +14,10 @@ $(document).on("click","button[id*='delContactRow']", function(e) {
 		contactsrow--;
 	}
 });
+
+if ($('#streetf').val() > 0 ) {
+	$('#adrsfact').show();
+}
 
 $('input[name="adrsisthesame"]').on("click", function(e) {
     if ($(this).attr('value').localeCompare("no") == 0) {

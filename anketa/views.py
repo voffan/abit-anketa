@@ -13,7 +13,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 from django.shortcuts import render_to_response, render, get_object_or_404, redirect
 from django.template import RequestContext
-from kladr.models import Street
+from kladr.models import Street, Kladr
 from anketa.models import Person, Address, Attribute, AttrValue, Abiturient, EduOrg, ProfileAttrs, ApplicationProfiles, \
     Education_Prog, Profile, Application, EduForm, ApplicationProfiles, Milit, Docs, Exams, DocAttr, Education, \
     Contacts, Relation, \
@@ -94,14 +94,85 @@ def PersonData(request):
         args['prevedu'] = edudoctype.level.value
     if person.docs_set.filter(docType__value__icontains=u'СНИЛС').first() is not None:
         args['inila'] = person.docs_set.filter(docType__value__icontains=u'СНИЛС').first().serialno
+
     # 3
-    address = person.address_set.filter(adrs_type__value__icontains=u'прописке').first()
+    def get_full_address(street_code, house, building, flat):
+        region_object = Kladr.objects.filter(code=(street_code[:2] + '00000000000')).first()
+        region = region_object.name + ' ' + region_object.socr + '.'
+        district_object = Kladr.objects.filter(code=(street_code[:5] + '00000000')).first()
+        if street_code[2:5] != '000':
+            district = district_object.name + ' ' + district_object.socr + '.'
+        else:
+            district = ''
+        city_object = Kladr.objects.filter(code=(street_code[:8] + '00000')).first()
+        if street_code[5:8] != '000':
+            city = city_object.socr + '. ' + city_object.name
+        else:
+            city = ''
+        village_object = Kladr.objects.filter(code=(street_code[:11] + '00')).first()
+        if street_code[8:11] != '000':
+            village = village_object.socr + '. ' + village_object.name
+        else:
+            village = ''
+        street_object = Street.objects.filter(code=street_code).first()
+        street = street_object.socr + '. ' + street_object.name
+        result = region
+        if district:
+            result += ', ' + district
+        if city:
+            result += ', ' + city
+        if village:
+            result += ', ' + village
+        result += ', ' + street
+        result += ', ' + house
+        if building:
+            result += ' корпус ' + building
+        if flat:
+            result += ', кв. ' + flat
+        return result
+
+    address = person.address_set.filter(adrs_type__value__icontains='По прописке').first()
     if address is not None:
-        args['zipcode'] = address.zipcode
-        args['street'] = address.street
-        args['house'] = address.house
-        args['building'] = address.building
-        args['flat'] = address.flat
+        args['adrsp'] = get_full_address(address.street.code, address.house, address.building, address.flat)
+        args['indexp'] = address.zipcode
+        args['streetp'] = address.street.code
+        args['housep'] = address.house
+        args['buildingp'] = address.building
+        args['flatp'] = address.flat
+        if address.adrs_type_same:
+            args['adrsisthesame'] = 'yes'
+        else:
+            args['adrsisthesame'] = 'no'
+    address = person.address_set.filter(adrs_type__value__icontains='Фактический').first()
+    if address is not None:
+        args['adrsf'] = get_full_address(address.street.code, address.house, address.building, address.flat)
+        args['indexf'] = address.zipcode
+        args['streetf'] = address.street.code
+        args['housef'] = address.house
+        args['buildingf'] = address.building
+        args['flatf'] = address.flat
+
+    args_to_print = [
+        'adrsp',
+        'indexp',
+        'streetp',
+        'housep',
+        'buildingp',
+        'flatp',
+        'adrsf',
+        'indexf',
+        'streetf',
+        'housef',
+        'buildingf',
+        'flatf',
+        'adrsisthesame',
+    ]
+    for arg_to_print in args_to_print:
+        try:
+            print(arg_to_print + ': ' + args[arg_to_print])
+        except:
+            print(arg_to_print + ': ' )
+
     contacts_type = AttrValue.objects.filter(attribute__name__icontains=u'Тип контакта')
     if contacts_type is not None:
         args['contacts_type'] = contacts_type
@@ -114,6 +185,7 @@ def PersonData(request):
             cont['value'] = item.value
             contacts.append(cont)
         args['contacts'] = contacts
+
     relation_type = AttrValue.objects.filter(attribute__name__icontains=u'Тип связи')
     if relation_type is not None:
         args['relation_type'] = relation_type
@@ -127,6 +199,7 @@ def PersonData(request):
             cont['value'] = Contacts.objects.filter(person=item.person).first().value
             relations.append(cont)
         args['relation'] = relations
+
     # 4
     exams = person.exams_set.exclude(exam_examType__value=u'Вступительный').all()
     if exams is not None:
@@ -361,33 +434,33 @@ def SavePrivilegies(request, abit):
 @transaction.atomic
 def SaveAddress(request, abit):
     print('Saving Address')
+    Address.objects.filter(abiturient=abit).delete()
+    address_type = 'По прописке'
+    address = Address()
+    address.abiturient = abit
+    address.adrs_type = AttrValue.objects.filter(value__icontains=address_type).first()
+    address.zipcode = request.POST.get('indexp', '')
+    address.street = Street.objects.filter(code=request.POST.get('streetp', '')).first()
+    address.house = request.POST.get('housep', '')
+    address.building = request.POST.get('buildingp', '')
+    address.flat = request.POST.get('flatp', '')
     if request.POST.get('adrsisthesame', '') == "yes":
-        adrs_type = 'По прописке'
-        adrs_fields = ['indexp', 'streetp', 'housep', 'buildingp', 'flatp']
+        address.adrs_type_same = True
     else:
-        adrs_type = 'Фактический'
-        adrs_fields = ['indexf', 'streetf', 'housef', 'buildingf', 'flatf']
-    if len(request.POST.get(adrs_fields[1], '')) < 1:
-        print('returned')
-        return
-    adrs = Address.objects.filter(abiturient=abit).filter(adrs_type__value__icontains=adrs_type).first()
-    if adrs is None:
-        adrs = Address()
-        adrs.abiturient = abit
-    adrs.adrs_type = AttrValue.objects.filter(value__icontains=adrs_type).first()
-    adrs.zipcode = request.POST.get(adrs_fields[0], '')
-    adrs.street = Street.objects.filter(code=request.POST.get(adrs_fields[1], '')).first()
-    print(adrs.street)
-    adrs.house = request.POST.get(adrs_fields[2], '')
-    adrs.building = request.POST.get(adrs_fields[3], '')
-    adrs.flat = request.POST.get(adrs_fields[4], '')
-    if ((request.POST.get('adrsisthesame', '')) == "yes"):
-        adrs.adrs_type_same = True
-        # adrs.adrs_type=AttrValue.objects.filter(value__icontains=u'прописке').first()
-        Address.objects.filter(abiturient__id=abit.id).delete()
-    else:
-        adrs.adrs_type_same = False
-    adrs.save()
+        address.adrs_type_same = False
+    address.save()
+    if request.POST.get('adrsisthesame', '') == "no":
+        address_type = 'Фактический'
+        address = Address()
+        address.abiturient = abit
+        address.adrs_type = AttrValue.objects.filter(value__icontains=address_type).first()
+        address.zipcode = request.POST.get('indexf', '')
+        address.street = Street.objects.filter(code=request.POST.get('streetf', '')).first()
+        address.house = request.POST.get('housef', '')
+        address.building = request.POST.get('buildingf', '')
+        address.flat = request.POST.get('flatf', '')
+        address.adrs_type_same = False
+        address.save()
     print('Address saved')
 
 
