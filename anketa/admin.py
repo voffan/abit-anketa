@@ -4,6 +4,18 @@ from django.contrib import admin
 from staff.models import Employee, Position
 import anketa.models# import University, Department, AttrType, Attribute, AttrValue
 
+
+class AddressAdmin(admin.ModelAdmin):
+    list_display = (
+        'abiturient',
+        'adrs_type',
+        'street',
+        'house',
+        'building',
+        'flat',
+        'adrs_type_same',
+    )
+
 #staff
 #admin.site.register(News)
 admin.site.register(Employee)
@@ -27,4 +39,4 @@ admin.site.register(anketa.models.Relation)
 admin.site.register(anketa.models.ProfileAttrs)
 admin.site.register(anketa.models.Exams)
 admin.site.register(anketa.models.EduOrg)
-admin.site.register(anketa.models.Address)
+admin.site.register(anketa.models.Address, AddressAdmin)
