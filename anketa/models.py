@@ -132,7 +132,7 @@ class Contacts(models.Model):
 class Education(models.Model):
 	abiturient = models.ForeignKey('Abiturient', verbose_name = u'Абитуриент')
 	doc = models.ForeignKey('Docs', verbose_name=u'Документ')
-	level = models.ForeignKey('AttrValue', verbose_name=u'Уровень образования', limit_choices_to={'attribute__name':u'Уровень образования'}, db_index =True)
+	level = models.ForeignKey('AttrValue', verbose_name=u'Уровень образования', limit_choices_to={'attribute__name':u'Предыдущее образование'}, db_index =True)
 	enterDate = models.DateField(u'Дата поступления')
 	def __str__(self):
 		return self.abiturient.fullname+' '+str(self.level)
@@ -151,8 +151,8 @@ class Docs(models.Model):
 	number = models.IntegerField(u'Номер документа', max_length=15, db_index=True, blank=True, null=True)
 	issueDate = models.DateField(u'Дата выдачи', blank=True, null=True)
 	isCopy = models.BooleanField(u'Оригинал документа', default=False)
-	docType = models.ForeignKey('AttrValue', verbose_name=u'Тип документа', limit_choices_to={'attribute__name':u'Тип документа'}, related_name='DocType_docs', db_index=True)
-	docIssuer = models.ForeignKey('AttrValue', verbose_name=u'Орган выдавший документ', limit_choices_to={'attribute__name':u'Орган выдавший документ'}, related_name='DocIssuer')
+	docType = models.ForeignKey('AttrValue', verbose_name=u'Тип документа', limit_choices_to={'attribute__name__icontains':u'Тип документа'}, related_name='DocType_docs', db_index=True)
+	docIssuer = models.ForeignKey('AttrValue', verbose_name=u'Орган выдавший документ', limit_choices_to={'attribute__name__icontains':u'Выдавший орган'}, related_name='DocIssuer')
 	def __str__(self):
 		return self.abiturient.fullname+' '+self.docType.value
 
@@ -240,7 +240,7 @@ class ApplicationProfiles(models.Model):
 		return self.application.abiturient.fullname + ' ' +self.profile.profile.name
 
 class NeedDocuments(models.Model):
-	docType = models.ForeignKey('AttrValue', verbose_name=u'Тип документа', limit_choices_to={'attribute__name':u'Тип документа'}, related_name='DocType_need')
+	docType = models.ForeignKey('AttrValue', verbose_name=u'Тип документа', limit_choices_to={'attribute__name__icontains':u'Тип документа'}, related_name='DocType_need')
 	profile = models.ForeignKey('Profile', verbose_name=u'Профиль', db_index=True)
 
 class Exams_needed(models.Model):
@@ -260,7 +260,9 @@ class Milit(models.Model):
 	liableForMilit = models.BooleanField(u'Военнообязанный', default=False)
 	isServed=models.BooleanField(u'служил в армии', default=False, blank=True)
 	yearDismissial=models.IntegerField(u'Год увольнения из рядов РА', max_length=4, blank=True, null= True)
-	rank = models.ForeignKey(AttrValue, verbose_name=u'Воинское звание',blank=True, null= True,related_name='Rank')
+	rank = models.ForeignKey(AttrValue, verbose_name=u'Воинское звание', limit_choices_to={'attribute__name':u'Воинское звание'}, blank=True, null= True,related_name='Rank')
+	def __str__(self):
+		return self.abiturient.fullname
 
 class DepAchieves(models.Model):
 	profile = models.ForeignKey(Profile, verbose_name = u'Профиль', db_index = True)
