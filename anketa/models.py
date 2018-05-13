@@ -2,6 +2,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from kladr.models import Street
+import os
 
 Sex = (
     (u'М', u'Мужской'),
@@ -17,6 +18,10 @@ AppPrior = (
     (u'С', u'Средний'),
     (u'Н', u'Низкий')
 )
+
+
+def DocImagePath(instance, filename):
+    return os.path.join('docimages', str(instance.doc.abiturient.id), str(instance.doc.id), filename)
 
 
 class Relation(models.Model):
@@ -159,11 +164,12 @@ class Contacts(models.Model):
 
 
 class Education(models.Model):
-    abiturient = models.ForeignKey('Abiturient', verbose_name=u'Абитуриент')
-    doc = models.ForeignKey('Docs', verbose_name=u'Документ')
-    level = models.ForeignKey('AttrValue', verbose_name=u'Уровень образования',
-                              limit_choices_to={'attribute__name': u'Уровень образования'}, db_index=True)
-    enterDate = models.DateField(u'Дата поступления')
+    abiturient = models.ForeignKey('Abiturient', verbose_name='Абитуриент')
+    doc = models.ForeignKey('Docs', verbose_name='Документ')
+    level = models.ForeignKey('AttrValue', verbose_name='Уровень образования',
+                              limit_choices_to={'attribute__name': 'Уровень образования'}, db_index=True)
+    enterDate = models.DateField('Дата поступления')
+    graduationDate = models.DateField('Дата окончания')
 
     def __str__(self):
         return self.abiturient.fullname + ' ' + str(self.level)
@@ -194,6 +200,13 @@ class Docs(models.Model):
 
     def __str__(self):
         return self.abiturient.fullname + ' ' + self.docType.value
+
+
+class DocImages(models.Model):
+	doc = models.ForeignKey('Docs', verbose_name='Документ', db_index=True)
+	image = models.ImageField(upload_to=DocImagePath)
+	def __str__(self):
+		return self.doc.abiturient.fullname + ' ' + self.doc.docType.value
 
 
 class Exams(models.Model):

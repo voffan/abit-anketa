@@ -95,6 +95,31 @@ def PersonData(request):
     if person.docs_set.filter(docType__value__icontains=u'СНИЛС').first() is not None:
         args['inila'] = person.docs_set.filter(docType__value__icontains=u'СНИЛС').first().serialno
 
+    args_to_print = [
+        'doctype',
+        'doctype_id',
+        'doctype_serial',
+        'doctype_number',
+        'doctype_date',
+        'doctype_issuer_id',
+        'doctype_issuer',
+        'edudoctype',
+        'edudoctype_id',
+        'edudoctype_serial',
+        'edudoctype_number',
+        'edudoctype_date',
+        'edudoctype_issuer_id',
+        'edudoctype_issuer',
+        'datejoining',
+        'prevedu',
+        'inila',
+    ]
+    for arg_to_print in args_to_print:
+        try:
+            print(arg_to_print + ': ' + str(args[arg_to_print]))
+        except:
+            print(arg_to_print + ': ' )
+
     # 3
     def get_full_address(street_code, house, building, flat):
         region_object = Kladr.objects.filter(code=(street_code[:2] + '00000000000')).first()
@@ -150,7 +175,7 @@ def PersonData(request):
         args['buildingf'] = address.building
         args['flatf'] = address.flat
 
-    args_to_print = [
+    """args_to_print = [
         'adrsp',
         'streetp',
         'housep',
@@ -167,7 +192,7 @@ def PersonData(request):
         try:
             print(arg_to_print + ': ' + args[arg_to_print])
         except:
-            print(arg_to_print + ': ' )
+            print(arg_to_print + ': ' )"""
 
     contacts_type = AttrValue.objects.filter(attribute__name__icontains=u'Тип контакта')
     if contacts_type is not None:
@@ -594,6 +619,7 @@ def AddDataToPerson(request):
                 if (len(request.POST.get('docissuer', '')) > 0):
                     doctype.docIssuer = AttrValue.objects.get(pk=request.POST.get('docissuer', ''))
                 doctype.save()
+
                 edudoc = abit.education_set.first()
                 if edudoc is None:
                     edudoc = Education()
@@ -1023,14 +1049,14 @@ def EduDocType(request):
 
 
 def PrevEduName(request):
-    trry = AttrValue.objects.filter(attribute__name__icontains=u'выдавший')
+    trry = EduOrg.objects.all()
     part = request.GET.get('query', '')
     if len(part) > 0:
-        trry = trry.filter(value__icontains=part)
-    trry = trry.values('id', 'value')
+        trry = trry.filter(name__icontains=part)
+    trry = trry.values('id', 'name')
     result = []
     for item in trry:
-        result.append({'id': item['id'], 'text': item['value']})
+        result.append({'id': item['id'], 'text': item['name']})
     return HttpResponse(json.dumps(result), content_type="application/json")
 
 
