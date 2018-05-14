@@ -20,17 +20,17 @@ import json
 # Create your views here.
 
 def get_street(request):
-	result=[]
-	village = request.GET.get('code','')
-	query = request.GET.get('query','')
-	print (village)
-	if len(village)>0:
+	result = []
+	village = request.GET.get('code', '')
+	query = request.GET.get('query', '')
+	print(village)
+	if len(village) > 0:
 		village_code = village[:11]
-		print (village_code)
+		print(village_code)
 		streets = Street.objects.filter(code__startswith=village_code)
-		if len(query)>0:
+		if len(query) > 0:
 			streets = streets.filter(name__icontains=query)
-		result=[{'id':item.code, 'text':(item.socr + '. ' + item.name)} for item in streets]
+		result = [{'id':item.code, 'text':(item.socr + '. ' + item.name)} for item in streets]
 	return HttpResponse(json.dumps(result), content_type='application/json')
 
 def get_region(request):
@@ -109,7 +109,7 @@ def get_objects_by_id(request):
 	query = request.GET.get('id', '')
 	success = 1
 	if len(query)>0:
-		object_id = query[:2]+'00000000000'
+		object_id = query[:2] + '00000000000'
 		region = Kladr.objects.filter(code=object_id).first()
 		if region is not None:
 			result.append({'data':{'region':{'id':region.code, 'text':(region.name + ' ' + region.socr + '.')},'district':{'id':'','text':''},'city':{'id':'','text':''},'village':{'id':'','text':''},'street':{'id':'','text':''}}})

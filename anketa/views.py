@@ -618,54 +618,52 @@ def AddDataToPerson(request):
                                                                    '%d/%m/%Y').strftime('%Y-%m-%d')
                 if (len(request.POST.get('docissuer', '')) > 0):
                     doctype.docIssuer = AttrValue.objects.get(pk=request.POST.get('docissuer', ''))
+                print(doctype)
                 doctype.save()
 
-                edudoc = abit.education_set.first()
-                if edudoc is None:
-                    edudoc = Education()
-                    edudoc.abiturient = abit
-                    doc = Docs()
-                    doc.abiturient = abit
-                else:
-                    doc = edudoc.doc
-                if (len(request.POST.get('edudoctype', ''))) > 0:
-                    doc.docType = AttrValue.objects.get(pk=request.POST.get('edudoctype', ''))
-                if (len(request.POST.get('serialedudoc', '')) > 0):
-                    doc.serialno = int(request.POST.get('serialedudoc', ''))
-                if (len(request.POST.get('numberedudoc', '')) > 0):
-                    doc.number = int(request.POST.get('numberedudoc', ''))
-                if (len(request.POST.get('dateexiting', '')) > 0):
-                    doc.issueDate = datetime.datetime.strptime(request.POST.get('dateexiting', ''),
-                                                               '%d/%m/%Y').strftime('%Y-%m-%d')
-                if (len(request.POST.get('preveduname', ''))) > 0:
-                    doc.docIssuer = AttrValue.objects.get(pk=request.POST.get('preveduname', ''))
-                doc.save()
-                edudoc.doc = doc
-                datejoining = request.POST.get('datejoining', '')
-                if len(datejoining) > 0:
-                    edudoc.enterDate = datetime.datetime.strptime(datejoining, '%d/%m/%Y').strftime('%Y-%m-%d')
-                else:
-                    pageIsComplete = False;
-                if doc.docType.value == "Аттестат":
-                    edudoc.level = AttrValue.objects.filter(
-                        attribute__name__icontains=u'Предыдущее образование').filter(value__icontains=u'СОО').first()
-                else:
-                    prevedu = request.POST.get('prevedu', '')
-                    if len(prevedu) > 0:
-                        if prevedu == "npo":
-                            edudoc.level = AttrValue.objects.filter(
-                                attribute__name__icontains=u'Предыдущее образование').filter(
-                                value__icontains=u'НПО').first()
-                        else:
-                            if prevedu == "spo":
-                                edudoc.level = AttrValue.objects.filter(
-                                    attribute__name__icontains=u'Предыдущее образование').filter(
-                                    value__icontains=u'СПО').first()
-                            else:
-                                edudoc.level = AttrValue.objects.filter(
-                                    attribute__name__icontains=u'Предыдущее образование').filter(
-                                    value__icontains=u'ВПО').first()
-                edudoc.save()
+                print('Saving Edu')
+                Education.objects.filter(abiturient=abit).delete()
+                Docs.objects.filter(abiturient=abit,
+                                    docType__attribute__name__icontains='Вид документа об образовании').delete()
+                docs = Docs()
+                docs.abiturient = abit
+                docs.docType = AttrValue.objects.get(pk=request.POST.get('edudoctype', ''))
+                docs.serialno = int(request.POST.get('serialedudoc', ''))
+                docs.number = int(request.POST.get('numberedudoc', ''))
+                docs.docIssuer = None
+                print(docs.abiturient)
+                print(docs.docType)
+                print(docs.serialno)
+                print(docs.number)
+                print(docs.docIssuer)
+                print(docs)
+                docs.save()
+                education = Education()
+                education.abiturient = abit
+                education.doc = Docs.objects.filter(
+                    abiturient=abit,
+                    docType__attribute__name__icontains='Вид документа об образовании'
+                ).first()
+                if request.POST.get('prevedu', '') == 'soo':
+                    education.level = AttrValue.objects.filter(value__icontains='СОО').first()
+                if request.POST.get('prevedu', '') == 'npo':
+                    education.level = AttrValue.objects.filter(value__icontains='НПО').first()
+                if request.POST.get('prevedu', '') == 'spo':
+                    education.level = AttrValue.objects.filter(value__icontains='СПО').first()
+                if request.POST.get('prevedu', '') == 'vpo':
+                    education.level = AttrValue.objects.filter(value__icontains='ВПО').first()
+                education.enterDate = datetime.datetime.strptime(request.POST.get('datejoining', ''),
+                                                                 '%d/%m/%Y').strftime('%Y-%m-%d')
+                education.graduationDate = datetime.datetime.strptime(request.POST.get('dateexiting', ''),
+                                                                 '%d/%m/%Y').strftime('%Y-%m-%d')
+                education.eduOrg = EduOrg.objects.get(pk=request.POST.get('preveduname', ''))
+                print(education.abiturient)
+                print(education.doc)
+                print(education.level)
+                print(education.enterDate)
+                print(education.graduationDate)
+                print(education.eduOrg)
+                education.save()
 
                 snils = abit.docs_set.filter(docType__value__icontains=u'CНИЛС').first()
                 if snils is None:

@@ -256,7 +256,7 @@ $('#street').select2({
 	minimumInputLength: 1,
 	language:"ru"
 });
-$('#SaveKladr').on('click',function(e){
+$('#SaveKladr').on('click',function(e) {
 	if ($('#street').val() === "") {
 		alert("Выберите улицу");
 		return;

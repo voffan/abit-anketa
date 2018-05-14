@@ -167,9 +167,10 @@ class Education(models.Model):
     abiturient = models.ForeignKey('Abiturient', verbose_name='Абитуриент')
     doc = models.ForeignKey('Docs', verbose_name='Документ')
     level = models.ForeignKey('AttrValue', verbose_name='Уровень образования',
-                              limit_choices_to={'attribute__name': 'Уровень образования'}, db_index=True)
+                              limit_choices_to={'attribute__name': 'Предыдущее образование'}, db_index=True)
     enterDate = models.DateField('Дата поступления')
     graduationDate = models.DateField('Дата окончания')
+    eduOrg = models.ForeignKey('EduOrg', verbose_name='Образовательное учреждение')
 
     def __str__(self):
         return self.abiturient.fullname + ' ' + str(self.level)
@@ -191,12 +192,23 @@ class Docs(models.Model):
     number = models.IntegerField(u'Номер документа', max_length=15, db_index=True, blank=True, null=True)
     issueDate = models.DateField(u'Дата выдачи', blank=True, null=True)
     isCopy = models.BooleanField(u'Оригинал документа', default=False)
-    docType = models.ForeignKey('AttrValue', verbose_name=u'Тип документа',
-                                limit_choices_to={'attribute__name': u'Тип документа'}, related_name='DocType_docs',
-                                db_index=True)
-    docIssuer = models.ForeignKey('AttrValue', verbose_name=u'Орган выдавший документ',
-                                  limit_choices_to={'attribute__name': u'Орган выдавший документ'},
-                                  related_name='DocIssuer')
+    docType = models.ForeignKey(
+        'AttrValue',
+        verbose_name=u'Тип документа',
+        limit_choices_to={'attribute__name': u'Тип документа'},
+        related_name='DocType_docs',
+        db_index=True,
+        blank=True,
+        null=True
+    )
+    docIssuer = models.ForeignKey(
+        'AttrValue',
+        verbose_name='Орган выдавший документ',
+        limit_choices_to={'attribute__name': 'Орган выдавший документ'},
+        related_name='DocIssuer',
+        blank=True,
+        null=True
+    )
 
     def __str__(self):
         return self.abiturient.fullname + ' ' + self.docType.value

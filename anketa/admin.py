@@ -43,6 +43,7 @@ class EducationAdmin(admin.ModelAdmin):
         'level',
         'enterDate',
         'graduationDate',
+        'eduOrg',
     )
 
 
