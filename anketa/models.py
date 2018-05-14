@@ -251,7 +251,7 @@ class University(models.Model):
 
 
 class EduOrg(models.Model):
-    name = models.CharField(u'Образовательное учреждение', max_length=100, db_index=True)
+    name = models.CharField('Образовательное учреждение', max_length=100, db_index=True)
     head = models.ForeignKey('self', null=True, blank=True, db_index=True)
     orgtype = models.ForeignKey('AttrValue', verbose_name=u'Тип образовательного учреждения', null=True, blank=True,
                                 db_index=True)

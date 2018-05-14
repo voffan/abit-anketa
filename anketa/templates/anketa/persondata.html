@@ -258,7 +258,7 @@
 	$("#dateexiting").datetimepicker({
 		format:'DD/MM/YYYY',
 		locale:"ru",
-		{% if edudoctype_date %} defaultDate:'{{edudoctype_date|date:"Y-m-d"}}' {% endif %}
+		{% if datejoining %} defaultDate:'{{datejoining|date:"Y-m-d"}}' {% endif %}
 	});
 	$("#nation").select2({
 		language:"ru",
@@ -426,8 +426,8 @@
 	{% if edudoctype != None  %}
 		$("#edudoctype").select2('data', {id : "{{edudoctype_id}}" , text: "{{edudoctype}}"});
 	{% endif %}
-	{% if edudoctype_issuer != None %}
-		$("#preveduname").select2('data', {id : "{{doctype_issuer_id}}" , text: "{{doctype_issuer}}"});
+	{% if preveduname != None %}
+		$("#preveduname").select2('data', {id : "{{preveduname_id}}" , text: "{{preveduname}}"});
 	{% endif %}
 	{% if rank != None  %}
 		$("#rank").select2('data',{id: '{{rank_id}}', text:"{{rank}}"});

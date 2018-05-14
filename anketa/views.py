@@ -90,6 +90,8 @@ def PersonData(request):
         args['datejoining'] = edudoctype.enterDate
         args['dateexiting'] = edudoctype.graduationDate
         args['prevedu'] = edudoctype.level.value
+        args['preveduname'] = edudoctype.eduOrg.name
+        args['preveduname_id'] = edudoctype.eduOrg.id
     if person.docs_set.filter(docType__value__icontains=u'СНИЛС').first() is not None:
         args['inila'] = person.docs_set.filter(docType__value__icontains=u'СНИЛС').first().serialno
 
@@ -105,11 +107,11 @@ def PersonData(request):
         'edudoctype_id',
         'edudoctype_serial',
         'edudoctype_number',
-        'edudoctype_date',
-        'edudoctype_issuer_id',
-        'edudoctype_issuer',
         'datejoining',
+        'dateexiting',
         'prevedu',
+        'preveduname',
+        'preveduname_id',
         'inila',
     ]
     for arg_to_print in args_to_print:

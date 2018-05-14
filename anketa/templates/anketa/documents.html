@@ -18,30 +18,30 @@
                     </div>
                     <p>
                         <div class="row">
-                                <div class = "col-xs-3 col-sm-3 col-md-2 col-sm-offset-1 col-md-offset-2">
-                                    <label for="serialdoc">Серия</label>
-                                    <input type = "text" name = "serialdoc" id = "serialdoc" class = "form-control" placeholder="1234" {% if doctype_serial %} value="{{doctype_serial}}" {% endif %}>
+                            <div class="col-xs-3 col-sm-3 col-md-2 col-sm-offset-1 col-md-offset-2">
+                                <label for="serialdoc">Серия</label>
+                                <input type="text" name="serialdoc" id="serialdoc" class="form-control" placeholder="1234" {% if doctype_serial %} value="{{doctype_serial}}" {% endif %}>
+                            </div>
+                            <div class = "col-xs-4 col-sm-3 col-md-3">
+                                <label for="numberdoc">Номер</label>
+                                <input type="text" name="numberdoc" id="numberdoc" class="form-control" placeholder="123456" {% if doctype_number %} value="{{doctype_number}}" {% endif %}>
+                            </div>
+                            <div class="col-xs-5 col-sm-4 col-md-3">
+                                <label for="datedoc">Дата выдачи</label>
+                                <div class='input-group date' id='datedoc'>
+                                    <input type="text" class="form-control" name="datedoc" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
                                 </div>
-                                <div class = "col-xs-4 col-sm-3 col-md-3">
-                                    <label for="numberdoc">Номер</label>
-                                    <input type = "text" name = "numberdoc" id = "numberdoc" class = "form-control" placeholder="123456" {% if doctype_number %} value="{{doctype_number}}" {% endif %}>
-                                </div>
-                                <div class = "col-xs-5 col-sm-4 col-md-3">
-                                    <label for="datedoc">Дата выдачи</label>
-                                    <div class='input-group date' id='datedoc'>
-                                        <input type="text" class="form-control" name="datedoc" />
-                                        <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-calendar"></span>
-                                        </span>
-                                    </div>
-                                </div>
+                            </div>
                         </div>
                     </p>
-                    <div class = "row">
+                    <div class="row">
                         <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
                             <p>
                                 <label for="docissuer">Кем выдан</label>
-                                <input type="hidden" name= "docissuer" id = "docissuer" class = "form-control" placeholder = "Отделом УФМС по Российской Федерации, г. Якутск">
+                                <input type="hidden" name= "docissuer" id="docissuer" class="form-control" placeholder="Отделом УФМС по Российской Федерации, г. Якутск">
                             </p>
                         </div>
                     </div>
@@ -63,10 +63,10 @@
                             <p>
                                 <label for="prevedu">Предыдущие образование</label>
                                 <p>
-                                    <input type = "radio" name= "prevedu" id = "prevedu" {% if prevedu == "СОО" %} checked {% endif %} value = "soo">СОО
-                                    <input type = "radio" name= "prevedu" id = "prevedu" {% if prevedu == "НПО" %} checked {% endif %} value = "npo">НПО
-                                    <input type = "radio" name= "prevedu" id = "prevedu" {% if prevedu == "СПО" %} checked {% endif %} value = "spo">СПО
-                                    <input type = "radio" name= "prevedu" id = "prevedu" {% if prevedu == "ВПО" %} checked {% endif %} value = "vpo">ВПО
+                                    <input type="radio" name="prevedu" id="prevedu" {% if prevedu == "СОО" %} checked {% endif %} value="soo">СОО
+                                    <input type="radio" name="prevedu" id="prevedu" {% if prevedu == "НПО" %} checked {% endif %} value="npo">НПО
+                                    <input type="radio" name="prevedu" id="prevedu" {% if prevedu == "СПО" %} checked {% endif %} value="spo">СПО
+                                    <input type="radio" name="prevedu" id="prevedu" {% if prevedu == "ВПО" %} checked {% endif %} value="vpo">ВПО
                                 </p>
                             </p>
                         </div>
@@ -75,60 +75,60 @@
                         <div class = "row">
                             <div class = "col-xs-6 col-sm-5 col-md-4 col-sm-offset-1 col-md-offset-2">
                                 <label for="serialedudoc">Серия</label>
-                                <input type = "text" name = "serialedudoc" id = "serialedudoc" class = "form-control" placeholder="1234" {% if edudoctype_serial %} value="{{edudoctype_serial}}" {% endif %}>
+                                <input type="text" name="serialedudoc" id="serialedudoc" class="form-control" placeholder="1234" {% if edudoctype_serial %} value="{{edudoctype_serial}}" {% endif %}>
                             </div>
                             <div class = "col-xs-6 col-sm-5 col-md-4">
                                 <label for="numberedudoc">Номер</label>
-                                <input type = "text" name = "numberedudoc" id = "numberedudoc" class = "form-control" placeholder="123456" {% if edudoctype_number %} value="{{edudoctype_number}}" {% endif %}>
+                                <input type="text" name="numberedudoc" id="numberedudoc" class="form-control" placeholder="123456" {% if edudoctype_number %} value="{{edudoctype_number}}" {% endif %}>
                             </div>
                         </div>
                     </p>
                     <p>
                         <div class="row">
                             <div class="col-xs-6 col-sm-5 col-md-4 col-sm-offset-1 col-md-offset-2">
-                                    <label for="datejoining">Дата поступления</label>
-                                    <div class='input-group date' id='datejoining'>
-                                        <input type="text" class="form-control" name="datejoining" />
-                                                <span class="input-group-addon">
-                                                <span class="glyphicon glyphicon-calendar"></span>
-                                            </span>
-                                    </div>
-                                </div>
-                                <div class="col-xs-6 col-sm-5 col-md-4">
-                                    <label for="dateexiting">Дата окончания</label>
-                                    <div class='input-group date' id='dateexiting'>
-                                        <input type="text" class="form-control" name="dateexiting" />
+                                <label for="datejoining">Дата поступления</label>
+                                <div class='input-group date' id='datejoining'>
+                                    <input type="text" class="form-control" name="datejoining" />
                                             <span class="input-group-addon">
-                                                <span class="glyphicon glyphicon-calendar"></span>
-                                            </span>
-                                    </div>
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
                                 </div>
+                            </div>
+                            <div class="col-xs-6 col-sm-5 col-md-4">
+                                <label for="dateexiting">Дата окончания</label>
+                                <div class='input-group date' id='dateexiting'>
+                                    <input type="text" class="form-control" name="dateexiting" />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                </div>
+                            </div>
                         </div>
                     </p>
                     <div class = "row">
                         <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
                             <p>
                                 <label for="preveduname">Название учебного заведения</label>
-                                <input type="hidden" name= "preveduname" id = "preveduname" class = "form-control" placeholder = "МОУ СОШ № 1, г. Якутск">
+                                <input type="hidden" name="preveduname" id="preveduname" class="form-control" placeholder="МОУ СОШ № 1, г. Якутск">
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="panel panel-primary">
-                            <div class="panel-heading">
-                            <h3 class="panel-title">СНИЛС</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div class="row">
-                                <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
-                                    <p>
-                                        <label for="inila">СНИЛС</label>
-                                        <input id="inila" name="inila" class="form-control" placeholder="123-456-789 00" pattern="\d{3}\.\d{3}\.\d{3}\.\d{3}" {% if inila %} value={{inila}} {% endif %}/>
-                                    </p>
-                                </div>
-                                </div>
-                            </div>
+                <div class="panel-heading">
+                <h3 class="panel-title">СНИЛС</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                    <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+                        <p>
+                            <label for="inila">СНИЛС</label>
+                            <input id="inila" name="inila" class="form-control" placeholder="123-456-789 00" {% if inila %} value={{inila}} {% endif %}/>
+                        </p>
+                    </div>
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
