@@ -87,10 +87,8 @@ def PersonData(request):
         args['edudoctype_id'] = edudoctype.doc.docType.id
         args['edudoctype_serial'] = edudoctype.doc.serialno
         args['edudoctype_number'] = edudoctype.doc.number
-        args['edudoctype_date'] = edudoctype.doc.issueDate
-        args['edudoctype_issuer_id'] = edudoctype.doc.docIssuer.id
-        args['edudoctype_issuer'] = edudoctype.doc.docIssuer.value
         args['datejoining'] = edudoctype.enterDate
+        args['dateexiting'] = edudoctype.graduationDate
         args['prevedu'] = edudoctype.level.value
     if person.docs_set.filter(docType__value__icontains=u'СНИЛС').first() is not None:
         args['inila'] = person.docs_set.filter(docType__value__icontains=u'СНИЛС').first().serialno
@@ -645,13 +643,13 @@ def AddDataToPerson(request):
                     docType__attribute__name__icontains='Вид документа об образовании'
                 ).first()
                 if request.POST.get('prevedu', '') == 'soo':
-                    education.level = AttrValue.objects.filter(value__icontains='СОО').first()
+                    education.level = AttrValue.objects.filter(value='СОО').first()
                 if request.POST.get('prevedu', '') == 'npo':
-                    education.level = AttrValue.objects.filter(value__icontains='НПО').first()
+                    education.level = AttrValue.objects.filter(value='НПО').first()
                 if request.POST.get('prevedu', '') == 'spo':
-                    education.level = AttrValue.objects.filter(value__icontains='СПО').first()
+                    education.level = AttrValue.objects.filter(value='СПО').first()
                 if request.POST.get('prevedu', '') == 'vpo':
-                    education.level = AttrValue.objects.filter(value__icontains='ВПО').first()
+                    education.level = AttrValue.objects.filter(value='ВПО').first()
                 education.enterDate = datetime.datetime.strptime(request.POST.get('datejoining', ''),
                                                                  '%d/%m/%Y').strftime('%Y-%m-%d')
                 education.graduationDate = datetime.datetime.strptime(request.POST.get('dateexiting', ''),
