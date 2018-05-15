@@ -8,3 +8,5 @@ __pycache__
 *.rqb
 venv
 venv_e
+.idea
+.vscode

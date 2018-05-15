@@ -3,20 +3,20 @@ var code = [];
 var codetype = [];
 
 
-function Kladr(object){
+function Kladr(object) {
 	saveObject = object;
-	if($(object).val().length < 1){
-		$('#region').select2('val','');
-		$('#district').select2('val','');
-		$('#city').select2('val','');
-		$('#village').select2('val','');
-		$('#street').select2('val','');
-		$('#city').select2('enable',true);
-		$('#district').select2('enable',true);
+	if($(object).val().length < 1) {
+		$('#region').select2('val', '');
+		$('#district').select2('val', '');
+		$('#city').select2('val', '');
+		$('#village').select2('val', '');
+		$('#street').select2('val', '');
+		$('#city').select2('enable', true);
+		$('#district').select2('enable', true);
 		$('#KladrModal').modal();
-		code = []
-		codetype = []
-	} if ($(object).val().length > 1){
+		code = [];
+		codetype = [];
+	} if ($(object).val().length > 1) {
 		$.ajax({
 			url:"{% url 'kladr:get_objects_by_id' %}",
 			method:"GET",
@@ -26,32 +26,82 @@ function Kladr(object){
 			success:function(data){
 				//console.log(data);
 				console.log('success!');
-				if (data[0]['success']=='1'){
+				console.log(data);
+				if (data[0]['success'] === 1) {
 					console.log('should print');
-					$('#city').select2('enable',true);
-					$('#district').select2('enable',true);
-					$('#region').select2('data',data[0]['data']['region']);
+					code = [];
+					codetype = [];
+					$('#region').select2('val', '');
+					$('#district').select2('val', '');
+					$('#city').select2('val', '');
+					$('#village').select2('val', '');
+					$('#street').select2('val', '');
+					$('#region').select2('enable', true);
+					$('#region').select2('data', data[0]['data']['region']);
+					code.push(data[0]['data']['region']['id']);
+					codetype.push("region");
+					if (data[0]['data']['district']['text'].length > 0) {
+						$('#district').select2('enable', true);
+						$('#district').select2('data', data[0]['data']['district']);
+						code.push(data[0]['data']['district']['id']);
+						codetype.push("district");
+					}
+					if (data[0]['data']['city']['text'].length > 0) {
+						$('#city').select2('enable', true);
+						$('#city').select2('data', data[0]['data']['city']);
+						code.push(data[0]['data']['city']['id']);
+						codetype.push("city");
+					}
+					if (data[0]['data']['village']['text'].length > 0) {
+						$('#village').select2('enable', true);
+						$('#village').select2('data', data[0]['data']['village']);
+						code.push(data[0]['data']['village']['id']);
+						codetype.push("village");
+					}
+					$('#street').select2('enable', true);
+					$('#street').select2('data', data[0]['data']['street']);
+					code.push(data[0]['data']['street']['id']);
+					codetype.push("street");
+					if (saveObject.selector === "#streetp") {
+						$('#adrshouse').val($('#housep').val());
+						$('#adrsbuilding').val($('#buildingp').val());
+						$('#adrsflat').val($('#flatp').val());
+                    }
+                    else {
+						$('#adrshouse').val($('#housef').val());
+						$('#adrsbuilding').val($('#buildingf').val());
+						$('#adrsflat').val($('#flatf').val());
+					}
+
+					/*
+					$('#city').select2('enable', true);
+					$('#district').select2('enable', true);
+					$('#region').select2('data', data[0]['data']['region']);
 					if (data[0]['data']['district']['text'].length > 0){
-						$('#district').select2('enable',true);
-						$('#city').select2('enable',false);
-						$('#district').select2('data',data[0]['data']['district']);
+						$('#district').select2('enable', true);
+						$('#city').select2('enable', false);
+						$('#district').select2('data', data[0]['data']['district']);
 					}
-					else $('#district').select2('val','');
-					if (data[0]['data']['city']['text'].length > 0){
-						$('#city').select2('enable',true);
-						$('#district').select2('enable',false);
-						$('#city').select2('data',data[0]['data']['city']);
+					else $('#district').select2('val', '');
+					if (data[0]['data']['city']['text'].length > 0) {
+						$('#city').select2('enable', true);
+						$('#district').select2('enable', false);
+						$('#city').select2('data', data[0]['data']['city']);
 					}
-					else $('#city').select2('val','');
-					if (data[0]['data']['village']['text'].length > 0) $('#village').select2('data',data[0]['data']['village']);
-					else $('#village').select2('val','');
-					$('#street').select2('data',data[0]['data']['street']);
+					else $('#city').select2('val', '');
+					if (data[0]['data']['village']['text'].length > 0) {
+                        $('#village').select2('data', data[0]['data']['village']);
+                    }
+					else {
+                        $('#village').select2('val', '');
+                    }
+					$('#street').select2('data', data[0]['data']['street']); */
 					$('#KladrModal').modal();
-				}else{
-					alert(data[0][['error']]);
+				} else {
+					alert('Ошибка');
 				}
 			},
-			error:function(){
+			error: function() {
 				alert('error while getting data!');
 			}
 		});
@@ -206,7 +256,17 @@ $('#street').select2({
 	minimumInputLength: 1,
 	language:"ru"
 });
-$('#SaveKladr').on('click',function(e){
+$('#SaveKladr').on('click',function(e) {
+	if ($('#street').val() === "") {
+		alert("Выберите улицу");
+		return;
+	}
+
+	if ($('#adrshouse').val() === "") {
+		alert("Введите номер дома");
+		return;
+	}
+
     $('adrsp').text = "fffff";
     var address = $('#region').select2('data').text;
     if ($('#district').select2('data')) {
@@ -237,14 +297,20 @@ $('#SaveKladr').on('click',function(e){
         address += ", кв. ";
         address += $('#adrsflat').val();
     }
-	$(saveObject).val(address);
-	$('#streetp').val(code[code.length - 1]);
-	$('#housep').val($('#adrshouse').val());
-	$('#buildingp').val($('#adrsbuilding').val());
-	$('#flatp').val($('#adrsflat').val());
+	if (saveObject.selector === "#streetp") {
+		$('#adrsp').val(address);
+		$('#streetp').val(code[code.length - 1]);
+		$('#housep').val($('#adrshouse').val());
+		$('#buildingp').val($('#adrsbuilding').val());
+		$('#flatp').val($('#adrsflat').val());
+	} else {
+    	$('#adrsf').val(address);
+		$('#streetf').val(code[code.length - 1]);
+		$('#housef').val($('#adrshouse').val());
+		$('#buildingf').val($('#adrsbuilding').val());
+		$('#flatf').val($('#adrsflat').val());
+	}
 	$('#KladrModal').modal('hide');
-
-
 });
 $('#region').on("change",function(e){
 	$('#district').select2('val','');

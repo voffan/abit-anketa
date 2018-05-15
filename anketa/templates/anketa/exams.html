@@ -28,7 +28,7 @@
 													<td><input type="hidden" class="form-control" name="examType" value="{{item.examtype.id}};{{item.examtype.name}}"></td>
 													<td><input type="text" class="form-control" name="egePoints" value ="{{item.points}}"></td>
 													<td><input type="text" class="form-control" name="egeYear"  value ="{{item.year}}"></td>
-													<td><button class="btn btn-default btn-sm" name="delExamRow" type="button">Удалить</button></td>
+													<td><button class="btn btn-default btn-sm" name="delExamRow" type="button" id="{{item.id}}">Удалить</button></td>
 												</tr>
 												{% endfor %}
 											{% else %}
@@ -37,7 +37,7 @@
 													<td><input type="hidden" class="form-control" name="examType"></td>
 													<td><input type="text" class="form-control" name="egePoints"></td>
 													<td><input type="text" class="form-control" name="egeYear"></td>
-													<td><button class="btn btn-default btn-sm" name="delExamRow" type="button">Удалить</button></td>
+													<td><button class="btn btn-default btn-sm" name="delExamRow" type="button" id="{{-1}}">Удалить</button></td>
 												</tr>
 											{% endif %}
 											</tbody>
@@ -72,7 +72,7 @@
 													<td><input type="hidden" class="form-control" name="addDisc" value ="{{item.subject}}"><input type="hidden" name="AddexamId" value ="{{item.id}}"></td>
 													<td><input type="text" class="form-control" name="addPoints" value ="{{item.points}}" readonly></td>
 													<td><input type="text" class="form-control" name="addYear"  value ="{{item.year}}" readonly></td>
-													<td><button class="btn btn-default btn-sm" name="delExamRow2" type="button">Удалить</button></td>
+													<td><button class="btn btn-default btn-sm" name="delExamRow2" type="button" id="{{item.id}}">Удалить</button></td>
 													</tr>
 												{% endfor %}
 											{% else %}
@@ -80,7 +80,7 @@
 													<td><input type="hidden" class="form-control" name="addDisc"><input type="hidden" name="examId" value ="-1"></td>
 													<td><input type="text" class="form-control" name="addPoints" readonly></td>
 													<td><input type="text" class="form-control" name="addYear" readonly></td>
-													<td><button class="btn btn-default btn-sm" name="delExamRow2" type="button">Удалить</button></td>
+													<td><button class="btn btn-default btn-sm" name="delExamRow2" type="button" id="-1">Удалить</button></td>
 												</tr>
 											{% endif %}
 											</tbody>

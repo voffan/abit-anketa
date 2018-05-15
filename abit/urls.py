@@ -1,9 +1,11 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.conf.urls import patterns, include, url
 
 from django.contrib import admin
 admin.autodiscover()
 
-from anketa.views import StartPage, StartApp, Streets, Territory, District, City, Citizenship, Nation, DocIssuer, Achievement, AchievResult, PrivCat, PrivType, PrevEduName, Institute, EduProf, Rank, Flang, CreatePerson, DocType, PersonProfile, Applications, PersonData, Account,EduName, SaveApplication, EduProfForm, GetSelectedApplication,DeleteApplication,AddDataToPerson, EduDocType,GetAddressTypeValues, ExamSubject, ExamType, AccountInfoChanging, api_saveexams
+from anketa.views import StartPage, StartApp, Streets, Territory, District, City, Citizenship, Nation, DocIssuer, Achievement, AchievResult, PrivCat, PrivType, PrevEduName, Institute, EduProf, Rank, Flang, CreatePerson, DocType, PersonProfile, Applications, PersonData, Account,EduName, SaveApplication, EduProfForm, GetSelectedApplication,DeleteApplication,AddDataToPerson, EduDocType,GetAddressTypeValues, ExamSubject, ExamType, AccountInfoChanging, api_exams, api_privileges, api_achievs
 
 
 urlpatterns = patterns('',
@@ -48,5 +50,7 @@ urlpatterns = patterns('',
     url(r'^kladr/', include('kladr.urls',namespace = 'kladr')),
     url(r'^auth/', include('authApp.urls', namespace = 'authapp')),
     #==============API=================================================
-    url(r'saveexams$',api_saveexams, name='api_saveexams')
-)
+    url(r'apiexams/$',api_exams, name='apiexams'),
+    url(r'apiprivileges/$',api_privileges, name='apiprivileges'),
+    url(r'apiachievs/$',api_achievs, name='apiachievs')
+) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
