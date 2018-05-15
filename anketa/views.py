@@ -93,7 +93,7 @@ def PersonData(request):
         args['preveduname'] = edudoctype.eduOrg.name
         args['preveduname_id'] = edudoctype.eduOrg.id
     if person.docs_set.filter(docType__value__icontains=u'СНИЛС').first() is not None:
-        args['inila'] = person.docs_set.filter(docType__value__icontains=u'СНИЛС').first().serialno
+        args['inila'] = person.docs_set.filter(docType__value__icontains=u'СНИЛС').first().number
 
     args_to_print = [
         'doctype',
@@ -665,15 +665,16 @@ def AddDataToPerson(request):
                 print(education.eduOrg)
                 education.save()
 
-                snils = abit.docs_set.filter(docType__value__icontains=u'CНИЛС').first()
-                if snils is None:
-                    snils = Docs()
-                    snils.docType = AttrValue.objects.filter(value__icontains=u'СНИЛС').first()
-                    snils.abiturient = abit
-                if (len(request.POST.get('inila', '')) > 0):
-                    snils.serialno = int(request.POST.get('inila', ''))
-                snils.docIssuer = doctype.docIssuer
-                snils.save()
+                print('Saving INILA')
+                Docs.objects.filter(abiturient=abit, docType__value='СНИЛС').delete()
+                inila = Docs()
+                inila.abiturient = abit
+                inila.number = int(request.POST.get('inila', ''))
+                inila.docType = AttrValue.objects.filter(value='СНИЛС').first()
+                print(inila.abiturient)
+                print(inila.number)
+                print(inila.docType)
+                inila.save()
 
             if page == 3:
                 print('Saving Page 3 - Contacts')
