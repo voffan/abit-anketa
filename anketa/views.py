@@ -6,7 +6,7 @@ import datetime
 from django.views.generic.edit import CreateView
 from django.forms.formsets import formset_factory
 from django.utils import timezone
-
+from django.db.models import Sum
 
 from django.core.urlresolvers import reverse
 from django.core.context_processors import csrf
@@ -501,7 +501,7 @@ def SaveApplication(request):
 		#application.withfee = False
 		app_status = AttrValue.objects.filter(attribute__name__icontains=u'Статус заявления').filter(value__icontains=u'Подан').first()
 		application.appState = app_status
-		application.points =100
+		application.points =100#checkpoint
 		application.priority = request.POST.get('eduprior')
 		if request.POST.get('track','') == "false":
 			application.track = False
@@ -532,7 +532,7 @@ def SaveApplication(request):
 			abit_exams = Exams.objects.filter(abiturient=application.abiturient)#EXAMS###########################
 			points_summ=0
 			for i in abit_exams:
-				points_summ+=i.points
+				points_summ+=i.points#checkpoint
 			forms = list(set(forms))
 			for i in range(len(forms)):
 				profile = ProfileAttrs.objects.get(pk=forms[i])
@@ -705,6 +705,37 @@ def GetAddressTypeValues(request):
 			result['building']=needed_adrs.building
 			result['flat']=needed_adrs.flat
 	return HttpResponse(json.dumps(result), content_type="application/json")
+
+def AbiturientList(request):
+	abitId = [x.abiturient.id for x in Application.objects.all()]
+	abiturients = Abiturient.objects.filter(id__in=abitId)
+	Data={}
+
+	abitData =[]
+	for item in abiturients:
+		points = Exams.objects.filter(abiturient=item).aggregate(Sum('points'))
+		abitData.append({'abiturient':item,'points':points.get('points__sum')})
+	Data['abitData'] = abitData
+
+	vuz = EduOrg.objects.all()
+	Data['edu_org'] = vuz
+
+	edu_prog = Education_Prog.objects.all()
+	Data['edu_prog'] = edu_prog
+
+	edu_prof = Profile.objects.all()
+	Data['edu_prof'] = edu_prof
+
+	
+	
+
+
+	
+	
+	
+	context = {'data':Data}
+	context.update(csrf(request))
+	return render(request,'anketa\\abiturientList.html',context)
 
 ################################## AJAX ###################################################
 

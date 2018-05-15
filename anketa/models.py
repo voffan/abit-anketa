@@ -172,7 +172,7 @@ class Exams(models.Model):
 	year = models.IntegerField(u'Год', max_length=4)
 	special = models.BooleanField(u'Особые условия', default = False)
 	def __str__(self):
-		return self.exam_subjects.value+' '+str(self.points)+' '+str(self.year)
+		return self.abiturient.fullname+' '+self.exam_subjects.value+' '+str(self.points)+' '+str(self.year)
 
 """
 class Department(models.Model):
