@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.conf.urls import patterns, include, url
 
 from django.contrib import admin
@@ -51,4 +53,4 @@ urlpatterns = patterns('',
     url(r'apiexams/$',api_exams, name='apiexams'),
     url(r'apiprivileges/$',api_privileges, name='apiprivileges'),
     url(r'apiachievs/$',api_achievs, name='apiachievs')
-)
+) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
