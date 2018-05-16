@@ -297,6 +297,19 @@ def Exam_list(request):
 
 @login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
+def Enlistment(request):
+	Data={}
+	abiturients = Abiturient.objects.all()
+	applications = Application.objects.all()
+	Data['abitura'] = abiturients
+	Data['applications'] = applications
+
+	context = {'data':Data}
+	context.update(csrf(request))
+	return render(request,'staff\enlistment.html',context)
+
+@login_required(login_url = '/auth')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Application_list (request):
 	employee = request.user.employee_set.get()
 	if request.user.is_superuser:
