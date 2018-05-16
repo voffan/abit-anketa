@@ -4,20 +4,68 @@
 					<input name="currentPage" id="currentPage" value="5" type="hidden"/>
 					<div class="container-fluid">
 						<div class ="row">
-							<div class="panel panel-primary">
+							<div class="panel panel-primary" id="privilegesPanelBody">
 								<div class="panel-heading">
 									<h3 class="panel-title">Льготы</h3>
 								</div>
 								<div class="panel-body">
 									<div class="row">
+									{% if privilegies %}
+										{% for item in privilegies %}
+										<div class = "col-xs-6 col-sm-6 col-md-6">
+											<label for="privcat">Категория</label>
+												<input type="hidden" class="form-control" name="privcat" value ="{{item.privcat.id}};{{item.privcat.name}}"><input type="hidden" name="privId" value ="{{item.id}}">
+										</div>
+										<div class = "col-xs-6 col-sm-6 col-md-6">
+											<label for="privtype">Тип</label>
+												<input type="hidden" class="form-control" name="privtype" value="{{item.privtype.id}};{{item.privtype.name}}">
+										</div>
+										{% endfor %}
+									{% endif %}
+									</div>
+
+									<br>
+									<div class="row">
+										<div class="col-xs-2">
+											<img class="img-thumbnail" src="123.jpg" style="width: 100px; height: 120px; float: left" alt="изображение документа" />
+										</div>
+										<div class="col-xs-10">
+											<div class="col-xs-4 col-sm-4 col-md-4">
+												<label for="privdocSeria">Серия документа</label>
+													<input type="text" class="form-control" name="privdocSeria" value="">
+											</div>
+											<div class="col-xs-4 col-sm-4 col-md-4">
+												<label for="privdocNomer">Номер документа</label>
+													<input type="text" class="form-control" name="privdocNomer" value="">
+											</div>
+											<div class="col-xs-4 col-sm-4 col-md-4">
+												<label for="privdocData">Дата выдачи</label>
+													<input type="text" class="form-control" name="privdocData" value="">
+											</div>
+											<div class="col-xs-12">
+												<label for="privdocIssuer">Кем выдан</label>
+												<input type="text" class="form-control" name="privdocIssuer" value="">
+											</div>
+										</div>
+									</div>
+									<br>
+									<div class="row">
+										<button class="btn btn-primary btn-block" type="button" id="addPriv">Добавить</button>
+									</div>
+								</div>
+							</div>
+						</div>
+<!--									<div class="row">
 										<table class="table" id="tablePriv">
 											<thead id="tablehead">
 												<tr>
-													<th width="35%">Категория</th>
-													<th width="30%">Тип</th>
-													<th width="15%">Серия документа</th>
-													<th width="15%">Номер документа</th>>
-													<th width="15%">Действие</th>
+													<th width="30%">Категория</th>
+													<th width="20%">Тип</th>
+													<th width="10%">Серия документа</th>
+													<th width="10%">Номер документа</th>
+													<th width="10%">Дата выдачи</th>
+													<th width="10%">Кем выдан</th>
+													<th width="10%">Действие</th>
 												</tr>
 											</thead>
 											<tbody id="privelegesTableBoby">
@@ -26,21 +74,28 @@
 												<tr class="info">
 													<td><input type="hidden" class="form-control" name="privcat" value ="{{item.privcat.id}};{{item.privcat.name}}"><input type="hidden" name="privId" value ="{{item.id}}"></td>
 													<td><input type="hidden" class="form-control" name="privtype" value="{{item.privtype.id}};{{item.privtype.name}}"></td>
+													<td><button class="btn btn-default btn-sm" name="delPrivRow" type="button" id="{{item.id}}">Удалить</button></td>
+												</tr>
+												<tr class="info">
+													<td><img height="25" width="10" src="" alt="изображение документа"></td>
 													<td><input type="text" class="form-control" name="privdocSeria" value=""></td>
 													<td><input type="text" class="form-control" name="privdocNomer" value=""></td>
-													<td><button class="btn btn-default btn-sm" name="delPrivRow" type="button" id="{{item.id}}">Удалить</button></td>
+													<td><input type="text" class="form-control" name="privdocData" value=""></td>
+												</tr>
+												<tr class="info">
+													<td><input type="text" class="form-control" name="privdocMesto" value=""></td>
 												</tr>
 												{% endfor %}
 											{% endif %}
 											</tbody>
 										</table>
 									</div>
-									<div class="row">
-										<button class="btn btn-primary btn-block" type="button" id="addPriv">Добавить</button>
-									</div>
 								</div>
 							</div>
-						</div>
+-->
+
+
+
 						<div class ="row">
 							<div class="panel panel-primary">
 								<div class="panel-heading">
