@@ -604,7 +604,6 @@ def Application_review (request, application_id):
 		if 'backspace' in request.POST:
 			return HttpResponseRedirect(reverse('staff:application_list'))
 		if 'print' in request.POST:
-
 			response = HttpResponse(content=save_virtual_workbook(ApplicationPrint(application,education,application_profile,exam,person,passp,snils)),content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 			response['Content-Disposition'] = 'attachment; filename=Anketa_SVFU_'+str(application.id)+'.xlsx'
 			return response
