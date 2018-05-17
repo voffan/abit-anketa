@@ -235,16 +235,52 @@ $("#addPriv").on("click", function()
 	{   if(privrows<maxPriv)
 		{
 		privrows++;
-			var newRow = $('<tr>\
-			                <td><input type="hidden" class="form-control" name="privcat"><input type="hidden" name="privId" value ="-1"></td>\
-							<td><input type="hidden" class="form-control" name="privtype"></td>\
-							<td><input type="text" class="form-control" name="privdocSeria"></td>\
-							<td><input type="text" class="form-control" name="privdocNomer"></td>\
-							<td><button class="btn btn-default btn-sm" name="delPrivRow" type="button">Удалить</button></td>\
-						    </tr>');
-			$("#privelegesTableBoby").append(newRow);
-			initSelect2_Priv(newRow.find('input[name^="privcat"]'));
-			initSelect2_PrivType(newRow.find('input[name^="privtype"]'));
+		    var newPanel = $('<div class="panel-body">\
+		                    <div class="row">\
+		                    <div class = "col-xs-6 col-sm-6 col-md-6">\
+		                    <label for="privcat">Категория</label>\
+							<input type="hidden" class="form-control" name="privcat" value =""><input type="hidden" name="privId" value ="-1">\
+							</div>\
+							<div class = "col-xs-6 col-sm-6 col-md-6">\
+							<label for="privtype">Тип</label>\
+							<input type="hidden" class="form-control" name="privtype" value="">\
+							</div>\
+							</div>\
+							<br>\
+							<div class="row">\
+							<div class="col-xs-4 col-sm-4 col-md-4">\
+							<label for="privdocSeria">Серия документа</label>\
+							<input type="text" class="form-control" name="privdocSeria" value="">\
+							</div>\
+							<div class="col-xs-4 col-sm-4 col-md-4">\
+							<label for="privdocNomer">Номер документа</label>\
+							<input type="text" class="form-control" name="privdocNomer" value="">\
+							</div>\
+							<div class="col-xs-4 col-sm-4 col-md-4">\
+							<label for="privdocData">Дата выдачи</label>\
+							<input type="text" class="form-control" name="privdocData" value="">\
+							</div>\
+							<div class="col-xs-10">\
+							<label for="privdocIssuer">Кем выдан</label>\
+							<input type="text" class="form-control" name="privdocIssuer" value="">\
+							</div>\
+							<div class="col-xs-2">\
+							<label for="addFile">Файл</label>\
+							<button class="btn btn-primary btn-block" type="button" id="addFile">Обзор...</button>\
+							</div>\
+							</div>\
+							<br>');
+			//var newRow = $('<tr>\
+			//              <td><input type="hidden" class="form-control" name="privcat"><input type="hidden" name="privId" value ="-1"></td>\
+			//				<td><input type="hidden" class="form-control" name="privtype"></td>\
+			//				<td><input type="text" class="form-control" name="privdocSeria"></td>\
+			//				<td><input type="text" class="form-control" name="privdocNomer"></td>\
+			//				<td><button class="btn btn-default btn-sm" name="delPrivRow" type="button">Удалить</button></td>\
+			//  		    </tr>');
+			//$("#privelegesTableBoby").append(newRow);
+			$("#privilegesPanelBody").append(newPanel);
+			initSelect2_Priv(newPanel.find('input[name^="privcat"]'));
+			initSelect2_PrivType(newPanel.find('input[name^="privtype"]'));
 		}
 	});
 $("#addAchiev").on("click", function()
