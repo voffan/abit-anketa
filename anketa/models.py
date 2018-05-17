@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
+import os
 from django.db import models
 from django.contrib.auth.models import User
 from kladr.models import Street
-import os
 
 Sex = (
     (u'М', u'Мужской'),
@@ -21,7 +21,7 @@ AppPrior = (
 
 
 def DocImagePath(instance, filename):
-    return os.path.join('docimages', str(instance.doc.abiturient.id), str(instance.doc.id), filename)
+	return os.path.join('docimages', str(instance.doc.abiturient.id), str(instance.doc.id), filename)
 
 
 class Relation(models.Model):
@@ -188,7 +188,7 @@ class DocAttr(models.Model):
 # Class that represent document of student
 class Docs(models.Model):
     abiturient = models.ForeignKey('Abiturient', verbose_name=u'Абитуриент')
-    serialno = models.IntegerField(u'Серия документа', max_length=15, db_index=True, blank=True, null=True)
+	serialno = models.BigIntegerField(u'Серия документа', max_length=15, db_index=True, blank=True, null=True)
     number = models.IntegerField(u'Номер документа', max_length=15, db_index=True, blank=True, null=True)
     issueDate = models.DateField(u'Дата выдачи', blank=True, null=True)
     isCopy = models.BooleanField(u'Оригинал документа', default=False)
@@ -212,13 +212,15 @@ class Docs(models.Model):
 
     def __str__(self):
         return self.abiturient.fullname + ' ' + self.docType.value
+	def __str__(self):
+		return self.doc.abiturient.fullname + ' ' + self.doc.docType.value
 
 
 class DocImages(models.Model):
 	doc = models.ForeignKey('Docs', verbose_name='Документ', db_index=True)
 	image = models.ImageField(upload_to=DocImagePath)
 	def __str__(self):
-		return self.doc.abiturient.fullname + ' ' + self.doc.docType.value
+		return self.doc.abiturient.fullname+' '+self.doc.docType.value
 
 
 class Exams(models.Model):
@@ -324,7 +326,7 @@ class ApplicationProfiles(models.Model):
 
 class NeedDocuments(models.Model):
     docType = models.ForeignKey('AttrValue', verbose_name=u'Тип документа',
-                                limit_choices_to={'attribute__name': u'Тип документа'}, related_name='DocType_need')
+                                limit_choices_to={'attribute__name__icontains': u'Тип документа'}, related_name='DocType_need')
     profile = models.ForeignKey('Profile', verbose_name=u'Профиль', db_index=True)
 
 
@@ -353,6 +355,8 @@ class Milit(models.Model):
     isServed = models.BooleanField(u'служил в армии', default=False, blank=True)
     yearDismissial = models.IntegerField(u'Год увольнения из рядов РА', max_length=4, blank=True, null=True)
     rank = models.ForeignKey(AttrValue, verbose_name=u'Воинское звание', blank=True, null=True, related_name='Rank')
+	def __str__(self):
+		return self.abiturient.fullname
 
 
 class DepAchieves(models.Model):

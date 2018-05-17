@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Abiturient_attrs',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
             ],
             options={
             },
@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Achievements',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
             ],
             options={
             },
@@ -34,11 +34,11 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Address',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
-                ('zipcode', models.CharField(verbose_name='Индекс', max_length=6, blank=True, null=True)),
-                ('house', models.CharField(verbose_name='дом', max_length=5)),
-                ('building', models.CharField(verbose_name='корпус', max_length=5, blank=True, null=True)),
-                ('flat', models.CharField(verbose_name='квартира', max_length=5, blank=True, null=True)),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
+                ('zipcode', models.CharField(blank=True, max_length=6, verbose_name='Индекс', null=True)),
+                ('house', models.CharField(max_length=5, verbose_name='дом')),
+                ('building', models.CharField(blank=True, max_length=5, verbose_name='корпус', null=True)),
+                ('flat', models.CharField(blank=True, max_length=5, verbose_name='квартира', null=True)),
                 ('adrs_type_same', models.BooleanField(default=False, verbose_name='Адрес по прописке совпадает с адресом фактического проживания')),
             ],
             options={
@@ -48,13 +48,13 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Application',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
                 ('date', models.DateField(auto_now_add=True, verbose_name='Дата подачи', db_index=True)),
-                ('number', models.IntegerField(verbose_name='Номер заявления', max_length=10, blank=True, null=True)),
+                ('number', models.IntegerField(blank=True, max_length=10, verbose_name='Номер заявления', null=True)),
                 ('budget', models.BooleanField(default=False, verbose_name='В рамках контрольных цифр приёма')),
                 ('withfee', models.BooleanField(default=False, verbose_name='по договорам об оказании платных обр. услуг')),
                 ('points', models.IntegerField(verbose_name='Кол-во баллов', db_index=True)),
-                ('priority', models.CharField(default='В', choices=[('В', 'Высокий'), ('С', 'Средний'), ('Н', 'Низкий')], null=True, verbose_name='Приоритет', max_length=10, blank=True)),
+                ('priority', models.CharField(max_length=10, default='В', null=True, verbose_name='Приоритет', blank=True, choices=[('В', 'Высокий'), ('С', 'Средний'), ('Н', 'Низкий')])),
                 ('track', models.BooleanField(default=True, verbose_name='Отслеживание')),
             ],
             options={
@@ -64,8 +64,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Application_attrs',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
-                ('app', models.ForeignKey(verbose_name='Заявление', to='anketa.Application')),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
+                ('app', models.ForeignKey(to='anketa.Application', verbose_name='Заявление')),
             ],
             options={
             },
@@ -74,9 +74,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ApplicationProfiles',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
                 ('points', models.IntegerField(verbose_name='Кол-во баллов')),
-                ('application', models.ForeignKey(verbose_name='Заявление', to='anketa.Application')),
+                ('application', models.ForeignKey(to='anketa.Application', verbose_name='Заявление')),
             ],
             options={
             },
@@ -85,8 +85,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Attribute',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
-                ('name', models.CharField(verbose_name='Наименование атрибута', max_length=250, db_index=True)),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
+                ('name', models.CharField(max_length=250, verbose_name='Наименование атрибута', db_index=True)),
                 ('parent', models.ForeignKey(null=True, to='anketa.Attribute', blank=True)),
             ],
             options={
@@ -96,8 +96,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='AttrType',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
-                ('name', models.CharField(verbose_name='', max_length=100)),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
+                ('name', models.CharField(max_length=100, verbose_name='')),
             ],
             options={
             },
@@ -106,9 +106,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='AttrValue',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
-                ('value', models.CharField(verbose_name='Значение', max_length=250, db_index=True)),
-                ('attribute', models.ForeignKey(verbose_name='Атрибут', to='anketa.Attribute')),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
+                ('value', models.CharField(max_length=250, verbose_name='Значение', db_index=True)),
+                ('attribute', models.ForeignKey(to='anketa.Attribute', verbose_name='Атрибут')),
             ],
             options={
             },
@@ -117,9 +117,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Contacts',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
-                ('value', models.CharField(verbose_name='Контакт', max_length=200)),
-                ('contact_type', models.ForeignKey(to='anketa.AttrValue', verbose_name='Тип контакта', related_name='ContactTypeAnketa')),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
+                ('value', models.CharField(max_length=200, verbose_name='Контакт')),
+                ('contact_type', models.ForeignKey(verbose_name='Тип контакта', to='anketa.AttrValue', related_name='ContactTypeAnketa')),
             ],
             options={
             },
@@ -128,9 +128,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='DepAchieves',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
                 ('points', models.IntegerField(verbose_name='Баллы')),
-                ('contest', models.ForeignKey(to='anketa.AttrValue', verbose_name='Мероприятие', related_name='contest_dep')),
+                ('contest', models.ForeignKey(verbose_name='Мероприятие', to='anketa.AttrValue', related_name='contest_dep')),
             ],
             options={
             },
@@ -139,9 +139,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='DocAttr',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
-                ('value', models.CharField(verbose_name='Значение атрибута', max_length=200)),
-                ('attr', models.ForeignKey(to='anketa.Attribute', verbose_name='Наименование атрибута', related_name='Attrname')),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
+                ('value', models.CharField(max_length=200, verbose_name='Значение атрибута')),
+                ('attr', models.ForeignKey(verbose_name='Наименование атрибута', to='anketa.Attribute', related_name='Attrname')),
             ],
             options={
             },
@@ -150,10 +150,10 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Docs',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
-                ('serialno', models.IntegerField(verbose_name='Серия документа', max_length=15, blank=True, db_index=True, null=True)),
-                ('number', models.IntegerField(verbose_name='Номер документа', max_length=15, blank=True, db_index=True, null=True)),
-                ('issueDate', models.DateField(verbose_name='Дата выдачи', blank=True, null=True)),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
+                ('serialno', models.IntegerField(blank=True, max_length=15, verbose_name='Серия документа', db_index=True, null=True)),
+                ('number', models.IntegerField(blank=True, max_length=15, verbose_name='Номер документа', db_index=True, null=True)),
+                ('issueDate', models.DateField(blank=True, verbose_name='Дата выдачи', null=True)),
                 ('isCopy', models.BooleanField(default=False, verbose_name='Оригинал документа')),
             ],
             options={
@@ -163,7 +163,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Education',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
                 ('enterDate', models.DateField(verbose_name='Дата поступления')),
             ],
             options={
@@ -173,9 +173,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Education_Prog',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
-                ('name', models.CharField(verbose_name='Направление/специальность', max_length=200, db_index=True)),
-                ('duration', models.ForeignKey(null=True, to='anketa.AttrValue', verbose_name='Срок обучения', related_name='duration\t', blank=True)),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
+                ('name', models.CharField(max_length=200, verbose_name='Направление/специальность', db_index=True)),
+                ('duration', models.ForeignKey(null=True, verbose_name='Срок обучения', to='anketa.AttrValue', blank=True, related_name='duration\t')),
             ],
             options={
             },
@@ -184,8 +184,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='EduOrg',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
-                ('name', models.CharField(verbose_name='Образовательное учреждение', max_length=100, db_index=True)),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
+                ('name', models.CharField(max_length=100, verbose_name='Образовательное учреждение', db_index=True)),
                 ('head', models.ForeignKey(null=True, to='anketa.EduOrg', blank=True)),
                 ('orgtype', models.ForeignKey(null=True, verbose_name='Тип образовательного учреждения', to='anketa.AttrValue', blank=True)),
             ],
@@ -196,9 +196,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Exams',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
-                ('points', models.IntegerField(verbose_name='Кол-во баллов', max_length=3, blank=True, db_index=True, null=True)),
-                ('year', models.IntegerField(verbose_name='Год', max_length=4)),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
+                ('points', models.IntegerField(blank=True, max_length=3, verbose_name='Кол-во баллов', db_index=True, null=True)),
+                ('year', models.IntegerField(max_length=4, verbose_name='Год')),
                 ('special', models.BooleanField(default=False, verbose_name='Особые условия')),
             ],
             options={
@@ -208,7 +208,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Exams_needed',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
                 ('min_points', models.IntegerField(verbose_name='Мин-ое кол-во баллов')),
             ],
             options={
@@ -218,8 +218,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='NeedDocuments',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
-                ('docType', models.ForeignKey(to='anketa.AttrValue', verbose_name='Тип документа', related_name='DocType_need')),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
+                ('docType', models.ForeignKey(verbose_name='Тип документа', to='anketa.AttrValue', related_name='DocType_need')),
             ],
             options={
             },
@@ -228,12 +228,12 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Person',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
-                ('sname', models.CharField(verbose_name='Фамилия', max_length=30)),
-                ('fname', models.CharField(verbose_name='Имя', max_length=30)),
-                ('mname', models.CharField(verbose_name='Отчество', max_length=30)),
-                ('fullname', models.CharField(verbose_name='ФИО', max_length=200, blank=True, db_index=True, null=True)),
-                ('sex', models.CharField(default='М', verbose_name='Пол', max_length=1, choices=[('М', 'Мужской'), ('Ж', 'Женский')])),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
+                ('sname', models.CharField(max_length=30, verbose_name='Фамилия')),
+                ('fname', models.CharField(max_length=30, verbose_name='Имя')),
+                ('mname', models.CharField(max_length=30, verbose_name='Отчество')),
+                ('fullname', models.CharField(blank=True, max_length=200, verbose_name='ФИО', db_index=True, null=True)),
+                ('sex', models.CharField(default='М', max_length=1, verbose_name='Пол', choices=[('М', 'Мужской'), ('Ж', 'Женский')])),
                 ('birthdate', models.DateField(verbose_name='Дата рождения')),
             ],
             options={
@@ -243,12 +243,12 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Abiturient',
             fields=[
-                ('person_ptr', models.OneToOneField(auto_created=True, to='anketa.Person', primary_key=True, parent_link=True, serialize=False)),
-                ('birthplace', models.CharField(verbose_name='Место рождения', max_length=100, blank=True, null=True)),
+                ('person_ptr', models.OneToOneField(primary_key=True, parent_link=True, auto_created=True, to='anketa.Person', serialize=False)),
+                ('birthplace', models.CharField(blank=True, max_length=100, verbose_name='Место рождения', null=True)),
                 ('hostel', models.NullBooleanField(default=False, verbose_name='Требуется общежитие')),
-                ('token', models.CharField(verbose_name='Token', max_length=100, blank=True, db_index=True, null=True)),
-                ('info_progress', models.CharField(verbose_name='Progress', max_length=20, blank=True, null=True)),
-                ('work_duration', models.CharField(verbose_name='Трудовой стаж', max_length=100, blank=True, db_index=True, null=True)),
+                ('token', models.CharField(blank=True, max_length=100, verbose_name='Token', db_index=True, null=True)),
+                ('info_progress', models.CharField(blank=True, max_length=20, verbose_name='Progress', null=True)),
+                ('work_duration', models.CharField(blank=True, max_length=100, verbose_name='Трудовой стаж', db_index=True, null=True)),
             ],
             options={
             },
@@ -257,11 +257,11 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Milit',
             fields=[
-                ('abiturient', models.OneToOneField(to='anketa.Abiturient', primary_key=True, serialize=False, verbose_name='Абитуриент')),
+                ('abiturient', models.OneToOneField(primary_key=True, verbose_name='Абитуриент', to='anketa.Abiturient', serialize=False)),
                 ('liableForMilit', models.BooleanField(default=False, verbose_name='Военнообязанный')),
                 ('isServed', models.BooleanField(default=False, verbose_name='служил в армии')),
-                ('yearDismissial', models.IntegerField(verbose_name='Год увольнения из рядов РА', max_length=4, blank=True, null=True)),
-                ('rank', models.ForeignKey(null=True, to='anketa.AttrValue', verbose_name='Воинское звание', related_name='Rank', blank=True)),
+                ('yearDismissial', models.IntegerField(blank=True, max_length=4, verbose_name='Год увольнения из рядов РА', null=True)),
+                ('rank', models.ForeignKey(null=True, verbose_name='Воинское звание', to='anketa.AttrValue', blank=True, related_name='Rank')),
             ],
             options={
             },
@@ -270,10 +270,10 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Privilegies',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
-                ('abiturient', models.ForeignKey(verbose_name='Абитуриент', to='anketa.Abiturient')),
-                ('category', models.ForeignKey(to='anketa.AttrValue', verbose_name='Категория', related_name='Category')),
-                ('priv_type', models.ForeignKey(to='anketa.AttrValue', verbose_name='Тип привелегии', related_name='Priv_type')),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
+                ('abiturient', models.ForeignKey(to='anketa.Abiturient', verbose_name='Абитуриент')),
+                ('category', models.ForeignKey(verbose_name='Категория', to='anketa.AttrValue', related_name='Category')),
+                ('priv_type', models.ForeignKey(verbose_name='Тип привелегии', to='anketa.AttrValue', related_name='Priv_type')),
             ],
             options={
             },
@@ -282,8 +282,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Profile',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
-                ('name', models.CharField(verbose_name='Профиль', max_length=100, db_index=True)),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
+                ('name', models.CharField(max_length=100, verbose_name='Профиль', db_index=True)),
                 ('edu_prog', models.ForeignKey(to='anketa.Education_Prog')),
             ],
             options={
@@ -293,9 +293,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ProfileAttrs',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
                 ('freespaces', models.IntegerField(verbose_name='КЦП')),
-                ('eduform', models.CharField(default='О', choices=[('О', 'Очное'), ('З', 'Заочное'), ('ОЗ', 'Очно-заочное')], null=True, verbose_name='Форма обучения', max_length=10, blank=True)),
+                ('eduform', models.CharField(max_length=10, default='О', null=True, verbose_name='Форма обучения', blank=True, choices=[('О', 'Очное'), ('З', 'Заочное'), ('ОЗ', 'Очно-заочное')])),
                 ('year', models.IntegerField(verbose_name='Год')),
                 ('startDate', models.DateField(verbose_name='Дата начала приемной кампании')),
                 ('endDate', models.DateField(verbose_name='Дата конца приемной кампании')),
@@ -308,10 +308,10 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Relation',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
-                ('abiturient', models.ForeignKey(to='anketa.Abiturient', verbose_name='Абитуриент', related_name='RelationAbiturient')),
-                ('person', models.ForeignKey(to='anketa.Person', verbose_name='Родственник', related_name='RelationPerson')),
-                ('relType', models.ForeignKey(verbose_name='Тип связи', to='anketa.AttrValue')),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
+                ('abiturient', models.ForeignKey(verbose_name='Абитуриент', to='anketa.Abiturient', related_name='RelationAbiturient')),
+                ('person', models.ForeignKey(verbose_name='Родственник', to='anketa.Person', related_name='RelationPerson')),
+                ('relType', models.ForeignKey(to='anketa.AttrValue', verbose_name='Тип связи')),
             ],
             options={
             },
@@ -320,11 +320,11 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Template',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
-                ('name', models.CharField(verbose_name='Шаблон', max_length=200, db_index=True)),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
+                ('name', models.CharField(max_length=200, verbose_name='Шаблон', db_index=True)),
                 ('active', models.BooleanField(default=True, verbose_name='Активно')),
-                ('org', models.ForeignKey(verbose_name='Обр. учреждение', to='anketa.EduOrg')),
-                ('type', models.ForeignKey(verbose_name='Тип шаблона', to='anketa.AttrValue')),
+                ('org', models.ForeignKey(to='anketa.EduOrg', verbose_name='Обр. учреждение')),
+                ('type', models.ForeignKey(to='anketa.AttrValue', verbose_name='Тип шаблона')),
             ],
             options={
             },
@@ -333,9 +333,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='TemplateAttrs',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
-                ('attribute', models.ForeignKey(verbose_name='Атрибут', to='anketa.Attribute')),
-                ('template', models.ForeignKey(verbose_name='Обр. учреждение', to='anketa.Template')),
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
+                ('attribute', models.ForeignKey(to='anketa.Attribute', verbose_name='Атрибут')),
+                ('template', models.ForeignKey(to='anketa.Template', verbose_name='Обр. учреждение')),
             ],
             options={
             },
@@ -344,109 +344,109 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='needdocuments',
             name='profile',
-            field=models.ForeignKey(verbose_name='Профиль', to='anketa.Profile'),
+            field=models.ForeignKey(to='anketa.Profile', verbose_name='Профиль'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='exams_needed',
             name='profile',
-            field=models.ForeignKey(verbose_name='Профиль', to='anketa.Profile'),
+            field=models.ForeignKey(to='anketa.Profile', verbose_name='Профиль'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='exams_needed',
             name='subject',
-            field=models.ForeignKey(to='anketa.AttrValue', verbose_name='Дисциплина', related_name='Subject'),
+            field=models.ForeignKey(verbose_name='Дисциплина', to='anketa.AttrValue', related_name='Subject'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='exams',
             name='abiturient',
-            field=models.ForeignKey(verbose_name='Абитуриент', to='anketa.Abiturient'),
+            field=models.ForeignKey(to='anketa.Abiturient', verbose_name='Абитуриент'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='exams',
             name='exam_examType',
-            field=models.ForeignKey(to='anketa.AttrValue', verbose_name='Тип экзамена', related_name='ExamType'),
+            field=models.ForeignKey(verbose_name='Тип экзамена', to='anketa.AttrValue', related_name='ExamType'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='exams',
             name='exam_subjects',
-            field=models.ForeignKey(to='anketa.AttrValue', verbose_name='Дисциплина', related_name='Exam_Subjects'),
+            field=models.ForeignKey(verbose_name='Дисциплина', to='anketa.AttrValue', related_name='Exam_Subjects'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='education_prog',
             name='eduorg',
-            field=models.ForeignKey(verbose_name='Образовательное учреждение', to='anketa.EduOrg'),
+            field=models.ForeignKey(to='anketa.EduOrg', verbose_name='Образовательное учреждение'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='education_prog',
             name='qualification',
-            field=models.ForeignKey(to='anketa.AttrValue', verbose_name='Квалификация', related_name='qualification'),
+            field=models.ForeignKey(verbose_name='Квалификация', to='anketa.AttrValue', related_name='qualification'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='education',
             name='abiturient',
-            field=models.ForeignKey(verbose_name='Абитуриент', to='anketa.Abiturient'),
+            field=models.ForeignKey(to='anketa.Abiturient', verbose_name='Абитуриент'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='education',
             name='doc',
-            field=models.ForeignKey(verbose_name='Документ', to='anketa.Docs'),
+            field=models.ForeignKey(to='anketa.Docs', verbose_name='Документ'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='education',
             name='level',
-            field=models.ForeignKey(verbose_name='Уровень образования', to='anketa.AttrValue'),
+            field=models.ForeignKey(to='anketa.AttrValue', verbose_name='Уровень образования'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='docs',
             name='abiturient',
-            field=models.ForeignKey(verbose_name='Абитуриент', to='anketa.Abiturient'),
+            field=models.ForeignKey(to='anketa.Abiturient', verbose_name='Абитуриент'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='docs',
             name='docIssuer',
-            field=models.ForeignKey(to='anketa.AttrValue', verbose_name='Орган выдавший документ', related_name='DocIssuer'),
+            field=models.ForeignKey(verbose_name='Орган выдавший документ', to='anketa.AttrValue', related_name='DocIssuer'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='docs',
             name='docType',
-            field=models.ForeignKey(to='anketa.AttrValue', verbose_name='Тип документа', related_name='DocType_docs'),
+            field=models.ForeignKey(verbose_name='Тип документа', to='anketa.AttrValue', related_name='DocType_docs'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='docattr',
             name='doc',
-            field=models.ForeignKey(verbose_name='Документ', to='anketa.Docs'),
+            field=models.ForeignKey(to='anketa.Docs', verbose_name='Документ'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='depachieves',
             name='profile',
-            field=models.ForeignKey(verbose_name='Профиль', to='anketa.Profile'),
+            field=models.ForeignKey(to='anketa.Profile', verbose_name='Профиль'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='depachieves',
             name='result',
-            field=models.ForeignKey(to='anketa.AttrValue', verbose_name='Достигнутый результат', related_name='contest_result_dep'),
+            field=models.ForeignKey(verbose_name='Достигнутый результат', to='anketa.AttrValue', related_name='contest_result_dep'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='contacts',
             name='person',
-            field=models.ForeignKey(verbose_name='Человек', to='anketa.Person'),
+            field=models.ForeignKey(to='anketa.Person', verbose_name='Человек'),
             preserve_default=True,
         ),
         migrations.AlterUniqueTogether(
@@ -456,7 +456,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='attribute',
             name='type',
-            field=models.ForeignKey(verbose_name='Тип атрибута', to='anketa.AttrType'),
+            field=models.ForeignKey(to='anketa.AttrType', verbose_name='Тип атрибута'),
             preserve_default=True,
         ),
         migrations.AlterUniqueTogether(
@@ -466,103 +466,103 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='applicationprofiles',
             name='profile',
-            field=models.ForeignKey(verbose_name='Профиль направления', to='anketa.ProfileAttrs'),
+            field=models.ForeignKey(to='anketa.ProfileAttrs', verbose_name='Профиль направления'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='application_attrs',
             name='attribute',
-            field=models.ForeignKey(verbose_name='Атрибут', to='anketa.AttrValue'),
+            field=models.ForeignKey(to='anketa.AttrValue', verbose_name='Атрибут'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='application',
             name='abiturient',
-            field=models.ForeignKey(verbose_name='Абитуриент', to='anketa.Abiturient'),
+            field=models.ForeignKey(to='anketa.Abiturient', verbose_name='Абитуриент'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='application',
             name='appState',
-            field=models.ForeignKey(verbose_name='Состояние заявления', to='anketa.AttrValue'),
+            field=models.ForeignKey(to='anketa.AttrValue', verbose_name='Состояние заявления'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='application',
             name='department',
-            field=models.ForeignKey(verbose_name='Институт/факультет', to='anketa.EduOrg'),
+            field=models.ForeignKey(to='anketa.EduOrg', verbose_name='Институт/факультет'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='address',
             name='abiturient',
-            field=models.ForeignKey(verbose_name='Абитуриент', to='anketa.Abiturient'),
+            field=models.ForeignKey(to='anketa.Abiturient', verbose_name='Абитуриент'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='address',
             name='adrs_type',
-            field=models.ForeignKey(to='anketa.AttrValue', verbose_name='Тип адреса', related_name='Adrs_type'),
+            field=models.ForeignKey(verbose_name='Тип адреса', to='anketa.AttrValue', related_name='Adrs_type'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='address',
             name='street',
-            field=models.ForeignKey(to='kladr.Street', verbose_name='Улица', related_name='Street'),
+            field=models.ForeignKey(verbose_name='Улица', to='kladr.Street', related_name='Street'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='achievements',
             name='abiturient',
-            field=models.ForeignKey(verbose_name='Абитуриент', to='anketa.Abiturient'),
+            field=models.ForeignKey(to='anketa.Abiturient', verbose_name='Абитуриент'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='achievements',
             name='contest',
-            field=models.ForeignKey(to='anketa.AttrValue', verbose_name='Мероприятие', related_name='contest_achievement'),
+            field=models.ForeignKey(verbose_name='Мероприятие', to='anketa.AttrValue', related_name='contest_achievement'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='achievements',
             name='result',
-            field=models.ForeignKey(to='anketa.AttrValue', verbose_name='Достигнутый результат', related_name='contest_result_achievement'),
+            field=models.ForeignKey(verbose_name='Достигнутый результат', to='anketa.AttrValue', related_name='contest_result_achievement'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='abiturient_attrs',
             name='abiturient',
-            field=models.ForeignKey(verbose_name='Абитуриент', to='anketa.Abiturient'),
+            field=models.ForeignKey(to='anketa.Abiturient', verbose_name='Абитуриент'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='abiturient_attrs',
             name='attribute',
-            field=models.ForeignKey(verbose_name='Атрибут', to='anketa.AttrValue'),
+            field=models.ForeignKey(to='anketa.AttrValue', verbose_name='Атрибут'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='abiturient',
             name='citizenship',
-            field=models.ForeignKey(null=True, to='anketa.AttrValue', verbose_name='Гражданство', related_name='Citizenship', blank=True),
+            field=models.ForeignKey(null=True, verbose_name='Гражданство', to='anketa.AttrValue', blank=True, related_name='Citizenship'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='abiturient',
             name='foreign_lang',
-            field=models.ForeignKey(null=True, to='anketa.AttrValue', verbose_name='Изучаемый иностранный язык', related_name='Foreign', blank=True),
+            field=models.ForeignKey(null=True, verbose_name='Изучаемый иностранный язык', to='anketa.AttrValue', blank=True, related_name='Foreign'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='abiturient',
             name='nationality',
-            field=models.ForeignKey(null=True, to='anketa.AttrValue', verbose_name='Национальность(по желанию)', related_name='Nationality', blank=True),
+            field=models.ForeignKey(null=True, verbose_name='Национальность(по желанию)', to='anketa.AttrValue', blank=True, related_name='Nationality'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='abiturient',
             name='user',
-            field=models.ForeignKey(verbose_name='Пользователь', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL, verbose_name='Пользователь'),
             preserve_default=True,
         ),
     ]

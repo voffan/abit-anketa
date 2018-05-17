@@ -1,0 +1,121 @@
+{% extends "anketa/base.html" %}
+
+{% block title %}
+Список подавших документы
+{% endblock %}
+
+{% block additionalcss %} {% endblock %}
+
+{% block scripts %}
+
+{% endblock %}
+
+{% block content %}
+<br>
+<form action="" method="GET" id="abit_list">
+	<div class="col-md-8 col-md-offset-2 col-sm-12 col-sm-offset-0">
+		
+		<div class="row filters">
+			<div class="col-xs-12">
+				<div class="container-fluid">					
+					<div class="panel panel-default">						
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-md-6">
+									<select class="form-control" name="vuz" id="vuz">
+										<option {% if data.filters.vuz == "0" %} selected {% endif %} value="0">Образовательное учреждение</option>      
+										{% for item in data.edu_org %}
+											{% if item.head = None %}
+												<option {% if data.filters.vuz == item.id %} selected {% endif %} value="{{ item.id }}">{{item.name}}</option>
+											{% endif %}
+										{% endfor %}           
+									</select>
+								</div>
+								<div class="col-md-6">
+									<select class="form-control" name="depart" id="depart">
+										<option {% if data.filters.depart == "0" %} selected {% endif %} value="0">Подразделение</option>       
+										{% for item in data.edu_org %}
+											{% if item.head != None %}
+												<option {% if data.filters.depart == item.id %} selected {% endif %} value="{{ item.id }}">{{item.name}}</option>
+											{% endif %}
+										{% endfor %}           
+									</select>
+								</div>
+							</div>
+							<div class="row" style="margin-top: 10px;">
+								<div class="col-md-6">
+									<select class="form-control" name="edu_prog" id="edu_prog" >
+										<option {% if data.filters.edu_prog == "0" %} selected {% endif %} value="0">Направление/специальность</option>       
+										{% for item in data.edu_prog %}											
+											<option {% if data.filters.edu_prog == item.id %} selected {% endif %} value="{{ item.id }}">{{item.name}}</option>											
+										{% endfor %}
+									</select>
+								</div>
+								<div class="col-md-6">
+									<select class="form-control" name="edu_prof" id="edu_prof">
+										<option {% if data.filters.edu_prof == "0" %} selected {% endif %} value="0">Профиль</option>
+										{% for item in data.edu_prof %}
+											<option {% if data.filters.edu_prof == item.id %} selected {% endif %} value="{{ item.id }}">{{item.name}}</option>
+										{% endfor %}                
+									</select>
+								</div>					
+							</div><!--end row-->
+							<div class="row" style="margin-top: 10px;">
+								<div class="container-fluid">
+									<div class="row">
+										<div class="col-md-6">
+											<select class="form-control" name="appType" id="appType">
+												<option {% if data.filters.appType == "0" %} selected {% endif %} value="0">Тип конкурса</option>
+												{% for item in data.appType %}
+													<option {% if data.filters.appType == item.id %} selected {% endif %} value="{{ item.id }}">{{item.name}}</option>
+												{% endfor %}                
+											</select>
+										</div>										
+										<div class="col-md-3">
+											<!--button type="submit" class="btn btn-warning " name="cancel" >Сбросить</button-->
+											<input type="submit" class="btn btn-default btn-block" name="apply" value="Применить"/>												
+										</div>
+										<div class="col-md-3">
+											<!--button type="submit" class="btn btn-primary " name="apply" >Применить</button-->												
+											<input type="submit" class="btn btn-default btn-block" name="cancel" value="Сбросить"/>
+										</div>							
+									</div>	
+								</div>
+																							
+							</div>
+						</div><!--end panel body-->
+					</div><!--end panel-->
+				</div><!--end container-fluid-->
+			</div>			
+		</div>
+		<div class="row tables"><!--start table-->
+			<div class="col-xs-12">
+				<div class="container-fluid">
+					<!--div class="panel panel-default">						
+						<div class="panel-body"-->
+							<table class="table table-bordered table-hover">
+								<thead>
+									<tr>
+										<th width="3%">№</th>
+										<th>Фамилия имя отчество</th>
+										<th>Баллы</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for item in data.abitData %}
+									<tr>
+										<td>{{ forloop.counter }}</td>
+										<td>{{ item.abiturient.fullname }}</td>
+										<td>{% if item.points == None %}0{% endif %}{% if item.points != None %}{{ item.points }}{% endif %}</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						<!--/div--><!--end panel-body-->
+					<!--/div--><!--end panel-->
+				</div><!--end container-fluid-->
+			</div>			
+		</div><!--end row table-->
+	</div><!--end div col col col-->
+</form>
+{% endblock %}

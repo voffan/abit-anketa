@@ -76,11 +76,11 @@
 <form action="" method="POST">
 {% csrf_token %} 
 {% if data.error_message %}
-<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
+<div class="col-xs-12 col-sm-12 col-md-12">
 	<div class="alert alert-danger">{{ data.error_message }}</div>
 </div>
 {% endif %}
-<div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
+<div class="col-xs-12 col-sm-12 col-md-12">
 	<div class="panel panel-default">
 	    <div class="panel-heading">Список значений</div>
 	        <div class="panel-body">
