@@ -11,18 +11,7 @@ class Migration(migrations.Migration):
         ('anketa', '0002_auto_20180505_1658'),
     ]
 
-    operations = [
-        migrations.CreateModel(
-            name='DocImages',
-            fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False, auto_created=True, verbose_name='ID')),
-                ('image', models.ImageField(upload_to=anketa.models.DocImagePath)),
-                ('doc', models.ForeignKey(verbose_name='Документ', to='anketa.Docs')),
-            ],
-            options={
-            },
-            bases=(models.Model,),
-        ),
+    operations = [        
         migrations.RemoveField(
             model_name='privilegies',
             name='privdocnomer',

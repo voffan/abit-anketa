@@ -4,10 +4,209 @@
 Список подавших документы
 {% endblock %}
 
-{% block additionalcss %} {% endblock %}
+{% load staticfiles %}
+
+{% block additionalcss %}
+<link href="{% static 'anketa/select2-3.5.4/select2.css' %}" rel="stylesheet">
+<link href="{% static 'anketa/select2-3.5.4/select2-bootstrap.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block scripts %}
+<script src="{% static 'anketa/select2-3.5.4/select2.min.js' %}"></script>
 
+
+<script type="text/javascript">
+var $selectdephead="";
+var $selectdepartment="";
+var $selecteduname="";
+
+
+function select2(){
+	$("#department").select2('disable');//ok
+	$("#eduname").select2('disable');//ok
+	$("#appType").select2('disable');//ok
+	$("#eduform").select2('disable');
+	$("#depHead").select2('val',"");//ok
+	$("#department").select2('val',"");//ok
+	$("#eduname").select2('val',"");//ok
+	$("#appType").select2('val',"");//ok
+	
+	//обнулить дерьмище
+};
+
+$('#depHead').on("select2-selecting", function(e) {
+	if($('#depHead').val())
+	{	
+		if($selectdephead!=$('#depHead').select2('data').text)
+		{
+			$("#department").select2('val',"");
+			$("#eduname").select2('val',"");
+			$("#eduname").select2('disable');
+			$("#eduprof").select2('val',"");
+			$("#eduprof").select2('disable');
+			$("#appType").select2('disable');
+			$("#appType").select2('val',"");
+			//обнулить дерьмище	
+		}					
+	}
+	
+	$("#department").select2('enable');
+});
+
+$('#department').on("select2-selecting", function(e) {
+	if($('#department').val())
+	{	
+		if($selectdepartment!=$('#department').select2('data').text)				
+		$("#eduname").select2('val',"");
+		$("#eduprof").select2('val',"");
+		$("#eduprof").select2('disable');
+		$("#appType").select2('disable');
+		$("#appType").select2('val',"");
+		//обнулить дерьмище			
+	}
+	$("#eduname").select2('enable');
+});
+
+$('#eduname').on("select2-selecting", function(e) {
+	if($('#eduname').val())
+	{
+		if($selecteduname!=$('#eduname').select2('data').text)
+		{
+			$("#eduprof").select2('val',"");
+			$("#appType").select2('disable');
+			$("#appType").select2('val',"");
+			//обнулить дерьмище
+		}
+	}
+	$("#eduprof").select2('enable');
+	//открыть дерьмище
+});
+
+$('#eduprof').on("select2-selecting", function(e){
+	if($('#eduprof').val()){
+		$('#appType').select2('val',"");		
+	}
+	$('#appType').select2('enable');
+	//$('#appType').val('94'); // Select the option with a value of '1'
+	//$('#appType').trigger('change'); // Notify any JS components that the value changed
+
+});
+
+
+
+$("#depHead").select2({
+	language:"ru",
+	ajax:{
+		url:{% url 'institute' %},
+		dataType:'json',
+		delay:250,
+		data:function(params){
+			return{
+				query:params
+			};
+		},
+		processResults: function(data, page)//ok
+		{
+			function isnull(value) {
+				return value.head == null;
+			};
+			result=data.filter(isnull);			
+			return{				
+				results:result,
+			};
+		},
+		cache:true
+	}
+});
+$('#department').select2({
+	language:"ru",
+	ajax:
+	{
+		url:{% url 'institute' %},
+		dataType: 'json',
+		delay: 250,
+		data:function(params){
+			return{
+				query: params, // search term
+			};
+		},
+		processResults: function (data, page) {
+			function isnotnull(value) {
+				var id = $('#depHead').val();
+				return value.head == id;
+			};
+			result=data.filter(isnotnull);			
+			return{				
+				results:result,
+			};
+		},
+		cache: true
+	}
+});
+$('#eduname').select2({
+	language:"ru",
+	ajax:
+	{
+		url:{% url 'eduname' %},
+		dataType: 'json',
+		delay: 250,
+		data:function(params){
+			return{
+				query: params, // search term
+				id:$("#department").select2('data').id
+			};
+		},
+		processResults: function (data, page) {
+			return {
+			  results: data,
+			};
+		},
+		cache: true
+	}
+});
+$('#eduprof').select2({
+		language:"ru",
+		ajax:{
+			url:{% url 'eduprof' %},
+			dataType:'json',
+			delay:250,
+			data:function(params){
+				return{
+					query:params,
+					id:$("#eduname").select2('data').id
+				};
+			},
+			processResults:function(data,page)
+			{
+				return{
+					results:data
+				};
+			},
+			cache:true
+		}
+	});
+
+$('#appType').select2({
+	language:"ru",
+	ajax:{
+		url:{% url 'appType' %},
+		dataType: 'json',
+		delay:250,
+		data:function(params){
+			return{
+				query:params,
+			};
+		},
+		processResults:function(data,page){		
+			return{
+				results:data
+			};
+		},
+		cache:true
+	}
+});
+
+</script>
 {% endblock %}
 
 {% block content %}
@@ -22,62 +221,67 @@
 						<div class="panel-body">
 							<div class="row">
 								<div class="col-md-6">
-									<select class="form-control" name="vuz" id="vuz">
+									<!--select class="form-control" name="vuz" id="vuz">
 										<option {% if data.filters.vuz == "0" %} selected {% endif %} value="0">Образовательное учреждение</option>      
 										{% for item in data.edu_org %}
 											{% if item.head = None %}
 												<option {% if data.filters.vuz == item.id %} selected {% endif %} value="{{ item.id }}">{{item.name}}</option>
 											{% endif %}
 										{% endfor %}           
-									</select>
+									</select-->
+									<input type="hidden" class="form-control" id="depHead" name="depHead" placeholder="Образовательное учреждение">
 								</div>
 								<div class="col-md-6">
-									<select class="form-control" name="depart" id="depart">
+									<!--select class="form-control" name="depart" id="depart">
 										<option {% if data.filters.depart == "0" %} selected {% endif %} value="0">Подразделение</option>       
 										{% for item in data.edu_org %}
 											{% if item.head != None %}
 												<option {% if data.filters.depart == item.id %} selected {% endif %} value="{{ item.id }}">{{item.name}}</option>
 											{% endif %}
 										{% endfor %}           
-									</select>
+									</select-->
+									<input type="hidden" class="form-control" name="department" id="department" placeholder="Подразделение" disabled>
 								</div>
 							</div>
 							<div class="row" style="margin-top: 10px;">
 								<div class="col-md-6">
-									<select class="form-control" name="edu_prog" id="edu_prog" >
+									<!--select class="form-control" name="edu_prog" id="edu_prog" >
 										<option {% if data.filters.edu_prog == "0" %} selected {% endif %} value="0">Направление/специальность</option>       
 										{% for item in data.edu_prog %}											
 											<option {% if data.filters.edu_prog == item.id %} selected {% endif %} value="{{ item.id }}">{{item.name}}</option>											
 										{% endfor %}
-									</select>
+									</select-->
+									<input type="hidden" class="form-control" name="eduname" id="eduname" placeholder="Направление/специальность" disabled>
 								</div>
 								<div class="col-md-6">
-									<select class="form-control" name="edu_prof" id="edu_prof">
+									<!--select class="form-control" name="edu_prof" id="edu_prof">
 										<option {% if data.filters.edu_prof == "0" %} selected {% endif %} value="0">Профиль</option>
 										{% for item in data.edu_prof %}
 											<option {% if data.filters.edu_prof == item.id %} selected {% endif %} value="{{ item.id }}">{{item.name}}</option>
 										{% endfor %}                
-									</select>
+									</select-->
+									<input type="hidden" class="form-control" id="eduprof" name="eduprof" placeholder="Профиль" disabled>
 								</div>					
 							</div><!--end row-->
 							<div class="row" style="margin-top: 10px;">
 								<div class="container-fluid">
 									<div class="row">
 										<div class="col-md-6">
-											<select class="form-control" name="appType" id="appType">
+											<!--select style="padding-top: 1px;padding-bottom: 1px;height:28px;"class="form-control" name="appType" id="appType">
 												<option {% if data.filters.appType == "0" %} selected {% endif %} value="0">Тип конкурса</option>
 												{% for item in data.appType %}
 													<option {% if data.filters.appType == item.id %} selected {% endif %} value="{{ item.id }}">{{item.name}}</option>
 												{% endfor %}                
-											</select>
+											</select-->
+											<input type="hidden" class="form-control" id="appType" name="appType" placeholder="Тип конкурса" disabled>
 										</div>										
 										<div class="col-md-3">
 											<!--button type="submit" class="btn btn-warning " name="cancel" >Сбросить</button-->
-											<input type="submit" class="btn btn-default btn-block" name="apply" value="Применить"/>												
+											<input type="submit" style="padding-top: 2px;padding-bottom:  2px;height:28px;" class="btn btn-default btn-block" name="apply" value="Применить"/>												
 										</div>
 										<div class="col-md-3">
 											<!--button type="submit" class="btn btn-primary " name="apply" >Применить</button-->												
-											<input type="submit" class="btn btn-default btn-block" name="cancel" value="Сбросить"/>
+											<input type="submit" style="padding-top: 2px;padding-bottom:  2px;height:28px;" class="btn btn-default btn-block" name="cancel" value="Сбросить"/>
 										</div>							
 									</div>	
 								</div>

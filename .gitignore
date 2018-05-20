@@ -10,3 +10,4 @@ venv
 venv_e
 .idea
 .vscode
+/anketa/migrations/0002_docimages.py

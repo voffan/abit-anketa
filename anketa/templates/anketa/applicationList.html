@@ -18,7 +18,7 @@
 	var $currentRow=null;
 	var $rowscount=3;
 	var $selectedprog="";
-	var $selecteddep=""	
+	var $selecteddep="";
 	var $profilerow = 1;
 	var $maxProfile = 5;
 
@@ -83,6 +83,8 @@
 					else $('#budget')[0].checked=''
 					if(data['withfee']==true) $('#withfee')[0].checked='checked'
 					else $('#withfee')[0].checked=''
+					if(data['target']==true) $('#target')[0].checked='checked'
+					else $('#target')[0].checked=''
 
 					var $track = $('input[type=radio]')
 					for(var i = 0; i<$track.length;i++){
@@ -270,6 +272,7 @@
 			},
 			processResults:function(data,page)
 			{
+				console.log(data);
 				return{
 					results:data
 				};
@@ -547,6 +550,9 @@
 							</br>
 								<label for="withfee">По договорам об оказании платных обр. услуг</label>
 								<input type="checkbox" name="withfee" id="withfee">
+							</br>
+								<label for="target">По договорам об оказании целевых обр. услуг</label>
+								<input type="checkbox" name="target" id="target">
 							</div>
 						</div>
 						<div class="row">

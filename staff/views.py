@@ -437,15 +437,7 @@ def Application_list (request):
 	if 'cancel' in request.GET:
 		return HttpResponseRedirect(reverse('staff:application_list'))
 	
-	app_pages = Paginator(applications, 20)
-	page = request.GET.get('page')
-	try:
-		current_page = app_pages.page(page)
-	except PageNotAnInteger:
-		current_page = app_pages.page(1)
-	except EmptyPage:
-		current_page = app_pages.page(app_pages.num_pages)
-	applications = current_page.object_list	
+	
 	abiturients = [app.abiturient.id for app in applications]
 	docs = Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains=u'аттестат')|Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains=u'Диплом')
 	apps_with_docs=[]
@@ -469,7 +461,7 @@ def Application_list (request):
 	data['edu_prog'] = Education_Prog.objects.all()
 	data['Docs'] = Docs.objects.all()
 	data['Application'] = AttrValue.objects.filter(attribute__name__icontains=u'статус за')
-	data['pages'] = current_page    
+	#data['pages'] = current_page    
 	data['filters'] = filters    
 	context = {'data':data}
 	context.update(csrf(request))
