@@ -16,82 +16,72 @@
 
 
 <script type="text/javascript">
-var $selectdephead="";
-var $selectdepartment="";
-var $selecteduname="";
 
-
-function select2(){
-	$("#department").select2('disable');//ok
-	$("#eduname").select2('disable');//ok
-	$("#appType").select2('disable');//ok
-	$("#eduform").select2('disable');
-	$("#depHead").select2('val',"");//ok
-	$("#department").select2('val',"");//ok
-	$("#eduname").select2('val',"");//ok
-	$("#appType").select2('val',"");//ok
-	
-	//обнулить дерьмище
+function Applay(){
+	$.ajax({
+		url: {% url 'getAbiturient' %},
+		type: "GET",
+		dataType: 'json',
+		data:$('#filters').serialize(),
+		dataProcess:true,
+		timeout:300,
+		success:function(data){
+			var new_tbody = document.createElement('tbody');
+			var old_tbody = document.getElementById('tbodys')
+			for(var i=0;i<data.length;i++){
+				var new_row = document.createElement('tr');
+				var new_td1 = document.createElement('td');
+				new_td1.append(i+1);
+				var new_td2 = document.createElement('td');
+				new_td2.append(data[i]['abiturient']);
+				var new_td3 = document.createElement('td');
+				if(data[i]['points']==null){
+					new_td3.append(0);
+				}
+				else{
+					new_td3.append(data[i]['points']);
+				}				
+				new_row.append(new_td1,new_td2,new_td3);
+				new_tbody.append(new_row);				
+			}
+			new_tbody.id="tbodys";
+			old_tbody.parentNode.replaceChild(new_tbody, old_tbody);
+		},
+		error:function(){
+			alert('krivoi kod');
+		}
+	});
 };
 
-$('#depHead').on("select2-selecting", function(e) {
+$("#depHead").on("change", function(e){
 	if($('#depHead').val())
-	{	
-		if($selectdephead!=$('#depHead').select2('data').text)
-		{
-			$("#department").select2('val',"");
-			$("#eduname").select2('val',"");
-			$("#eduname").select2('disable');
-			$("#eduprof").select2('val',"");
-			$("#eduprof").select2('disable');
-			$("#appType").select2('disable');
-			$("#appType").select2('val',"");
-			//обнулить дерьмище	
-		}					
+	{		
+		$("#department").select2('val',"");
+		$("#eduname").select2('val',"");
+		$("#eduname").select2('disable');
+		$("#eduprof").select2('val',"");
+		$("#eduprof").select2('disable');		
 	}
-	
 	$("#department").select2('enable');
 });
 
-$('#department').on("select2-selecting", function(e) {
+$('#department').on("change", function(e) {
 	if($('#department').val())
-	{	
-		if($selectdepartment!=$('#department').select2('data').text)				
+	{							
 		$("#eduname").select2('val',"");
 		$("#eduprof").select2('val',"");
-		$("#eduprof").select2('disable');
-		$("#appType").select2('disable');
-		$("#appType").select2('val',"");
-		//обнулить дерьмище			
+		$("#eduprof").select2('disable');		
 	}
 	$("#eduname").select2('enable');
 });
 
-$('#eduname').on("select2-selecting", function(e) {
+$('#eduname').on("change", function(e) {
 	if($('#eduname').val())
-	{
-		if($selecteduname!=$('#eduname').select2('data').text)
-		{
-			$("#eduprof").select2('val',"");
-			$("#appType").select2('disable');
-			$("#appType").select2('val',"");
-			//обнулить дерьмище
-		}
+	{		
+		$("#eduprof").select2('val',"");			
 	}
 	$("#eduprof").select2('enable');
-	//открыть дерьмище
 });
-
-$('#eduprof').on("select2-selecting", function(e){
-	if($('#eduprof').val()){
-		$('#appType').select2('val',"");		
-	}
-	$('#appType').select2('enable');
-	//$('#appType').val('94'); // Select the option with a value of '1'
-	//$('#appType').trigger('change'); // Notify any JS components that the value changed
-
-});
-
 
 
 $("#depHead").select2({
@@ -186,80 +176,38 @@ $('#eduprof').select2({
 		}
 	});
 
+
 $('#appType').select2({
 	language:"ru",
-	ajax:{
-		url:{% url 'appType' %},
-		dataType: 'json',
-		delay:250,
-		data:function(params){
-			return{
-				query:params,
-			};
-		},
-		processResults:function(data,page){		
-			return{
-				results:data
-			};
-		},
-		cache:true
-	}
 });
+
 
 </script>
 {% endblock %}
 
 {% block content %}
 <br>
-<form action="" method="GET" id="abit_list">
-	<div class="col-md-8 col-md-offset-2 col-sm-12 col-sm-offset-0">
-		
-		<div class="row filters">
+
+<div class="col-md-8 col-md-offset-2 col-sm-12 col-sm-offset-0">
+	<form action="" method="GET" id="filters">
+		<div class="row filters" id="filters">
 			<div class="col-xs-12">
 				<div class="container-fluid">					
 					<div class="panel panel-default">						
 						<div class="panel-body">
 							<div class="row">
 								<div class="col-md-6">
-									<!--select class="form-control" name="vuz" id="vuz">
-										<option {% if data.filters.vuz == "0" %} selected {% endif %} value="0">Образовательное учреждение</option>      
-										{% for item in data.edu_org %}
-											{% if item.head = None %}
-												<option {% if data.filters.vuz == item.id %} selected {% endif %} value="{{ item.id }}">{{item.name}}</option>
-											{% endif %}
-										{% endfor %}           
-									</select-->
 									<input type="hidden" class="form-control" id="depHead" name="depHead" placeholder="Образовательное учреждение">
 								</div>
 								<div class="col-md-6">
-									<!--select class="form-control" name="depart" id="depart">
-										<option {% if data.filters.depart == "0" %} selected {% endif %} value="0">Подразделение</option>       
-										{% for item in data.edu_org %}
-											{% if item.head != None %}
-												<option {% if data.filters.depart == item.id %} selected {% endif %} value="{{ item.id }}">{{item.name}}</option>
-											{% endif %}
-										{% endfor %}           
-									</select-->
 									<input type="hidden" class="form-control" name="department" id="department" placeholder="Подразделение" disabled>
 								</div>
 							</div>
 							<div class="row" style="margin-top: 10px;">
 								<div class="col-md-6">
-									<!--select class="form-control" name="edu_prog" id="edu_prog" >
-										<option {% if data.filters.edu_prog == "0" %} selected {% endif %} value="0">Направление/специальность</option>       
-										{% for item in data.edu_prog %}											
-											<option {% if data.filters.edu_prog == item.id %} selected {% endif %} value="{{ item.id }}">{{item.name}}</option>											
-										{% endfor %}
-									</select-->
 									<input type="hidden" class="form-control" name="eduname" id="eduname" placeholder="Направление/специальность" disabled>
 								</div>
 								<div class="col-md-6">
-									<!--select class="form-control" name="edu_prof" id="edu_prof">
-										<option {% if data.filters.edu_prof == "0" %} selected {% endif %} value="0">Профиль</option>
-										{% for item in data.edu_prof %}
-											<option {% if data.filters.edu_prof == item.id %} selected {% endif %} value="{{ item.id }}">{{item.name}}</option>
-										{% endfor %}                
-									</select-->
 									<input type="hidden" class="form-control" id="eduprof" name="eduprof" placeholder="Профиль" disabled>
 								</div>					
 							</div><!--end row-->
@@ -267,31 +215,29 @@ $('#appType').select2({
 								<div class="container-fluid">
 									<div class="row">
 										<div class="col-md-6">
-											<!--select style="padding-top: 1px;padding-bottom: 1px;height:28px;"class="form-control" name="appType" id="appType">
-												<option {% if data.filters.appType == "0" %} selected {% endif %} value="0">Тип конкурса</option>
-												{% for item in data.appType %}
-													<option {% if data.filters.appType == item.id %} selected {% endif %} value="{{ item.id }}">{{item.name}}</option>
-												{% endfor %}                
-											</select-->
-											<input type="hidden" class="form-control" id="appType" name="appType" placeholder="Тип конкурса" disabled>
+											<select style="padding-top: 1px;padding-bottom: 1px;height:28px;"class="form-control" name="appType" id="appType">
+												<option value="-1">Тип конкурса все</option>
+												{% for item in data.appTypes %}
+													<option value="{{item.id}}">{{item.value}}</option>
+												{% endfor %}              
+											</select>
 										</div>										
 										<div class="col-md-3">
-											<!--button type="submit" class="btn btn-warning " name="cancel" >Сбросить</button-->
-											<input type="submit" style="padding-top: 2px;padding-bottom:  2px;height:28px;" class="btn btn-default btn-block" name="apply" value="Применить"/>												
+											<input type="button" style="padding-top: 2px;padding-bottom:  2px;height:28px;" class="btn btn-default btn-block" OnClick="Applay()" value="Применить"/>
 										</div>
 										<div class="col-md-3">
-											<!--button type="submit" class="btn btn-primary " name="apply" >Применить</button-->												
 											<input type="submit" style="padding-top: 2px;padding-bottom:  2px;height:28px;" class="btn btn-default btn-block" name="cancel" value="Сбросить"/>
 										</div>							
 									</div>	
-								</div>
-																							
+								</div>								
 							</div>
 						</div><!--end panel body-->
 					</div><!--end panel-->
 				</div><!--end container-fluid-->
 			</div>			
 		</div>
+	</form>
+	<form action="" method="GET" id="abit_list">
 		<div class="row tables"><!--start table-->
 			<div class="col-xs-12">
 				<div class="container-fluid">
@@ -305,7 +251,7 @@ $('#appType').select2({
 										<th>Баллы</th>
 									</tr>
 								</thead>
-								<tbody>
+								<tbody id="tbodys">
 									{% for item in data.abitData %}
 									<tr>
 										<td>{{ forloop.counter }}</td>
@@ -320,6 +266,7 @@ $('#appType').select2({
 				</div><!--end container-fluid-->
 			</div>			
 		</div><!--end row table-->
-	</div><!--end div col col col-->
-</form>
+	</form>
+</div><!--end div col col col-->
+
 {% endblock %}
