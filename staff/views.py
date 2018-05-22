@@ -886,13 +886,18 @@ def edu_org_prog_prof_add(edu_org_prog, values):
 @transaction.atomic
 def edu_org_add(values):
 	if int(values['edu_org_id'])<0:
-		edu_org = EduOrg(name=values['edu_org_name'], orgtype_id=values['edu_org_type'])
-		if EduOrg.objects.filter(name=edu_org.name, orgtype_id=edu_org.orgtype.id).first() == None:
+		edu_org = EduOrg(name=values['edu_org_name'], orgtype=AttrValue.objects.filter(id=values['edu_org_type']).first(),head=EduOrg.objects.filter(id=values['edu_org_head']).first())
+		if EduOrg.objects.filter(name=edu_org.name, orgtype_id=edu_org.orgtype.id, head_id=edu_org.head.id).first() == None:
 			edu_org.save()
 	else:
 		edu_org = EduOrg.objects.get(pk=values['edu_org_id'])
 		edu_org.name = values['edu_org_name']
-		edu_org.save()
+		if values['edu_org_type'] != '-1':
+			edu_org.orgtype = AttrValue.objects.filter(id=values['edu_org_type']).first()
+		if values['edu_org_head'] != '-1':
+			edu_org.head = EduOrg.objects.filter(id=values['edu_org_head']).first()
+		if EduOrg.objects.filter(name=edu_org.name, orgtype_id=edu_org.orgtype.id, head_id=edu_org.head.id).first() == None:
+			edu_org.save()
 
 @transaction.atomic
 def edu_org_prog_add(edu_org, values):
@@ -911,7 +916,8 @@ def edu_org_prog_add(edu_org, values):
 		edu_org_prog_add.name = values['edu_org_prog_name']
 		edu_org_prog_add.duration = AttrValue.objects.get(pk=values['edu_org_duration'])
 		edu_org_prog_add.qualification = AttrValue.objects.get(pk=values['edu_org_qual'])
-		edu_org_prog_add.save()
+		if Education_Prog.objects.filter(eduorg_id=edu_org.id, name=values['edu_org_prog_name'],qualification_id=values['edu_org_qual'],duration_id=values['edu_org_duration']).first() == None:
+			edu_org_prog_add.save()
 
 
 

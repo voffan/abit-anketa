@@ -18,39 +18,41 @@
 <script type="text/javascript">
 
 function Applay(){
-	$.ajax({
-		url: {% url 'getAbiturient' %},
-		type: "GET",
-		dataType: 'json',
-		data:$('#filters').serialize(),
-		dataProcess:true,
-		timeout:300,
-		success:function(data){
-			var new_tbody = document.createElement('tbody');
-			var old_tbody = document.getElementById('tbodys')
-			for(var i=0;i<data.length;i++){
-				var new_row = document.createElement('tr');
-				var new_td1 = document.createElement('td');
-				new_td1.append(i+1);
-				var new_td2 = document.createElement('td');
-				new_td2.append(data[i]['abiturient']);
-				var new_td3 = document.createElement('td');
-				if(data[i]['points']==null){
-					new_td3.append(0);
+	if($('#eduprof').val()!=""){
+		$.ajax({
+			url: {% url 'getAbiturient' %},
+			type: "GET",
+			dataType: 'json',
+			data:$('#filters').serialize(),
+			dataProcess:true,
+			timeout:300,
+			success:function(data){
+				var new_tbody = document.createElement('tbody');
+				var old_tbody = document.getElementById('tbodys')
+				for(var i=0;i<data.length;i++){
+					var new_row = document.createElement('tr');
+					var new_td1 = document.createElement('td');
+					new_td1.append(i+1);
+					var new_td2 = document.createElement('td');
+					new_td2.append(data[i]['abiturient']);
+					var new_td3 = document.createElement('td');
+					if(data[i]['points']==null){
+						new_td3.append(0);
+					}
+					else{
+						new_td3.append(data[i]['points']);
+					}				
+					new_row.append(new_td1,new_td2,new_td3);
+					new_tbody.append(new_row);				
 				}
-				else{
-					new_td3.append(data[i]['points']);
-				}				
-				new_row.append(new_td1,new_td2,new_td3);
-				new_tbody.append(new_row);				
+				new_tbody.id="tbodys";
+				old_tbody.parentNode.replaceChild(new_tbody, old_tbody);
+			},
+			error:function(){
+				alert('krivoi kod');
 			}
-			new_tbody.id="tbodys";
-			old_tbody.parentNode.replaceChild(new_tbody, old_tbody);
-		},
-		error:function(){
-			alert('krivoi kod');
-		}
-	});
+		});
+	};	
 };
 
 $("#depHead").on("change", function(e){
@@ -58,11 +60,17 @@ $("#depHead").on("change", function(e){
 	{		
 		$("#department").select2('val',"");
 		$("#eduname").select2('val',"");
-		$("#eduname").select2('disable');
+		//$("#eduname").select2('disable');
 		$("#eduprof").select2('val',"");
-		$("#eduprof").select2('disable');		
+		$("#eduprof").select2('disable');
+		$('#apply').attr('disabled',true);	
+		$('#appType').select2('val','-1');
+		$('#appType').select2();		
 	}
 	$("#department").select2('enable');
+	$('#department').select2('open');				
+	$("#eduname").select2('enable');
+	$('#appType').select2('disable');
 });
 
 $('#department').on("change", function(e) {
@@ -70,18 +78,39 @@ $('#department').on("change", function(e) {
 	{							
 		$("#eduname").select2('val',"");
 		$("#eduprof").select2('val',"");
-		$("#eduprof").select2('disable');		
+		$("#eduprof").select2('disable');	
+		$('#apply').attr('disabled',true);	
+		$('#appType').select2('val','-1');
+		$('#appType').select2();		
 	}
 	$("#eduname").select2('enable');
+	$('#eduname').select2('open');
+	$('#appType').select2('disable');
 });
 
 $('#eduname').on("change", function(e) {
 	if($('#eduname').val())
 	{		
-		$("#eduprof").select2('val',"");			
+		$("#eduprof").select2('val',"");
+		$('#apply').attr('disabled',true);
+		$('#appType').select2('val','-1');
+		$('#appType').select2();
 	}
 	$("#eduprof").select2('enable');
+	$('#eduprof').select2('open');
+	$('#appType').select2('disable');				
 });
+
+$('#eduprof').on('change',function(e){
+	if($('#eduprof').val()){
+		$('#apply').attr('disabled',false);
+		$('#appType').select2('val','-1');
+		$('#appType').select2();
+	}
+	$('#appType').select2('enable');
+});
+
+
 
 
 $("#depHead").select2({
@@ -125,7 +154,11 @@ $('#department').select2({
 				var id = $('#depHead').val();
 				return value.head == id;
 			};
-			result=data.filter(isnotnull);			
+			result=data.filter(isnotnull);
+			if(result.length==0){
+				$('#eduname').select2('open');
+				$('#department').select2('close');
+			};			
 			return{				
 				results:result,
 			};
@@ -137,16 +170,21 @@ $('#eduname').select2({
 	language:"ru",
 	ajax:
 	{
-		url:{% url 'eduname' %},
+		url:{% url 'eduname2' %},
 		dataType: 'json',
 		delay: 250,
 		data:function(params){
 			return{
 				query: params, // search term
-				id:$("#department").select2('data').id
+				departId:$("#department").val(),
+				depHeadId:$("#depHead").val()
 			};
 		},
 		processResults: function (data, page) {
+			if(data.length==0){
+				$('#department').select2('open');
+				$('#eduname').select2('close');
+			};			
 			return {
 			  results: data,
 			};
@@ -215,7 +253,7 @@ $('#appType').select2({
 								<div class="container-fluid">
 									<div class="row">
 										<div class="col-md-6">
-											<select style="padding-top: 1px;padding-bottom: 1px;height:28px;"class="form-control" name="appType" id="appType">
+											<select style="padding-top: 0px;padding-bottom: 0px;height:28px;"class="form-control" name="appType" id="appType" disabled>
 												<option value="-1">Тип конкурса все</option>
 												{% for item in data.appTypes %}
 													<option value="{{item.id}}">{{item.value}}</option>
@@ -223,7 +261,7 @@ $('#appType').select2({
 											</select>
 										</div>										
 										<div class="col-md-3">
-											<input type="button" style="padding-top: 2px;padding-bottom:  2px;height:28px;" class="btn btn-default btn-block" OnClick="Applay()" value="Применить"/>
+											<input type="button" id="apply" disabled style="padding-top: 2px;padding-bottom:  2px;height:28px;" class="btn btn-default btn-block" OnClick="Applay()" value="Применить"/>
 										</div>
 										<div class="col-md-3">
 											<input type="submit" style="padding-top: 2px;padding-bottom:  2px;height:28px;" class="btn btn-default btn-block" name="cancel" value="Сбросить"/>

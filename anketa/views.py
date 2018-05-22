@@ -740,6 +740,8 @@ def SaveApplication(request):
 			min1 += 1
 		else:
 			application.withfee = False
+
+		#######################ЦЕЛЕВОЕ####################################
 		if request.POST.get('target',''):
 			targetApp = Application_attrs()
 			targetApp.app = application
@@ -748,10 +750,26 @@ def SaveApplication(request):
 			min1 += 1
 		else:
 			targetApp = Application_attrs.objects.filter(app__id=application.id).first()
-			targetApp.delete()
+			if targetApp is not None:
+				targetApp.delete()
+		#######################ЦЕЛЕВОЕ####################################
+
 		if min1 == 0:
 			result = {'result':0, 'error_msg':'minimym 1 chek viberi'}
 			return HttpResponse(json.dumps(result), content_type="application/json")
+
+		#######################ЛЬГОТЫ####################################
+		if len(Privilegies.objects.filter(abiturient__id=Abiturient.objects.get(user=request.user).id))>0:
+			privilegesApp = Application_attrs()
+			privilegesApp.app = application
+			privilegesApp.attribute = AttrValue.objects.filter(attribute__name__icontains=u'Тип договора образования').filter(value__icontains=u'Льготный').first()
+			privilegesApp.save()
+		else:
+			privilegesApp = Application_attrs.objects.filter(app__id=application.id).first()
+			if privilegesApp is not None:
+				privilegesApp.delete()
+		#######################ЛЬГОТЫ####################################
+
 		if (len(request.POST.getlist('eduprof'))>0):
 			forms = request.POST.getlist('eduform','')
 			app_prof_id = request.POST.getlist('prof_id','')
@@ -950,7 +968,6 @@ def AbiturientList(request):
 	Data={}
 	year = datetime.datetime.strftime(datetime.datetime.now(), '%Y')
 	abitData =[]
-	appTypeId = []
 	appTypes = AttrValue.objects.filter(attribute__name__icontains=u'Тип договора образования')
 	Data['appTypes'] = appTypes
 	
@@ -959,8 +976,7 @@ def AbiturientList(request):
 	for item in abiturients:
 		points = Exams.objects.filter(abiturient=item).aggregate(Sum('points'))
 		abitData.append({'abiturient':item,'points':points.get('points__sum')})
-	Data['abitData'] = abitData	
-
+	Data['abitData'] = abitData
 	
 	if 'cancel' in request.GET:
 		return HttpResponseRedirect(reverse('abiturientList'))	
@@ -973,29 +989,10 @@ def AbiturientList(request):
 
 def GetAbiturient(request):
 	result = []
-	appTypeId = []
 	year = datetime.datetime.strftime(datetime.datetime.now(), '%Y')	
-	kostil = 0
-	
-	#abiturients = Abiturient.objects.all()
-	if 'appType' in request.GET:		
-		if request.GET['appType'] is not None:
-			if len(request.GET['appType']) > 0 and request.GET['appType']!= '-1':
-				kostil = 1
-				appType = int(request.GET['appType'])				
-				for x in Application_attrs.objects.all():
-					apple = ApplicationProfiles.objects.filter(application__id=x.app.id).first()
-					if 'eduprof' in request.GET:
-						if x.attribute.id == appType and apple.profile.profile.id==int(request.GET['eduprof']):
-							appTypeId.append(x.app.abiturient.id)
-					else:
-						if x.attribute.id == appType:
-							appTypeId.append(x.app.abiturient.id)
-
-				print('appType: ', appTypeId)
-				#esheAbitId = [x.abiturient.id for x in Application.objects.filter(id__in=appTypeId)]
-
-				
+	abitId = []	
+	abiturients = Abiturient.objects.all()
+		
 	if 'eduprof' in request.GET:
 		abitData =[]
 		if request.GET['eduprof'] is not None:
@@ -1003,26 +1000,19 @@ def GetAbiturient(request):
 			if len(request.GET['eduprof'])>0:
 				print('eduprof len > 0')
 				abitId = [x.application.abiturient.id for x in ApplicationProfiles.objects.filter(profile__year=year).filter(profile__profile__id=int(request.GET['eduprof']))]			
-				abiturients = Abiturient.objects.filter(id__in=abitId)
-				if kostil == 1:
-					if appTypeId is not None:
-						print('eduprof appTypeId is not None: ',appTypeId)
-						if len(appTypeId)>0:
-							abiturients = abiturients.filter(id__in=appTypeId)
-						else:
-							abiturients = []
-							print('eduprof len appTypeId = 0: ',abiturients)
-				for item in abiturients:
-					points = Exams.objects.filter(abiturient=item).aggregate(Sum('points'))
-					result.append({'abiturient':item.fullname,'points':points.get('points__sum')})
-	else:
-		abitId = [x.application.abiturient.id for x in ApplicationProfiles.objects.filter(profile__year=year)]			
-		abiturients = Abiturient.objects.filter(id__in=abitId)
-		for item in abiturients:
-			points = Exams.objects.filter(abiturient=item).aggregate(Sum('points'))
-			result.append({'abiturient':item.fullname,'points':points.get('points__sum')})
+				abiturients = abiturients.filter(id__in=abitId)
 
-				
+	if 'appType' in request.GET:
+		if request.GET['appType'] is not None:
+			if len(request.GET['appType']) > 0 and request.GET['appType']!= '-1':
+				appAttrId = [x.app.id for x in Application_attrs.objects.filter(attribute__id=request.GET['appType'])]
+				appProf = ApplicationProfiles.objects.filter(application__id__in=appAttrId).filter(profile__profile__id=request.GET['eduprof'])
+				abitId = [x.application.abiturient.id for x in appProf]
+				abiturients = abiturients.filter(id__in=abitId)
+
+	for item in abiturients:
+		points = Exams.objects.filter(abiturient=item).aggregate(Sum('points'))
+		result.append({'abiturient':item.fullname,'points':points.get('points__sum')})
 
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
@@ -1228,13 +1218,16 @@ def EduProf(request):
 		result.append({'id': item['id'], 'text': item['name']})
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
-def AppType(request):
-	applicationType = AttrValue.objects.filter(attribute__name__icontains=u'Тип договора образования')
-	applicationType = applicationType.values('id','value')
+def EduName2(request):	
+	if request.GET['departId'] is not None and len(request.GET['departId'])>0:
+		institute = EduOrg.objects.get(pk=request.GET.get('departId', ''))		
+	else:
+		institute = EduOrg.objects.get(pk=request.GET.get('depHeadId', ''))
+	eduname = institute.education_prog_set.filter(name__icontains=request.GET.get('query', ''))
+	eduname = eduname.values('id', 'name', 'qualification__value')
 	result = []
-	result.append({'id':-1,'text':"Все"})
-	for item in applicationType:
-		result.append({'id': item['id'], 'text': item['value']})
+	for item in eduname:
+		result.append({'id': item['id'], 'text': item['name'] + ' ' + item['qualification__value']})
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
 
