@@ -3,9 +3,11 @@ from django.conf.urls.static import static
 from django.conf.urls import patterns, include, url
 
 from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
 admin.autodiscover()
 
-from anketa.views import StartPage, StartApp, Streets, Territory, District, City, Citizenship, Nation, DocIssuer, Achievement, AchievResult, PrivCat, PrivType, PrevEduName, Institute, EduProf, Rank, Flang, CreatePerson, DocType, PersonProfile, Applications, PersonData, Account,EduName, SaveApplication, EduProfForm, GetSelectedApplication,DeleteApplication,AddDataToPerson, EduDocType,GetAddressTypeValues, ExamSubject, ExamType, AccountInfoChanging, api_exams, api_privileges, api_achievs
+from anketa.views import StartPage, StartApp, Streets, Territory, District, City, Citizenship, Nation, DocIssuer, Achievement, AchievResult, PrivCat, PrivType, PrevEduName, Institute, EduProf, Privilegies, Rank, Flang, CreatePerson, DocType, PersonProfile, Applications, PersonData, Account,EduName, SaveApplication, EduProfForm, GetSelectedApplication,DeleteApplication,AddDataToPerson, EduDocType,GetAddressTypeValues, ExamSubject, ExamType, AccountInfoChanging, AbiturientList, api_exams, api_privileges, api_achievs, EduName2, GetAbiturient
 
 
 urlpatterns = patterns('',
@@ -29,6 +31,7 @@ urlpatterns = patterns('',
     url(r'^institute/$', Institute, name = 'institute'),
     url(r'^eduname/$',EduName,name='eduname'),
     url(r'^eduprof/$', EduProf, name = 'eduprof'),
+    url(r'^eduname2/$', EduName2, name = 'eduname2'),
     url(r'^examsubject/$', ExamSubject, name = 'examsubject'),
     url(r'^examtype/$', ExamType, name='examtype'),
     url(r'^privcat/$', PrivCat, name='privcat'),
@@ -49,6 +52,8 @@ urlpatterns = patterns('',
     url(r'^staff/', include('staff.urls',namespace = 'staff')),
     url(r'^kladr/', include('kladr.urls',namespace = 'kladr')),
     url(r'^auth/', include('authApp.urls', namespace = 'authapp')),
+    url(r'^abiturientList/', AbiturientList,name="abiturientList"),
+    url(r'^getAbiturient/$', GetAbiturient, name="getAbiturient"),
     #==============API=================================================
     url(r'apiexams/$',api_exams, name='apiexams'),
     url(r'apiprivileges/$',api_privileges, name='apiprivileges'),

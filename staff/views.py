@@ -10,11 +10,14 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import transaction
 from django import template
 
+from staff.applicationPrint import ApplicationPrint
+from openpyxl.writer.excel import save_virtual_workbook
+
 import json
 from datetime import date
 import datetime
 from staff.models import Employee, Position, Contacts as ContactsStaff
-from anketa.models import ApplicationProfiles, EduOrg, ProfileAttrs, EduForm, Attribute, AttrType, Relation, Person, Application, Abiturient, Docs, AttrValue, Profile, Contacts, Address, Education_Prog,  Privilegies, Exams, DepAchieves, Milit, DocAttr, Achievements
+from anketa.models import ApplicationProfiles, DocImages, EduOrg, ProfileAttrs, EduForm, Attribute, AttrType, Relation, Person, Application, Abiturient, Docs, AttrValue, Profile, Contacts, Address, Education_Prog,  Privilegies, Exams, DepAchieves, Milit, DocAttr, Achievements
 from django.contrib.auth.models import User
 
 # Create your views here.
@@ -236,6 +239,75 @@ def Employee_Useraccount(request):
 	context.update(csrf(request))
 	return render(request,'staff\employee_acc.html',context)
 
+
+@transaction.atomic
+def save_exams(exam_data):
+	exams = Exams.objects.filter(pk__in=list(exam_data.keys()))	
+	for exam in exams:
+		exam.points = int(exam_data[str(exam.id)])
+		exam.save()
+		
+
+@login_required(login_url = '/auth')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
+def Exam_list(request):
+	data={}
+	filters={}
+	subjects = AttrValue.objects.filter(attribute__name=u'Дисциплина')#spisok disciplin
+	##########vse vstypitel'nie ekzameni dlya poly4eniya vsex godov sda4i############
+	years=[]
+	exams = Exams.objects.filter(exam_examType__value=u'Вступительный')
+	for exam in exams:
+		years.append(exam.year)
+	########################################################################	
+	year=datetime.datetime.strftime(datetime.datetime.today(),"%Y") #tekyshiy god
+	filters['years'] = int(year)
+	if 'years' in request.POST and int(request.POST['years'])>0:
+		year = request.POST['years']
+		exams = exams.filter(year=request.POST['years'])
+		filters['years'] = int(request.POST['years'])
+
+	exams = Exams.objects.filter(exam_examType__value=u'Вступительный', year=year)#spisok ekzamenov na tekyshiy god	
+
+	if 'apply' in request.POST:
+
+		if 'subject' in request.POST and int(request.POST['subject'])>0:
+			exams = exams.filter(exam_subjects__id=request.POST['subject'])
+			filters['subject_type']=int(request.POST['subject'])
+	
+		if 'fio' in request.POST and len(request.POST['fio'])>0:
+			exams = exams.filter(abiturient__fullname__icontains=request.POST['fio'])
+			filters['fio'] = request.POST['fio']
+
+	if 'cancel' in request.POST:
+		return HttpResponseRedirect(reverse('staff:exam_list'))
+
+	if 'save' in request.POST:
+		exams_id = request.POST.getlist('exam_id')
+		exams_points = request.POST.getlist('points')
+		save_exams(dict(zip(exams_id, exams_points)))
+
+	data['subjects'] = subjects
+	data['exams'] = exams
+	data['filters'] = filters
+	data['years'] = list(set(years))
+	context = {'data':data}
+	context.update(csrf(request))
+	return render(request, 'staff\Exam_list.html', context)
+
+@login_required(login_url = '/auth')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
+def Enlistment(request):
+	Data={}
+	abiturients = Abiturient.objects.all()
+	applications = Application.objects.all()
+	Data['abitura'] = abiturients
+	Data['applications'] = applications
+
+	context = {'data':Data}
+	context.update(csrf(request))
+	return render(request,'staff\enlistment.html',context)
+
 @login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Application_list (request):
@@ -297,28 +369,13 @@ def Application_list (request):
 			applications=applications.filter(abiturient__fullname__icontains=fname)
 			filters['fio'] = fname
 
-		if 'forma' in request.GET:
-			if request.GET['forma'] =='2':
-				applications = applications.filter(applicationprofiles__profile__eduform=u'О')
-				selectform = '2'
-				filters['forma'] = selectform
-			if request.GET['forma'] =='3':
-				applications = applications.filter(applicationprofiles__profile__eduform=u'З')
-				selectform = '3'
-				filters['forma'] = selectform
-			if request.GET['forma'] =='4':
-				applications = applications.filter(applicationprofiles__profile__eduform=u'ОЗ')
-				selectform = '4'
-				filters['forma'] = selectform
-
-
 		if 'balli1' in request.GET and len(request.GET['balli1'])>0:
-			bal1 = request.GET['balli1']
+			bal1 = int(request.GET['balli1'])
 			applications = applications.filter(points__gt=bal1)
 			filters['balli1'] = bal1
 
 		if 'balli2' in request.GET and len(request.GET['balli2'])>0:
-			bal2 = request.GET['balli2']
+			bal2 = int(request.GET['balli2'])
 			applications = applications.filter(points__lt=bal2)
 			filters['balli2'] = bal2
 
@@ -340,8 +397,30 @@ def Application_list (request):
 		if 'profil' in request.GET and int(request.GET['profil'])>0:
 			selectprof = request.GET['profil']
 			applications = applications.filter(applicationprofiles__profile__profile__id=selectprof)
-			appProfile = appProfile.filter(profile__profile__id = selectprof)
+			if 'forma' not in request.GET:
+				appProfile = appProfile.filter(profile__profile__id = selectprof)
+			else:
+				applications = applications.filter(applicationprofiles__profile__profile__id=selectprof, applicationprofiles__profile__eduform=EduForm[int(request.GET['forma'])-2][0])
+				appProfile = appProfile.filter(profile__profile__id=selectprof, profile__eduform=EduForm[int(request.GET['forma'])-2][0])
+				filters['forma'] = selectform
 			filters['profil'] = int(selectprof)
+
+		'''if 'forma' in request.GET:
+			if request.GET['forma'] =='2':
+				applications = applications.filter(applicationprofiles__profile__eduform=u'О')
+				selectform = '2'
+				appProfile = appProfile.filter(profile__eduform = u'О')
+				filters['forma'] = selectform
+			if request.GET['forma'] =='3':
+				applications = applications.filter(applicationprofiles__profile__eduform=u'З')
+				selectform = '3'
+				appProfile = appProfile.filter(profile__eduform = u'З')
+				filters['forma'] = selectform
+			if request.GET['forma'] =='4':
+				applications = applications.filter(applicationprofiles__profile__eduform=u'ОЗ')
+				selectform = '4'
+				appProfile = appProfile.filter(profile__eduform = u'ОЗ')
+				filters['forma'] = selectform'''
 	
 		if 'appNumb' in request.GET and len(request.GET['appNumb'])>0:
 			selectNumb = request.GET['appNumb']			
@@ -358,15 +437,7 @@ def Application_list (request):
 	if 'cancel' in request.GET:
 		return HttpResponseRedirect(reverse('staff:application_list'))
 	
-	app_pages = Paginator(applications, 20)
-	page = request.GET.get('page')
-	try:
-		current_page = app_pages.page(page)
-	except PageNotAnInteger:
-		current_page = app_pages.page(1)
-	except EmptyPage:
-		current_page = app_pages.page(app_pages.num_pages)
-	applications = current_page.object_list	
+	
 	abiturients = [app.abiturient.id for app in applications]
 	docs = Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains=u'аттестат')|Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains=u'Диплом')
 	apps_with_docs=[]
@@ -390,43 +461,96 @@ def Application_list (request):
 	data['edu_prog'] = Education_Prog.objects.all()
 	data['Docs'] = Docs.objects.all()
 	data['Application'] = AttrValue.objects.filter(attribute__name__icontains=u'статус за')
-	data['pages'] = current_page    
+	#data['pages'] = current_page    
 	data['filters'] = filters    
-	return render(request, 'staff/application_list.html', data)
+	context = {'data':data}
+	context.update(csrf(request))
+	return render(request,'staff\\application_list.html',context)
 
-
+################################## backgrid collection json ######################################
 @login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
+def Backgrid_collection(request):
+	employee = request.user.employee_set.get()
+	if request.user.is_superuser:
+		applications = Application.objects.all()
+	else:		
+		applications = Application.objects.filter(department=employee.department)
+	appProfile = ApplicationProfiles.objects.all()
+	applications = Application.objects.select_related('Abiturient').filter(department__id = employee.department.id)
+	#profiles = Profile.objects.all()	
+	abiturients = [app.abiturient.id for app in applications]
+	docs = Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains=u'аттестат')|Docs.objects.select_related('AttrValue').filter(abiturient__id__in = abiturients, docType__value__icontains=u'Диплом')
+	apps_with_docs=[]
+	result = []
+	preress=[]
+	for app in applications:
+		doc = docs.filter(abiturient__id = app.abiturient.id).first()
+		prof = appProfile.filter(application__id=app.id)
+		apps_with_docs.append({'app':app, 'doc':doc, 'prof':prof})
+		preress.append({'fullname':app.abiturient.fullname,"edu_form":str(prof[0].profile.eduform),"date":str(app.date),"edu_prog":str(prof[0].profile.profile.name),"edu_prof":str(prof[0].profile.profile.edu_prog.qualification.value),"points":int(app.points),"appState":str(app.appState.value)})
+	result.append(preress)		
+	return HttpResponse(json.dumps(result), content_type="application/json")    
+	
+def testjson(request):
+	return render(request,'staff\\testjson.json')
+
+@login_required(login_url = '/auth')
+#@user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Application_review (request, application_id):	
 	#return HttpResponseRedirect(reverse('staff:application_list'))
-	application = Application.objects.select_related('Abiturient').get(pk=application_id)	
-	#passp = AttrValue.objects.filter(attribute__id = 6)
+	application = Application.objects.select_related('Abiturient').get(pk=application_id)
 	passp = application.abiturient.docs_set.filter(docType__value__icontains=u'Паспорт').first()
+	passpIn = []
 	if passp is None:
 		passp = application.abiturient.docs_set.filter(docType__value__icontains=u'Загран').first()
 	if passp is None:
 		passp = application.abiturient.docs_set.filter(docType__value__icontains=u'Водит').first()
 	if passp is None:
 		passp = application.abiturient.docs_set.filter(docType__value__icontains=u'Военн').first()
-	
+	if passp is not None:
+		passpImg = DocImages.objects.filter(doc__id=passp.id)		
+		if len(passpImg)>0:
+			for img in passpImg:
+				passpIn.append({'id':passp.id,'doc':passp,'img':{'id':img.id,'pic':img.image}})
+		else:
+			passpIn.append({'id':passp.id,'doc':passp})
 	Data={}
+	
+	education = []
 	if application.abiturient.education_set.filter().first() is not None:
 		education = application.abiturient.education_set.get()
-	
-		edu_doc = education.doc #application.abiturient.docs_set.filter(docType__value__icontains=u'Аттестат').first()
-		Data['education'] = education
-		Data['edud'] = edu_doc
+		eduImg = DocImages.objects.filter(doc__id=education.doc.id)		
+		edudIn = []
+		if len(eduImg)>0:
+			for img in eduImg:
+				edudIn.append({'education':education,'id':education.doc.id,'doc':education.doc,'img':{'id':img.id,'pic':img.image}})
+		else:
+			edudIn.append({'education':education,'id':education.doc.id,'doc':education.doc})		
+		Data['edud'] = edudIn
 
 	adrtype = AttrValue.objects.filter(attribute__name__icontains=u'Тип адреса')
 	rank = AttrValue.objects.filter(attribute__name__icontains=u'Воинское звание')
 	snils = application.abiturient.docs_set.filter(docType__value__icontains=u'СНИЛС').first()
+	if snils is not None:
+		snilsImg = DocImages.objects.filter(doc__id=snils.id)
+		Data['snilsImg']=snilsImg
+		snils1=[]#####ЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫnaidesh ly4she sdelaem ly4she
+		if len(str(snils.serialno))>10:
+			for i in range(len(str(snils.serialno))):
+				if i % 3 == 0 and i != 0:
+					snils1+='-'
+				snils1+=str(snils.serialno)[i]
+			Data['snils'] = snils1
+		else:
+			Data['snils'] = str(snils.serialno)
+
 	foreign_lang = AttrValue.objects.filter(attribute__name__icontains=u'Изучаемый язык')
 	docissuer = AttrValue.objects.filter(attribute__name__icontains=u'выдавший ')
 	nationality = AttrValue.objects.filter(attribute__name__icontains=u'национальность')	
 	doctype = AttrValue.objects.exclude(value__icontains=u'диплом').exclude(value__icontains=u'аттест').exclude(value__icontains=u'СНИЛС').filter(attribute__name__icontains=u'тип документа')
 	Data['edudoctype'] = AttrValue.objects.filter(value__icontains=u'диплом')|AttrValue.objects.filter(value__icontains=u'аттестат')
 	contactyp = AttrValue.objects.filter(attribute__name__icontains=u'Тип контакта')
-	#abiturient = application.abiturien_set.filter(attribute__name__icontains=u'Тип контакта')
 	relation = Relation.objects.filter(abiturient__id=application.abiturient.id)
 	relcontacts=[]
 	for item in relation:
@@ -437,21 +561,24 @@ def Application_review (request, application_id):
 
 	application_profile = ApplicationProfiles.objects.filter(application=application_id)
 
+	exam = Exams.objects.filter(abiturient__id=application.abiturient.id)#, exam_examType__value=u'ЕГЭ'
+
 	Data['relation'] = relcontacts
 	Data['rel_type'] = AttrValue.objects.filter(attribute__name__icontains=u'тип связи')
 	Data['nationality'] = nationality
 	Data['docType'] = doctype
 	Data['docissuer'] = docissuer
-	Data['adrtype'] = adrtype
-	Data['snils'] = snils
+	Data['adrtype'] = adrtype	
 	Data['foreign_lang'] = foreign_lang
-	Data['passp'] = passp
+	Data['passpIn'] = passpIn
 	Data['rank'] = rank
 	Data['application']=application
 	Data['contacts'] = Contacts.objects.filter(person_id=application.abiturient.id)	
 	Data['address'] = Address.objects.filter(pk=application_id)
 	Data['education_prog'] = application_profile
-	Data['exams'] = Exams.objects.filter(pk=application_id)
+	Data['exams'] = exam
+	Data['exam_type'] = AttrValue.objects.filter(attribute__name__icontains=u'Тип экзамена')
+	Data['exam_subjects'] = AttrValue.objects.filter(attribute__name__icontains=u'Дисциплина')
 	Data['privilegies'] = Privilegies.objects.filter(pk=application_id)
 	Data['depachieves'] = DepAchieves.objects.filter(pk=application_id)
 	if hasattr(application.abiturient, 'milit'):
@@ -459,8 +586,6 @@ def Application_review (request, application_id):
 	Data['docattr'] = DocAttr.objects.filter(pk=application_id)
 	Data['achievements'] = Achievements.objects.filter(pk=application_id)	
 	Data['contactyp'] = contactyp
-
-
 
 	person=Abiturient.objects.filter(person_ptr__id=application.abiturient.id).first()
 	contacts_type = AttrValue.objects.filter(attribute__name__icontains=u'Тип контакта')
@@ -485,6 +610,11 @@ def Application_review (request, application_id):
 			application.save()
 		if 'backspace' in request.POST:
 			return HttpResponseRedirect(reverse('staff:application_list'))
+		if 'print' in request.POST:
+			response = HttpResponse(content=save_virtual_workbook(ApplicationPrint(application,education,application_profile,exam,person,passp,snils)),content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+			response['Content-Disposition'] = 'attachment; filename=Anketa_SVFU_'+str(application.id)+'.xlsx'
+			return response
+			
 
 	context = {'data':Data}
 	context.update(csrf(request))
@@ -544,7 +674,7 @@ def Catalogs(request):
 	if 'save' in request.POST and len(request.POST.get('attr_name',''))>0:
 		if user.is_superuser:
 			attribute_add(request.POST)
-	    
+		
 	attribute1 = Attribute.objects.all()    
 	attrvalue = AttrValue.objects.all()
 	attrtype = AttrType.objects.all()
@@ -758,13 +888,18 @@ def edu_org_prog_prof_add(edu_org_prog, values):
 @transaction.atomic
 def edu_org_add(values):
 	if int(values['edu_org_id'])<0:
-		edu_org = EduOrg(name=values['edu_org_name'], orgtype_id=values['edu_org_type'])
-		if EduOrg.objects.filter(name=edu_org.name, orgtype_id=edu_org.orgtype.id).first() == None:
+		edu_org = EduOrg(name=values['edu_org_name'], orgtype=AttrValue.objects.filter(id=values['edu_org_type']).first(),head=EduOrg.objects.filter(id=values['edu_org_head']).first())
+		if EduOrg.objects.filter(name=edu_org.name, orgtype_id=edu_org.orgtype.id, head_id=edu_org.head.id).first() == None:
 			edu_org.save()
 	else:
 		edu_org = EduOrg.objects.get(pk=values['edu_org_id'])
 		edu_org.name = values['edu_org_name']
-		edu_org.save()
+		if values['edu_org_type'] != '-1':
+			edu_org.orgtype = AttrValue.objects.filter(id=values['edu_org_type']).first()
+		if values['edu_org_head'] != '-1':
+			edu_org.head = EduOrg.objects.filter(id=values['edu_org_head']).first()
+		if EduOrg.objects.filter(name=edu_org.name, orgtype_id=edu_org.orgtype.id, head_id=edu_org.head.id).first() == None:
+			edu_org.save()
 
 @transaction.atomic
 def edu_org_prog_add(edu_org, values):
@@ -783,13 +918,13 @@ def edu_org_prog_add(edu_org, values):
 		edu_org_prog_add.name = values['edu_org_prog_name']
 		edu_org_prog_add.duration = AttrValue.objects.get(pk=values['edu_org_duration'])
 		edu_org_prog_add.qualification = AttrValue.objects.get(pk=values['edu_org_qual'])
-		edu_org_prog_add.save()
+		if Education_Prog.objects.filter(eduorg_id=edu_org.id, name=values['edu_org_prog_name'],qualification_id=values['edu_org_qual'],duration_id=values['edu_org_duration']).first() == None:
+			edu_org_prog_add.save()
 
 
 
 
 #=================================================ajax functions==========================================================
-
 @login_required(login_url = '/auth')
 @user_passes_test(CheckUserIsStaff, login_url = '/auth')
 def Edu_orgs_value(request):
@@ -907,6 +1042,30 @@ def Wiz_cont_apply(request):
 		result['error_message'] = str(e)	
 	return HttpResponse(json.dumps(result), content_type="application/json")
 	#attri_bute = Attribute(name=values['attr_name'],type_id=values['attrtype'])
+
+@login_required(login_url = '/auth')
+@user_passes_test(CheckUserIsStaff, login_url = '/auth')
+def Add_exam_to_person(request):
+	result={'result':"success"}
+	if request.method =='POST':
+		try:			
+			examsList = request.POST.getlist('examId')
+			examPoints = request.POST.getlist('points[1]')
+
+			for i in range(0,len(examsList)):				
+				exam = Exams.objects.get(pk=examsList[i])				
+				exam.points = examPoints[i]
+				exam.save()
+		
+		except Exception as e:
+					result['result']=str(e)
+		else:
+			pass
+		finally:
+			pass
+	
+	
+	return HttpResponse(json.dumps(result), content_type="application/json")
 
 def AddDataToPerson(request):
 	result="success"
@@ -1123,3 +1282,59 @@ def AddDataToPerson(request):
 					result=str(e)
 	return HttpResponse(json.dumps(result), content_type="application/json")
 
+	'''wb = Workbook()
+	ws = wb.active;
+	ws.title = u'Операции магазина'
+	ws['A1'] = u'Операции магазина ' + shop.name
+
+	_row = 2
+	_column = 1
+	if 'filters' in request.session and 'operations' in request.session['filters']:
+		if 'op_date' in request.session['filters']['operations']:
+			ws.cell(row=_row, column=_column).value = u'На дату: ' + request.session['filters']['operations']['op_date']
+			_row += 1
+		if 'oper' in request.session['filters']['operations']:
+			ws.cell(row=_row, column=_column).value = u'По операции: ' + Operation.objects.get(
+				pk=request.session['filters']['operations']['oper']).name
+			_row += 1
+		if 'order' in request.session['filters']['operations']:
+			ws.cell(row=_row, column=_column).value = u'По номеру заказа: ' + request.session['filters']['operations'][
+				'order']
+			_row += 1
+		if 'employee' in request.session['filters']['operations']:
+			ws.cell(row=_row, column=_column).value = u'По сотруднику' + ShopStaff.objects.get(
+				person__pk=request.session['filters']['operations']['employee']).person.name
+			_row += 1
+		if 'item' in request.session['filters']['operations']:
+			ws.cell(row=_row, column=_column).value = u'' + Items.objects.get(
+				pk=request.session['filters']['operations']['item']).name
+			_row += 1
+
+	_row += 2
+	ws.cell(row=_row, column=1).value = u'№'
+	ws.cell(row=_row, column=2).value = u'Дата'
+	ws.cell(row=_row, column=3).value = u'Операция'
+	ws.cell(row=_row, column=4).value = u'Заказ'
+	ws.cell(row=_row, column=5).value = u'Сотрудник'
+	ws.cell(row=_row, column=6).value = u'Товар'
+	ws.cell(row=_row, column=7).value = u'Кол-во'
+	ws.cell(row=_row, column=8).value = u'Стоимость'
+	i = 1
+	_row += 1
+	for operation in operations:
+		ws.cell(row=_row, column=1).value = i
+		ws.cell(row=_row, column=2).value = operation.operation_date.strftime('%d.%m.%Y')
+		ws.cell(row=_row, column=3).value = operation.operation.name
+		if operation.order is not None:
+			ws.cell(row=_row, column=4).value = operation.order.id
+		ws.cell(row=_row, column=5).value = operation.user.person.name
+		ws.cell(row=_row, column=6).value = operation.item.name
+		ws.cell(row=_row, column=7).value = operation.item_vol
+		ws.cell(row=_row, column=8).value = operation.item_sum
+		_row += 1
+		i += 1
+
+	response = HttpResponse(content=save_virtual_workbook(wb),#save_virtual_workbook находится в openpyxl
+							content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+	response['Content-Disposition'] = 'attachment; filename=opertions.xlsx'
+	return response'''

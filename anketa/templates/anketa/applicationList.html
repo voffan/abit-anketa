@@ -18,7 +18,7 @@
 	var $currentRow=null;
 	var $rowscount=3;
 	var $selectedprog="";
-	var $selecteddep=""	
+	var $selecteddep="";
 	var $profilerow = 1;
 	var $maxProfile = 5;
 
@@ -83,6 +83,8 @@
 					else $('#budget')[0].checked=''
 					if(data['withfee']==true) $('#withfee')[0].checked='checked'
 					else $('#withfee')[0].checked=''
+					if(data['target']==true) $('#target')[0].checked='checked'
+					else $('#target')[0].checked=''
 
 					var $track = $('input[type=radio]')
 					for(var i = 0; i<$track.length;i++){
@@ -270,6 +272,7 @@
 			},
 			processResults:function(data,page)
 			{
+				console.log(data);
 				return{
 					results:data
 				};
@@ -494,7 +497,10 @@
 											<!--td>{% for i in item.prof %} {% if i.profile.eduform == 'О'%} Очное {% endif %}{% if i.profile.eduform == 'ОЗ'%} Очно-заочное {% endif %}{% if i.profile.eduform == 'З'%} Заочное {% endif %} , {% endfor %}</td-->
 											<td>{{item.app.appState.value}}</td>
 											<td>{% if item.app.priority == 'В' %}Высокий{% endif %}{% if item.app.priority == 'С' %}Средний{% endif %}{% if item.app.priority == 'Н' %}Низкий{% endif %}</td>
-											<td><button type="button" class="btn btn-danger pull-right" id="{{item.app.id}}ydalit">X</button></td>
+											<td>
+												<button type="button" class="btn btn-danger pull-right" id="{{item.app.id}}ydalit">X</button>
+												<input type="button" class="btn btn-primary" onclick="location.href='{% url 'staff:application_review' item.app.id %}';" value="Посмотреть" />
+											</td>
 										</tr>
 									{% endfor %}
 									</tbody>
@@ -544,6 +550,9 @@
 							</br>
 								<label for="withfee">По договорам об оказании платных обр. услуг</label>
 								<input type="checkbox" name="withfee" id="withfee">
+							</br>
+								<label for="target">По договорам об оказании целевых обр. услуг</label>
+								<input type="checkbox" name="target" id="target">
 							</div>
 						</div>
 						<div class="row">
@@ -588,12 +597,23 @@
 						</br>
 						<input type="hidden" name="facepalm" id="facepalm">
 						<div class="row">
-							<div class="col-md-9 col-xs-8 col-sm-8">
-								<button type="button" class="btn btn-danger pull-right" id="cancel">Отменить</button>
-							</div>
-							<div class="col-md-2 col-xs-8 col-sm-8">
-								<button type="button" class="btn btn-success pull-right" id="save">Сохранить</button>
-							</div>
+							<div class="col-md-12">								
+								<div class="pull-right">
+									<div class="col-md-2 ">
+										<button type="button" class="btn btn-danger" id="cancel">Отменить</button>
+									</div>
+								</div>
+								<div class="pull-right">								
+									<div class="col-md-2 ">
+										<button type="button" class="btn btn-success" id="save">Сохранить</button>
+									</div>
+								</div>
+								<!--div class="pull-right">
+									<div class="col-md-2 ">
+										<a href="" id="reviewLink">Посмотреть</a>
+									</div>									
+								</div-->							
+							</div>							
 						</div>
 					</div>
 				</div>
@@ -601,7 +621,7 @@
 		</div>
 	</div>
 </form>
-<script type="text/javascript">
+<!--script type="text/javascript">
     var reformalOptions = {
         project_id: 977752,
         project_host: "abit-4ino.reformal.ru",
@@ -619,5 +639,5 @@
         script.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'media.reformal.ru/widgets/v3/reformal.js';
         document.getElementsByTagName('head')[0].appendChild(script);
     })();
-</script><noscript><a href="http://reformal.ru"><img src="http://media.reformal.ru/reformal.png" /></a><a href="http://abit-4ino.reformal.ru">Oтзывы и предложения для abit-anketa</a></noscript>
+</script><noscript><a href="http://reformal.ru"><img src="http://media.reformal.ru/reformal.png" /></a><a href="http://abit-4ino.reformal.ru">Oтзывы и предложения для abit-anketa</a></noscript-->
 {% endblock %}

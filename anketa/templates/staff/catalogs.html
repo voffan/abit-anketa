@@ -121,19 +121,24 @@
 </div>
 
 <!--Фильтр по наименованию атрибута-->
-<div class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2">
-	<div class="panel panel-default">
-		<div class="panel-heading">Список Атрибутов</div>
-		<div class="panel-body">
-			<form action=""  method="POST">
-				{% csrf_token %}  
-				<input type = "text" class="form-control" name = "attribute1" id = "attribute1" hidden/>
+		<div class="col-xs-12 col-sm-12 col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">Список Атрибутов</div>
+			<div class="panel-body">
+				<form action=""  method="POST">
+					{% csrf_token %}  
+					<input type = "text" class="form-control" name = "attribute1" id = "attribute1" hidden/>
+					<p></p>
+					<table>
+					<td>
+						<button type="submit" class="btn btn-default" name="filter">Применить фильтр</button>
+					</td>
+					<td>
+						<button type="submit" class="btn btn-default" name="reset">Сбросить фильтр</button><!--dasdasdasdasda-->
+					</td>
+					</table>
+				</form>
 				<p></p>
-				<table>
-					<td><button type="submit" class="btn btn-default" name="filter">Применить фильтр</button></td>
-					<td><button type="submit" class="btn btn-default" name="reset">Сбросить фильтр</button></td>
-				</table>
-			</form>
 			<p></p>
 			<form action=""  method="POST">
 				{% csrf_token %} 

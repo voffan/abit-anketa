@@ -1,0 +1,310 @@
+{% extends "anketa/base.html" %}
+
+{% block title %}
+Список подавших документы
+{% endblock %}
+
+{% load staticfiles %}
+
+{% block additionalcss %}
+<link href="{% static 'anketa/select2-3.5.4/select2.css' %}" rel="stylesheet">
+<link href="{% static 'anketa/select2-3.5.4/select2-bootstrap.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'anketa/select2-3.5.4/select2.min.js' %}"></script>
+
+
+<script type="text/javascript">
+
+function Applay(){
+	if($('#eduprof').val()!=""){
+		$.ajax({
+			url: {% url 'getAbiturient' %},
+			type: "GET",
+			dataType: 'json',
+			data:$('#filters').serialize(),
+			dataProcess:true,
+			timeout:300,
+			success:function(data){
+				var new_tbody = document.createElement('tbody');
+				var old_tbody = document.getElementById('tbodys')
+				for(var i=0;i<data.length;i++){
+					var new_row = document.createElement('tr');
+					var new_td1 = document.createElement('td');
+					new_td1.append(i+1);
+					var new_td2 = document.createElement('td');
+					new_td2.append(data[i]['abiturient']);
+					var new_td3 = document.createElement('td');
+					if(data[i]['points']==null){
+						new_td3.append(0);
+					}
+					else{
+						new_td3.append(data[i]['points']);
+					}				
+					new_row.append(new_td1,new_td2,new_td3);
+					new_tbody.append(new_row);				
+				}
+				new_tbody.id="tbodys";
+				old_tbody.parentNode.replaceChild(new_tbody, old_tbody);
+			},
+			error:function(){
+				alert('krivoi kod');
+			}
+		});
+	};	
+};
+
+$("#depHead").on("change", function(e){
+	if($('#depHead').val())
+	{		
+		$("#department").select2('val',"");
+		$("#eduname").select2('val',"");
+		//$("#eduname").select2('disable');
+		$("#eduprof").select2('val',"");
+		$("#eduprof").select2('disable');
+		$('#apply').attr('disabled',true);	
+		$('#appType').select2('val','-1');
+		$('#appType').select2();		
+	}
+	$("#department").select2('enable');
+	$('#department').select2('open');				
+	$("#eduname").select2('enable');
+	$('#appType').select2('disable');
+});
+
+$('#department').on("change", function(e) {
+	if($('#department').val())
+	{							
+		$("#eduname").select2('val',"");
+		$("#eduprof").select2('val',"");
+		$("#eduprof").select2('disable');	
+		$('#apply').attr('disabled',true);	
+		$('#appType').select2('val','-1');
+		$('#appType').select2();		
+	}
+	$("#eduname").select2('enable');
+	$('#eduname').select2('open');
+	$('#appType').select2('disable');
+});
+
+$('#eduname').on("change", function(e) {
+	if($('#eduname').val())
+	{		
+		$("#eduprof").select2('val',"");
+		$('#apply').attr('disabled',true);
+		$('#appType').select2('val','-1');
+		$('#appType').select2();
+	}
+	$("#eduprof").select2('enable');
+	$('#eduprof').select2('open');
+	$('#appType').select2('disable');				
+});
+
+$('#eduprof').on('change',function(e){
+	if($('#eduprof').val()){
+		$('#apply').attr('disabled',false);
+		$('#appType').select2('val','-1');
+		$('#appType').select2();
+	}
+	$('#appType').select2('enable');
+});
+
+
+
+
+$("#depHead").select2({
+	language:"ru",
+	ajax:{
+		url:{% url 'institute' %},
+		dataType:'json',
+		delay:250,
+		data:function(params){
+			return{
+				query:params
+			};
+		},
+		processResults: function(data, page)//ok
+		{
+			function isnull(value) {
+				return value.head == null;
+			};
+			result=data.filter(isnull);			
+			return{				
+				results:result,
+			};
+		},
+		cache:true
+	}
+});
+$('#department').select2({
+	language:"ru",
+	ajax:
+	{
+		url:{% url 'institute' %},
+		dataType: 'json',
+		delay: 250,
+		data:function(params){
+			return{
+				query: params, // search term
+			};
+		},
+		processResults: function (data, page) {
+			function isnotnull(value) {
+				var id = $('#depHead').val();
+				return value.head == id;
+			};
+			result=data.filter(isnotnull);
+			if(result.length==0){
+				$('#eduname').select2('open');
+				$('#department').select2('close');
+			};			
+			return{				
+				results:result,
+			};
+		},
+		cache: true
+	}
+});
+$('#eduname').select2({
+	language:"ru",
+	ajax:
+	{
+		url:{% url 'eduname2' %},
+		dataType: 'json',
+		delay: 250,
+		data:function(params){
+			return{
+				query: params, // search term
+				departId:$("#department").val(),
+				depHeadId:$("#depHead").val()
+			};
+		},
+		processResults: function (data, page) {
+			if(data.length==0){
+				$('#department').select2('open');
+				$('#eduname').select2('close');
+			};			
+			return {
+			  results: data,
+			};
+		},
+		cache: true
+	}
+});
+$('#eduprof').select2({
+		language:"ru",
+		ajax:{
+			url:{% url 'eduprof' %},
+			dataType:'json',
+			delay:250,
+			data:function(params){
+				return{
+					query:params,
+					id:$("#eduname").select2('data').id
+				};
+			},
+			processResults:function(data,page)
+			{
+				return{
+					results:data
+				};
+			},
+			cache:true
+		}
+	});
+
+
+$('#appType').select2({
+	language:"ru",
+});
+
+
+</script>
+{% endblock %}
+
+{% block content %}
+<br>
+
+<div class="col-md-8 col-md-offset-2 col-sm-12 col-sm-offset-0">
+	<form action="" method="GET" id="filters">
+		<div class="row filters" id="filters">
+			<div class="col-xs-12">
+				<div class="container-fluid">					
+					<div class="panel panel-default">						
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-md-6">
+									<input type="hidden" class="form-control" id="depHead" name="depHead" placeholder="Образовательное учреждение">
+								</div>
+								<div class="col-md-6">
+									<input type="hidden" class="form-control" name="department" id="department" placeholder="Подразделение" disabled>
+								</div>
+							</div>
+							<div class="row" style="margin-top: 10px;">
+								<div class="col-md-6">
+									<input type="hidden" class="form-control" name="eduname" id="eduname" placeholder="Направление/специальность" disabled>
+								</div>
+								<div class="col-md-6">
+									<input type="hidden" class="form-control" id="eduprof" name="eduprof" placeholder="Профиль" disabled>
+								</div>					
+							</div><!--end row-->
+							<div class="row" style="margin-top: 10px;">
+								<div class="container-fluid">
+									<div class="row">
+										<div class="col-md-6">
+											<select style="padding-top: 0px;padding-bottom: 0px;height:28px;"class="form-control" name="appType" id="appType" disabled>
+												<option value="-1">Тип конкурса все</option>
+												{% for item in data.appTypes %}
+													<option value="{{item.id}}">{{item.value}}</option>
+												{% endfor %}              
+											</select>
+										</div>										
+										<div class="col-md-3">
+											<input type="button" id="apply" disabled style="padding-top: 2px;padding-bottom:  2px;height:28px;" class="btn btn-default btn-block" OnClick="Applay()" value="Применить"/>
+										</div>
+										<div class="col-md-3">
+											<input type="submit" style="padding-top: 2px;padding-bottom:  2px;height:28px;" class="btn btn-default btn-block" name="cancel" value="Сбросить"/>
+										</div>							
+									</div>	
+								</div>								
+							</div>
+						</div><!--end panel body-->
+					</div><!--end panel-->
+				</div><!--end container-fluid-->
+			</div>			
+		</div>
+	</form>
+	<form action="" method="GET" id="abit_list">
+		<div class="row tables"><!--start table-->
+			<div class="col-xs-12">
+				<div class="container-fluid">
+					<!--div class="panel panel-default">						
+						<div class="panel-body"-->
+							<table class="table table-bordered table-hover">
+								<thead>
+									<tr>
+										<th width="3%">№</th>
+										<th>Фамилия имя отчество</th>
+										<th>Баллы</th>
+									</tr>
+								</thead>
+								<tbody id="tbodys">
+									{% for item in data.abitData %}
+									<tr>
+										<td>{{ forloop.counter }}</td>
+										<td>{{ item.abiturient.fullname }}</td>
+										<td>{% if item.points == None %}0{% endif %}{% if item.points != None %}{{ item.points }}{% endif %}</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						<!--/div--><!--end panel-body-->
+					<!--/div--><!--end panel-->
+				</div><!--end container-fluid-->
+			</div>			
+		</div><!--end row table-->
+	</form>
+</div><!--end div col col col-->
+
+{% endblock %}

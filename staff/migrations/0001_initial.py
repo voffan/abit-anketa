@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Contacts',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
+                ('id', models.AutoField(primary_key=True, serialize=False, auto_created=True, verbose_name='ID')),
                 ('value', models.CharField(db_index=True, max_length=150, verbose_name='Контакт')),
                 ('contact_type', models.ForeignKey(to='anketa.AttrValue', verbose_name='Тип контакта')),
             ],
@@ -27,13 +27,12 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Employee',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
+                ('id', models.AutoField(primary_key=True, serialize=False, auto_created=True, verbose_name='ID')),
                 ('uniemployee', models.IntegerField(db_index=True, verbose_name='УнивСотрудник')),
-                ('fullname', models.CharField(blank=True, null=True, db_index=True, max_length=200, verbose_name='ФИО')),
+                ('fullname', models.CharField(blank=True, db_index=True, null=True, max_length=200, verbose_name='ФИО')),
                 ('first_name', models.CharField(max_length=100, verbose_name='Фамилия')),
                 ('mid_name', models.CharField(max_length=100, verbose_name='Имя')),
                 ('last_name', models.CharField(max_length=100, verbose_name='Отчество')),
-                ('active', models.BooleanField(default=True, verbose_name='Активен')),
                 ('department', models.ForeignKey(to='anketa.EduOrg', verbose_name='Подразделение')),
             ],
             options={
@@ -43,7 +42,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Position',
             fields=[
-                ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
+                ('id', models.AutoField(primary_key=True, serialize=False, auto_created=True, verbose_name='ID')),
                 ('name', models.CharField(db_index=True, max_length=200, verbose_name='Должность')),
             ],
             options={
