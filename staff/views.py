@@ -501,19 +501,20 @@ def Application_review (request, application_id):
 	#return HttpResponseRedirect(reverse('staff:application_list'))
 	application = Application.objects.select_related('Abiturient').get(pk=application_id)
 	passp = application.abiturient.docs_set.filter(docType__value__icontains=u'Паспорт').first()
+	passpIn = []
 	if passp is None:
 		passp = application.abiturient.docs_set.filter(docType__value__icontains=u'Загран').first()
 	if passp is None:
 		passp = application.abiturient.docs_set.filter(docType__value__icontains=u'Водит').first()
 	if passp is None:
 		passp = application.abiturient.docs_set.filter(docType__value__icontains=u'Военн').first()
-	passpImg = DocImages.objects.filter(doc__id=passp.id)
-	passpIn = []
-	if len(passpImg)>0:
-		for img in passpImg:
-			passpIn.append({'id':passp.id,'doc':passp,'img':{'id':img.id,'pic':img.image}})
-	else:
-		passpIn.append({'id':passp.id,'doc':passp})
+	if passp is not None:
+		passpImg = DocImages.objects.filter(doc__id=passp.id)		
+		if len(passpImg)>0:
+			for img in passpImg:
+				passpIn.append({'id':passp.id,'doc':passp,'img':{'id':img.id,'pic':img.image}})
+		else:
+			passpIn.append({'id':passp.id,'doc':passp})
 	Data={}
 	
 	education = []
@@ -531,17 +532,18 @@ def Application_review (request, application_id):
 	adrtype = AttrValue.objects.filter(attribute__name__icontains=u'Тип адреса')
 	rank = AttrValue.objects.filter(attribute__name__icontains=u'Воинское звание')
 	snils = application.abiturient.docs_set.filter(docType__value__icontains=u'СНИЛС').first()
-	snilsImg = DocImages.objects.filter(doc__id=snils.id)
-	Data['snilsImg']=snilsImg
-	snils1=[]#####ЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫnaidesh ly4she sdelaem ly4she
-	if len(str(snils.serialno))>10:
-		for i in range(len(str(snils.serialno))):
-			if i % 3 == 0 and i != 0:
-				snils1+='-'
-			snils1+=str(snils.serialno)[i]
-		Data['snils'] = snils1
-	else:
-		Data['snils'] = str(snils.serialno)
+	if snils is not None:
+		snilsImg = DocImages.objects.filter(doc__id=snils.id)
+		Data['snilsImg']=snilsImg
+		snils1=[]#####ЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫЫnaidesh ly4she sdelaem ly4she
+		if len(str(snils.serialno))>10:
+			for i in range(len(str(snils.serialno))):
+				if i % 3 == 0 and i != 0:
+					snils1+='-'
+				snils1+=str(snils.serialno)[i]
+			Data['snils'] = snils1
+		else:
+			Data['snils'] = str(snils.serialno)
 
 	foreign_lang = AttrValue.objects.filter(attribute__name__icontains=u'Изучаемый язык')
 	docissuer = AttrValue.objects.filter(attribute__name__icontains=u'выдавший ')
