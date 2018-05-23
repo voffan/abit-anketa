@@ -1,5 +1,5 @@
 <div class="tab-pane" id="tab2">
-    <form id="documents" name="documents" role="form" method="post">
+    <form id="documents" name="documents" role="form" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <input name="currentPage" id="currentPage" value="2" type="hidden"/>
         <div class = "container-fluid">
@@ -20,11 +20,11 @@
                         <div class="row">
                             <div class="col-xs-3 col-sm-3 col-md-2 col-sm-offset-1 col-md-offset-2">
                                 <label for="serialdoc">Серия</label>
-                                <input type="text" name="serialdoc" id="serialdoc" class="form-control" placeholder="1234" {% if doctype_serial %} value="{{doctype_serial}}" {% endif %}>
+                                <input type="number" name="serialdoc" id="serialdoc" class="form-control" placeholder="1234" {% if doctype_serial %} value="{{doctype_serial}}" {% endif %}>
                             </div>
                             <div class = "col-xs-4 col-sm-3 col-md-3">
                                 <label for="numberdoc">Номер</label>
-                                <input type="text" name="numberdoc" id="numberdoc" class="form-control" placeholder="123456" {% if doctype_number %} value="{{doctype_number}}" {% endif %}>
+                                <input type="number" name="numberdoc" id="numberdoc" class="form-control" placeholder="123456" {% if doctype_number %} value="{{doctype_number}}" {% endif %}>
                             </div>
                             <div class="col-xs-5 col-sm-4 col-md-3">
                                 <label for="datedoc">Дата выдачи</label>
@@ -45,6 +45,10 @@
                             </p>
                         </div>
                     </div>
+                    <p>
+                        <label for="imgfiles">Фотографии</label>
+                        <input type="file" name="imgfiles" id="imgfiles" class="form-control" multiple required>
+                    </p>
                 </div>
             </div>
             <div class="panel panel-primary">
@@ -75,11 +79,11 @@
                         <div class = "row">
                             <div class = "col-xs-6 col-sm-5 col-md-4 col-sm-offset-1 col-md-offset-2">
                                 <label for="serialedudoc">Серия</label>
-                                <input type="text" name="serialedudoc" id="serialedudoc" class="form-control" placeholder="1234" {% if edudoctype_serial %} value="{{edudoctype_serial}}" {% endif %}>
+                                <input type="number" name="serialedudoc" id="serialedudoc" class="form-control" placeholder="1234" {% if edudoctype_serial %} value="{{edudoctype_serial}}" {% endif %}>
                             </div>
                             <div class = "col-xs-6 col-sm-5 col-md-4">
                                 <label for="numberedudoc">Номер</label>
-                                <input type="text" name="numberedudoc" id="numberedudoc" class="form-control" placeholder="123456" {% if edudoctype_number %} value="{{edudoctype_number}}" {% endif %}>
+                                <input type="number" name="numberedudoc" id="numberedudoc" class="form-control" placeholder="123456" {% if edudoctype_number %} value="{{edudoctype_number}}" {% endif %}>
                             </div>
                         </div>
                     </p>
@@ -124,7 +128,7 @@
                     <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
                         <p>
                             <label for="inila">СНИЛС</label>
-                            <input id="inila" name="inila" class="form-control" placeholder="123-456-789 00" {% if inila %} value={{inila}} {% endif %}/>
+                            <input type="number" id="inila" name="inila" class="form-control" placeholder="123-456-789 00" {% if inila %} value={{inila}} {% endif %}/>
                         </p>
                     </div>
                     </div>

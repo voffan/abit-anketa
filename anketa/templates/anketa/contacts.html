@@ -116,7 +116,7 @@
 						</div>
 						<div class="row">
 							<button class="btn btn-primary btn-block" type="button" id="addContact">Добавить контакт</button>
-								</div>
+                        </div>
 					</div>
 				</div>
 			</div>
@@ -149,7 +149,7 @@
 											</select>
 											</td>
 											<td><input type="text" class="form-control" name="relationFIO" value= "{{item.fio}} {{item.}}"></td>
-											<td><input type="text" class="form-control" name="relationcontactvalue" value= {{item.value}}></td>
+											<td><input type="number" class="form-control" name="relationcontactvalue" value= {{item.value}}></td>
 											<td><button class="btn btn-default btn-sm" id="delRelationRow" type="button">Удалить</button></td>
 										</tr>
 										{% endfor %}

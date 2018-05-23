@@ -16,8 +16,7 @@ from django.template import RequestContext
 from kladr.models import Street, Kladr
 from anketa.models import Person, Address, Attribute, AttrValue, Abiturient, EduOrg, ProfileAttrs, ApplicationProfiles, \
     Education_Prog, Profile, Application, EduForm, ApplicationProfiles, Milit, Docs, Exams, DocAttr, Education, \
-    Contacts, Relation, \
-    Exams_needed, Achievements, Privilegies
+    Contacts, Relation, Exams_needed, Achievements, Privilegies, DocImages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.db import transaction
