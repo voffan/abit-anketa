@@ -137,7 +137,7 @@ class Application_attrs(models.Model):
 	attribute = models.ForeignKey('AttrValue', verbose_name=u'Атрибут', db_index=True)
 
 	def __str__(self):
-		return self.abiturient.fullname + ' ' + self.attribute.name
+		return self.app.abiturient.fullname + ' ' + self.attribute.value
 
 
 class Address(models.Model):
@@ -212,8 +212,6 @@ class Docs(models.Model):
 
 	def __str__(self):
 		return self.abiturient.fullname + ' ' + self.docType.value
-	def __str__(self):
-		return self.doc.abiturient.fullname + ' ' + self.doc.docType.value
 
 
 class DocImages(models.Model):

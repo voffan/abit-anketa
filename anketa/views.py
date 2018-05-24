@@ -631,7 +631,7 @@ def AddDataToPerson(request):
 				print('Saving Edu')
 				Education.objects.filter(abiturient=abit).delete()
 				Docs.objects.filter(abiturient=abit,
-									docType__attribute__name__icontains='Вид документа об образовании').delete()
+									docType__attribute__name__icontains='Тип документа об образовании').delete()
 				docs = Docs()
 				docs.abiturient = abit
 				docs.docType = AttrValue.objects.get(pk=request.POST.get('edudoctype', ''))
@@ -649,7 +649,7 @@ def AddDataToPerson(request):
 				education.abiturient = abit
 				education.doc = Docs.objects.filter(
 					abiturient=abit,
-					docType__attribute__name__icontains='Вид документа об образовании'
+					docType__attribute__name__icontains='Тип документа об образовании'
 				).first()
 				if request.POST.get('prevedu', '') == 'soo':
 					education.level = AttrValue.objects.filter(value='СОО').first()
@@ -707,7 +707,9 @@ def AddDataToPerson(request):
 
 @transaction.atomic
 def SaveApplication(request):
-	result = {'result':0, 'error_msg':''}	
+	result = {'result':0, 'error_msg':''}
+	fiks1 = 0
+	fiks2 = 0	
 	if request.method == 'POST':
 		if(int(request.POST.get('facepalm',''))>0):
 			application=Application.objects.get(pk=request.POST.get('facepalm'))
@@ -742,11 +744,9 @@ def SaveApplication(request):
 			application.withfee = False
 
 		#######################ЦЕЛЕВОЕ####################################
+
 		if request.POST.get('target',''):
-			targetApp = Application_attrs()
-			targetApp.app = application
-			targetApp.attribute = AttrValue.objects.filter(attribute__name__icontains=u'Тип договора образования').filter(value__icontains=u'Целевой').first()
-			targetApp.save()
+			fiks1 = 1							
 			min1 += 1
 		else:
 			targetApp = Application_attrs.objects.filter(app__id=application.id).first()
@@ -760,10 +760,7 @@ def SaveApplication(request):
 
 		#######################ЛЬГОТЫ####################################
 		if len(Privilegies.objects.filter(abiturient__id=Abiturient.objects.get(user=request.user).id))>0:
-			privilegesApp = Application_attrs()
-			privilegesApp.app = application
-			privilegesApp.attribute = AttrValue.objects.filter(attribute__name__icontains=u'Тип договора образования').filter(value__icontains=u'Льготный').first()
-			privilegesApp.save()
+			fiks2 = 1			
 		else:
 			privilegesApp = Application_attrs.objects.filter(app__id=application.id).first()
 			if privilegesApp is not None:
@@ -789,6 +786,21 @@ def SaveApplication(request):
 				if dateNow >= datetime.datetime.strftime(profile.startDate,'%Y-%m-%d'):
 					if dateNow <= datetime.datetime.strftime(profile.endDate,'%Y-%m-%d'):						
 						application.save()
+
+						if fiks1 ==	1:
+							targetApp = Application_attrs()
+							targetApp.app = application
+							targetApp.attribute = AttrValue.objects.filter(attribute__name__icontains=u'Тип договора образования').filter(value__icontains=u'Целевой').first()							
+							if Application_attrs.objects.filter(app__id=application.id,attribute__id=AttrValue.objects.filter(attribute__name__icontains=u'Тип договора образования').filter(value__icontains=u'Целевой').first().id)is not None:
+								targetApp.save()
+
+						if fiks2 == 1:
+							privilegesApp = Application_attrs()
+							privilegesApp.app = application
+							privilegesApp.attribute = AttrValue.objects.filter(attribute__name__icontains=u'Тип договора образования').filter(value__icontains=u'Льготный').first()
+							if Application_attrs.objects.filter(app__id=application.id,attribute__id=AttrValue.objects.filter(attribute__name__icontains=u'Тип договора образования').filter(value__icontains=u'Льготный').first().id)is not None:
+								privilegesApp.save()
+
 						appProf = ApplicationProfiles.objects.filter(pk = app_prof_id[i]).first()
 						if appProf is None:
 							appProf = ApplicationProfiles()
@@ -990,7 +1002,8 @@ def AbiturientList(request):
 def GetAbiturient(request):
 	result = []
 	year = datetime.datetime.strftime(datetime.datetime.now(), '%Y')	
-	abitId = []	
+	abitId = []
+	appTypes = AttrValue.objects.filter(attribute__name__icontains=u'Тип договора образования')	
 	abiturients = Abiturient.objects.all()
 		
 	if 'eduprof' in request.GET:
@@ -999,20 +1012,28 @@ def GetAbiturient(request):
 			print('eduprof is not None')
 			if len(request.GET['eduprof'])>0:
 				print('eduprof len > 0')
-				abitId = [x.application.abiturient.id for x in ApplicationProfiles.objects.filter(profile__year=year).filter(profile__profile__id=int(request.GET['eduprof']))]			
+				abitId = [x.application.abiturient.id for x in ApplicationProfiles.objects.filter(
+					profile__year=year).filter(profile__profile__id=int(request.GET['eduprof']))]			
 				abiturients = abiturients.filter(id__in=abitId)
 
-	if 'appType' in request.GET:
-		if request.GET['appType'] is not None:
-			if len(request.GET['appType']) > 0 and request.GET['appType']!= '-1':
-				appAttrId = [x.app.id for x in Application_attrs.objects.filter(attribute__id=request.GET['appType'])]
-				appProf = ApplicationProfiles.objects.filter(application__id__in=appAttrId).filter(profile__profile__id=request.GET['eduprof'])
+	
+	if appTypes is not None:
+		if len(appTypes) > 0:
+			for appT in appTypes:
+				appAttrId = [x.app.id for x in Application_attrs.objects.filter(attribute__id=appT.id)]
+				print("appAttrId ",appAttrId)
+				appProf = ApplicationProfiles.objects.filter(application__id__in=appAttrId).filter(
+					profile__profile__id=request.GET['eduprof'])
+				print("appProf ",appProf)
 				abitId = [x.application.abiturient.id for x in appProf]
+				print("abitId ", abitId)
 				abiturients = abiturients.filter(id__in=abitId)
+				print("abiturients ",abiturients)
 
-	for item in abiturients:
-		points = Exams.objects.filter(abiturient=item).aggregate(Sum('points'))
-		result.append({'abiturient':item.fullname,'points':points.get('points__sum')})
+				for abitur in abiturients:
+					points = Exams.objects.filter(abiturient=abitur).aggregate(Sum('points'))
+					print("appT_ID ",appT.id)
+					result.append({'abiturient':abitur.fullname,'points':points.get('points__sum'),'appType':appT.id})
 
 	return HttpResponse(json.dumps(result), content_type="application/json")
 

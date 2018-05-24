@@ -64,13 +64,13 @@ $("#depHead").on("change", function(e){
 		$("#eduprof").select2('val',"");
 		$("#eduprof").select2('disable');
 		$('#apply').attr('disabled',true);	
-		$('#appType').select2('val','-1');
-		$('#appType').select2();		
+		//$('#appType').select2('val','-1');
+		//$('#appType').select2();		
 	}
 	$("#department").select2('enable');
 	$('#department').select2('open');				
 	$("#eduname").select2('enable');
-	$('#appType').select2('disable');
+	//$('#appType').select2('disable');
 });
 
 $('#department').on("change", function(e) {
@@ -80,12 +80,12 @@ $('#department').on("change", function(e) {
 		$("#eduprof").select2('val',"");
 		$("#eduprof").select2('disable');	
 		$('#apply').attr('disabled',true);	
-		$('#appType').select2('val','-1');
-		$('#appType').select2();		
+		//$('#appType').select2('val','-1');
+		//$('#appType').select2();		
 	}
 	$("#eduname").select2('enable');
 	$('#eduname').select2('open');
-	$('#appType').select2('disable');
+	//$('#appType').select2('disable');
 });
 
 $('#eduname').on("change", function(e) {
@@ -93,21 +93,21 @@ $('#eduname').on("change", function(e) {
 	{		
 		$("#eduprof").select2('val',"");
 		$('#apply').attr('disabled',true);
-		$('#appType').select2('val','-1');
-		$('#appType').select2();
+		//$('#appType').select2('val','-1');
+		//$('#appType').select2();
 	}
 	$("#eduprof").select2('enable');
 	$('#eduprof').select2('open');
-	$('#appType').select2('disable');				
+	//$('#appType').select2('disable');				
 });
 
 $('#eduprof').on('change',function(e){
 	if($('#eduprof').val()){
 		$('#apply').attr('disabled',false);
-		$('#appType').select2('val','-1');
-		$('#appType').select2();
+		//$('#appType').select2('val','-1');
+		//$('#appType').select2();
 	}
-	$('#appType').select2('enable');
+	//$('#appType').select2('enable');
 });
 
 
@@ -253,14 +253,14 @@ $('#appType').select2({
 								<div class="container-fluid">
 									<div class="row">
 										<div class="col-md-6">
-											<select style="padding-top: 0px;padding-bottom: 0px;height:28px;"class="form-control" name="appType" id="appType" disabled>
+											<!--select style="padding-top: 0px;padding-bottom: 0px;height:28px;"class="form-control" name="appType" id="appType" disabled>
 												<option value="-1">Тип конкурса все</option>
 												{% for item in data.appTypes %}
 													<option value="{{item.id}}">{{item.value}}</option>
 												{% endfor %}              
-											</select>
+											</select-->
 										</div>										
-										<div class="col-md-3">
+										<div class="col-md-3 col-md-3-offset-6">
 											<input type="button" id="apply" disabled style="padding-top: 2px;padding-bottom:  2px;height:28px;" class="btn btn-default btn-block" OnClick="Applay()" value="Применить"/>
 										</div>
 										<div class="col-md-3">
@@ -290,13 +290,35 @@ $('#appType').select2({
 									</tr>
 								</thead>
 								<tbody id="tbodys">
-									{% for item in data.abitData %}
 									<tr>
-										<td>{{ forloop.counter }}</td>
-										<td>{{ item.abiturient.fullname }}</td>
-										<td>{% if item.points == None %}0{% endif %}{% if item.points != None %}{{ item.points }}{% endif %}</td>
+										<th></th>										
+										<th >Целевики</th>
+										<th></th>								
 									</tr>
-									{% endfor %}
+									
+									<tr>
+
+									</tr>
+									
+									<tr>
+										<th></th>										
+										<th>Льготники</th>
+										<th></th>
+									</tr>
+									
+									<tr>
+
+									</tr>
+									
+									<tr>
+										<th></th>
+										<th>Холопы</th>
+										<th></th>
+									</tr>
+
+									<tr>
+
+									</tr>
 								</tbody>
 							</table>
 						<!--/div--><!--end panel-body-->
