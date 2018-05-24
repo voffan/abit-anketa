@@ -112,32 +112,35 @@
 				    break;
             }
 		}
+
 		$(document).on("click","button[id*='save']", function()
 		{
 			$("#currentPage").val(($(this).attr('id').slice('4')));
-				$.ajax({
-					url:{% url 'add_data_to_person' %},
-					type:GetTabFormData().attr('method'),
-					data:GetTabFormData().serialize(),
-					dataProcess:true,
-					timeout:500,
-					success:function(data)
-					{
-						if (data['result']==="success")
-						{
-							$.notify("Сохранено.", "success");
-						}
-						else
-						{
-							$.notify("Что-то пошло не так :(", "error");
-						}
-						console.log('Result is loaded!');
-					},
-					error:function()
-					{
-						$.notify("Отсутствует соединение :(", "error");
-					}
-				});
+            console.log(GetTabFormData());
+            console.log(GetTabFormData().attr('method'));
+            $.ajax({
+                url:{% url 'add_data_to_person' %},
+                type:GetTabFormData().attr('method'),
+                data:GetTabFormData().serialize(),
+                dataProcess:true,
+                timeout:500,
+                success:function(data)
+                {
+                    if (data['result']==="success")
+                    {
+                        $.notify("Сохранено.", "success");
+                    }
+                    else
+                    {
+                        $.notify("Что-то пошло не так :(", "error");
+                    }
+                    console.log('Result is loaded!');
+                },
+                error:function()
+                {
+                    $.notify("Отсутствует соединение :(", "error");
+                }
+            });
 		});
 		function initSelect2(object){
 			object.select2({
@@ -261,9 +264,9 @@
 		{% if datejoining %} defaultDate:'{{datejoining|date:"Y-m-d"}}' {% endif %}
 	});
 	$("#nation").select2({
-		language:"ru",
-		allowClear:true,
-		placeholder: "Саха",
+		language: "ru",
+		allowClear: true,
+		placeholder: "...",
 		ajax:{
 			url:{% url 'nation' %},
 			dataType:'json',
@@ -273,7 +276,7 @@
 					query:params
 				};
 			},
-			processResults:function(data,page)
+			processResults:function(data, page)
 			{
 				return{
 					results:data
@@ -448,15 +451,15 @@ function tabInit(arg){
 		$lis.children[0].className = "";
 		$lis.children[arg-1].className = "active";
 		$tabs[0].className = "tab-pane";
-		$tabs[arg-1].className = "tab-pane active";		
+		$tabs[arg-1].className = "tab-pane active";
 		document.getElementById("progress-bar").style.width=$percent+'%';
 };
 $(document).ready(function(){
 	var li = getGlobalVar('li');
-	if(li){		
-		tabInit(li);		
+	if(li){
+		tabInit(li);
 	};
-	localStorage.removeItem('li');	
+	localStorage.removeItem('li');
 });
 </script>
 {% endblock %}
