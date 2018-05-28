@@ -45,10 +45,32 @@
                             </p>
                         </div>
                     </div>
-                    <p>
-                        <label for="imgfiles">Фотографии</label>
-                        <input type="file" name="imgfiles" id="imgfiles" class="form-control" multiple required>
-                    </p>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+                            <p>
+                                <label for="docs_images">Сканы документов</label>
+                                <input type="file" name="docs_images" id="docs_images" class="form-control" accept="image/*" multiple required style="display: none;">
+                                <div>
+                                    {% if docs_images|length == 0 %}
+                                        <span class="text-muted">Пока не загружено ни одного изображения </span>
+                                    {% else %}
+                                        <span class="text-muted">Загружено изображений: {{ docs_images|length }} </span>
+                                    {% endif %}
+                                    <input type="button" class="btn btn-default" value="Загрузить..." onclick="document.getElementById('docs_images').click()">
+                                </div>
+                                <br>
+                                <div class="row">
+                                {% for docs_image in docs_images %}
+                                    <div class="col-xs-3 docs_images" id="{{ docs_image }}">
+                                        <img src="/images/{{ docs_image }}" alt="{{ docs_image }}" class="img-thumbnail">
+                                        <a onclick="$(this).parent().addClass('removed').hide()">Удалить</a>
+                                    </div>
+                                {% endfor %}
+                                <input name="removedDocsImages" id="removedDocsImages" type="hidden"/>
+                                </div>
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="panel panel-primary">

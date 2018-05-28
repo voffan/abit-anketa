@@ -212,8 +212,6 @@ class Docs(models.Model):
 
 	def __str__(self):
 		return self.abiturient.fullname + ' ' + self.docType.value
-	def __str__(self):
-		return self.doc.abiturient.fullname + ' ' + self.doc.docType.value
 
 
 class DocImages(models.Model):

@@ -113,34 +113,50 @@
             }
 		}
 
-		$(document).on("click","button[id*='save']", function()
-		{
-			$("#currentPage").val(($(this).attr('id').slice('4')));
-            console.log(GetTabFormData());
-            console.log(GetTabFormData().attr('method'));
-            $.ajax({
-                url:{% url 'add_data_to_person' %},
-                type:GetTabFormData().attr('method'),
-                data:GetTabFormData().serialize(),
-                dataProcess:true,
-                timeout:500,
-                success:function(data)
-                {
-                    if (data['result']==="success")
-                    {
-                        $.notify("Сохранено.", "success");
-                    }
-                    else
-                    {
-                        $.notify("Что-то пошло не так :(", "error");
-                    }
-                    console.log('Result is loaded!');
-                },
-                error:function()
-                {
-                    $.notify("Отсутствует соединение :(", "error");
+		$(document).on("click","button[id*='save']", function() {
+		    if ($('.tab-pane#tab2').hasClass('active')) {
+		        var removed_docs_images = Array();
+		        for (i = 0; i < $('.docs_images.removed').length; i++) {
+		            removed_docs_images.push($('.docs_images.removed')[i].id);
                 }
-            });
+		        console.log(removed_docs_images);
+		        $('#removedDocsImages').val(removed_docs_images);
+                var formData = new FormData(GetTabFormData()[0]);
+                $.ajax({
+                    type: "POST",
+                    url: {% url 'add_data_to_person' %},
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: "json",
+                    success: function(formData) {
+                        $.notify("Сохранено", "success");
+                    },
+                    error: function() {
+                        $.notify("Отсутствует соединение", "error");
+                    }
+                });
+            } else {
+                $("#currentPage").val(($(this).attr('id').slice('4')));
+                $.ajax({
+                    url: {% url 'add_data_to_person' %},
+                    type: GetTabFormData().attr('method'),
+                    data: GetTabFormData().serialize(),
+                    dataProcess: true,
+                    timeout: 500,
+                    success: function(data) {
+                        if (data['result'] === "success") {
+                            $.notify("Сохранено", "success");
+                        }
+                        else {
+                            $.notify("Что-то пошло не так", "error");
+                        }
+                    },
+                    error: function() {
+                        $.notify("Отсутствует соединение", "error");
+                    }
+                });
+            }
 		});
 		function initSelect2(object){
 			object.select2({

@@ -92,8 +92,15 @@ def PersonData(request):
         args['prevedu'] = edudoctype.level.value
         args['preveduname'] = edudoctype.eduOrg.name
         args['preveduname_id'] = edudoctype.eduOrg.id
-    if person.docs_set.filter(docType__value__icontains=u'СНИЛС').first() is not None:
-        args['inila'] = person.docs_set.filter(docType__value__icontains=u'СНИЛС').first().number
+    if person.docs_set.filter(docType__value__icontains='СНИЛС').first() is not None:
+        args['inila'] = person.docs_set.filter(docType__value__icontains='СНИЛС').first().number
+    if DocImages.objects.filter(doc=person.docs_set.filter(
+            docType__attribute__name__icontains='удостоверяющего личность').first()):
+        doc_images = []
+        for doc_image in DocImages.objects.filter(doc=person.docs_set.filter(
+            docType__attribute__name__icontains='удостоверяющего личность').first()):
+            doc_images.append(doc_image.image)
+        args['docs_images'] = doc_images
 
     args_to_print = [
         'doctype',
@@ -113,6 +120,7 @@ def PersonData(request):
         'preveduname',
         'preveduname_id',
         'inila',
+        'docs_images',
     ]
     for arg_to_print in args_to_print:
         try:
@@ -607,7 +615,7 @@ def AddDataToPerson(request):
                 if (len(request.POST.get('sex', ''))) > 0:
                     abit.sex = request.POST.get('sex', '')
             if page == 2:
-                doctype = abit.docs_set.filter(docType__attribute__name__icontains=u'удостоверяющего личность').first()
+                doctype = abit.docs_set.filter(docType__attribute__name__icontains='удостоверяющего личность').first()
                 if doctype is None:
                     doctype = Docs()
                     doctype.abiturient = abit
@@ -628,6 +636,15 @@ def AddDataToPerson(request):
                     doctype.docIssuer = AttrValue.objects.get(pk=request.POST.get('docissuer', ''))
                 print(doctype)
                 doctype.save()
+
+                print('Saving doc image')
+                for file in request.FILES.getlist('docs_images'):
+                    print(file.name)
+                    doc_image = DocImages()
+                    doc_image.doc = abit.docs_set.filter(
+                        docType__attribute__name__icontains='удостоверяющего личность').first()
+                    doc_image.image = file
+                    doc_image.save()
 
                 print('Saving Edu')
                 Education.objects.filter(abiturient=abit).delete()
