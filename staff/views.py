@@ -898,7 +898,7 @@ def edu_org_add(values):
 			edu_org.orgtype = AttrValue.objects.filter(id=values['edu_org_type']).first()
 		if values['edu_org_head'] != '-1':
 			edu_org.head = EduOrg.objects.filter(id=values['edu_org_head']).first()
-		if EduOrg.objects.filter(name=edu_org.name, orgtype_id=edu_org.orgtype.id, head_id=edu_org.head.id).first() == None:
+		if EduOrg.objects.filter(name=edu_org.name, orgtype=edu_org.orgtype, head=edu_org.head).first() == None:
 			edu_org.save()
 
 @transaction.atomic

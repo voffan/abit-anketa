@@ -760,83 +760,89 @@ def SaveApplication(request):
         else:
             application.withfee = False
 
-        #######################ЦЕЛЕВОЕ####################################
-        if request.POST.get('target', ''):
-            targetApp = Application_attrs()
-            targetApp.app = application
-            targetApp.attribute = AttrValue.objects.filter(
-                attribute__name__icontains=u'Тип договора образования').filter(value__icontains=u'Целевой').first()
-            targetApp.save()
-            min1 += 1
-        else:
-            targetApp = Application_attrs.objects.filter(app__id=application.id).first()
-            if targetApp is not None:
-                targetApp.delete()
-        #######################ЦЕЛЕВОЕ####################################
+		#######################ЦЕЛЕВОЕ####################################
+
+		if request.POST.get('target',''):
+			fiks1 = 1
+			min1 += 1
+		else:
+			targetApp = Application_attrs.objects.filter(app__id=application.id).first()
+			if targetApp is not None:
+				targetApp.delete()
+		#######################ЦЕЛЕВОЕ####################################
 
         if min1 == 0:
             result = {'result': 0, 'error_msg': 'minimym 1 chek viberi'}
             return HttpResponse(json.dumps(result), content_type="application/json")
 
-        #######################ЛЬГОТЫ####################################
-        if len(Privilegies.objects.filter(abiturient__id=Abiturient.objects.get(user=request.user).id)) > 0:
-            privilegesApp = Application_attrs()
-            privilegesApp.app = application
-            privilegesApp.attribute = AttrValue.objects.filter(
-                attribute__name__icontains=u'Тип договора образования').filter(value__icontains=u'Льготный').first()
-            privilegesApp.save()
-        else:
-            privilegesApp = Application_attrs.objects.filter(app__id=application.id).first()
-            if privilegesApp is not None:
-                privilegesApp.delete()
-        #######################ЛЬГОТЫ####################################
+		#######################ЛЬГОТЫ####################################
+		if len(Privilegies.objects.filter(abiturient__id=Abiturient.objects.get(user=request.user).id))>0:
+			fiks2 = 1
+		else:
+			privilegesApp = Application_attrs.objects.filter(app__id=application.id).first()
+			if privilegesApp is not None:
+				privilegesApp.delete()
+		#######################ЛЬГОТЫ####################################
 
-        if (len(request.POST.getlist('eduprof')) > 0):
-            forms = request.POST.getlist('eduform', '')
-            app_prof_id = request.POST.getlist('prof_id', '')
-            ##############delete################
-            ppc = [x for x in app_prof_id if x != -1]
-            if len(ppc) < len(ApplicationProfiles.objects.filter(application=application)):
-                ApplicationProfiles.objects.filter(application=application).exclude(id__in=ppc).delete()
-            ##############delete################
-            abit_exams = Exams.objects.filter(abiturient=application.abiturient)  # EXAMS###########################
-            points_summ = 0
-            for i in abit_exams:
-                if i.points is not None:
-                    points_summ += i.points  # checkpoint
-            forms = list(set(forms))
-            for i in range(len(forms)):
-                profile = ProfileAttrs.objects.get(pk=forms[i])
-                if dateNow >= datetime.datetime.strftime(profile.startDate, '%Y-%m-%d'):
-                    if dateNow <= datetime.datetime.strftime(profile.endDate, '%Y-%m-%d'):
-                        application.save()
-                        appProf = ApplicationProfiles.objects.filter(pk=app_prof_id[i]).first()
-                        if appProf is None:
-                            appProf = ApplicationProfiles()
-                        appProf.application = application
-                        appProf.profile = ProfileAttrs.objects.get(pk=forms[i])
-                        appProf.points = points_summ
-                        exams_needed = Exams_needed.objects.filter(profile=appProf.profile.profile)
-                        for exam_need in exams_needed:
-                            for abit_exam in abit_exams:
-                                if abit_exam.exam_subjects == exam_need.subject:
-                                    if abit_exam.points < exam_need.min_points:
-                                        result = {'result': 0, 'error_msg': 'yBbl He xBoTaeT 6aJIJIoB'}
-                                        return HttpResponse(json.dumps(result), content_type="application/json")
-                                    #########FIX IT###############
-                            # else:
-                            # result = {'result':0, 'error_msg':'yBbl He xBoTaeT Heo6xoDuMblx ek3aMeHoB'}
-                        appProf.save()
-                    else:
-                        result = {'result': 0,
-                                  'error_msg': 'АЛЛО гараж период приема заявлений по направлению ' + profile.profile.name + ' ' + profile.profile.edu_prog.qualification.value + ' ' + profile.eduform + ' уже закончился'}
-                else:
-                    result = {'result': 0,
-                              'error_msg': 'АЛЛО гараж период приема заявлений по направлению ' + profile.profile.name + ' ' + profile.profile.edu_prog.qualification.value + ' ' + profile.eduform + ' еще не начался'}
-            # if profileValid >0:
+		if (len(request.POST.getlist('eduprof'))>0):
+			forms = request.POST.getlist('eduform','')
+			app_prof_id = request.POST.getlist('prof_id','')
+			##############delete################
+			ppc=[x for x in app_prof_id if x != -1]
+			if len(ppc)<len(ApplicationProfiles.objects.filter(application=application)):
+				ApplicationProfiles.objects.filter(application=application).exclude(id__in=ppc).delete()
+			##############delete################
+			abit_exams = Exams.objects.filter(abiturient=application.abiturient)#EXAMS###########################
+			points_summ=0
+			for i in abit_exams:
+				if i.points is not None:
+					points_summ+=i.points#checkpoint
+			forms = list(set(forms))
+			for i in range(len(forms)):
+				profile = ProfileAttrs.objects.get(pk=forms[i])
+				if dateNow >= datetime.datetime.strftime(profile.startDate,'%Y-%m-%d'):
+					if dateNow <= datetime.datetime.strftime(profile.endDate,'%Y-%m-%d'):
+						application.save()
 
-            # FIX DELS	#ApplicationProfiles.objects.filter(application=application).delete()
-            """	
+						if fiks1 ==	1:
+							targetApp = Application_attrs()
+							targetApp.app = application
+							targetApp.attribute = AttrValue.objects.filter(attribute__name__icontains=u'Тип договора образования').filter(value__icontains=u'Целевой').first()
+							if Application_attrs.objects.filter(app__id=application.id,attribute__id=AttrValue.objects.filter(attribute__name__icontains=u'Тип договора образования').filter(value__icontains=u'Целевой').first().id)is not None:
+								targetApp.save()
+
+						if fiks2 == 1:
+							privilegesApp = Application_attrs()
+							privilegesApp.app = application
+							privilegesApp.attribute = AttrValue.objects.filter(attribute__name__icontains=u'Тип договора образования').filter(value__icontains=u'Льготный').first()
+							if Application_attrs.objects.filter(app__id=application.id,attribute__id=AttrValue.objects.filter(attribute__name__icontains=u'Тип договора образования').filter(value__icontains=u'Льготный').first().id)is not None:
+								privilegesApp.save()
+
+						appProf = ApplicationProfiles.objects.filter(pk = app_prof_id[i]).first()
+						if appProf is None:
+							appProf = ApplicationProfiles()
+						appProf.application=application
+						appProf.profile=ProfileAttrs.objects.get(pk = forms[i])
+						appProf.points=points_summ
+						exams_needed = Exams_needed.objects.filter(profile=appProf.profile.profile)
+						for exam_need in exams_needed:
+							for abit_exam in abit_exams:
+								if abit_exam.exam_subjects==exam_need.subject:
+									if abit_exam.points<exam_need.min_points:
+										result = {'result':0, 'error_msg':'yBbl He xBoTaeT 6aJIJIoB'}
+										return HttpResponse(json.dumps(result), content_type="application/json")
+										#########FIX IT###############
+								#else:
+									#result = {'result':0, 'error_msg':'yBbl He xBoTaeT Heo6xoDuMblx ek3aMeHoB'}
+						appProf.save()
+					else:
+						result = {'result':0, 'error_msg':'АЛЛО гараж период приема заявлений по направлению '+profile.profile.name+' '+profile.profile.edu_prog.qualification.value+' '+profile.eduform+' уже закончился'}
+				else:
+					result = {'result':0, 'error_msg':'АЛЛО гараж период приема заявлений по направлению '+profile.profile.name+' '+profile.profile.edu_prog.qualification.value+' '+profile.eduform+' еще не начался'}
+			#if profileValid >0:
+
+			#FIX DELS	#ApplicationProfiles.objects.filter(application=application).delete()
+			"""	
 				for i in range(len(forms)):
 					appProf = ApplicationProfiles.objects.filter(pk = app_prof_id[i]).first()
 					if appProf is None:
@@ -1013,30 +1019,40 @@ def AbiturientList(request):
 ################################## AJAX ###################################################
 
 def GetAbiturient(request):
-    result = []
-    year = datetime.datetime.strftime(datetime.datetime.now(), '%Y')
-    abitId = []
-    abiturients = Abiturient.objects.all()
+	result = []
+	year = datetime.datetime.strftime(datetime.datetime.now(), '%Y')
+	abitId = []
+	appTypes = AttrValue.objects.filter(attribute__name__icontains=u'Тип договора образования')
+	abiturients = Abiturient.objects.all()
 
-    if 'eduprof' in request.GET:
-        abitData = []
-        if request.GET['eduprof'] is not None:
-            print('eduprof is not None')
-            if len(request.GET['eduprof']) > 0:
-                print('eduprof len > 0')
-                abitId = [x.application.abiturient.id for x in
-                          ApplicationProfiles.objects.filter(profile__year=year).filter(
-                              profile__profile__id=int(request.GET['eduprof']))]
-                abiturients = abiturients.filter(id__in=abitId)
+	if 'eduprof' in request.GET:
+		abitData =[]
+		if request.GET['eduprof'] is not None:
+			print('eduprof is not None')
+			if len(request.GET['eduprof'])>0:
+				print('eduprof len > 0')
+				abitId = [x.application.abiturient.id for x in ApplicationProfiles.objects.filter(
+					profile__year=year).filter(profile__profile__id=int(request.GET['eduprof']))]
+				abiturients = abiturients.filter(id__in=abitId)
 
-    if 'appType' in request.GET:
-        if request.GET['appType'] is not None:
-            if len(request.GET['appType']) > 0 and request.GET['appType'] != '-1':
-                appAttrId = [x.app.id for x in Application_attrs.objects.filter(attribute__id=request.GET['appType'])]
-                appProf = ApplicationProfiles.objects.filter(application__id__in=appAttrId).filter(
-                    profile__profile__id=request.GET['eduprof'])
-                abitId = [x.application.abiturient.id for x in appProf]
-                abiturients = abiturients.filter(id__in=abitId)
+
+	if appTypes is not None:
+		if len(appTypes) > 0:
+			for appT in appTypes:
+				appAttrId = [x.app.id for x in Application_attrs.objects.filter(attribute__id=appT.id)]
+				print("appAttrId ",appAttrId)
+				appProf = ApplicationProfiles.objects.filter(application__id__in=appAttrId).filter(
+					profile__profile__id=request.GET['eduprof'])
+				print("appProf ",appProf)
+				abitId = [x.application.abiturient.id for x in appProf]
+				print("abitId ", abitId)
+				abiturients = abiturients.filter(id__in=abitId)
+				print("abiturients ",abiturients)
+
+				for abitur in abiturients:
+					points = Exams.objects.filter(abiturient=abitur).aggregate(Sum('points'))
+					print("appT_ID ",appT.id)
+					result.append({'abiturient':abitur.fullname,'points':points.get('points__sum'),'appType':appT.id})
 
     for item in abiturients:
         points = Exams.objects.filter(abiturient=item).aggregate(Sum('points'))

@@ -1,0 +1,4255 @@
+[
+{
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+        "user_permissions": [],
+        "groups": [],
+        "first_name": "",
+        "email": "3@3.com",
+        "date_joined": "2016-03-09T05:46:14Z",
+        "last_name": "",
+        "is_staff": true,
+        "is_active": true,
+        "username": "4ino",
+        "last_login": "2016-03-30T07:18:33Z",
+        "is_superuser": true,
+        "password": "pbkdf2_sha256$15000$0S3c42CSlFVd$o66QHn0scY+WAzvhlKQwufGah8YnRNPRt767qI2DgrY="
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+        "user_permissions": [],
+        "groups": [],
+        "first_name": "",
+        "email": "a@a.ru",
+        "date_joined": "2016-03-09T05:55:41Z",
+        "last_name": "",
+        "is_staff": false,
+        "is_active": true,
+        "username": "a",
+        "last_login": "2018-05-17T11:36:19Z",
+        "is_superuser": false,
+        "password": "pbkdf2_sha256$15000$aDFvloJGPyHg$sOdV4eHhCYNC7CtL3i7qtUPGkKR64/2jkFLB14uT8TU="
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 4,
+    "fields": {
+        "user_permissions": [],
+        "groups": [],
+        "first_name": "",
+        "email": "w@w.ru",
+        "date_joined": "2016-03-11T15:38:46Z",
+        "last_name": "",
+        "is_staff": false,
+        "is_active": true,
+        "username": "w",
+        "last_login": "2016-03-11T15:38:46Z",
+        "is_superuser": false,
+        "password": "pbkdf2_sha256$15000$IxupvbFUPVbn$HRE+1BL/CAM2SN+db3zRf5DuHh+k6yN0jhIVP84WCPA="
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 5,
+    "fields": {
+        "user_permissions": [],
+        "groups": [],
+        "first_name": "",
+        "email": "",
+        "date_joined": "2016-03-12T01:29:36Z",
+        "last_name": "",
+        "is_staff": false,
+        "is_active": true,
+        "username": "kolya",
+        "last_login": "2017-12-03T04:30:28Z",
+        "is_superuser": false,
+        "password": "pbkdf2_sha256$15000$vqmaD3Fb0f7f$dBGdeWTpgxo5mzVHhK41jBBvWsVg5KSzJlXiIQilkjA="
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 6,
+    "fields": {
+        "user_permissions": [],
+        "groups": [],
+        "first_name": "",
+        "email": "",
+        "date_joined": "2016-03-12T01:37:14Z",
+        "last_name": "",
+        "is_staff": false,
+        "is_active": true,
+        "username": "ivan",
+        "last_login": "2016-03-12T01:37:14Z",
+        "is_superuser": false,
+        "password": "pbkdf2_sha256$15000$sUsWsdrZ6daK$UzL1U4ihxPUY02cJnSuATcT5u79Nf447/cq7NZaXbh8="
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 11,
+    "fields": {
+        "user_permissions": [],
+        "groups": [],
+        "first_name": "",
+        "email": "ana@mail.ru",
+        "date_joined": "2016-03-12T07:12:52Z",
+        "last_name": "",
+        "is_staff": false,
+        "is_active": true,
+        "username": "ana",
+        "last_login": "2016-03-12T07:12:52Z",
+        "is_superuser": false,
+        "password": "pbkdf2_sha256$15000$sXN5blvzOazJ$W+JWgnuqpN3VALSmtMROjQBmDmwrH2f/hW8Vao8F1/Y="
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 12,
+    "fields": {
+        "user_permissions": [],
+        "groups": [],
+        "first_name": "",
+        "email": "",
+        "date_joined": "2016-03-16T02:11:34Z",
+        "last_name": "",
+        "is_staff": false,
+        "is_active": true,
+        "username": "baska",
+        "last_login": "2016-03-16T02:11:34Z",
+        "is_superuser": false,
+        "password": "pbkdf2_sha256$15000$KOHBL16DvYZI$EkS4cD0ZQncqKfbQSgc0kKbfB8uPgv5FzT5ECpbpAUQ="
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 13,
+    "fields": {
+        "user_permissions": [],
+        "groups": [],
+        "first_name": "",
+        "email": "",
+        "date_joined": "2016-03-22T08:53:42Z",
+        "last_name": "",
+        "is_staff": false,
+        "is_active": true,
+        "username": "roma",
+        "last_login": "2016-03-22T08:53:42Z",
+        "is_superuser": false,
+        "password": "pbkdf2_sha256$15000$DcLvpufyk4ml$wnrQ6EtO4JAC1lnASkJ1lG2f6x6+I7ucvFMv4JPio38="
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 20,
+    "fields": {
+        "user_permissions": [],
+        "groups": [],
+        "first_name": "",
+        "email": "v\u0432\u044b\u0432\u044b\u0432@mail.ru",
+        "date_joined": "2016-03-30T07:34:38Z",
+        "last_name": "",
+        "is_staff": true,
+        "is_active": true,
+        "username": "4ino_rp",
+        "last_login": "2018-05-17T11:41:49Z",
+        "is_superuser": true,
+        "password": "pbkdf2_sha256$15000$FpMUoOeYaLEP$H0tpOL2YXonaUy+jqq0njl9jmEsp6ejoy+E/4c/AHRk="
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 21,
+    "fields": {
+        "user_permissions": [],
+        "groups": [],
+        "first_name": "",
+        "email": "check@mail.ru",
+        "date_joined": "2016-05-04T15:12:53Z",
+        "last_name": "",
+        "is_staff": false,
+        "is_active": true,
+        "username": "st-pi",
+        "last_login": "2016-05-08T15:22:42Z",
+        "is_superuser": false,
+        "password": "pbkdf2_sha256$15000$6e0fvpeMu31h$C/FU01SmoR9ftkYDy5nwrUQwqaCHgIE5boEzfF1czIs="
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 22,
+    "fields": {
+        "user_permissions": [],
+        "groups": [],
+        "first_name": "",
+        "email": "student@mail.ru",
+        "date_joined": "2016-11-25T08:51:07Z",
+        "last_name": "",
+        "is_staff": false,
+        "is_active": true,
+        "username": "student1",
+        "last_login": "2016-11-26T04:01:59Z",
+        "is_superuser": false,
+        "password": "pbkdf2_sha256$15000$6keARXyRWpuB$tJwVWvmOfp9/Q8UHWWhuiyS1N9jdV+0vDT458RckLk4="
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 23,
+    "fields": {
+        "user_permissions": [],
+        "groups": [],
+        "first_name": "b",
+        "email": "b@b.ru",
+        "date_joined": "2017-02-19T14:58:57Z",
+        "last_name": "b",
+        "is_staff": false,
+        "is_active": true,
+        "username": "b",
+        "last_login": "2017-02-19T14:58:57Z",
+        "is_superuser": false,
+        "password": "pbkdf2_sha256$15000$EBWj10gKTLMu$+vDAqduKrYomcWJSHxwhjacgT9kr4rr0Fl8c/FbXxug="
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 24,
+    "fields": {
+        "user_permissions": [],
+        "groups": [],
+        "first_name": "",
+        "email": "c@c.ru",
+        "date_joined": "2017-05-19T09:16:55Z",
+        "last_name": "",
+        "is_staff": false,
+        "is_active": true,
+        "username": "c",
+        "last_login": "2017-05-19T09:28:44Z",
+        "is_superuser": false,
+        "password": "pbkdf2_sha256$15000$sQFRwa9GdBcz$ow0if1OqcVSUuNcbopGzaBt0qyJcB4LFUPQ3K1c7/sk="
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 27,
+    "fields": {
+        "user_permissions": [],
+        "groups": [],
+        "first_name": "",
+        "email": "test1@user.ru",
+        "date_joined": "2017-11-19T09:56:20Z",
+        "last_name": "",
+        "is_staff": true,
+        "is_active": false,
+        "username": "test1",
+        "last_login": "2018-03-25T03:57:21Z",
+        "is_superuser": false,
+        "password": "pbkdf2_sha256$15000$damPz6Zlunx0$2v0hAn68tH1axbLPbc27loSEqSo3rqnBJh2oEyyvZuE="
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 28,
+    "fields": {
+        "user_permissions": [],
+        "groups": [],
+        "first_name": "",
+        "email": "test2@user.ru",
+        "date_joined": "2017-11-19T09:57:20Z",
+        "last_name": "",
+        "is_staff": true,
+        "is_active": true,
+        "username": "test2",
+        "last_login": "2018-01-25T14:04:53Z",
+        "is_superuser": false,
+        "password": "pbkdf2_sha256$15000$RohtOUxGfVvc$IRnq0k+urEC4yy5uxgVwGkloJr5GVbIU7dkA/51ZVGk="
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 29,
+    "fields": {
+        "user_permissions": [],
+        "groups": [],
+        "first_name": "",
+        "email": "test3@mail.ru",
+        "date_joined": "2017-11-21T15:39:01Z",
+        "last_name": "",
+        "is_staff": false,
+        "is_active": true,
+        "username": "test3",
+        "last_login": "2017-12-07T14:55:05Z",
+        "is_superuser": false,
+        "password": "pbkdf2_sha256$15000$uHcGWamVFWWp$aFgZTUcyihBusvQs3BHgFW6YPVB9vesT97B4VT33QLM="
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 30,
+    "fields": {
+        "user_permissions": [],
+        "groups": [],
+        "first_name": "",
+        "email": "test4@sad.rt",
+        "date_joined": "2017-11-21T16:00:12Z",
+        "last_name": "",
+        "is_staff": false,
+        "is_active": true,
+        "username": "test4",
+        "last_login": "2018-03-25T03:58:07Z",
+        "is_superuser": false,
+        "password": "pbkdf2_sha256$15000$gzVpEzlbJXFE$jyy30mn7xn23cIRyT2imd48JX0SXvhzBRJlEQVAQpU0="
+    }
+},
+{
+    "model": "auth.user",
+    "pk": 31,
+    "fields": {
+        "user_permissions": [],
+        "groups": [],
+        "first_name": "",
+        "email": "em@i.l",
+        "date_joined": "2017-11-21T16:37:50Z",
+        "last_name": "",
+        "is_staff": true,
+        "is_active": true,
+        "username": "slonenok",
+        "last_login": "2018-01-25T14:15:42Z",
+        "is_superuser": false,
+        "password": "pbkdf2_sha256$15000$0FkMXncFuiIO$PEEZCLZEDIteI/sWeScSJGoxJfejgAgDY3y3MFAXKeg="
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "0y2gstbh6j7m4xet1wrq9zn8trdqy9q6",
+    "fields": {
+        "expire_date": "2018-04-29T02:45:59Z",
+        "session_data": "ZTFkNGE0Yjk2ZmRiMjcwNWNiMmZhNGM4Nzc1OWI0NGRmNWExYjk5Yjp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6MjAsIl9hdXRoX3VzZXJfaGFzaCI6ImI0NTQzYzc2NDhlMjkwNTIzNDdkMDg0MThiNGU1NDY0NjFjMzI1ZDcifQ=="
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "0yyxtcq937x33jjcics0duaz4ngn80l8",
+    "fields": {
+        "expire_date": "2016-05-28T03:28:30Z",
+        "session_data": "ZTFkNGE0Yjk2ZmRiMjcwNWNiMmZhNGM4Nzc1OWI0NGRmNWExYjk5Yjp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6MjAsIl9hdXRoX3VzZXJfaGFzaCI6ImI0NTQzYzc2NDhlMjkwNTIzNDdkMDg0MThiNGU1NDY0NjFjMzI1ZDcifQ=="
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "1k8v3vge8wfsot5hdwxk6fbko9zk1mjh",
+    "fields": {
+        "expire_date": "2017-05-23T06:21:10Z",
+        "session_data": "YWMzY2RiZGE3M2E2MTU4OWYwYzJiYjA3YWU1MjcyMTAyN2UwOWExMDp7Il9hdXRoX3VzZXJfaGFzaCI6IjQ2MzBmYTU5YmYxOTgwODY4ZGQwMWEwYTcyMjM1YjZjMGI1NWU2OTYiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOjJ9"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "22ldpof5xb4jn069i8jskfgntgf3xcaq",
+    "fields": {
+        "expire_date": "2016-03-23T05:54:52Z",
+        "session_data": "YWExNzVhZDgyM2VkYmY1Y2IwZjljYTQzZmNiY2RhNTZlMGZlYmI5MTp7Il9hdXRoX3VzZXJfaGFzaCI6IjgxYTg1ZmE5NTIwMDcyY2E3YWNlYjU4YjlhOTY1ZDBkY2UyOWI4YzAiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOjF9"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "2w9qlx0pb96w4pduyeftlx60t84j90ic",
+    "fields": {
+        "expire_date": "2018-05-29T19:52:11Z",
+        "session_data": "YTg0NzIwZDdkYzFlMmRhMWU2Y2ZkOGIyYzA4YWEyMTNjMjE5ODBmZjp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6MiwiX2F1dGhfdXNlcl9oYXNoIjoiNDYzMGZhNTliZjE5ODA4NjhkZDAxYTBhNzIyMzViNmMwYjU1ZTY5NiJ9"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "35si2v8r4fmwcp8s8y593sm4zw3iw91e",
+    "fields": {
+        "expire_date": "2017-02-06T10:58:40Z",
+        "session_data": "ZWJlMTY5YjFhNzg4OTg2YTA1Zjc0NmZkNmZlY2I1NzdhMDk5ZDljODp7Il9hdXRoX3VzZXJfaGFzaCI6IjQ2MzBmYTU5YmYxOTgwODY4ZGQwMWEwYTcyMjM1YjZjMGI1NWU2OTYiLCJfYXV0aF91c2VyX2lkIjoyLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCJ9"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "73zq8qu7s2faft92029uea32tf41hn9z",
+    "fields": {
+        "expire_date": "2016-05-17T14:36:07Z",
+        "session_data": "Yzg5NTNkZGZmOThkMmQ0MzIzY2IyMGMzOGNiZjk2NDc0ZWYxODY5Mzp7Il9hdXRoX3VzZXJfaWQiOjIwLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaGFzaCI6ImI0NTQzYzc2NDhlMjkwNTIzNDdkMDg0MThiNGU1NDY0NjFjMzI1ZDcifQ=="
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "95l95zsoxfblsmhiewcsc06ghvxg0vex",
+    "fields": {
+        "expire_date": "2018-04-26T05:31:36Z",
+        "session_data": "Yzg5NTNkZGZmOThkMmQ0MzIzY2IyMGMzOGNiZjk2NDc0ZWYxODY5Mzp7Il9hdXRoX3VzZXJfaWQiOjIwLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaGFzaCI6ImI0NTQzYzc2NDhlMjkwNTIzNDdkMDg0MThiNGU1NDY0NjFjMzI1ZDcifQ=="
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "9x8kki1903lilucpdy3bx5xidl2jkz4w",
+    "fields": {
+        "expire_date": "2018-05-10T06:45:31Z",
+        "session_data": "ZThlMzU4Y2M5Njc3YjRjODNmMjRjZDA0Y2U1M2U1ZjNiMDNkZWY1OTp7Il9hdXRoX3VzZXJfaWQiOjIwLCJfYXV0aF91c2VyX2hhc2giOiJiNDU0M2M3NjQ4ZTI5MDUyMzQ3ZDA4NDE4YjRlNTQ2NDYxYzMyNWQ3IiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQifQ=="
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "ahdr3zzz2ykhaodzow5pdh6cf6c2ttck",
+    "fields": {
+        "expire_date": "2016-05-20T14:44:15Z",
+        "session_data": "ZDc0NmVmMjBmNWI4ZTlkZjQ0NzdmNWJkNDM2ZjdmY2E1NTQxZmE4NTp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiYjQ1NDNjNzY0OGUyOTA1MjM0N2QwODQxOGI0ZTU0NjQ2MWMzMjVkNyIsIl9hdXRoX3VzZXJfaWQiOjIwfQ=="
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "bdbhoapzhoakby5gvfimm7thfd9awp8n",
+    "fields": {
+        "expire_date": "2016-05-28T03:07:36Z",
+        "session_data": "Yzg5NTNkZGZmOThkMmQ0MzIzY2IyMGMzOGNiZjk2NDc0ZWYxODY5Mzp7Il9hdXRoX3VzZXJfaWQiOjIwLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaGFzaCI6ImI0NTQzYzc2NDhlMjkwNTIzNDdkMDg0MThiNGU1NDY0NjFjMzI1ZDcifQ=="
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "cc4m5oyr2qywsx2ln2mswciv5zhnls3o",
+    "fields": {
+        "expire_date": "2018-05-29T12:08:36Z",
+        "session_data": "MmFhOTEwMTVmY2E5NjdmOWNhM2RlNTlkOGQ5ZjIxMDE4MjNjMGYzYjp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiNDYzMGZhNTliZjE5ODA4NjhkZDAxYTBhNzIyMzViNmMwYjU1ZTY5NiIsIl9hdXRoX3VzZXJfaWQiOjJ9"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "cu1e2fr5xcfud56h5jtdwrtxw5er8qba",
+    "fields": {
+        "expire_date": "2018-02-08T14:46:50Z",
+        "session_data": "ZThlMzU4Y2M5Njc3YjRjODNmMjRjZDA0Y2U1M2U1ZjNiMDNkZWY1OTp7Il9hdXRoX3VzZXJfaWQiOjIwLCJfYXV0aF91c2VyX2hhc2giOiJiNDU0M2M3NjQ4ZTI5MDUyMzQ3ZDA4NDE4YjRlNTQ2NDYxYzMyNWQ3IiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQifQ=="
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "dki0pt6iamtq007kdnjjnva0mry8ajst",
+    "fields": {
+        "expire_date": "2018-01-03T14:40:58Z",
+        "session_data": "ZThlMzU4Y2M5Njc3YjRjODNmMjRjZDA0Y2U1M2U1ZjNiMDNkZWY1OTp7Il9hdXRoX3VzZXJfaWQiOjIwLCJfYXV0aF91c2VyX2hhc2giOiJiNDU0M2M3NjQ4ZTI5MDUyMzQ3ZDA4NDE4YjRlNTQ2NDYxYzMyNWQ3IiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQifQ=="
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "ekopsvui0yk4mmapll4j3mgmve4gh1p0",
+    "fields": {
+        "expire_date": "2018-05-10T06:59:16Z",
+        "session_data": "MWI3NjUzYzJlOWIxZjY0NDMzMThiYWZkZjRkOWQzZDczMmE0ZmRkZTp7Il9hdXRoX3VzZXJfaWQiOjIsIl9hdXRoX3VzZXJfaGFzaCI6IjQ2MzBmYTU5YmYxOTgwODY4ZGQwMWEwYTcyMjM1YjZjMGI1NWU2OTYiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCJ9"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "fj7b92gzildww2f1kyciqnlswlvj6cgz",
+    "fields": {
+        "expire_date": "2017-07-04T02:08:49Z",
+        "session_data": "MmFhOTEwMTVmY2E5NjdmOWNhM2RlNTlkOGQ5ZjIxMDE4MjNjMGYzYjp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiNDYzMGZhNTliZjE5ODA4NjhkZDAxYTBhNzIyMzViNmMwYjU1ZTY5NiIsIl9hdXRoX3VzZXJfaWQiOjJ9"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "hf5bxvcrc997p58u903csh6ks34zh139",
+    "fields": {
+        "expire_date": "2016-05-04T15:15:20Z",
+        "session_data": "ZTFkNGE0Yjk2ZmRiMjcwNWNiMmZhNGM4Nzc1OWI0NGRmNWExYjk5Yjp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6MjAsIl9hdXRoX3VzZXJfaGFzaCI6ImI0NTQzYzc2NDhlMjkwNTIzNDdkMDg0MThiNGU1NDY0NjFjMzI1ZDcifQ=="
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "hru0danxt0xu4ni18fq6fz0ijqu87qb3",
+    "fields": {
+        "expire_date": "2018-04-08T05:16:42Z",
+        "session_data": "YTg0NzIwZDdkYzFlMmRhMWU2Y2ZkOGIyYzA4YWEyMTNjMjE5ODBmZjp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6MiwiX2F1dGhfdXNlcl9oYXNoIjoiNDYzMGZhNTliZjE5ODA4NjhkZDAxYTBhNzIyMzViNmMwYjU1ZTY5NiJ9"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "i4d1so16ab4vvqbk2dn6o3z5cwq8dqzp",
+    "fields": {
+        "expire_date": "2017-06-02T09:28:44Z",
+        "session_data": "MGJkZWQ3ZDEyMTc5OGY3ZjFmYTA0NzZjYzJjNjUwNmI0OGYxZGJiMTp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6MjQsIl9hdXRoX3VzZXJfaGFzaCI6IjdiM2EwNTRiZDk2Y2ZjNjQwNTI5ZGUwNjUwNTMxZmQ4NWI0YTFmZWEifQ=="
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "iofgqs3own6ouqjuenchhtvo1wao4797",
+    "fields": {
+        "expire_date": "2018-04-11T06:37:26Z",
+        "session_data": "ZTFkNGE0Yjk2ZmRiMjcwNWNiMmZhNGM4Nzc1OWI0NGRmNWExYjk5Yjp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6MjAsIl9hdXRoX3VzZXJfaGFzaCI6ImI0NTQzYzc2NDhlMjkwNTIzNDdkMDg0MThiNGU1NDY0NjFjMzI1ZDcifQ=="
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "kw41kdpri1d0uuyyx4vhl6dlkq64eide",
+    "fields": {
+        "expire_date": "2018-04-12T05:17:56Z",
+        "session_data": "ZWRkZjJkMGU5OTk5MzM4Y2YyYzg0NWYwNThlYjYwNWQ2MzJkZmYwZjp7Il9hdXRoX3VzZXJfaGFzaCI6ImI0NTQzYzc2NDhlMjkwNTIzNDdkMDg0MThiNGU1NDY0NjFjMzI1ZDciLCJfYXV0aF91c2VyX2lkIjoyMCwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQifQ=="
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "l1nf9dsminbtz0z0k47o7dl7sg02mpsf",
+    "fields": {
+        "expire_date": "2018-02-25T13:34:56Z",
+        "session_data": "ZTFkNGE0Yjk2ZmRiMjcwNWNiMmZhNGM4Nzc1OWI0NGRmNWExYjk5Yjp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6MjAsIl9hdXRoX3VzZXJfaGFzaCI6ImI0NTQzYzc2NDhlMjkwNTIzNDdkMDg0MThiNGU1NDY0NjFjMzI1ZDcifQ=="
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "lumc5tg8rrp9m0gpvglb9lb5z2hv2ngf",
+    "fields": {
+        "expire_date": "2017-03-07T06:24:54Z",
+        "session_data": "YTg0NzIwZDdkYzFlMmRhMWU2Y2ZkOGIyYzA4YWEyMTNjMjE5ODBmZjp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6MiwiX2F1dGhfdXNlcl9oYXNoIjoiNDYzMGZhNTliZjE5ODA4NjhkZDAxYTBhNzIyMzViNmMwYjU1ZTY5NiJ9"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "mn2sqns9cmrmx788up9b0m66n4olkag6",
+    "fields": {
+        "expire_date": "2016-05-22T15:22:42Z",
+        "session_data": "OGVkMzQ0YjRkN2I1M2ZiZWI0MDI2OWE3ZDJhOTU4MjFkZjE2OGU0MTp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6MjEsIl9hdXRoX3VzZXJfaGFzaCI6ImY0N2Y0NjdlMjkyNjNjMTUyNDc0NDQzYTMyNjA3OTYwM2FiMDhmMDQifQ=="
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "oaf65mohuwkywot9g9he4x2jsck3nmmu",
+    "fields": {
+        "expire_date": "2018-04-08T04:00:21Z",
+        "session_data": "ZDc0NmVmMjBmNWI4ZTlkZjQ0NzdmNWJkNDM2ZjdmY2E1NTQxZmE4NTp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiYjQ1NDNjNzY0OGUyOTA1MjM0N2QwODQxOGI0ZTU0NjQ2MWMzMjVkNyIsIl9hdXRoX3VzZXJfaWQiOjIwfQ=="
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "qdfu8xh5afruikiddxkrzdwa6gf6di1h",
+    "fields": {
+        "expire_date": "2016-05-18T15:44:25Z",
+        "session_data": "MGE4MzY4YzY3MmM5MjhlM2NmZDA4NjA1ZGFjMDA2NWQ1MmQyN2MyMjp7Il9hdXRoX3VzZXJfaGFzaCI6ImI0NTQzYzc2NDhlMjkwNTIzNDdkMDg0MThiNGU1NDY0NjFjMzI1ZDciLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOjIwfQ=="
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "r8b7usd1i2zeucm9rwl5uk0wjlt02841",
+    "fields": {
+        "expire_date": "2016-05-25T13:46:44Z",
+        "session_data": "Yzg5NTNkZGZmOThkMmQ0MzIzY2IyMGMzOGNiZjk2NDc0ZWYxODY5Mzp7Il9hdXRoX3VzZXJfaWQiOjIwLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaGFzaCI6ImI0NTQzYzc2NDhlMjkwNTIzNDdkMDg0MThiNGU1NDY0NjFjMzI1ZDcifQ=="
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "tlqmjptxsbrfxivp6ttjh0b2arye8rwh",
+    "fields": {
+        "expire_date": "2017-12-17T16:45:54Z",
+        "session_data": "ZTFkNGE0Yjk2ZmRiMjcwNWNiMmZhNGM4Nzc1OWI0NGRmNWExYjk5Yjp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6MjAsIl9hdXRoX3VzZXJfaGFzaCI6ImI0NTQzYzc2NDhlMjkwNTIzNDdkMDg0MThiNGU1NDY0NjFjMzI1ZDcifQ=="
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "tou02nol1kemaoopuf7pdb3dmllnb56m",
+    "fields": {
+        "expire_date": "2017-05-24T15:35:05Z",
+        "session_data": "MmFhOTEwMTVmY2E5NjdmOWNhM2RlNTlkOGQ5ZjIxMDE4MjNjMGYzYjp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiNDYzMGZhNTliZjE5ODA4NjhkZDAxYTBhNzIyMzViNmMwYjU1ZTY5NiIsIl9hdXRoX3VzZXJfaWQiOjJ9"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "twx60g1p5rcdbr4br40uh12fg3i1x67m",
+    "fields": {
+        "expire_date": "2017-03-05T14:58:23Z",
+        "session_data": "Yzg5NTNkZGZmOThkMmQ0MzIzY2IyMGMzOGNiZjk2NDc0ZWYxODY5Mzp7Il9hdXRoX3VzZXJfaWQiOjIwLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaGFzaCI6ImI0NTQzYzc2NDhlMjkwNTIzNDdkMDg0MThiNGU1NDY0NjFjMzI1ZDcifQ=="
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "u9qt9mmcn7nq8bukhxpya6gi4s7i5p6g",
+    "fields": {
+        "expire_date": "2016-05-24T15:04:55Z",
+        "session_data": "ZWRkZjJkMGU5OTk5MzM4Y2YyYzg0NWYwNThlYjYwNWQ2MzJkZmYwZjp7Il9hdXRoX3VzZXJfaGFzaCI6ImI0NTQzYzc2NDhlMjkwNTIzNDdkMDg0MThiNGU1NDY0NjFjMzI1ZDciLCJfYXV0aF91c2VyX2lkIjoyMCwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQifQ=="
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "uu4vp53graxm2xsgrzunbx99x08os87h",
+    "fields": {
+        "expire_date": "2016-05-20T15:22:52Z",
+        "session_data": "ZThlMzU4Y2M5Njc3YjRjODNmMjRjZDA0Y2U1M2U1ZjNiMDNkZWY1OTp7Il9hdXRoX3VzZXJfaWQiOjIwLCJfYXV0aF91c2VyX2hhc2giOiJiNDU0M2M3NjQ4ZTI5MDUyMzQ3ZDA4NDE4YjRlNTQ2NDYxYzMyNWQ3IiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQifQ=="
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "vc39972vg3yopr4wc2ijs3a1nai7dosl",
+    "fields": {
+        "expire_date": "2016-04-19T10:49:02Z",
+        "session_data": "OGQ5MzM1MjJkMWMxMzVkZDEyNzFiMmIwODlhZGZlY2RkMjg4NzY2OTp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiMDZlZDdjMjZiYzZiMTk1MDA0MWYxN2ZlYTE3ODQyODMzYTY1OTUwNyIsIl9hdXRoX3VzZXJfaWQiOjIwfQ=="
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "w4dx30nv1am9p8o4j4nlyubbxhx4zypy",
+    "fields": {
+        "expire_date": "2017-04-06T06:13:49Z",
+        "session_data": "MmFhOTEwMTVmY2E5NjdmOWNhM2RlNTlkOGQ5ZjIxMDE4MjNjMGYzYjp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9oYXNoIjoiNDYzMGZhNTliZjE5ODA4NjhkZDAxYTBhNzIyMzViNmMwYjU1ZTY5NiIsIl9hdXRoX3VzZXJfaWQiOjJ9"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "w7xstbyfm9ynn59e3ky66dludxzet87i",
+    "fields": {
+        "expire_date": "2017-12-21T14:55:28Z",
+        "session_data": "OTRiNTA2YmIwNTcxZTNmMGNmNDdiMmMwNGYxNTY3ZDE3OWI2MDU5MTp7Il9hdXRoX3VzZXJfaGFzaCI6IjU0ZTg5ZWY1ZGVkMmM4ZGEzMjdlZmQ2ZjYzOTlmYTcyMzNlOWJhYzkiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOjI4fQ=="
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "wn67e1f8zhosmyla2e527sjzllwk8dd7",
+    "fields": {
+        "expire_date": "2018-05-31T11:41:49Z",
+        "session_data": "Yzg5NTNkZGZmOThkMmQ0MzIzY2IyMGMzOGNiZjk2NDc0ZWYxODY5Mzp7Il9hdXRoX3VzZXJfaWQiOjIwLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaGFzaCI6ImI0NTQzYzc2NDhlMjkwNTIzNDdkMDg0MThiNGU1NDY0NjFjMzI1ZDcifQ=="
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "xwz4o5wocola2e0hl0488y09hi50bcl3",
+    "fields": {
+        "expire_date": "2017-08-26T08:51:53Z",
+        "session_data": "ZWJlMTY5YjFhNzg4OTg2YTA1Zjc0NmZkNmZlY2I1NzdhMDk5ZDljODp7Il9hdXRoX3VzZXJfaGFzaCI6IjQ2MzBmYTU5YmYxOTgwODY4ZGQwMWEwYTcyMjM1YjZjMGI1NWU2OTYiLCJfYXV0aF91c2VyX2lkIjoyLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCJ9"
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "z0adcwha0pc8qek1aodmb9zn4jymmuzd",
+    "fields": {
+        "expire_date": "2017-04-19T06:45:36Z",
+        "session_data": "ZThlMzU4Y2M5Njc3YjRjODNmMjRjZDA0Y2U1M2U1ZjNiMDNkZWY1OTp7Il9hdXRoX3VzZXJfaWQiOjIwLCJfYXV0aF91c2VyX2hhc2giOiJiNDU0M2M3NjQ4ZTI5MDUyMzQ3ZDA4NDE4YjRlNTQ2NDYxYzMyNWQ3IiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQifQ=="
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "zd9rbksr999hf8a1y88debwkp489katu",
+    "fields": {
+        "expire_date": "2016-08-13T16:38:55Z",
+        "session_data": "ZWRkZjJkMGU5OTk5MzM4Y2YyYzg0NWYwNThlYjYwNWQ2MzJkZmYwZjp7Il9hdXRoX3VzZXJfaGFzaCI6ImI0NTQzYzc2NDhlMjkwNTIzNDdkMDg0MThiNGU1NDY0NjFjMzI1ZDciLCJfYXV0aF91c2VyX2lkIjoyMCwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQifQ=="
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "zetft928rwifasgki08f3phwvpkim2on",
+    "fields": {
+        "expire_date": "2016-12-12T06:26:22Z",
+        "session_data": "Yzg5NTNkZGZmOThkMmQ0MzIzY2IyMGMzOGNiZjk2NDc0ZWYxODY5Mzp7Il9hdXRoX3VzZXJfaWQiOjIwLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaGFzaCI6ImI0NTQzYzc2NDhlMjkwNTIzNDdkMDg0MThiNGU1NDY0NjFjMzI1ZDcifQ=="
+    }
+},
+{
+    "model": "sessions.session",
+    "pk": "zwqt90yn8tdm6or3ja3mg42yigwabw5m",
+    "fields": {
+        "expire_date": "2018-02-25T23:56:54Z",
+        "session_data": "ZWRkZjJkMGU5OTk5MzM4Y2YyYzg0NWYwNThlYjYwNWQ2MzJkZmYwZjp7Il9hdXRoX3VzZXJfaGFzaCI6ImI0NTQzYzc2NDhlMjkwNTIzNDdkMDg0MThiNGU1NDY0NjFjMzI1ZDciLCJfYXV0aF91c2VyX2lkIjoyMCwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQifQ=="
+    }
+},
+{
+    "model": "anketa.relation",
+    "pk": 11,
+    "fields": {
+        "relType": 66,
+        "person": 17,
+        "abiturient": 13
+    }
+},
+{
+    "model": "anketa.relation",
+    "pk": 12,
+    "fields": {
+        "relType": 66,
+        "person": 22,
+        "abiturient": 21
+    }
+},
+{
+    "model": "anketa.relation",
+    "pk": 13,
+    "fields": {
+        "relType": 65,
+        "person": 23,
+        "abiturient": 21
+    }
+},
+{
+    "model": "anketa.attrtype",
+    "pk": 1,
+    "fields": {
+        "name": "\u0421\u043f\u0438\u0441\u043e\u043a"
+    }
+},
+{
+    "model": "anketa.attribute",
+    "pk": 1,
+    "fields": {
+        "type": 1,
+        "parent": null,
+        "name": "\u041d\u0430\u0446\u0438\u043e\u043d\u0430\u043b\u044c\u043d\u043e\u0441\u0442\u044c"
+    }
+},
+{
+    "model": "anketa.attribute",
+    "pk": 2,
+    "fields": {
+        "type": 1,
+        "parent": null,
+        "name": "\u0413\u0440\u0430\u0436\u0434\u0430\u043d\u0441\u0442\u0432\u043e"
+    }
+},
+{
+    "model": "anketa.attribute",
+    "pk": 3,
+    "fields": {
+        "type": 1,
+        "parent": null,
+        "name": "\u0418\u0437\u0443\u0447\u0430\u0435\u043c\u044b\u0439 \u044f\u0437\u044b\u043a"
+    }
+},
+{
+    "model": "anketa.attribute",
+    "pk": 4,
+    "fields": {
+        "type": 1,
+        "parent": null,
+        "name": "\u041a\u0432\u0430\u043b\u0438\u0444\u0438\u043a\u0430\u0446\u0438\u044f"
+    }
+},
+{
+    "model": "anketa.attribute",
+    "pk": 5,
+    "fields": {
+        "type": 1,
+        "parent": null,
+        "name": "\u0421\u0442\u0430\u0442\u0443\u0441 \u0437\u0430\u044f\u0432\u043b\u0435\u043d\u0438\u044f"
+    }
+},
+{
+    "model": "anketa.attribute",
+    "pk": 6,
+    "fields": {
+        "type": 1,
+        "parent": null,
+        "name": "\u0422\u0438\u043f \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430 \u0443\u0434\u043e\u0441\u0442\u043e\u0432\u0435\u0440\u044f\u044e\u0449\u0435\u0433\u043e \u043b\u0438\u0447\u043d\u043e\u0441\u0442\u044c"
+    }
+},
+{
+    "model": "anketa.attribute",
+    "pk": 7,
+    "fields": {
+        "type": 1,
+        "parent": null,
+        "name": "\u0412\u044b\u0434\u0430\u0432\u0448\u0438\u0439 \u043e\u0440\u0433\u0430\u043d"
+    }
+},
+{
+    "model": "anketa.attribute",
+    "pk": 8,
+    "fields": {
+        "type": 1,
+        "parent": null,
+        "name": "\u041f\u0440\u0435\u0434\u044b\u0434\u0443\u0449\u0435\u0435 \u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u043d\u0438\u0435"
+    }
+},
+{
+    "model": "anketa.attribute",
+    "pk": 13,
+    "fields": {
+        "type": 1,
+        "parent": null,
+        "name": "\u0422\u0438\u043f \u043a\u043e\u043d\u0442\u0430\u043a\u0442\u0430"
+    }
+},
+{
+    "model": "anketa.attribute",
+    "pk": 14,
+    "fields": {
+        "type": 1,
+        "parent": null,
+        "name": "22242"
+    }
+},
+{
+    "model": "anketa.attribute",
+    "pk": 15,
+    "fields": {
+        "type": 1,
+        "parent": null,
+        "name": "\u0412\u043e\u0438\u043d\u0441\u043a\u043e\u0435 \u0437\u0432\u0430\u043d\u0438\u0435"
+    }
+},
+{
+    "model": "anketa.attribute",
+    "pk": 16,
+    "fields": {
+        "type": 1,
+        "parent": null,
+        "name": "\u0422\u0438\u043f \u0430\u0434\u0440\u0435\u0441\u0430"
+    }
+},
+{
+    "model": "anketa.attribute",
+    "pk": 17,
+    "fields": {
+        "type": 1,
+        "parent": null,
+        "name": "\u0414\u0438\u0441\u0446\u0438\u043f\u043b\u0438\u043d\u0430"
+    }
+},
+{
+    "model": "anketa.attribute",
+    "pk": 18,
+    "fields": {
+        "type": 1,
+        "parent": null,
+        "name": "\u0422\u0438\u043f \u044d\u043a\u0437\u0430\u043c\u0435\u043d\u0430"
+    }
+},
+{
+    "model": "anketa.attribute",
+    "pk": 19,
+    "fields": {
+        "type": 1,
+        "parent": null,
+        "name": "\u0412\u0438\u0434 \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430 \u043e\u0431 \u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u043d\u0438\u0438"
+    }
+},
+{
+    "model": "anketa.attribute",
+    "pk": 20,
+    "fields": {
+        "type": 1,
+        "parent": null,
+        "name": "\u041c\u0435\u0434\u0438\u0446\u0438\u043d\u0441\u043a\u0438\u0439 \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442"
+    }
+},
+{
+    "model": "anketa.attribute",
+    "pk": 21,
+    "fields": {
+        "type": 1,
+        "parent": null,
+        "name": "\u0422\u0438\u043f \u0441\u0432\u044f\u0437\u0438"
+    }
+},
+{
+    "model": "anketa.attribute",
+    "pk": 22,
+    "fields": {
+        "type": 1,
+        "parent": null,
+        "name": "\u0422\u0438\u043f \u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c\u043d\u043e\u0433\u043e \u0443\u0447\u0440\u0435\u0436\u0434\u0435\u043d\u0438\u044f"
+    }
+},
+{
+    "model": "anketa.attribute",
+    "pk": 23,
+    "fields": {
+        "type": 1,
+        "parent": null,
+        "name": "\u0421\u0440\u043e\u043a \u043e\u0431\u0443\u0447\u0435\u043d\u0438\u044f"
+    }
+},
+{
+    "model": "anketa.attribute",
+    "pk": 24,
+    "fields": {
+        "type": 1,
+        "parent": null,
+        "name": "\u0422\u0438\u043f \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430 \u043e\u0431 \u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u043d\u0438\u0438"
+    }
+},
+{
+    "model": "anketa.attribute",
+    "pk": 25,
+    "fields": {
+        "type": 1,
+        "parent": null,
+        "name": "\u0422\u0438\u043f \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430 \u0421\u041d\u0418\u041b\u0421"
+    }
+},
+{
+    "model": "anketa.attribute",
+    "pk": 26,
+    "fields": {
+        "type": 1,
+        "parent": null,
+        "name": "\u0418\u043d\u043e\u0441\u0442\u0440\u0430\u043d\u043d\u044b\u0439 \u044f\u0437\u044b\u043a"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 1,
+    "fields": {
+        "attribute": 1,
+        "value": "ork"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 2,
+    "fields": {
+        "attribute": 2,
+        "value": "\u0420\u0424"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 3,
+    "fields": {
+        "attribute": 26,
+        "value": "\u0410\u043d\u0433\u043b\u0438\u0439\u0441\u043a\u0438\u0439"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 4,
+    "fields": {
+        "attribute": 4,
+        "value": "\u0411\u0430\u043a\u0430\u043b\u0430\u0432\u0440"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 5,
+    "fields": {
+        "attribute": 5,
+        "value": "\u041f\u043e\u0434\u0430\u043d\u043d\u044b\u0439"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 6,
+    "fields": {
+        "attribute": 24,
+        "value": "\u0410\u0442\u0442\u0435\u0441\u0442\u0430\u0442"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 7,
+    "fields": {
+        "attribute": 7,
+        "value": "\u041c\u0411\u041e\u0423 \u0421\u041e\u0428 \u211631 \u041c\u041e \u0413\u043e\u0440\u043e\u0434 \u042f\u043a\u0443\u0442\u0441\u043a"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 8,
+    "fields": {
+        "attribute": 1,
+        "value": "\u0421\u0430\u0445\u0430"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 9,
+    "fields": {
+        "attribute": 26,
+        "value": "\u041d\u0435\u043c\u0435\u0446\u043a\u0438\u0439"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 10,
+    "fields": {
+        "attribute": 26,
+        "value": "\u0424\u0440\u0430\u043d\u0446\u0443\u0437\u043a\u0438\u0439"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 11,
+    "fields": {
+        "attribute": 26,
+        "value": "\u041a\u0438\u0442\u0430\u0439\u0441\u043a\u0438\u0439"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 12,
+    "fields": {
+        "attribute": 5,
+        "value": "\u041f\u043e\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\u043d\u044b\u0439"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 13,
+    "fields": {
+        "attribute": 5,
+        "value": "\u042d\u043a\u0441\u043f\u043e\u0440\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u044b\u0439"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 14,
+    "fields": {
+        "attribute": 5,
+        "value": "\u0410\u043d\u0443\u043b\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u044b\u0439"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 15,
+    "fields": {
+        "attribute": 1,
+        "value": "\u0420\u0443\u0441\u0441\u043a\u0438\u0439"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 16,
+    "fields": {
+        "attribute": 24,
+        "value": "\u0414\u0438\u043f\u043b\u043e\u043c"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 17,
+    "fields": {
+        "attribute": 7,
+        "value": "\u041c\u0443\u0445\u043e\u0441\u0440\u0430\u043d\u0441\u043a\u0438\u0439 \u0443\u043d\u0438\u0432\u0435\u0440"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 18,
+    "fields": {
+        "attribute": 7,
+        "value": "\u041c\u041e\u0423 \u0421\u041e\u0428 \u21167 \u0433.\u042f\u043a\u0443\u0442\u0441\u043a"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 19,
+    "fields": {
+        "attribute": 7,
+        "value": "\u0421\u041e\u0428 \u0442\u0443\u0440\u0443\u043a\u0442\u0438\u043d\u0441\u043a\u0430\u044f \u044f \u0435\u0431\u0443"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 20,
+    "fields": {
+        "attribute": 7,
+        "value": "\u041c\u041e\u0423 \u0421\u041e\u0428 \u211617 \u041c\u041e \u0413\u043e\u0440\u043e\u0434 \u042f\u043a\u0443\u0442\u0441\u043a"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 22,
+    "fields": {
+        "attribute": 8,
+        "value": "\u0421\u041e\u041e"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 23,
+    "fields": {
+        "attribute": 8,
+        "value": "\u041d\u041f\u041e"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 24,
+    "fields": {
+        "attribute": 8,
+        "value": "\u0412\u041f\u041e"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 26,
+    "fields": {
+        "attribute": 8,
+        "value": "\u0421\u041f\u041e"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 27,
+    "fields": {
+        "attribute": 7,
+        "value": "\u041f\u0435\u0447\u0435\u043d\u044c"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 34,
+    "fields": {
+        "attribute": 13,
+        "value": "\u0414\u043e\u043c\u0430\u0448\u043d\u0438\u0439 \u0442\u0435\u043b\u0435\u0444\u043e\u043d"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 35,
+    "fields": {
+        "attribute": 13,
+        "value": "\u0420\u0430\u0431\u043e\u0447\u0438\u0439 \u0442\u0435\u043b\u0435\u0444\u043e\u043d"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 37,
+    "fields": {
+        "attribute": 13,
+        "value": "\u043c\u043e\u0431\u0438\u043b\u044c\u043d\u044b\u0439"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 39,
+    "fields": {
+        "attribute": 13,
+        "value": "\u0410\u0434\u0440\u0435\u0441 \u0444\u0430\u043a\u0442\u0438\u0447\u0435\u0441\u043a\u0438\u0439"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 43,
+    "fields": {
+        "attribute": 13,
+        "value": "vk-id"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 44,
+    "fields": {
+        "attribute": 6,
+        "value": "\u041f\u0430\u0441\u043f\u043e\u0440\u0442"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 45,
+    "fields": {
+        "attribute": 20,
+        "value": "\u0421\u041d\u0418\u041b\u0421"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 54,
+    "fields": {
+        "attribute": 14,
+        "value": "45"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 57,
+    "fields": {
+        "attribute": 1,
+        "value": "\u0422\u0430\u0442\u0430\u0440"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 58,
+    "fields": {
+        "attribute": 15,
+        "value": "\u041a\u0430\u043f\u0438\u0442\u0430\u043d"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 59,
+    "fields": {
+        "attribute": 15,
+        "value": "\u0420\u044f\u0434\u043e\u0432\u043e\u0439"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 60,
+    "fields": {
+        "attribute": 16,
+        "value": "\u0424\u0430\u043a\u0442\u0438\u0447\u0435\u0441\u043a\u0438\u0439"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 61,
+    "fields": {
+        "attribute": 16,
+        "value": "\u041f\u043e \u043f\u0440\u043e\u043f\u0438\u0441\u043a\u0435"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 62,
+    "fields": {
+        "attribute": 17,
+        "value": "\u041c\u0430\u0442\u0435\u043c\u0430\u0442\u0438\u043a\u0430"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 63,
+    "fields": {
+        "attribute": 17,
+        "value": "\u0420\u0443\u0441\u0441\u043a\u0438\u0439 \u044f\u0437\u044b\u043a"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 64,
+    "fields": {
+        "attribute": 18,
+        "value": "\u0415\u0413\u042d"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 65,
+    "fields": {
+        "attribute": 21,
+        "value": "\u041e\u0442\u0435\u0446"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 66,
+    "fields": {
+        "attribute": 21,
+        "value": "\u041c\u0430\u0442\u044c"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 67,
+    "fields": {
+        "attribute": 2,
+        "value": "US"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 68,
+    "fields": {
+        "attribute": 2,
+        "value": "EU"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 69,
+    "fields": {
+        "attribute": 14,
+        "value": "123123"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 72,
+    "fields": {
+        "attribute": 15,
+        "value": "\u0413\u043b\u043e\u0431\u0430\u043b\u042d\u043b\u0438\u0442"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 76,
+    "fields": {
+        "attribute": 14,
+        "value": "\u0432\u0430\u043f"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 77,
+    "fields": {
+        "attribute": 4,
+        "value": "\u041c\u0430\u0433\u0438\u0441\u0442\u0440"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 82,
+    "fields": {
+        "attribute": 5,
+        "value": "\u0420\u0435\u043a\u043e\u043c\u0435\u043d\u0434\u043e\u0432\u0430\u043d\u043d\u044b\u0439 \u043a \u0437\u0430\u0447\u0438\u0441\u043b\u0435\u043d\u0438\u044e"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 83,
+    "fields": {
+        "attribute": 5,
+        "value": "\u0417\u0430\u0447\u0438\u0441\u043b\u0435\u043d\u043d\u044b\u0439"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 84,
+    "fields": {
+        "attribute": 22,
+        "value": "\u0412\u0423\u0417"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 85,
+    "fields": {
+        "attribute": 22,
+        "value": "\u0421\u0421\u0423\u0417"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 86,
+    "fields": {
+        "attribute": 23,
+        "value": "4 \u0433\u043e\u0434\u0430"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 87,
+    "fields": {
+        "attribute": 23,
+        "value": "5 \u043b\u0435\u0442"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 88,
+    "fields": {
+        "attribute": 23,
+        "value": "6 \u043b\u0435\u0442"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 89,
+    "fields": {
+        "attribute": 23,
+        "value": "3.2 \u0433\u043e\u0434\u0430"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 90,
+    "fields": {
+        "attribute": 22,
+        "value": "\u0418\u043d\u0441\u0442\u0438\u0442\u0443\u0442"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 91,
+    "fields": {
+        "attribute": 22,
+        "value": "\u0424\u0430\u043a\u0443\u043b\u044c\u0442\u0435\u0442"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 92,
+    "fields": {
+        "attribute": 18,
+        "value": "\u0412\u0441\u0442\u0443\u043f\u0438\u0442\u0435\u043b\u044c\u043d\u044b\u0439"
+    }
+},
+{
+    "model": "anketa.attrvalue",
+    "pk": 93,
+    "fields": {
+        "attribute": 25,
+        "value": "\u0421\u041d\u0418\u041b\u0421"
+    }
+},
+{
+    "model": "anketa.person",
+    "pk": 1,
+    "fields": {
+        "fullname": "\u041d\u043e\u0432\u0433\u043e\u0440\u043e\u0434\u043e\u0432\u0422\u044d\u0441\u0442\u0421\u043c\u0435\u043d\u044b\u0418\u043c\u0435\u043d\u04381 \u0422\u0438\u0442 \u041f\u0435\u0442\u0440\u043e\u0432\u0438\u0447",
+        "mname": "\u041f\u0435\u0442\u0440\u043e\u0432\u0438\u0447",
+        "birthdate": "1992-03-11",
+        "fname": "\u0422\u0438\u0442",
+        "sex": "\u0416",
+        "sname": "\u041d\u043e\u0432\u0433\u043e\u0440\u043e\u0434\u043e\u0432\u0422\u044d\u0441\u0442\u0421\u043c\u0435\u043d\u044b\u0418\u043c\u0435\u043d\u04381"
+    }
+},
+{
+    "model": "anketa.person",
+    "pk": 2,
+    "fields": {
+        "fullname": "\u0410\u043d\u0443\u0444\u0440\u0438\u0435\u0432 \u041d\u0438\u043a\u043e\u043b\u0430\u0439 \u0410\u043d\u0430\u0442\u043e\u043b\u044c\u0435\u0432\u0438\u0447",
+        "mname": "\u0410\u043d\u0430\u0442\u043e\u043b\u044c\u0435\u0432\u0438\u0447",
+        "birthdate": "1994-03-12",
+        "fname": "\u041d\u0438\u043a\u043e\u043b\u0430\u0439",
+        "sex": "\u041c",
+        "sname": "\u0410\u043d\u0443\u0444\u0440\u0438\u0435\u0432"
+    }
+},
+{
+    "model": "anketa.person",
+    "pk": 3,
+    "fields": {
+        "fullname": "\u0418\u0432\u0430\u043d\u043e\u0432 \u0418\u0432\u0430\u043d \u0418\u0432\u0430\u043d\u043e\u0432\u0438\u0447",
+        "mname": "\u0418\u0432\u0430\u043d\u043e\u0432\u0438\u0447",
+        "birthdate": "1997-03-12",
+        "fname": "\u0418\u0432\u0430\u043d",
+        "sex": "\u041c",
+        "sname": "\u0418\u0432\u0430\u043d\u043e\u0432"
+    }
+},
+{
+    "model": "anketa.person",
+    "pk": 4,
+    "fields": {
+        "fullname": "\u0421\u0442\u0440\u0443\u0447\u043a\u043e\u0432 \u0412\u0430\u0441\u0438\u043b\u0438\u0439 \u0427\u0435\u0435\u0432\u0438\u0447",
+        "mname": "\u0427\u0435\u0435\u0432\u0438\u0447",
+        "birthdate": "1990-03-16",
+        "fname": "\u0412\u0430\u0441\u0438\u043b\u0438\u0439",
+        "sex": "\u041c",
+        "sname": "\u0421\u0442\u0440\u0443\u0447\u043a\u043e\u0432"
+    }
+},
+{
+    "model": "anketa.person",
+    "pk": 5,
+    "fields": {
+        "fullname": "\u0411\u043e\u0431\u0431 \u0420\u043e\u043c\u0430\u043d \u0415\u0432\u0433\u0435\u043d\u044c\u0435\u0432\u0438\u0447",
+        "mname": "\u0415\u0432\u0433\u0435\u043d\u044c\u0435\u0432\u0438\u0447",
+        "birthdate": "1992-09-02",
+        "fname": "\u0420\u043e\u043c\u0430\u043d",
+        "sex": "\u041c",
+        "sname": "\u0411\u043e\u0431\u0431"
+    }
+},
+{
+    "model": "anketa.person",
+    "pk": 6,
+    "fields": {
+        "fullname": "\u0421\u0435\u0440\u0433\u0435\u0435\u0432 \u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440 \u0421\u0435\u0440\u0433\u0435\u0435\u0432\u0438\u0447",
+        "mname": "\u0421\u0435\u0440\u0433\u0435\u0435\u0432\u0438\u0447",
+        "birthdate": "1991-05-10",
+        "fname": "\u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440",
+        "sex": "\u041c",
+        "sname": "\u0421\u0435\u0440\u0433\u0435\u0435\u0432"
+    }
+},
+{
+    "model": "anketa.person",
+    "pk": 7,
+    "fields": {
+        "fullname": "\u0420\u0435\u0431\u0440\u043e\u0432 \u0410\u043d\u0434\u0440\u0435\u0439 \u0410\u043d\u0434\u0440\u0435\u0435\u0432\u0438\u0447",
+        "mname": "\u0410\u043d\u0434\u0440\u0435\u0435\u0432\u0438\u0447",
+        "birthdate": "1993-11-03",
+        "fname": "\u0410\u043d\u0434\u0440\u0435\u0439",
+        "sex": "\u041c",
+        "sname": "\u0420\u0435\u0431\u0440\u043e\u0432"
+    }
+},
+{
+    "model": "anketa.person",
+    "pk": 8,
+    "fields": {
+        "fullname": "\u041f\u0443\u0442\u0438\u043d \u041f\u0443\u0442\u0438\u043d \u041f\u0443\u0442\u0438\u043d",
+        "mname": "\u041f\u0443\u0442\u0438\u043d",
+        "birthdate": "2016-05-14",
+        "fname": "\u041f\u0443\u0442\u0438\u043d",
+        "sex": "\u041c",
+        "sname": "\u041f\u0443\u0442\u0438\u043d"
+    }
+},
+{
+    "model": "anketa.person",
+    "pk": 9,
+    "fields": {
+        "fullname": "\u0418\u0432\u0430\u043d\u043e\u0432  \u0418\u0432\u0430\u043d \u0418\u0432\u0430\u043d\u043e",
+        "mname": "\u0418\u0432\u0430\u043d\u043e",
+        "birthdate": "2016-05-14",
+        "fname": "\u0418\u0432\u0430\u043d",
+        "sex": "\u041c",
+        "sname": "\u0418\u0432\u0430\u043d\u043e\u0432 "
+    }
+},
+{
+    "model": "anketa.person",
+    "pk": 10,
+    "fields": {
+        "fullname": "\u0418\u0432\u0430\u043d\u043e\u0432 \u0418\u0432\u0430\u043d",
+        "mname": "\u0418\u0432\u0430\u043d",
+        "birthdate": "2000-11-11",
+        "fname": "",
+        "sex": "\u041c",
+        "sname": "\u0418\u0432\u0430\u043d\u043e\u0432"
+    }
+},
+{
+    "model": "anketa.person",
+    "pk": 11,
+    "fields": {
+        "fullname": "\u041f\u0443\u0442\u0438\u043d \u041f\u0443\u0442\u0438\u043d \u041f\u0443\u0442\u0438\u043d",
+        "mname": "\u041f\u0443\u0442\u0438\u043d",
+        "birthdate": "2000-11-11",
+        "fname": "\u041f\u0443\u0442\u0438\u043d",
+        "sex": "\u041c",
+        "sname": "\u041f\u0443\u0442\u0438\u043d"
+    }
+},
+{
+    "model": "anketa.person",
+    "pk": 12,
+    "fields": {
+        "fullname": "\u043c\u0435\u0434\u0432\u0435\u0434\u0435\u0432 \u043c\u0435\u0434\u0432\u0435\u0434\u0435\u0432 \u043c\u0435\u0434\u0432\u0435\u0434\u0435\u0432",
+        "mname": "\u043c\u0435\u0434\u0432\u0435\u0434\u0435\u0432",
+        "birthdate": "2000-11-11",
+        "fname": "\u043c\u0435\u0434\u0432\u0435\u0434\u0435\u0432",
+        "sex": "\u041c",
+        "sname": "\u043c\u0435\u0434\u0432\u0435\u0434\u0435\u0432"
+    }
+},
+{
+    "model": "anketa.person",
+    "pk": 13,
+    "fields": {
+        "fullname": "\u041d\u043e\u0432\u0433\u043e\u0440\u043e\u0434\u043e\u0432 \u0422\u0438\u0442 \u041f\u0435\u0442\u0440\u043e\u0432\u0438\u0447",
+        "mname": "\u041f\u0435\u0442\u0440\u043e\u0432\u0438\u0447",
+        "birthdate": "1992-06-11",
+        "fname": "\u0422\u0438\u0442",
+        "sex": "\u041c",
+        "sname": "\u041d\u043e\u0432\u0433\u043e\u0440\u043e\u0434\u043e\u0432"
+    }
+},
+{
+    "model": "anketa.person",
+    "pk": 14,
+    "fields": {
+        "fullname": "\u0444\u0430\u043c\u0438\u043b\u0438\u044f \u0418\u043c\u044f \u041e\u0442\u0447\u0435\u0441\u0442\u0432\u043e",
+        "mname": "\u041e\u0442\u0447\u0435\u0441\u0442\u0432\u043e",
+        "birthdate": "2007-05-15",
+        "fname": "\u0418\u043c\u044f",
+        "sex": "\u041c",
+        "sname": "\u0444\u0430\u043c\u0438\u043b\u0438\u044f"
+    }
+},
+{
+    "model": "anketa.person",
+    "pk": 15,
+    "fields": {
+        "fullname": "\u0444\u0430\u043c\u0438\u043b\u0438\u044f \u0418\u043c\u044f \u041e\u0442\u0447\u0435\u0441\u0442\u0432\u043e",
+        "mname": "\u041e\u0442\u0447\u0435\u0441\u0442\u0432\u043e",
+        "birthdate": "2007-05-15",
+        "fname": "\u0418\u043c\u044f",
+        "sex": "\u041c",
+        "sname": "\u0444\u0430\u043c\u0438\u043b\u0438\u044f"
+    }
+},
+{
+    "model": "anketa.person",
+    "pk": 16,
+    "fields": {
+        "fullname": "\u0444\u0430\u043c\u0438\u043b\u0438\u044f \u0418\u043c\u044f \u041e\u0442\u0447\u0435\u0441\u0442\u0432\u043e",
+        "mname": "\u041e\u0442\u0447\u0435\u0441\u0442\u0432\u043e",
+        "birthdate": "2007-05-15",
+        "fname": "\u0418\u043c\u044f",
+        "sex": "\u041c",
+        "sname": "\u0444\u0430\u043c\u0438\u043b\u0438\u044f"
+    }
+},
+{
+    "model": "anketa.person",
+    "pk": 17,
+    "fields": {
+        "fullname": "\u0444\u0430\u043c\u0438\u043b\u0438\u044f \u0418\u043c\u044f \u041e\u0442\u0447\u0435\u0441\u0442\u0432\u043e",
+        "mname": "\u041e\u0442\u0447\u0435\u0441\u0442\u0432\u043e",
+        "birthdate": "2000-11-11",
+        "fname": "\u0418\u043c\u044f",
+        "sex": "\u041c",
+        "sname": "\u0444\u0430\u043c\u0438\u043b\u0438\u044f"
+    }
+},
+{
+    "model": "anketa.person",
+    "pk": 18,
+    "fields": {
+        "fullname": "familiyaB imyaB ot4estvoB",
+        "mname": "ot4estvoB",
+        "birthdate": "2000-11-18",
+        "fname": "imyaB",
+        "sex": "\u041c",
+        "sname": "familiyaB"
+    }
+},
+{
+    "model": "anketa.person",
+    "pk": 19,
+    "fields": {
+        "fullname": "\u0441 \u0441 \u0441",
+        "mname": "\u0441",
+        "birthdate": "2017-05-01",
+        "fname": "\u0441",
+        "sex": "\u041c",
+        "sname": "\u0441"
+    }
+},
+{
+    "model": "anketa.person",
+    "pk": 20,
+    "fields": {
+        "fullname": "\u0418\u0432\u0430\u043d\u043e\u0432 \u0410\u0439\u0430\u0430\u043b \u0421\u0435\u043c\u0435\u043d\u043e\u0432\u0438\u0447",
+        "mname": "\u0421\u0435\u043c\u0435\u043d\u043e\u0432\u0438\u0447",
+        "birthdate": "1992-07-11",
+        "fname": "\u0410\u0439\u0430\u0430\u043b",
+        "sex": "\u041c",
+        "sname": "\u0418\u0432\u0430\u043d\u043e\u0432"
+    }
+},
+{
+    "model": "anketa.person",
+    "pk": 21,
+    "fields": {
+        "fullname": "\u0410\u043b\u0435\u043a\u0441\u0435\u0435\u0432 \u041c\u0438\u0445\u0430\u0438\u043b \u0410\u043d\u0434\u0440\u0435\u0435\u0432\u0438\u0447",
+        "mname": "\u0410\u043d\u0434\u0440\u0435\u0435\u0432\u0438\u0447",
+        "birthdate": "1992-01-01",
+        "fname": "\u041c\u0438\u0445\u0430\u0438\u043b",
+        "sex": "\u041c",
+        "sname": "\u0410\u043b\u0435\u043a\u0441\u0435\u0435\u0432"
+    }
+},
+{
+    "model": "anketa.person",
+    "pk": 22,
+    "fields": {
+        "fullname": "\u0444\u0430\u043c\u0438\u043b\u0438\u044f \u0438\u043c\u044f \u043c\u0430\u0442\u0435\u0440\u0438",
+        "mname": "\u043c\u0430\u0442\u0435\u0440\u0438",
+        "birthdate": "2007-05-15",
+        "fname": "\u0438\u043c\u044f",
+        "sex": "\u041c",
+        "sname": "\u0444\u0430\u043c\u0438\u043b\u0438\u044f"
+    }
+},
+{
+    "model": "anketa.person",
+    "pk": 23,
+    "fields": {
+        "fullname": "\u0444\u0430\u043c\u0438\u043b\u0438\u044f \u0438\u043c\u044f \u0431\u0430\u0442\u0438",
+        "mname": "\u0431\u0430\u0442\u0438",
+        "birthdate": "2007-05-15",
+        "fname": "\u0438\u043c\u044f",
+        "sex": "\u041c",
+        "sname": "\u0444\u0430\u043c\u0438\u043b\u0438\u044f"
+    }
+},
+{
+    "model": "anketa.abiturient",
+    "pk": 1,
+    "fields": {
+        "birthplace": "\u0433.\u042f\u043a\u0443\u0442\u0441\u043a",
+        "info_progress": "000000",
+        "nationality": 8,
+        "token": "",
+        "user": [
+            "a"
+        ],
+        "foreign_lang": 10,
+        "hostel": true,
+        "citizenship": 2,
+        "work_duration": null
+    }
+},
+{
+    "model": "anketa.abiturient",
+    "pk": 2,
+    "fields": {
+        "birthplace": "\u0441.\u0420\u0430\u0437\u0432\u0438\u043b\u043a\u0430",
+        "info_progress": "000000",
+        "nationality": 15,
+        "token": "",
+        "user": [
+            "kolya"
+        ],
+        "foreign_lang": 3,
+        "hostel": true,
+        "citizenship": 67,
+        "work_duration": null
+    }
+},
+{
+    "model": "anketa.abiturient",
+    "pk": 3,
+    "fields": {
+        "birthplace": "\u0441. \u0418\u0432\u0430\u043d\u043e\u0432\u043e",
+        "info_progress": null,
+        "nationality": 8,
+        "token": "",
+        "user": [
+            "ivan"
+        ],
+        "foreign_lang": 3,
+        "hostel": true,
+        "citizenship": 2,
+        "work_duration": null
+    }
+},
+{
+    "model": "anketa.abiturient",
+    "pk": 4,
+    "fields": {
+        "birthplace": "\u0433.\u042f\u043a\u0443\u0442\u0441\u043a",
+        "info_progress": null,
+        "nationality": 8,
+        "token": "",
+        "user": [
+            "baska"
+        ],
+        "foreign_lang": 10,
+        "hostel": false,
+        "citizenship": 2,
+        "work_duration": null
+    }
+},
+{
+    "model": "anketa.abiturient",
+    "pk": 5,
+    "fields": {
+        "birthplace": "\u0433.\u0418\u0440\u043a\u0443\u0442\u0441\u043a",
+        "info_progress": null,
+        "nationality": 8,
+        "token": "",
+        "user": [
+            "roma"
+        ],
+        "foreign_lang": 9,
+        "hostel": true,
+        "citizenship": 2,
+        "work_duration": null
+    }
+},
+{
+    "model": "anketa.abiturient",
+    "pk": 6,
+    "fields": {
+        "birthplace": "\u0433.\u042f\u043a\u0443\u0442\u0441\u043a",
+        "info_progress": null,
+        "nationality": 8,
+        "token": "",
+        "user": [
+            "4ino"
+        ],
+        "foreign_lang": 3,
+        "hostel": false,
+        "citizenship": 2,
+        "work_duration": null
+    }
+},
+{
+    "model": "anketa.abiturient",
+    "pk": 7,
+    "fields": {
+        "birthplace": "\u0423\u043d\u0438\u0442\u0430\u0437 \u0431\u043b\u044f\u0442\u044c",
+        "info_progress": null,
+        "nationality": 8,
+        "token": null,
+        "user": [
+            "st-pi"
+        ],
+        "foreign_lang": 3,
+        "hostel": true,
+        "citizenship": 2,
+        "work_duration": null
+    }
+},
+{
+    "model": "anketa.abiturient",
+    "pk": 13,
+    "fields": {
+        "birthplace": "\u042f\u043a\u0443\u0442\u0441\u043a",
+        "info_progress": "000000",
+        "nationality": 8,
+        "token": null,
+        "user": [
+            "student1"
+        ],
+        "foreign_lang": 11,
+        "hostel": true,
+        "citizenship": 2,
+        "work_duration": null
+    }
+},
+{
+    "model": "anketa.abiturient",
+    "pk": 18,
+    "fields": {
+        "birthplace": "",
+        "info_progress": "",
+        "nationality": 15,
+        "token": "",
+        "user": [
+            "b"
+        ],
+        "foreign_lang": null,
+        "hostel": false,
+        "citizenship": 67,
+        "work_duration": ""
+    }
+},
+{
+    "model": "anketa.abiturient",
+    "pk": 19,
+    "fields": {
+        "birthplace": null,
+        "info_progress": null,
+        "nationality": null,
+        "token": null,
+        "user": [
+            "c"
+        ],
+        "foreign_lang": null,
+        "hostel": false,
+        "citizenship": null,
+        "work_duration": null
+    }
+},
+{
+    "model": "anketa.abiturient",
+    "pk": 20,
+    "fields": {
+        "birthplace": null,
+        "info_progress": null,
+        "nationality": null,
+        "token": null,
+        "user": [
+            "test3"
+        ],
+        "foreign_lang": null,
+        "hostel": false,
+        "citizenship": null,
+        "work_duration": null
+    }
+},
+{
+    "model": "anketa.abiturient",
+    "pk": 21,
+    "fields": {
+        "birthplace": "\u043c\u0430\u0440\u0441",
+        "info_progress": "000000",
+        "nationality": 57,
+        "token": null,
+        "user": [
+            "test4"
+        ],
+        "foreign_lang": 11,
+        "hostel": true,
+        "citizenship": 67,
+        "work_duration": null
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 3,
+    "fields": {
+        "appState": 12,
+        "track": true,
+        "withfee": false,
+        "department": 2,
+        "points": 210,
+        "number": 2,
+        "date": "2016-03-12",
+        "priority": "\u0412",
+        "abiturient": 2,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 8,
+    "fields": {
+        "appState": 5,
+        "track": true,
+        "withfee": false,
+        "department": 2,
+        "points": 100,
+        "number": null,
+        "date": "2016-05-09",
+        "priority": "\u0412",
+        "abiturient": 7,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 35,
+    "fields": {
+        "appState": 14,
+        "track": true,
+        "withfee": false,
+        "department": 2,
+        "points": 100,
+        "number": null,
+        "date": "2017-04-01",
+        "priority": "high",
+        "abiturient": 1,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 36,
+    "fields": {
+        "appState": 5,
+        "track": true,
+        "withfee": false,
+        "department": 2,
+        "points": 100,
+        "number": null,
+        "date": "2016-04-01",
+        "priority": "normal",
+        "abiturient": 1,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 37,
+    "fields": {
+        "appState": 5,
+        "track": true,
+        "withfee": false,
+        "department": 2,
+        "points": 100,
+        "number": null,
+        "date": "2017-04-05",
+        "priority": "normal",
+        "abiturient": 1,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 54,
+    "fields": {
+        "appState": 5,
+        "track": false,
+        "withfee": false,
+        "department": 2,
+        "points": 100,
+        "number": null,
+        "date": "2017-05-09",
+        "priority": null,
+        "abiturient": 1,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 55,
+    "fields": {
+        "appState": 14,
+        "track": true,
+        "withfee": false,
+        "department": 2,
+        "points": 100,
+        "number": null,
+        "date": "2017-04-10",
+        "priority": "low",
+        "abiturient": 1,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 57,
+    "fields": {
+        "appState": 14,
+        "track": true,
+        "withfee": false,
+        "department": 2,
+        "points": 100,
+        "number": null,
+        "date": "2017-04-10",
+        "priority": "low",
+        "abiturient": 1,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 58,
+    "fields": {
+        "appState": 14,
+        "track": true,
+        "withfee": false,
+        "department": 2,
+        "points": 100,
+        "number": null,
+        "date": "2017-04-11",
+        "priority": "normal",
+        "abiturient": 1,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 59,
+    "fields": {
+        "appState": 14,
+        "track": true,
+        "withfee": false,
+        "department": 2,
+        "points": 100,
+        "number": null,
+        "date": "2017-04-11",
+        "priority": "\u0421",
+        "abiturient": 1,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 60,
+    "fields": {
+        "appState": 12,
+        "track": true,
+        "withfee": false,
+        "department": 2,
+        "points": 100,
+        "number": null,
+        "date": "2017-04-18",
+        "priority": "\u0412",
+        "abiturient": 1,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 61,
+    "fields": {
+        "appState": 5,
+        "track": false,
+        "withfee": false,
+        "department": 2,
+        "points": 100,
+        "number": null,
+        "date": "2017-05-08",
+        "priority": "\u041d",
+        "abiturient": 1,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 62,
+    "fields": {
+        "appState": 5,
+        "track": true,
+        "withfee": false,
+        "department": 2,
+        "points": 100,
+        "number": null,
+        "date": "2017-05-08",
+        "priority": "\u0421",
+        "abiturient": 1,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 81,
+    "fields": {
+        "appState": 5,
+        "track": false,
+        "withfee": false,
+        "department": 2,
+        "points": 100,
+        "number": null,
+        "date": "2017-05-08",
+        "priority": "\u0421",
+        "abiturient": 1,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 84,
+    "fields": {
+        "appState": 5,
+        "track": false,
+        "withfee": false,
+        "department": 2,
+        "points": 100,
+        "number": null,
+        "date": "2017-05-19",
+        "priority": "\u0412",
+        "abiturient": 1,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 86,
+    "fields": {
+        "appState": 14,
+        "track": true,
+        "withfee": false,
+        "department": 2,
+        "points": 100,
+        "number": null,
+        "date": "2017-05-16",
+        "priority": "\u041d",
+        "abiturient": 1,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 87,
+    "fields": {
+        "appState": 5,
+        "track": true,
+        "withfee": true,
+        "department": 1,
+        "points": 100,
+        "number": null,
+        "date": "2017-11-22",
+        "priority": "\u0421",
+        "abiturient": 20,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 88,
+    "fields": {
+        "appState": 14,
+        "track": true,
+        "withfee": true,
+        "department": 1,
+        "points": 100,
+        "number": null,
+        "date": "2017-11-22",
+        "priority": "\u0421",
+        "abiturient": 20,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 89,
+    "fields": {
+        "appState": 14,
+        "track": true,
+        "withfee": true,
+        "department": 1,
+        "points": 100,
+        "number": null,
+        "date": "2017-11-22",
+        "priority": "\u0421",
+        "abiturient": 20,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 90,
+    "fields": {
+        "appState": 14,
+        "track": true,
+        "withfee": true,
+        "department": 1,
+        "points": 100,
+        "number": null,
+        "date": "2017-11-22",
+        "priority": "\u0421",
+        "abiturient": 20,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 91,
+    "fields": {
+        "appState": 14,
+        "track": true,
+        "withfee": true,
+        "department": 1,
+        "points": 100,
+        "number": null,
+        "date": "2017-11-22",
+        "priority": "\u0421",
+        "abiturient": 20,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 92,
+    "fields": {
+        "appState": 14,
+        "track": true,
+        "withfee": true,
+        "department": 1,
+        "points": 100,
+        "number": null,
+        "date": "2017-11-22",
+        "priority": "\u0421",
+        "abiturient": 20,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 93,
+    "fields": {
+        "appState": 14,
+        "track": true,
+        "withfee": true,
+        "department": 1,
+        "points": 100,
+        "number": null,
+        "date": "2017-11-22",
+        "priority": "\u0421",
+        "abiturient": 20,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 94,
+    "fields": {
+        "appState": 14,
+        "track": true,
+        "withfee": true,
+        "department": 1,
+        "points": 100,
+        "number": null,
+        "date": "2017-11-22",
+        "priority": "\u0421",
+        "abiturient": 20,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 95,
+    "fields": {
+        "appState": 14,
+        "track": true,
+        "withfee": true,
+        "department": 1,
+        "points": 100,
+        "number": null,
+        "date": "2017-11-22",
+        "priority": "\u0421",
+        "abiturient": 20,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 96,
+    "fields": {
+        "appState": 14,
+        "track": true,
+        "withfee": true,
+        "department": 1,
+        "points": 100,
+        "number": null,
+        "date": "2017-11-22",
+        "priority": "\u0421",
+        "abiturient": 20,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 97,
+    "fields": {
+        "appState": 14,
+        "track": true,
+        "withfee": true,
+        "department": 1,
+        "points": 100,
+        "number": null,
+        "date": "2017-11-22",
+        "priority": "\u0421",
+        "abiturient": 20,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 98,
+    "fields": {
+        "appState": 14,
+        "track": true,
+        "withfee": true,
+        "department": 1,
+        "points": 100,
+        "number": null,
+        "date": "2017-11-22",
+        "priority": "\u0421",
+        "abiturient": 20,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 99,
+    "fields": {
+        "appState": 14,
+        "track": true,
+        "withfee": true,
+        "department": 1,
+        "points": 100,
+        "number": null,
+        "date": "2017-11-22",
+        "priority": "\u0421",
+        "abiturient": 20,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 100,
+    "fields": {
+        "appState": 14,
+        "track": true,
+        "withfee": true,
+        "department": 1,
+        "points": 100,
+        "number": null,
+        "date": "2017-11-22",
+        "priority": "\u0421",
+        "abiturient": 20,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 101,
+    "fields": {
+        "appState": 14,
+        "track": true,
+        "withfee": true,
+        "department": 1,
+        "points": 100,
+        "number": null,
+        "date": "2017-11-22",
+        "priority": "\u0421",
+        "abiturient": 20,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 102,
+    "fields": {
+        "appState": 12,
+        "track": true,
+        "withfee": true,
+        "department": 1,
+        "points": 100,
+        "number": null,
+        "date": "2017-11-22",
+        "priority": "\u0412",
+        "abiturient": 21,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 103,
+    "fields": {
+        "appState": 12,
+        "track": true,
+        "withfee": true,
+        "department": 1,
+        "points": 100,
+        "number": null,
+        "date": "2017-12-04",
+        "priority": "\u041d",
+        "abiturient": 21,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.application",
+    "pk": 104,
+    "fields": {
+        "appState": 5,
+        "track": true,
+        "withfee": true,
+        "department": 4,
+        "points": 100,
+        "number": null,
+        "date": "2018-03-25",
+        "priority": "\u0412",
+        "abiturient": 1,
+        "budget": true
+    }
+},
+{
+    "model": "anketa.address",
+    "pk": 9,
+    "fields": {
+        "adrs_type_same": false,
+        "street": 1,
+        "abiturient": 7,
+        "flat": "75",
+        "zipcode": "",
+        "adrs_type": 61,
+        "house": "6",
+        "building": "2"
+    }
+},
+{
+    "model": "anketa.address",
+    "pk": 10,
+    "fields": {
+        "adrs_type_same": false,
+        "street": 1,
+        "abiturient": 7,
+        "flat": "",
+        "zipcode": "",
+        "adrs_type": 39,
+        "house": "",
+        "building": ""
+    }
+},
+{
+    "model": "anketa.address",
+    "pk": 11,
+    "fields": {
+        "adrs_type_same": false,
+        "street": 1,
+        "abiturient": 13,
+        "flat": "",
+        "zipcode": "",
+        "adrs_type": 61,
+        "house": "",
+        "building": ""
+    }
+},
+{
+    "model": "anketa.address",
+    "pk": 12,
+    "fields": {
+        "adrs_type_same": false,
+        "street": 1,
+        "abiturient": 13,
+        "flat": "",
+        "zipcode": "",
+        "adrs_type": 39,
+        "house": "",
+        "building": ""
+    }
+},
+{
+    "model": "anketa.address",
+    "pk": 13,
+    "fields": {
+        "adrs_type_same": false,
+        "street": 1,
+        "abiturient": 1,
+        "flat": "",
+        "zipcode": "",
+        "adrs_type": 61,
+        "house": "",
+        "building": ""
+    }
+},
+{
+    "model": "anketa.address",
+    "pk": 14,
+    "fields": {
+        "adrs_type_same": false,
+        "street": 1,
+        "abiturient": 1,
+        "flat": "",
+        "zipcode": "",
+        "adrs_type": 39,
+        "house": "",
+        "building": ""
+    }
+},
+{
+    "model": "anketa.contacts",
+    "pk": 5,
+    "fields": {
+        "contact_type": 43,
+        "value": "48484844848",
+        "person": 9
+    }
+},
+{
+    "model": "anketa.contacts",
+    "pk": 6,
+    "fields": {
+        "contact_type": 34,
+        "value": "89141454949",
+        "person": 8
+    }
+},
+{
+    "model": "anketa.contacts",
+    "pk": 10,
+    "fields": {
+        "contact_type": 34,
+        "value": "48484844848",
+        "person": 10
+    }
+},
+{
+    "model": "anketa.contacts",
+    "pk": 11,
+    "fields": {
+        "contact_type": 34,
+        "value": "89141454949",
+        "person": 11
+    }
+},
+{
+    "model": "anketa.contacts",
+    "pk": 12,
+    "fields": {
+        "contact_type": 34,
+        "value": "12313545",
+        "person": 12
+    }
+},
+{
+    "model": "anketa.contacts",
+    "pk": 15,
+    "fields": {
+        "contact_type": 37,
+        "value": "12345678912",
+        "person": 2
+    }
+},
+{
+    "model": "anketa.contacts",
+    "pk": 16,
+    "fields": {
+        "contact_type": 43,
+        "value": "\u0434\u0449\u0434\u0449\u044b\u0440\u0444",
+        "person": 2
+    }
+},
+{
+    "model": "anketa.contacts",
+    "pk": 18,
+    "fields": {
+        "contact_type": 34,
+        "value": "88005553535",
+        "person": 14
+    }
+},
+{
+    "model": "anketa.contacts",
+    "pk": 20,
+    "fields": {
+        "contact_type": 34,
+        "value": "88005553535",
+        "person": 15
+    }
+},
+{
+    "model": "anketa.contacts",
+    "pk": 22,
+    "fields": {
+        "contact_type": 34,
+        "value": "88005553535",
+        "person": 16
+    }
+},
+{
+    "model": "anketa.contacts",
+    "pk": 23,
+    "fields": {
+        "contact_type": 43,
+        "value": "154654",
+        "person": 13
+    }
+},
+{
+    "model": "anketa.contacts",
+    "pk": 24,
+    "fields": {
+        "contact_type": 34,
+        "value": "88005553535",
+        "person": 17
+    }
+},
+{
+    "model": "anketa.contacts",
+    "pk": 25,
+    "fields": {
+        "contact_type": 34,
+        "value": "2321312312",
+        "person": 1
+    }
+},
+{
+    "model": "anketa.contacts",
+    "pk": 26,
+    "fields": {
+        "contact_type": 43,
+        "value": "312312424",
+        "person": 1
+    }
+},
+{
+    "model": "anketa.contacts",
+    "pk": 27,
+    "fields": {
+        "contact_type": 35,
+        "value": "34653465",
+        "person": 1
+    }
+},
+{
+    "model": "anketa.contacts",
+    "pk": 28,
+    "fields": {
+        "contact_type": 34,
+        "value": "3145123",
+        "person": 21
+    }
+},
+{
+    "model": "anketa.contacts",
+    "pk": 29,
+    "fields": {
+        "contact_type": 34,
+        "value": "3231231",
+        "person": 22
+    }
+},
+{
+    "model": "anketa.contacts",
+    "pk": 30,
+    "fields": {
+        "contact_type": 34,
+        "value": "4544123",
+        "person": 23
+    }
+},
+{
+    "model": "anketa.education",
+    "pk": 2,
+    "fields": {
+        "enterDate": "2017-02-09",
+        "doc": 14,
+        "abiturient": 1,
+        "graduationDate": "2018-05-13",
+        "level": 22,
+        "eduOrg": 2
+    }
+},
+{
+    "model": "anketa.education",
+    "pk": 3,
+    "fields": {
+        "enterDate": "2016-09-06",
+        "doc": 23,
+        "abiturient": 21,
+        "graduationDate": "2018-05-13",
+        "level": 22,
+        "eduOrg": 1
+    }
+},
+{
+    "model": "anketa.education",
+    "pk": 4,
+    "fields": {
+        "enterDate": "2010-04-10",
+        "doc": 25,
+        "abiturient": 7,
+        "graduationDate": "2018-05-13",
+        "level": 26,
+        "eduOrg": 1
+    }
+},
+{
+    "model": "anketa.education",
+    "pk": 5,
+    "fields": {
+        "enterDate": "2014-05-12",
+        "doc": 2,
+        "abiturient": 2,
+        "graduationDate": "2018-05-13",
+        "level": 24,
+        "eduOrg": 1
+    }
+},
+{
+    "model": "anketa.docs",
+    "pk": 1,
+    "fields": {
+        "serialno": 1408,
+        "isCopy": true,
+        "number": 228,
+        "abiturient": 1,
+        "docType": 6,
+        "docIssuer": 7,
+        "issueDate": "2006-03-11"
+    }
+},
+{
+    "model": "anketa.docs",
+    "pk": 2,
+    "fields": {
+        "serialno": 1408,
+        "isCopy": false,
+        "number": 228,
+        "abiturient": 2,
+        "docType": 16,
+        "docIssuer": 17,
+        "issueDate": "2006-03-12"
+    }
+},
+{
+    "model": "anketa.docs",
+    "pk": 3,
+    "fields": {
+        "serialno": 8800555,
+        "isCopy": false,
+        "number": 3535,
+        "abiturient": 3,
+        "docType": 6,
+        "docIssuer": 18,
+        "issueDate": "2012-03-12"
+    }
+},
+{
+    "model": "anketa.docs",
+    "pk": 4,
+    "fields": {
+        "serialno": 1408,
+        "isCopy": true,
+        "number": 228,
+        "abiturient": 4,
+        "docType": 6,
+        "docIssuer": 18,
+        "issueDate": "2006-03-16"
+    }
+},
+{
+    "model": "anketa.docs",
+    "pk": 5,
+    "fields": {
+        "serialno": 1408,
+        "isCopy": true,
+        "number": 228,
+        "abiturient": 5,
+        "docType": 6,
+        "docIssuer": 19,
+        "issueDate": "2010-03-22"
+    }
+},
+{
+    "model": "anketa.docs",
+    "pk": 6,
+    "fields": {
+        "serialno": 9806,
+        "isCopy": true,
+        "number": 238889,
+        "abiturient": 6,
+        "docType": 6,
+        "docIssuer": 20,
+        "issueDate": "2009-06-22"
+    }
+},
+{
+    "model": "anketa.docs",
+    "pk": 7,
+    "fields": {
+        "serialno": 123,
+        "isCopy": false,
+        "number": 456465,
+        "abiturient": 2,
+        "docType": 44,
+        "docIssuer": 20,
+        "issueDate": "2016-04-21"
+    }
+},
+{
+    "model": "anketa.docs",
+    "pk": 8,
+    "fields": {
+        "serialno": 2545,
+        "isCopy": false,
+        "number": 358148,
+        "abiturient": 2,
+        "docType": 45,
+        "docIssuer": 17,
+        "issueDate": "2016-04-23"
+    }
+},
+{
+    "model": "anketa.docs",
+    "pk": 9,
+    "fields": {
+        "serialno": 1234,
+        "isCopy": false,
+        "number": 123456,
+        "abiturient": 7,
+        "docType": 44,
+        "docIssuer": 17,
+        "issueDate": "2014-05-19"
+    }
+},
+{
+    "model": "anketa.docs",
+    "pk": 10,
+    "fields": {
+        "serialno": 123456789,
+        "isCopy": false,
+        "number": null,
+        "abiturient": 7,
+        "docType": 93,
+        "docIssuer": 17,
+        "issueDate": null
+    }
+},
+{
+    "model": "anketa.docs",
+    "pk": 13,
+    "fields": {
+        "serialno": 1234,
+        "isCopy": false,
+        "number": 123456,
+        "abiturient": 1,
+        "docType": 44,
+        "docIssuer": 17,
+        "issueDate": "2014-07-16"
+    }
+},
+{
+    "model": "anketa.docs",
+    "pk": 14,
+    "fields": {
+        "serialno": 1234,
+        "isCopy": false,
+        "number": 123456,
+        "abiturient": 1,
+        "docType": 6,
+        "docIssuer": 17,
+        "issueDate": "2017-10-06"
+    }
+},
+{
+    "model": "anketa.docs",
+    "pk": 17,
+    "fields": {
+        "serialno": 12345678901,
+        "isCopy": false,
+        "number": null,
+        "abiturient": 1,
+        "docType": 93,
+        "docIssuer": 17,
+        "issueDate": null
+    }
+},
+{
+    "model": "anketa.docs",
+    "pk": 22,
+    "fields": {
+        "serialno": 4321,
+        "isCopy": false,
+        "number": 654321,
+        "abiturient": 21,
+        "docType": 44,
+        "docIssuer": 20,
+        "issueDate": "2017-01-03"
+    }
+},
+{
+    "model": "anketa.docs",
+    "pk": 23,
+    "fields": {
+        "serialno": 4321,
+        "isCopy": false,
+        "number": 765432,
+        "abiturient": 21,
+        "docType": 6,
+        "docIssuer": 18,
+        "issueDate": "2017-09-06"
+    }
+},
+{
+    "model": "anketa.docs",
+    "pk": 24,
+    "fields": {
+        "serialno": 1234567890,
+        "isCopy": false,
+        "number": null,
+        "abiturient": 21,
+        "docType": 45,
+        "docIssuer": 20,
+        "issueDate": null
+    }
+},
+{
+    "model": "anketa.docs",
+    "pk": 25,
+    "fields": {
+        "serialno": 4444,
+        "isCopy": false,
+        "number": 666666,
+        "abiturient": 7,
+        "docType": 6,
+        "docIssuer": 27,
+        "issueDate": "2012-05-12"
+    }
+},
+{
+    "model": "anketa.docimages",
+    "pk": 1,
+    "fields": {
+        "image": "docimages/1/13/HFE77O1iZ00.jpg",
+        "doc": 13
+    }
+},
+{
+    "model": "anketa.docimages",
+    "pk": 2,
+    "fields": {
+        "image": "docimages/1/13/148727082416115942.jpg",
+        "doc": 13
+    }
+},
+{
+    "model": "anketa.docimages",
+    "pk": 3,
+    "fields": {
+        "image": "docimages/1/13/E-1-1-1.jpg",
+        "doc": 13
+    }
+},
+{
+    "model": "anketa.docimages",
+    "pk": 4,
+    "fields": {
+        "image": "docimages/1/14/15983d5042c69e.jpg",
+        "doc": 14
+    }
+},
+{
+    "model": "anketa.docimages",
+    "pk": 5,
+    "fields": {
+        "image": "docimages/1/14/1468264884125053805.jpg",
+        "doc": 14
+    }
+},
+{
+    "model": "anketa.docimages",
+    "pk": 6,
+    "fields": {
+        "image": "docimages/1/17/sqHJ6au7P1E.jpg",
+        "doc": 17
+    }
+},
+{
+    "model": "anketa.docimages",
+    "pk": 7,
+    "fields": {
+        "image": "docimages/1/17/XmK2KSk1cCI.jpg",
+        "doc": 17
+    }
+},
+{
+    "model": "anketa.docimages",
+    "pk": 8,
+    "fields": {
+        "image": "docimages/7/9/145260408818813946.jpg",
+        "doc": 9
+    }
+},
+{
+    "model": "anketa.exams",
+    "pk": 15,
+    "fields": {
+        "exam_subjects": 62,
+        "points": 96,
+        "abiturient": 7,
+        "exam_examType": 64,
+        "year": 2015,
+        "special": false
+    }
+},
+{
+    "model": "anketa.exams",
+    "pk": 18,
+    "fields": {
+        "exam_subjects": 62,
+        "points": 150,
+        "abiturient": 13,
+        "exam_examType": 64,
+        "year": 2012,
+        "special": true
+    }
+},
+{
+    "model": "anketa.exams",
+    "pk": 19,
+    "fields": {
+        "exam_subjects": 63,
+        "points": 200,
+        "abiturient": 13,
+        "exam_examType": 64,
+        "year": 2013,
+        "special": false
+    }
+},
+{
+    "model": "anketa.exams",
+    "pk": 20,
+    "fields": {
+        "exam_subjects": 62,
+        "points": 151,
+        "abiturient": 1,
+        "exam_examType": 64,
+        "year": 1999,
+        "special": true
+    }
+},
+{
+    "model": "anketa.exams",
+    "pk": 21,
+    "fields": {
+        "exam_subjects": 63,
+        "points": 555,
+        "abiturient": 1,
+        "exam_examType": 64,
+        "year": 1998,
+        "special": false
+    }
+},
+{
+    "model": "anketa.exams",
+    "pk": 22,
+    "fields": {
+        "exam_subjects": 62,
+        "points": 200,
+        "abiturient": 1,
+        "exam_examType": 64,
+        "year": 2016,
+        "special": true
+    }
+},
+{
+    "model": "anketa.exams",
+    "pk": 24,
+    "fields": {
+        "exam_subjects": 63,
+        "points": 100,
+        "abiturient": 1,
+        "exam_examType": 64,
+        "year": 2017,
+        "special": false
+    }
+},
+{
+    "model": "anketa.exams",
+    "pk": 25,
+    "fields": {
+        "exam_subjects": 62,
+        "points": 79,
+        "abiturient": 2,
+        "exam_examType": 64,
+        "year": 2011,
+        "special": true
+    }
+},
+{
+    "model": "anketa.exams",
+    "pk": 26,
+    "fields": {
+        "exam_subjects": 63,
+        "points": 51,
+        "abiturient": 2,
+        "exam_examType": 64,
+        "year": 2011,
+        "special": false
+    }
+},
+{
+    "model": "anketa.exams",
+    "pk": 27,
+    "fields": {
+        "exam_subjects": 63,
+        "points": 100,
+        "abiturient": 2,
+        "exam_examType": 64,
+        "year": 2015,
+        "special": false
+    }
+},
+{
+    "model": "anketa.exams",
+    "pk": 28,
+    "fields": {
+        "exam_subjects": 63,
+        "points": 81,
+        "abiturient": 2,
+        "exam_examType": 92,
+        "year": 2018,
+        "special": false
+    }
+},
+{
+    "model": "anketa.exams",
+    "pk": 29,
+    "fields": {
+        "exam_subjects": 63,
+        "points": 51,
+        "abiturient": 2,
+        "exam_examType": 92,
+        "year": 2016,
+        "special": false
+    }
+},
+{
+    "model": "anketa.exams",
+    "pk": 30,
+    "fields": {
+        "exam_subjects": 62,
+        "points": 20,
+        "abiturient": 2,
+        "exam_examType": 92,
+        "year": 2018,
+        "special": false
+    }
+},
+{
+    "model": "anketa.exams",
+    "pk": 31,
+    "fields": {
+        "exam_subjects": 62,
+        "points": 54,
+        "abiturient": 7,
+        "exam_examType": 92,
+        "year": 2018,
+        "special": true
+    }
+},
+{
+    "model": "anketa.exams",
+    "pk": 32,
+    "fields": {
+        "exam_subjects": 62,
+        "points": 52,
+        "abiturient": 7,
+        "exam_examType": 92,
+        "year": 2017,
+        "special": false
+    }
+},
+{
+    "model": "anketa.exams",
+    "pk": 33,
+    "fields": {
+        "exam_subjects": 63,
+        "points": 200,
+        "abiturient": 7,
+        "exam_examType": 92,
+        "year": 2018,
+        "special": false
+    }
+},
+{
+    "model": "anketa.exams",
+    "pk": 34,
+    "fields": {
+        "exam_subjects": 62,
+        "points": 20,
+        "abiturient": 1,
+        "exam_examType": 92,
+        "year": 2018,
+        "special": false
+    }
+},
+{
+    "model": "anketa.exams",
+    "pk": 35,
+    "fields": {
+        "exam_subjects": 62,
+        "points": 67,
+        "abiturient": 1,
+        "exam_examType": 92,
+        "year": 2018,
+        "special": false
+    }
+},
+{
+    "model": "anketa.eduorg",
+    "pk": 1,
+    "fields": {
+        "head": null,
+        "orgtype": null,
+        "name": "\u0421\u0435\u0432\u0435\u0440\u043e-\u0412\u043e\u0441\u0442\u043e\u0447\u043d\u044b\u0439 \u0444\u0435\u0434\u0435\u0440\u0430\u043b\u044c\u043d\u044b\u0439 \u0443\u043d\u0438\u0432\u0435\u0440\u0441\u0438\u0442\u0435\u0442 \u0438\u043c. \u041c.\u041a. \u0410\u043c\u043c\u043e\u0441\u043e\u0432\u0430"
+    }
+},
+{
+    "model": "anketa.eduorg",
+    "pk": 2,
+    "fields": {
+        "head": 1,
+        "orgtype": null,
+        "name": "\u0418\u041c\u0418"
+    }
+},
+{
+    "model": "anketa.eduorg",
+    "pk": 3,
+    "fields": {
+        "head": 1,
+        "orgtype": null,
+        "name": "\u0424\u0422\u0418"
+    }
+},
+{
+    "model": "anketa.eduorg",
+    "pk": 4,
+    "fields": {
+        "head": null,
+        "orgtype": 84,
+        "name": "\u041e\u041b\u041e\u041b\u041e \u0412\u0423\u0417"
+    }
+},
+{
+    "model": "anketa.eduorg",
+    "pk": 5,
+    "fields": {
+        "head": null,
+        "orgtype": 84,
+        "name": "\u041c\u0413\u0423"
+    }
+},
+{
+    "model": "anketa.eduorg",
+    "pk": 8,
+    "fields": {
+        "head": null,
+        "orgtype": 85,
+        "name": "\u041a\u041e\u041b\u041b\u0415\u0414\u0416 \u0421\u0412\u042f\u0417\u0418 \u0418\u041c. \u0414\u0423\u0414\u041a\u0418\u041d\u0410"
+    }
+},
+{
+    "model": "anketa.eduorg",
+    "pk": 9,
+    "fields": {
+        "head": null,
+        "orgtype": 90,
+        "name": "\u0418\u043d\u0441\u0442\u0438\u0442\u0443\u0442 \u0432 \u0441\u0441\u0443\u0437\u0435"
+    }
+},
+{
+    "model": "anketa.education_prog",
+    "pk": 1,
+    "fields": {
+        "eduorg": 2,
+        "name": "\u0424\u0443\u043d\u0434\u0430\u043c\u0435\u043d\u0442\u0430\u043b\u044c\u043d\u0430\u044f \u0438\u043d\u0444\u043e\u0440\u043c\u0430\u0442\u0438\u043a\u0430 \u0438 \u0438\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u043e\u043d\u043d\u044b\u0435 \u0442\u0435\u0445\u043d\u043e\u043b\u043e\u0433\u0438\u0438",
+        "duration": 87,
+        "qualification": 4
+    }
+},
+{
+    "model": "anketa.education_prog",
+    "pk": 2,
+    "fields": {
+        "eduorg": 2,
+        "name": "\u0418\u043d\u0444\u043e\u0440\u043c\u0430\u0442\u0438\u043a\u0430 \u0438 \u0432\u044b\u0447\u0438\u0441\u043b\u0438\u0442\u0435\u043b\u044c\u043d\u0430\u044f \u0442\u0435\u0445\u043d\u0438\u043a\u0430",
+        "duration": 88,
+        "qualification": 4
+    }
+},
+{
+    "model": "anketa.education_prog",
+    "pk": 3,
+    "fields": {
+        "eduorg": 2,
+        "name": "\u0418\u043d\u0444\u043e\u0440\u043c\u0430\u0442\u0438\u043a\u0430 \u0438 \u0432\u044b\u0447\u0438\u0441\u043b\u0438\u0442\u0435\u043b\u044c\u043d\u0430\u044f \u0442\u0435\u0445\u043d\u0438\u043a\u0430",
+        "duration": 86,
+        "qualification": 77
+    }
+},
+{
+    "model": "anketa.education_prog",
+    "pk": 4,
+    "fields": {
+        "eduorg": 1,
+        "name": "\u041d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u0441\u043f\u0435\u0446\u0438\u0430\u043b\u044c\u043d\u043e\u0441\u0442\u044c ",
+        "duration": null,
+        "qualification": 4
+    }
+},
+{
+    "model": "anketa.education_prog",
+    "pk": 5,
+    "fields": {
+        "eduorg": 4,
+        "name": "\u0442\u043e\u043f\u043e\u0432\u043e\u0435 \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435",
+        "duration": 88,
+        "qualification": 77
+    }
+},
+{
+    "model": "anketa.education_prog",
+    "pk": 6,
+    "fields": {
+        "eduorg": 4,
+        "name": "\u0441\u0442\u0440\u0430\u0434\u0430\u0439c",
+        "duration": 88,
+        "qualification": 4
+    }
+},
+{
+    "model": "anketa.education_prog",
+    "pk": 11,
+    "fields": {
+        "eduorg": 5,
+        "name": "\u0431\u043b\u0430\u0442\u043d\u0430\u044f",
+        "duration": 89,
+        "qualification": 77
+    }
+},
+{
+    "model": "anketa.education_prog",
+    "pk": 12,
+    "fields": {
+        "eduorg": 4,
+        "name": "456454",
+        "duration": 86,
+        "qualification": 4
+    }
+},
+{
+    "model": "anketa.education_prog",
+    "pk": 13,
+    "fields": {
+        "eduorg": 9,
+        "name": "6 \u043b\u0435\u0442",
+        "duration": 88,
+        "qualification": 77
+    }
+},
+{
+    "model": "anketa.education_prog",
+    "pk": 14,
+    "fields": {
+        "eduorg": 8,
+        "name": "\u0438\u0437\u0438",
+        "duration": 88,
+        "qualification": 77
+    }
+},
+{
+    "model": "anketa.education_prog",
+    "pk": 15,
+    "fields": {
+        "eduorg": 5,
+        "name": "\u0418\u0437\u0438\u043f\u0438\u0437\u0438",
+        "duration": 86,
+        "qualification": 4
+    }
+},
+{
+    "model": "anketa.profile",
+    "pk": 1,
+    "fields": {
+        "edu_prog": 2,
+        "name": "\u0422\u0435\u0445\u043d\u043e\u043b\u043e\u0433\u0438 \u0440\u0430\u0437\u0440\u0430\u0431\u043e\u0442\u043a\u0438 \u041f\u041e"
+    }
+},
+{
+    "model": "anketa.profile",
+    "pk": 3,
+    "fields": {
+        "edu_prog": 2,
+        "name": "\u0414\u0440\u0443\u0433\u043e\u0439 \u043f\u0440\u043e\u0444\u0438\u043b\u044c"
+    }
+},
+{
+    "model": "anketa.profile",
+    "pk": 4,
+    "fields": {
+        "edu_prog": 3,
+        "name": "\u0422\u0435\u0445\u043d\u043e\u043b\u043e\u0433\u0438 \u0440\u0430\u0437\u0440\u0430\u0431\u043e\u0442\u043a\u0438 \u041f\u041e"
+    }
+},
+{
+    "model": "anketa.profile",
+    "pk": 5,
+    "fields": {
+        "edu_prog": 4,
+        "name": "\u044d\u0442\u043e\u0442\u043f\u0440\u043e\u0444\u0438\u043b\u044c\u0421\u0412\u0424\u0423"
+    }
+},
+{
+    "model": "anketa.profile",
+    "pk": 6,
+    "fields": {
+        "edu_prog": 6,
+        "name": "django"
+    }
+},
+{
+    "model": "anketa.profile",
+    "pk": 7,
+    "fields": {
+        "edu_prog": 6,
+        "name": "erwerwer"
+    }
+},
+{
+    "model": "anketa.profile",
+    "pk": 10,
+    "fields": {
+        "edu_prog": 13,
+        "name": "\u0434\u043e\u043a\u0442\u043e\u0440 \u043d\u0430\u0443\u043a"
+    }
+},
+{
+    "model": "anketa.profile",
+    "pk": 11,
+    "fields": {
+        "edu_prog": 14,
+        "name": "\u0438\u0437\u0438 \u043f\u0440\u043e\u0444\u0438\u043b\u044c"
+    }
+},
+{
+    "model": "anketa.profile",
+    "pk": 12,
+    "fields": {
+        "edu_prog": 5,
+        "name": "\u0448\u0430\u043b\u0442\u0430\u0439\u0431\u0430\u043b\u0442\u0430\u0439"
+    }
+},
+{
+    "model": "anketa.profileattrs",
+    "pk": 1,
+    "fields": {
+        "eduform": "\u041e",
+        "endDate": "2017-08-10",
+        "year": 2016,
+        "freespaces": 24,
+        "profile": 3,
+        "startDate": "2017-06-10"
+    }
+},
+{
+    "model": "anketa.profileattrs",
+    "pk": 2,
+    "fields": {
+        "eduform": "\u041e",
+        "endDate": "2017-08-10",
+        "year": 2016,
+        "freespaces": 100,
+        "profile": 1,
+        "startDate": "2017-06-10"
+    }
+},
+{
+    "model": "anketa.profileattrs",
+    "pk": 3,
+    "fields": {
+        "eduform": "\u0417",
+        "endDate": "2017-08-10",
+        "year": 2016,
+        "freespaces": 20,
+        "profile": 1,
+        "startDate": "2017-06-10"
+    }
+},
+{
+    "model": "anketa.profileattrs",
+    "pk": 4,
+    "fields": {
+        "eduform": "\u041e",
+        "endDate": "2017-08-10",
+        "year": 2017,
+        "freespaces": 45,
+        "profile": 4,
+        "startDate": "2017-04-10"
+    }
+},
+{
+    "model": "anketa.profileattrs",
+    "pk": 5,
+    "fields": {
+        "eduform": "\u041e\u0417",
+        "endDate": "2017-08-10",
+        "year": 2017,
+        "freespaces": 854,
+        "profile": 4,
+        "startDate": "2017-04-10"
+    }
+},
+{
+    "model": "anketa.profileattrs",
+    "pk": 6,
+    "fields": {
+        "eduform": "\u041e",
+        "endDate": "2017-08-10",
+        "year": 2017,
+        "freespaces": 20,
+        "profile": 1,
+        "startDate": "2017-06-10"
+    }
+},
+{
+    "model": "anketa.profileattrs",
+    "pk": 7,
+    "fields": {
+        "eduform": "\u041e\u0417",
+        "endDate": "2017-08-10",
+        "year": 2017,
+        "freespaces": 10,
+        "profile": 1,
+        "startDate": "2017-06-05"
+    }
+},
+{
+    "model": "anketa.profileattrs",
+    "pk": 8,
+    "fields": {
+        "eduform": "\u041e",
+        "endDate": "2017-08-10",
+        "year": 2017,
+        "freespaces": 20,
+        "profile": 3,
+        "startDate": "2017-06-10"
+    }
+},
+{
+    "model": "anketa.profileattrs",
+    "pk": 9,
+    "fields": {
+        "eduform": "\u0417",
+        "endDate": "2017-08-10",
+        "year": 2017,
+        "freespaces": 5,
+        "profile": 3,
+        "startDate": "2017-06-10"
+    }
+},
+{
+    "model": "anketa.profileattrs",
+    "pk": 10,
+    "fields": {
+        "eduform": "\u041e",
+        "endDate": "2017-11-25",
+        "year": 2017,
+        "freespaces": 2,
+        "profile": 5,
+        "startDate": "2017-11-22"
+    }
+},
+{
+    "model": "anketa.profileattrs",
+    "pk": 11,
+    "fields": {
+        "eduform": "\u0417",
+        "endDate": "2018-08-24",
+        "year": 2017,
+        "freespaces": 20,
+        "profile": 10,
+        "startDate": "2017-12-21"
+    }
+},
+{
+    "model": "anketa.profileattrs",
+    "pk": 12,
+    "fields": {
+        "eduform": "\u0417",
+        "endDate": "2020-04-24",
+        "year": 2018,
+        "freespaces": 32,
+        "profile": 10,
+        "startDate": "2017-12-17"
+    }
+},
+{
+    "model": "anketa.profileattrs",
+    "pk": 13,
+    "fields": {
+        "eduform": "\u041e\u0417",
+        "endDate": "2020-04-24",
+        "year": 2018,
+        "freespaces": 32,
+        "profile": 10,
+        "startDate": "2017-12-17"
+    }
+},
+{
+    "model": "anketa.profileattrs",
+    "pk": 14,
+    "fields": {
+        "eduform": "\u041e\u0417",
+        "endDate": "2023-07-14",
+        "year": 2020,
+        "freespaces": 123,
+        "profile": 10,
+        "startDate": "2020-07-16"
+    }
+},
+{
+    "model": "anketa.profileattrs",
+    "pk": 15,
+    "fields": {
+        "eduform": "\u041e",
+        "endDate": "2017-12-23",
+        "year": 2017,
+        "freespaces": 35,
+        "profile": 10,
+        "startDate": "2017-12-07"
+    }
+},
+{
+    "model": "anketa.profileattrs",
+    "pk": 16,
+    "fields": {
+        "eduform": "\u041e",
+        "endDate": "2018-11-09",
+        "year": 2018,
+        "freespaces": 5,
+        "profile": 10,
+        "startDate": "2018-01-26"
+    }
+},
+{
+    "model": "anketa.profileattrs",
+    "pk": 17,
+    "fields": {
+        "eduform": "\u0417",
+        "endDate": "2018-06-07",
+        "year": 2018,
+        "freespaces": 100,
+        "profile": 11,
+        "startDate": "2018-01-11"
+    }
+},
+{
+    "model": "anketa.profileattrs",
+    "pk": 18,
+    "fields": {
+        "eduform": "\u0417",
+        "endDate": "2019-06-01",
+        "year": 2018,
+        "freespaces": 1,
+        "profile": 12,
+        "startDate": "2018-09-01"
+    }
+},
+{
+    "model": "anketa.profileattrs",
+    "pk": 19,
+    "fields": {
+        "eduform": "\u041e",
+        "endDate": "2019-06-01",
+        "year": 2018,
+        "freespaces": 1,
+        "profile": 12,
+        "startDate": "2018-09-01"
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 1,
+    "fields": {
+        "profile": 1,
+        "points": 300,
+        "application": 8
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 3,
+    "fields": {
+        "profile": 2,
+        "points": 300,
+        "application": 3
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 27,
+    "fields": {
+        "profile": 3,
+        "points": 300,
+        "application": 35
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 28,
+    "fields": {
+        "profile": 1,
+        "points": 300,
+        "application": 36
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 29,
+    "fields": {
+        "profile": 3,
+        "points": 300,
+        "application": 36
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 30,
+    "fields": {
+        "profile": 3,
+        "points": 300,
+        "application": 37
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 34,
+    "fields": {
+        "profile": 1,
+        "points": 300,
+        "application": 55
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 35,
+    "fields": {
+        "profile": 2,
+        "points": 300,
+        "application": 57
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 36,
+    "fields": {
+        "profile": 2,
+        "points": 300,
+        "application": 57
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 37,
+    "fields": {
+        "profile": 4,
+        "points": 300,
+        "application": 58
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 38,
+    "fields": {
+        "profile": 4,
+        "points": 300,
+        "application": 59
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 39,
+    "fields": {
+        "profile": 5,
+        "points": 300,
+        "application": 60
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 80,
+    "fields": {
+        "profile": 7,
+        "points": 300,
+        "application": 62
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 81,
+    "fields": {
+        "profile": 6,
+        "points": 300,
+        "application": 62
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 82,
+    "fields": {
+        "profile": 5,
+        "points": 300,
+        "application": 61
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 83,
+    "fields": {
+        "profile": 5,
+        "points": 300,
+        "application": 81
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 94,
+    "fields": {
+        "profile": 5,
+        "points": 300,
+        "application": 54
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 97,
+    "fields": {
+        "profile": 5,
+        "points": 906,
+        "application": 84
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 98,
+    "fields": {
+        "profile": 5,
+        "points": 300,
+        "application": 86
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 99,
+    "fields": {
+        "profile": 10,
+        "points": 0,
+        "application": 87
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 100,
+    "fields": {
+        "profile": 10,
+        "points": 0,
+        "application": 88
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 101,
+    "fields": {
+        "profile": 10,
+        "points": 0,
+        "application": 89
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 102,
+    "fields": {
+        "profile": 10,
+        "points": 0,
+        "application": 90
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 103,
+    "fields": {
+        "profile": 10,
+        "points": 0,
+        "application": 91
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 104,
+    "fields": {
+        "profile": 10,
+        "points": 0,
+        "application": 92
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 105,
+    "fields": {
+        "profile": 10,
+        "points": 0,
+        "application": 93
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 106,
+    "fields": {
+        "profile": 10,
+        "points": 0,
+        "application": 94
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 107,
+    "fields": {
+        "profile": 10,
+        "points": 0,
+        "application": 95
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 108,
+    "fields": {
+        "profile": 10,
+        "points": 0,
+        "application": 96
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 109,
+    "fields": {
+        "profile": 10,
+        "points": 0,
+        "application": 97
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 110,
+    "fields": {
+        "profile": 10,
+        "points": 0,
+        "application": 98
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 111,
+    "fields": {
+        "profile": 10,
+        "points": 0,
+        "application": 99
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 112,
+    "fields": {
+        "profile": 10,
+        "points": 0,
+        "application": 100
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 113,
+    "fields": {
+        "profile": 10,
+        "points": 0,
+        "application": 101
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 114,
+    "fields": {
+        "profile": 10,
+        "points": 0,
+        "application": 102
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 115,
+    "fields": {
+        "profile": 2,
+        "points": 100,
+        "application": 103
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 116,
+    "fields": {
+        "profile": 9,
+        "points": 100,
+        "application": 103
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 117,
+    "fields": {
+        "profile": 19,
+        "points": 1006,
+        "application": 104
+    }
+},
+{
+    "model": "anketa.applicationprofiles",
+    "pk": 118,
+    "fields": {
+        "profile": 18,
+        "points": 1006,
+        "application": 104
+    }
+},
+{
+    "model": "anketa.exams_needed",
+    "pk": 1,
+    "fields": {
+        "min_points": 150,
+        "subject": 62,
+        "profile": 4
+    }
+},
+{
+    "model": "anketa.exams_needed",
+    "pk": 2,
+    "fields": {
+        "min_points": 150,
+        "subject": 63,
+        "profile": 4
+    }
+},
+{
+    "model": "anketa.milit",
+    "pk": 1,
+    "fields": {
+        "liableForMilit": true,
+        "yearDismissial": null,
+        "isServed": false,
+        "rank": null
+    }
+},
+{
+    "model": "anketa.milit",
+    "pk": 7,
+    "fields": {
+        "liableForMilit": true,
+        "yearDismissial": 2000,
+        "isServed": true,
+        "rank": 72
+    }
+},
+{
+    "model": "anketa.milit",
+    "pk": 13,
+    "fields": {
+        "liableForMilit": false,
+        "yearDismissial": null,
+        "isServed": false,
+        "rank": null
+    }
+},
+{
+    "model": "anketa.milit",
+    "pk": 21,
+    "fields": {
+        "liableForMilit": true,
+        "yearDismissial": 2011,
+        "isServed": true,
+        "rank": 59
+    }
+},
+{
+    "model": "staff.employee",
+    "pk": 2,
+    "fields": {
+        "last_name": "\u041e\u0442\u0447\u0435\u0441\u0442\u0432\u043e",
+        "fullname": "\u0424\u0430\u043c\u0438\u043b\u0438\u044f \u0418\u043c\u044f \u041e\u0442\u0447\u0435\u0441\u0442\u0432\u043e",
+        "user": [
+            "a"
+        ],
+        "uniemployee": 228,
+        "department": 2,
+        "position": 2,
+        "mid_name": "\u0418\u043c\u044f",
+        "first_name": "\u0424\u0430\u043c\u0438\u043b\u0438\u044f"
+    }
+},
+{
+    "model": "staff.employee",
+    "pk": 4,
+    "fields": {
+        "last_name": "\u0421\u0435\u0440\u0433\u0435\u0435\u0432\u0438\u0447",
+        "fullname": "\u0421\u0435\u0440\u0433\u0435\u0435\u0432 \u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440 \u0421\u0435\u0440\u0433\u0435\u0435\u0432\u0438\u0447",
+        "user": [
+            "4ino_rp"
+        ],
+        "uniemployee": 0,
+        "department": 2,
+        "position": 2,
+        "mid_name": "\u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440",
+        "first_name": "\u0421\u0435\u0440\u0433\u0435\u0435\u0432"
+    }
+},
+{
+    "model": "staff.employee",
+    "pk": 7,
+    "fields": {
+        "last_name": "\u041a\u0442\u043e\u0435\u0432\u0438\u0447",
+        "fullname": "\u0421\u0442\u0440\u0443\u0447\u043a\u043e\u0432 \u0412\u0430\u0441\u0438\u043b\u0438\u0439 \u041a\u0442\u043e\u0435\u0432\u0438\u0447",
+        "user": [
+            "test1"
+        ],
+        "uniemployee": 0,
+        "department": 3,
+        "position": 4,
+        "mid_name": "\u0412\u0430\u0441\u0438\u043b\u0438\u0439",
+        "first_name": "\u0421\u0442\u0440\u0443\u0447\u043a\u043e\u0432"
+    }
+},
+{
+    "model": "staff.employee",
+    "pk": 8,
+    "fields": {
+        "last_name": "\u0410\u043d\u0430\u0442\u043e\u043b\u044c\u0447\u044a",
+        "fullname": "\u0410\u043d\u0443\u0444\u0440\u0438\u0435\u0432 \u041d\u0438\u043a\u043e\u043b\u0430\u0439 \u0410\u043d\u0430\u0442\u043e\u043b\u044c\u0447\u044a",
+        "user": [
+            "test2"
+        ],
+        "uniemployee": 0,
+        "department": 1,
+        "position": 3,
+        "mid_name": "\u041d\u0438\u043a\u043e\u043b\u0430\u0439",
+        "first_name": "\u0410\u043d\u0443\u0444\u0440\u0438\u0435\u0432"
+    }
+},
+{
+    "model": "staff.employee",
+    "pk": 9,
+    "fields": {
+        "last_name": "\u0441\u0443\u043f\u0435\u0440\u043c\u0435\u043d\u043e\u0432\u0438\u0447",
+        "fullname": "\u043d\u043e\u0440\u0438\u0441 \u0447\u0430\u043a \u0441\u0443\u043f\u0435\u0440\u043c\u0435\u043d\u043e\u0432\u0438\u0447",
+        "user": [
+            "slonenok"
+        ],
+        "uniemployee": 0,
+        "department": 3,
+        "position": 1,
+        "mid_name": "\u0447\u0430\u043a",
+        "first_name": "\u043d\u043e\u0440\u0438\u0441"
+    }
+},
+{
+    "model": "staff.position",
+    "pk": 1,
+    "fields": {
+        "name": "predsedatel'"
+    }
+},
+{
+    "model": "staff.position",
+    "pk": 2,
+    "fields": {
+        "name": "car'"
+    }
+},
+{
+    "model": "staff.position",
+    "pk": 3,
+    "fields": {
+        "name": "\u041c\u0438\u0434\u0435\u0440"
+    }
+},
+{
+    "model": "staff.position",
+    "pk": 4,
+    "fields": {
+        "name": "fraer"
+    }
+},
+{
+    "model": "staff.contacts",
+    "pk": 31,
+    "fields": {
+        "contact_type": 37,
+        "value": "123123123",
+        "employee": 4
+    }
+},
+{
+    "model": "staff.contacts",
+    "pk": 40,
+    "fields": {
+        "contact_type": 39,
+        "value": "jopamira",
+        "employee": 4
+    }
+},
+{
+    "model": "staff.contacts",
+    "pk": 41,
+    "fields": {
+        "contact_type": 35,
+        "value": "888888888",
+        "employee": 4
+    }
+},
+{
+    "model": "staff.contacts",
+    "pk": 42,
+    "fields": {
+        "contact_type": 43,
+        "value": "01",
+        "employee": 4
+    }
+},
+{
+    "model": "staff.contacts",
+    "pk": 43,
+    "fields": {
+        "contact_type": 35,
+        "value": "88005553535",
+        "employee": 4
+    }
+},
+{
+    "model": "kladr.kladr",
+    "pk": 1,
+    "fields": {
+        "socr": "tr",
+        "code": "777",
+        "index": "",
+        "name": "tron",
+        "status": "1",
+        "gninmb": "",
+        "uno": "",
+        "ocatd": ""
+    }
+},
+{
+    "model": "kladr.street",
+    "pk": 1,
+    "fields": {
+        "socr": "\u0436\u043e\u043f\u0430",
+        "code": "1234",
+        "index": "",
+        "name": "\u0425\u0430\u043b\u0442\u0443\u0440\u0438\u043d\u0430",
+        "gninmb": "",
+        "uno": "",
+        "ocatd": ""
+    }
+}
+]
