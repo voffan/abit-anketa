@@ -94,13 +94,30 @@ def PersonData(request):
 		args['preveduname_id'] = edudoctype.eduOrg.id
 	if person.docs_set.filter(docType__value__icontains='СНИЛС').first() is not None:
 		args['inila'] = person.docs_set.filter(docType__value__icontains='СНИЛС').first().number
+
 	if DocImages.objects.filter(doc=person.docs_set.filter(
 			docType__attribute__name__icontains='удостоверяющего личность').first()):
-		doc_images = []
-		for doc_image in DocImages.objects.filter(doc=person.docs_set.filter(
+		docs_images = []
+		for docs_image in DocImages.objects.filter(doc=person.docs_set.filter(
 			docType__attribute__name__icontains='удостоверяющего личность').first()):
-			doc_images.append(doc_image.image)
-		args['docs_images'] = doc_images
+			docs_images.append(docs_image.image)
+		args['docs_images'] = docs_images
+
+	if DocImages.objects.filter(doc=person.docs_set.filter(
+			docType__attribute__name__icontains='Вид документа об образовании').first()):
+		edudocs_images = []
+		for edudocs_image in DocImages.objects.filter(doc=person.docs_set.filter(
+			docType__attribute__name__icontains='Вид документа об образовании').first()):
+			edudocs_images.append(edudocs_image.image)
+		args['edudocs_images'] = edudocs_images
+
+	if DocImages.objects.filter(doc=person.docs_set.filter(
+			docType__value='СНИЛС').first()):
+		inila_images = []
+		for inila_image in DocImages.objects.filter(doc=person.docs_set.filter(
+			docType__value='СНИЛС').first()):
+			inila_images.append(inila_image.image)
+		args['inila_images'] = inila_images
 
 	args_to_print = [
 		'doctype',
@@ -121,6 +138,8 @@ def PersonData(request):
 		'preveduname_id',
 		'inila',
 		'docs_images',
+		'edudocs_images',
+		'inila_images',
 	]
 	for arg_to_print in args_to_print:
 		try:
@@ -615,6 +634,18 @@ def AddDataToPerson(request):
 				if (len(request.POST.get('sex', ''))) > 0:
 					abit.sex = request.POST.get('sex', '')
 			if page == 2:
+				for i in range(int(request.POST.get('removedDocsImages', ''))):
+					DocImages.objects.filter(image=request.POST.get('removedDocsImage' + str(i))).delete()
+					print('removed: ' + request.POST.get('removedDocsImage' + str(i)))
+
+				for i in range(int(request.POST.get('removedEduDocsImages', ''))):
+					DocImages.objects.filter(image=request.POST.get('removedEduDocsImage' + str(i))).delete()
+					print('removed: ' + request.POST.get('removedEduDocsImage' + str(i)))
+
+				for i in range(int(request.POST.get('removedInilaImages', ''))):
+					DocImages.objects.filter(image=request.POST.get('removedInilaImage' + str(i))).delete()
+					print('removed: ' + request.POST.get('removedInilaImage' + str(i)))
+
 				doctype = abit.docs_set.filter(docType__attribute__name__icontains='удостоверяющего личность').first()
 				if doctype is None:
 					doctype = Docs()
@@ -647,10 +678,10 @@ def AddDataToPerson(request):
 					doc_image.save()
 
 				print('Saving Edu')
-				Education.objects.filter(abiturient=abit).delete()
-				Docs.objects.filter(abiturient=abit,
-									docType__attribute__name__icontains='Вид документа об образовании').delete()
-				docs = Docs()
+				docs = Docs.objects.filter(abiturient=abit,
+									docType__attribute__name__icontains='Вид документа об образовании').first()
+				if docs is None:
+					docs = Docs()
 				docs.abiturient = abit
 				docs.docType = AttrValue.objects.get(pk=request.POST.get('edudoctype', ''))
 				docs.serialno = int(request.POST.get('serialedudoc', ''))
@@ -663,7 +694,10 @@ def AddDataToPerson(request):
 				print(docs.docIssuer)
 				print(docs)
 				docs.save()
-				education = Education()
+
+				education = Education.objects.filter(abiturient=abit).first()
+				if education is None:
+					education = Education()
 				education.abiturient = abit
 				education.doc = Docs.objects.filter(
 					abiturient=abit,
@@ -690,9 +724,19 @@ def AddDataToPerson(request):
 				print(education.eduOrg)
 				education.save()
 
+				print('Saving edu doc image')
+				for file in request.FILES.getlist('edudocs_images'):
+					print(file.name)
+					doc_image = DocImages()
+					doc_image.doc = abit.docs_set.filter(
+						docType__attribute__name__icontains='Вид документа об образовании').first()
+					doc_image.image = file
+					doc_image.save()
+
 				print('Saving INILA')
-				Docs.objects.filter(abiturient=abit, docType__value='СНИЛС').delete()
-				inila = Docs()
+				inila = Docs.objects.filter(abiturient=abit, docType__value='СНИЛС').first()
+				if inila is None:
+					inila = Docs()
 				inila.abiturient = abit
 				inila.number = int(request.POST.get('inila', ''))
 				inila.docType = AttrValue.objects.filter(value='СНИЛС').first()
@@ -700,6 +744,15 @@ def AddDataToPerson(request):
 				print(inila.number)
 				print(inila.docType)
 				inila.save()
+
+				print('Saving inila image')
+				for file in request.FILES.getlist('inila_images'):
+					print(file.name)
+					doc_image = DocImages()
+					print(abit.docs_set.filter(docType__value='СНИЛС').first())
+					doc_image.doc = abit.docs_set.filter(docType__value='СНИЛС').first()
+					doc_image.image = file
+					doc_image.save()
 
 			if page == 3:
 				print('Saving Page 3 - Contacts')

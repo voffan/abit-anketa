@@ -60,13 +60,13 @@
                                 </div>
                                 <br>
                                 <div class="row">
-                                {% for docs_image in docs_images %}
-                                    <div class="col-xs-3 docs_images" id="{{ docs_image }}">
-                                        <img src="/images/{{ docs_image }}" alt="{{ docs_image }}" class="img-thumbnail">
-                                        <a onclick="$(this).parent().addClass('removed').hide()">Удалить</a>
-                                    </div>
-                                {% endfor %}
-                                <input name="removedDocsImages" id="removedDocsImages" type="hidden"/>
+                                    {% for docs_image in docs_images %}
+                                        <div class="col-xs-3 docs_images" id="{{ docs_image }}">
+                                            <img src="/images/{{ docs_image }}" alt="{{ docs_image }}" class="img-thumbnail">
+                                            <a onclick="$(this).parent().addClass('removed').hide()">Удалить</a>
+                                        </div>
+                                    {% endfor %}
+                                    <input name="removedDocsImages" id="removedDocsImages" type="hidden"/>
                                 </div>
                             </p>
                         </div>
@@ -139,6 +139,32 @@
                             </p>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+                            <p>
+                                <label for="edudocs_images">Сканы документов</label>
+                                <input type="file" name="edudocs_images" id="edudocs_images" class="form-control" accept="image/*" multiple required style="display: none;">
+                                <div>
+                                    {% if edudocs_images|length == 0 %}
+                                        <span class="text-muted">Пока не загружено ни одного изображения </span>
+                                    {% else %}
+                                        <span class="text-muted">Загружено изображений: {{ edudocs_images|length }} </span>
+                                    {% endif %}
+                                    <input type="button" class="btn btn-default" value="Загрузить..." onclick="document.getElementById('edudocs_images').click()">
+                                </div>
+                                <br>
+                                <div class="row">
+                                    {% for edudocs_image in edudocs_images %}
+                                        <div class="col-xs-3 edudocs_images" id="{{ edudocs_image }}">
+                                            <img src="/images/{{ edudocs_image }}" alt="{{ edudocs_image }}" class="img-thumbnail">
+                                            <a onclick="$(this).parent().addClass('removed').hide()">Удалить</a>
+                                        </div>
+                                    {% endfor %}
+                                    <input name="removedEduDocsImages" id="removedEduDocsImages" type="hidden"/>
+                                </div>
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="panel panel-primary">
@@ -147,12 +173,38 @@
                 </div>
                 <div class="panel-body">
                     <div class="row">
-                    <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
-                        <p>
-                            <label for="inila">СНИЛС</label>
-                            <input type="number" id="inila" name="inila" class="form-control" placeholder="123-456-789 00" {% if inila %} value={{inila}} {% endif %}/>
-                        </p>
+                        <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+                            <p>
+                                <label for="inila">СНИЛС</label>
+                                <input type="number" id="inila" name="inila" class="form-control" placeholder="123-456-789 00" {% if inila %} value={{inila}} {% endif %}/>
+                            </p>
+                        </div>
                     </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+                            <p>
+                                <label for="inila_images">Сканы документов</label>
+                                <input type="file" name="inila_images" id="inila_images" class="form-control" accept="image/*" multiple required style="display: none;">
+                                <div>
+                                    {% if inila_images|length == 0 %}
+                                        <span class="text-muted">Пока не загружено ни одного изображения </span>
+                                    {% else %}
+                                        <span class="text-muted">Загружено изображений: {{ inila_images|length }} </span>
+                                    {% endif %}
+                                    <input type="button" class="btn btn-default" value="Загрузить..." onclick="document.getElementById('inila_images').click()">
+                                </div>
+                                <br>
+                                <div class="row">
+                                    {% for inila_image in inila_images %}
+                                        <div class="col-xs-3 inila_images" id="{{ inila_image }}">
+                                            <img src="/images/{{ inila_image }}" alt="{{ inila_image }}" class="img-thumbnail">
+                                            <a onclick="$(this).parent().addClass('removed').hide()">Удалить</a>
+                                        </div>
+                                    {% endfor %}
+                                    <input name="removedInilaImages" id="removedInilaImages" type="hidden"/>
+                                </div>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>

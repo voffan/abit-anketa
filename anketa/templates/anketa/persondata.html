@@ -116,11 +116,41 @@
 		$(document).on("click","button[id*='save']", function() {
 		    if ($('.tab-pane#tab2').hasClass('active')) {
 		        var removed_docs_images = Array();
-		        for (i = 0; i < $('.docs_images.removed').length; i++) {
+		        for (var i = 0; i < $('.docs_images.removed').length; i++) {
 		            removed_docs_images.push($('.docs_images.removed')[i].id);
+                    $('<input>', {
+                        id: 'removedDocsImage' + i,
+                        name: 'removedDocsImage' + i,
+                        value: $('.docs_images.removed')[i].id,
+                        type: 'hidden'
+                    }).appendTo('#documents');
                 }
-		        console.log(removed_docs_images);
-		        $('#removedDocsImages').val(removed_docs_images);
+		        $('#removedDocsImages').val(removed_docs_images.length);
+
+		        var removed_edudocs_images = Array();
+		        for (var i = 0; i < $('.edudocs_images.removed').length; i++) {
+		            removed_edudocs_images.push($('.edudocs_images.removed')[i].id);
+                    $('<input>', {
+                        id: 'removedEduDocsImage' + i,
+                        name: 'removedEduDocsImage' + i,
+                        value: $('.edudocs_images.removed')[i].id,
+                        type: 'hidden'
+                    }).appendTo('#documents');
+                }
+		        $('#removedEduDocsImages').val(removed_edudocs_images.length);
+
+		        var removed_inila_images = Array();
+		        for (var i = 0; i < $('.inila_images.removed').length; i++) {
+		            removed_inila_images.push($('.inila_images.removed')[i].id);
+                    $('<input>', {
+                        id: 'removedInilaImage' + i,
+                        name: 'removedInilaImage' + i,
+                        value: $('.inila_images.removed')[i].id,
+                        type: 'hidden'
+                    }).appendTo('#documents');
+                }
+		        $('#removedInilaImages').val(removed_inila_images.length);
+
                 var formData = new FormData(GetTabFormData()[0]);
                 $.ajax({
                     type: "POST",
