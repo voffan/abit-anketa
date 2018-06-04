@@ -73,29 +73,6 @@ function Kladr(object) {
 						$('#adrsflat').val($('#flatf').val());
 					}
 
-					/*
-					$('#city').select2('enable', true);
-					$('#district').select2('enable', true);
-					$('#region').select2('data', data[0]['data']['region']);
-					if (data[0]['data']['district']['text'].length > 0){
-						$('#district').select2('enable', true);
-						$('#city').select2('enable', false);
-						$('#district').select2('data', data[0]['data']['district']);
-					}
-					else $('#district').select2('val', '');
-					if (data[0]['data']['city']['text'].length > 0) {
-						$('#city').select2('enable', true);
-						$('#district').select2('enable', false);
-						$('#city').select2('data', data[0]['data']['city']);
-					}
-					else $('#city').select2('val', '');
-					if (data[0]['data']['village']['text'].length > 0) {
-                        $('#village').select2('data', data[0]['data']['village']);
-                    }
-					else {
-                        $('#village').select2('val', '');
-                    }
-					$('#street').select2('data', data[0]['data']['street']); */
 					$('#KladrModal').modal();
 				} else {
 					alert('Ошибка');

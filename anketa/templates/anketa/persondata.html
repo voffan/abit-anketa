@@ -61,20 +61,18 @@
 		{% if contacts %}
 			var contactsrow = {{contacts|length}};
 		{% else %}
-		var contactsrow = 1;
+		    var contactsrow = 1;
 		{% endif %}
 		var maxContacts = 10;
 
 		{% if relations %}
 			var relationsrow = {{relations|length}};
 		{% else %}
-		var relationsrow = 1;
+		    var relationsrow = 1;
 		{% endif %}
 		var maxRelations = 10;
-		$(document).on("click","button[id*='delRelationRow']", function()
-		{
-			if(relationsrow>1)
-			{
+		$(document).on("click","button[id*='delRelationRow']", function() {
+			if (relationsrow > 1) {
 				$(this).parent().parent().remove();
 				relationsrow--;
 			}

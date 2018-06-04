@@ -629,6 +629,8 @@ def AddDataToPerson(request):
 						'%Y-%m-%d')
 				if (len(request.POST.get('nation', ''))) > 0:
 					abit.nationality = AttrValue.objects.get(pk=request.POST.get('nation', ''))
+				else:
+					abit.nationality = None
 				if (len(request.POST.get('citizenship', ''))) > 0:
 					abit.citizenship = AttrValue.objects.get(pk=request.POST.get('citizenship', ''))
 				if (len(request.POST.get('sex', ''))) > 0:

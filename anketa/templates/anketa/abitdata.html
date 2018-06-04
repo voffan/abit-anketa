@@ -1,79 +1,79 @@
-			<div class="tab-pane" id="tab1">
-				<form id="abitdata" name="abitdata" role="form" method="post">
-					{% csrf_token %}
-					<input name="currentPage" id="currentPage" value="1" type="hidden"/>
-					<div class = "container-fluid">
-						<div class = "row">
-							<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2 col-sm-offset-1">
-								<p>
-									<label for="sname">Фамилия</label>
-									<input type = "text" name= "sname" id = "sname" class = "form-control" placeholder = "Иванов" value="{{ sname }}">
-								</p>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2 col-sm-offset-1">
-								<p>
-									<label for="name">Имя</label>
-									<input type = "text" name= "name" id = "name" class = "form-control" placeholder = "Иван" value="{{ fname }}">
-								</p>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2 col-sm-offset-1">
-								<p>
-									<label for="mname">Отчество</label>
-									<input type="text" name = "mname" id ="mname" class="form-control" placeholder="Иванович" value="{{ mname }}">
-								</p>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-xs-6 col-sm-5 col-md-4 col-md-offset-2 col-sm-offset-1">
-								<p>
-									<label for="birthday">Дата рождения</label>
-									<div class='input-group date' id='birthday'>
-										<input type="text" class="form-control" name="birthday" />
-											<span class="input-group-addon">
-												<span class="glyphicon glyphicon-calendar"></span>
-											</span>
-									</div>
-								</p>
-							</div>
-							<div class ="col-xs-6 col-sm-5 col-md-3">
-								<label for="sex">Пол</label>
-									<p>
-										<input type="radio" name = "sex" value="М" {% if sex == "М" %} checked {% endif %}>Мужской
-										<input type="radio" name = "sex" value="Ж" {% if sex == "Ж" %} checked {% endif %}>Женский
-									</p>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2 col-sm-offset-1">
-								<p>
-									<label for="birthplace">Место рождения</label>
-									<input type="text" name = "birthplace" id ="birthplace" class="form-control" placeholder="г. Якутск" value ="{{ birthplace }}">
-								</p>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-xs-6 col-sm-5 col-md-4 col-md-offset-2 col-sm-offset-1">
-								<p>
-									<label for="nation">Национальность(по желанию)</label>
-									<input type="hidden" class="form-control" id ="nation" name="nation">
-								</p>
-							</div>
-							<div class="col-xs-6 col-sm-5 col-md-4">
-								<p>
-									<label for="citizenship">Гражданство</label>
-									<input type="hidden" id="citizenship" name="citizenship" class="form-control">
-								</p>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2 col-sm-offset-1">
-								<button class="btn btn-primary btn-block" type="button" id="save1">Сохранить</button>
-							</div>
-						</div>
-					</div>
-				</form>
-			</div>
+<div class="tab-pane" id="tab1">
+    <form id="abitdata" name="abitdata" role="form" method="post">
+        {% csrf_token %}
+        <input name="currentPage" id="currentPage" value="1" type="hidden"/>
+        <div class = "container-fluid">
+            <div class = "row">
+                <div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2 col-sm-offset-1">
+                    <p>
+                        <label for="sname">Фамилия</label>
+                        <input type = "text" name= "sname" id = "sname" class = "form-control" placeholder = "Иванов" value="{{ sname }}">
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2 col-sm-offset-1">
+                    <p>
+                        <label for="name">Имя</label>
+                        <input type = "text" name= "name" id = "name" class = "form-control" placeholder = "Иван" value="{{ fname }}">
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2 col-sm-offset-1">
+                    <p>
+                        <label for="mname">Отчество</label>
+                        <input type="text" name = "mname" id ="mname" class="form-control" placeholder="Иванович" value="{{ mname }}">
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6 col-sm-5 col-md-4 col-md-offset-2 col-sm-offset-1">
+                    <p>
+                        <label for="birthday">Дата рождения</label>
+                        <div class='input-group date' id='birthday'>
+                            <input type="text" class="form-control" name="birthday" />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                        </div>
+                    </p>
+                </div>
+                <div class ="col-xs-6 col-sm-5 col-md-3">
+                    <label for="sex">Пол</label>
+                        <p>
+                            <input type="radio" name = "sex" value="М" {% if sex == "М" %} checked {% endif %}>Мужской
+                            <input type="radio" name = "sex" value="Ж" {% if sex == "Ж" %} checked {% endif %}>Женский
+                        </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2 col-sm-offset-1">
+                    <p>
+                        <label for="birthplace">Место рождения</label>
+                        <input type="text" name = "birthplace" id ="birthplace" class="form-control" placeholder="г. Якутск" value ="{{ birthplace }}">
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6 col-sm-5 col-md-4 col-md-offset-2 col-sm-offset-1">
+                    <p>
+                        <label for="nation">Национальность (по желанию)</label>
+                        <input type="hidden" class="form-control" id ="nation" name="nation">
+                    </p>
+                </div>
+                <div class="col-xs-6 col-sm-5 col-md-4">
+                    <p>
+                        <label for="citizenship">Гражданство</label>
+                        <input type="hidden" id="citizenship" name="citizenship" class="form-control">
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-10 col-md-8 col-md-offset-2 col-sm-offset-1">
+                    <button class="btn btn-primary btn-block" type="button" id="save1">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
