@@ -64,12 +64,12 @@ class AttrValue(models.Model):
 
 
 class Person(models.Model):
-	sname = models.CharField(u'Фамилия', max_length=30)
-	fname = models.CharField(u'Имя', max_length=30)
-	mname = models.CharField(u'Отчество', max_length=30)
-	fullname = models.CharField(u'ФИО', max_length=200, blank=True, null=True, db_index=True)
-	sex = models.CharField(u'Пол', choices=Sex, max_length=1, default='М')
-	birthdate = models.DateField(u'Дата рождения')
+	sname = models.CharField('Фамилия', max_length=30)
+	fname = models.CharField('Имя', max_length=30)
+	mname = models.CharField('Отчество', max_length=30)
+	fullname = models.CharField('ФИО', max_length=200, blank=True, null=True, db_index=True)
+	sex = models.CharField('Пол', choices=Sex, max_length=1, default='М')
+	birthdate = models.DateField('Дата рождения')
 
 	def __str__(self):
 		return self.fullname
@@ -87,22 +87,22 @@ class Person(models.Model):
 
 
 class Abiturient(Person):
-	birthplace = models.CharField(u'Место рождения', max_length=100, null=True, blank=True)  # добавить r
-	hostel = models.NullBooleanField(u'Требуется общежитие', default=False)
-	nationality = models.ForeignKey(AttrValue, verbose_name=u'Национальность(по желанию)',
-									limit_choices_to={'attribute__name': u'Национальность'}, db_index=True, blank=True,
+	birthplace = models.CharField('Место рождения', max_length=100, null=True, blank=True)  # добавить r
+	hostel = models.NullBooleanField('Требуется общежитие', default=False)
+	nationality = models.ForeignKey(AttrValue, verbose_name='Национальность (по желанию)',
+									limit_choices_to={'attribute__name': 'Национальность'}, db_index=True, blank=True,
 									null=True, related_name='Nationality')
-	citizenship = models.ForeignKey(AttrValue, verbose_name=u'Гражданство',
-									limit_choices_to={'attribute__name': u'Гражданство'}, db_index=True,
+	citizenship = models.ForeignKey(AttrValue, verbose_name='Гражданство',
+									limit_choices_to={'attribute__name': 'Гражданство'}, db_index=True,
 									related_name='Citizenship', null=True, blank=True)
-	foreign_lang = models.ForeignKey(AttrValue, verbose_name=u'Изучаемый иностранный язык',
-									 limit_choices_to={'attribute__name': u'Иностранный язык'}, related_name='Foreign',
+	foreign_lang = models.ForeignKey(AttrValue, verbose_name='Изучаемый иностранный язык',
+									 limit_choices_to={'attribute__name': 'Иностранный язык'}, related_name='Foreign',
 									 null=True, blank=True)
-	token = models.CharField(u'Token', max_length=100, db_index=True, null=True, blank=True)
-	user = models.ForeignKey(User, verbose_name=u'Пользователь', db_index=True)
-	info_progress = models.CharField(u'Progress', max_length=20, null=True,
+	token = models.CharField('Token', max_length=100, db_index=True, null=True, blank=True)
+	user = models.ForeignKey(User, verbose_name='Пользователь', db_index=True)
+	info_progress = models.CharField('Progress', max_length=20, null=True,
 									 blank=True)  # Битовая маска отображающая какие группа в личных данных заполнена, а какая нет.
-	work_duration = models.CharField(u'Трудовой стаж', max_length=100, null=True, db_index=True, blank=True)
+	work_duration = models.CharField('Трудовой стаж', max_length=100, null=True, db_index=True, blank=True)
 
 
 class Abiturient_attrs(models.Model):
@@ -114,19 +114,19 @@ class Abiturient_attrs(models.Model):
 
 
 class Application(models.Model):
-	department = models.ForeignKey('EduOrg', verbose_name=u'Институт/факультет', db_index=True)
-	abiturient = models.ForeignKey('Abiturient', verbose_name=u'Абитуриент', db_index=True)
-	date = models.DateField(u'Дата подачи', auto_now_add=True, db_index=True)
-	number = models.IntegerField(u'Номер заявления', max_length=10, null=True,
+	department = models.ForeignKey('EduOrg', verbose_name='Институт/факультет', db_index=True)
+	abiturient = models.ForeignKey('Abiturient', verbose_name='Абитуриент', db_index=True)
+	date = models.DateField('Дата подачи', auto_now_add=True, db_index=True)
+	number = models.IntegerField('Номер заявления', max_length=10, null=True,
 								 blank=True)  # номер в журнале в приемной комиссии
-	budget = models.BooleanField(u'В рамках контрольных цифр приёма', default=False)
-	withfee = models.BooleanField(u'по договорам об оказании платных обр. услуг', default=False)
-	appState = models.ForeignKey('AttrValue', verbose_name=u'Состояние заявления',
+	budget = models.BooleanField('В рамках контрольных цифр приёма', default=False)
+	withfee = models.BooleanField('по договорам об оказании платных обр. услуг', default=False)
+	appState = models.ForeignKey('AttrValue', verbose_name='Состояние заявления',
 								 limit_choices_to={'attribute__name': u'Статус заявления'}, db_index=True)
-	points = models.IntegerField(u'Кол-во баллов', db_index=True)
-	priority = models.CharField(u'Приоритет', choices=AppPrior, default='В', max_length=10, null=True,
+	points = models.IntegerField('Кол-во баллов', db_index=True)
+	priority = models.CharField('Приоритет', choices=AppPrior, default='В', max_length=10, null=True,
 								blank=True)  # Убрать null, blank
-	track = models.BooleanField(u'Отслеживание', default=True)
+	track = models.BooleanField('Отслеживание', default=True)
 
 	def __str__(self):
 		return self.abiturient.fullname + ' application#' + str(self.id)
@@ -187,15 +187,15 @@ class DocAttr(models.Model):
 
 # Class that represent document of student
 class Docs(models.Model):
-	abiturient = models.ForeignKey('Abiturient', verbose_name=u'Абитуриент')
-	serialno = models.BigIntegerField(u'Серия документа', max_length=15, db_index=True, blank=True, null=True)
-	number = models.IntegerField(u'Номер документа', max_length=15, db_index=True, blank=True, null=True)
-	issueDate = models.DateField(u'Дата выдачи', blank=True, null=True)
-	isCopy = models.BooleanField(u'Оригинал документа', default=False)
+	abiturient = models.ForeignKey('Abiturient', verbose_name='Абитуриент')
+	serialno = models.BigIntegerField('Серия документа', max_length=15, db_index=True, blank=True, null=True)
+	number = models.IntegerField('Номер документа', max_length=15, db_index=True, blank=True, null=True)
+	issueDate = models.DateField('Дата выдачи', blank=True, null=True)
+	isCopy = models.BooleanField('Оригинал документа', default=False)
 	docType = models.ForeignKey(
 		'AttrValue',
-		verbose_name=u'Тип документа',
-		limit_choices_to={'attribute__name': u'Тип документа'},
+		verbose_name='Тип документа',
+		limit_choices_to={'attribute__name': 'Тип документа'},
 		related_name='DocType_docs',
 		db_index=True,
 		blank=True,
@@ -218,7 +218,7 @@ class DocImages(models.Model):
 	doc = models.ForeignKey('Docs', verbose_name='Документ', db_index=True)
 	image = models.ImageField(upload_to=DocImagePath)
 	def __str__(self):
-		return self.doc.abiturient.fullname+' '+self.doc.docType.value
+		return self.doc.abiturient.fullname + ' ' + self.doc.docType.value
 
 
 class Exams(models.Model):

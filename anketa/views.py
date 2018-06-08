@@ -92,8 +92,32 @@ def PersonData(request):
 		args['prevedu'] = edudoctype.level.value
 		args['preveduname'] = edudoctype.eduOrg.name
 		args['preveduname_id'] = edudoctype.eduOrg.id
-	if person.docs_set.filter(docType__value__icontains=u'СНИЛС').first() is not None:
-		args['inila'] = person.docs_set.filter(docType__value__icontains=u'СНИЛС').first().number
+	if person.docs_set.filter(docType__value__icontains='СНИЛС').first() is not None:
+		args['inila'] = person.docs_set.filter(docType__value__icontains='СНИЛС').first().number
+
+	if DocImages.objects.filter(doc=person.docs_set.filter(
+			docType__attribute__name__icontains='удостоверяющего личность').first()):
+		docs_images = []
+		for docs_image in DocImages.objects.filter(doc=person.docs_set.filter(
+			docType__attribute__name__icontains='удостоверяющего личность').first()):
+			docs_images.append(docs_image.image)
+		args['docs_images'] = docs_images
+
+	if DocImages.objects.filter(doc=person.docs_set.filter(
+			docType__attribute__name__icontains='Вид документа об образовании').first()):
+		edudocs_images = []
+		for edudocs_image in DocImages.objects.filter(doc=person.docs_set.filter(
+			docType__attribute__name__icontains='Вид документа об образовании').first()):
+			edudocs_images.append(edudocs_image.image)
+		args['edudocs_images'] = edudocs_images
+
+	if DocImages.objects.filter(doc=person.docs_set.filter(
+			docType__value='СНИЛС').first()):
+		inila_images = []
+		for inila_image in DocImages.objects.filter(doc=person.docs_set.filter(
+			docType__value='СНИЛС').first()):
+			inila_images.append(inila_image.image)
+		args['inila_images'] = inila_images
 
 	args_to_print = [
 		'doctype',
@@ -113,6 +137,9 @@ def PersonData(request):
 		'preveduname',
 		'preveduname_id',
 		'inila',
+		'docs_images',
+		'edudocs_images',
+		'inila_images',
 	]
 	for arg_to_print in args_to_print:
 		try:
@@ -602,12 +629,26 @@ def AddDataToPerson(request):
 						'%Y-%m-%d')
 				if (len(request.POST.get('nation', ''))) > 0:
 					abit.nationality = AttrValue.objects.get(pk=request.POST.get('nation', ''))
+				else:
+					abit.nationality = None
 				if (len(request.POST.get('citizenship', ''))) > 0:
 					abit.citizenship = AttrValue.objects.get(pk=request.POST.get('citizenship', ''))
 				if (len(request.POST.get('sex', ''))) > 0:
 					abit.sex = request.POST.get('sex', '')
 			if page == 2:
-				doctype = abit.docs_set.filter(docType__attribute__name__icontains=u'удостоверяющего личность').first()
+				for i in range(int(request.POST.get('removedDocsImages', ''))):
+					DocImages.objects.filter(image=request.POST.get('removedDocsImage' + str(i))).delete()
+					print('removed: ' + request.POST.get('removedDocsImage' + str(i)))
+
+				for i in range(int(request.POST.get('removedEduDocsImages', ''))):
+					DocImages.objects.filter(image=request.POST.get('removedEduDocsImage' + str(i))).delete()
+					print('removed: ' + request.POST.get('removedEduDocsImage' + str(i)))
+
+				for i in range(int(request.POST.get('removedInilaImages', ''))):
+					DocImages.objects.filter(image=request.POST.get('removedInilaImage' + str(i))).delete()
+					print('removed: ' + request.POST.get('removedInilaImage' + str(i)))
+
+				doctype = abit.docs_set.filter(docType__attribute__name__icontains='удостоверяющего личность').first()
 				if doctype is None:
 					doctype = Docs()
 					doctype.abiturient = abit
@@ -629,11 +670,20 @@ def AddDataToPerson(request):
 				print(doctype)
 				doctype.save()
 
+				print('Saving doc image')
+				for file in request.FILES.getlist('docs_images'):
+					print(file.name)
+					doc_image = DocImages()
+					doc_image.doc = abit.docs_set.filter(
+						docType__attribute__name__icontains='удостоверяющего личность').first()
+					doc_image.image = file
+					doc_image.save()
+
 				print('Saving Edu')
-				Education.objects.filter(abiturient=abit).delete()
-				Docs.objects.filter(abiturient=abit,
-									docType__attribute__name__icontains='Тип документа об образовании').delete()
-				docs = Docs()
+				docs = Docs.objects.filter(abiturient=abit,
+									docType__attribute__name__icontains='Вид документа об образовании').first()
+				if docs is None:
+					docs = Docs()
 				docs.abiturient = abit
 				docs.docType = AttrValue.objects.get(pk=request.POST.get('edudoctype', ''))
 				docs.serialno = int(request.POST.get('serialedudoc', ''))
@@ -646,11 +696,14 @@ def AddDataToPerson(request):
 				print(docs.docIssuer)
 				print(docs)
 				docs.save()
-				education = Education()
+
+				education = Education.objects.filter(abiturient=abit).first()
+				if education is None:
+					education = Education()
 				education.abiturient = abit
 				education.doc = Docs.objects.filter(
 					abiturient=abit,
-					docType__attribute__name__icontains='Тип документа об образовании'
+					docType__attribute__name__icontains='Вид документа об образовании'
 				).first()
 				if request.POST.get('prevedu', '') == 'soo':
 					education.level = AttrValue.objects.filter(value='СОО').first()
@@ -663,7 +716,7 @@ def AddDataToPerson(request):
 				education.enterDate = datetime.datetime.strptime(request.POST.get('datejoining', ''),
 																 '%d/%m/%Y').strftime('%Y-%m-%d')
 				education.graduationDate = datetime.datetime.strptime(request.POST.get('dateexiting', ''),
-																 '%d/%m/%Y').strftime('%Y-%m-%d')
+																	  '%d/%m/%Y').strftime('%Y-%m-%d')
 				education.eduOrg = EduOrg.objects.get(pk=request.POST.get('preveduname', ''))
 				print(education.abiturient)
 				print(education.doc)
@@ -673,9 +726,19 @@ def AddDataToPerson(request):
 				print(education.eduOrg)
 				education.save()
 
+				print('Saving edu doc image')
+				for file in request.FILES.getlist('edudocs_images'):
+					print(file.name)
+					doc_image = DocImages()
+					doc_image.doc = abit.docs_set.filter(
+						docType__attribute__name__icontains='Вид документа об образовании').first()
+					doc_image.image = file
+					doc_image.save()
+
 				print('Saving INILA')
-				Docs.objects.filter(abiturient=abit, docType__value='СНИЛС').delete()
-				inila = Docs()
+				inila = Docs.objects.filter(abiturient=abit, docType__value='СНИЛС').first()
+				if inila is None:
+					inila = Docs()
 				inila.abiturient = abit
 				inila.number = int(request.POST.get('inila', ''))
 				inila.docType = AttrValue.objects.filter(value='СНИЛС').first()
@@ -683,6 +746,15 @@ def AddDataToPerson(request):
 				print(inila.number)
 				print(inila.docType)
 				inila.save()
+
+				print('Saving inila image')
+				for file in request.FILES.getlist('inila_images'):
+					print(file.name)
+					doc_image = DocImages()
+					print(abit.docs_set.filter(docType__value='СНИЛС').first())
+					doc_image.doc = abit.docs_set.filter(docType__value='СНИЛС').first()
+					doc_image.image = file
+					doc_image.save()
 
 			if page == 3:
 				print('Saving Page 3 - Contacts')
@@ -747,7 +819,7 @@ def SaveApplication(request):
 		fiks1=0
 		fiks2=0
 		if request.POST.get('target',''):
-			fiks1 = 1							
+			fiks1 = 1
 			min1 += 1
 		else:
 			targetApp = Application_attrs.objects.filter(app__id=application.id).first()
@@ -761,7 +833,7 @@ def SaveApplication(request):
 
 		#######################ЛЬГОТЫ####################################
 		if len(Privilegies.objects.filter(abiturient__id=Abiturient.objects.get(user=request.user).id))>0:
-			fiks2 = 1			
+			fiks2 = 1
 		else:
 			privilegesApp = Application_attrs.objects.filter(app__id=application.id).first()
 			if privilegesApp is not None:
@@ -775,8 +847,8 @@ def SaveApplication(request):
 			ppc=[x for x in app_prof_id if x != -1]
 			if len(ppc)<len(ApplicationProfiles.objects.filter(application=application)):
 				ApplicationProfiles.objects.filter(application=application).exclude(id__in=ppc).delete()
-			##############delete################			
-			abit_exams = Exams.objects.filter(abiturient=application.abiturient)#EXAMS###########################			
+			##############delete################
+			abit_exams = Exams.objects.filter(abiturient=application.abiturient)#EXAMS###########################
 			points_summ=0
 			for i in abit_exams:
 				if i.points is not None:
@@ -785,13 +857,13 @@ def SaveApplication(request):
 			for i in range(len(forms)):
 				profile = ProfileAttrs.objects.get(pk=forms[i])
 				if dateNow >= datetime.datetime.strftime(profile.startDate,'%Y-%m-%d'):
-					if dateNow <= datetime.datetime.strftime(profile.endDate,'%Y-%m-%d'):						
+					if dateNow <= datetime.datetime.strftime(profile.endDate,'%Y-%m-%d'):
 						application.save()
 
 						if fiks1 ==	1:
 							targetApp = Application_attrs()
 							targetApp.app = application
-							targetApp.attribute = AttrValue.objects.filter(attribute__name__icontains=u'Тип договора образования').filter(value__icontains=u'Целевой').first()							
+							targetApp.attribute = AttrValue.objects.filter(attribute__name__icontains=u'Тип договора образования').filter(value__icontains=u'Целевой').first()
 							if Application_attrs.objects.filter(app__id=application.id,attribute__id=AttrValue.objects.filter(attribute__name__icontains=u'Тип договора образования').filter(value__icontains=u'Целевой').first().id)is not None:
 								targetApp.save()
 
@@ -805,7 +877,7 @@ def SaveApplication(request):
 						appProf = ApplicationProfiles.objects.filter(pk = app_prof_id[i]).first()
 						if appProf is None:
 							appProf = ApplicationProfiles()
-						appProf.application=application		
+						appProf.application=application
 						appProf.profile=ProfileAttrs.objects.get(pk = forms[i])
 						appProf.points=points_summ
 						exams_needed = Exams_needed.objects.filter(profile=appProf.profile.profile)
@@ -815,7 +887,7 @@ def SaveApplication(request):
 									if abit_exam.points<exam_need.min_points:
 										result = {'result':0, 'error_msg':'yBbl He xBoTaeT 6aJIJIoB'}
 										return HttpResponse(json.dumps(result), content_type="application/json")
-										#########FIX IT###############										
+										#########FIX IT###############
 								#else:
 									#result = {'result':0, 'error_msg':'yBbl He xBoTaeT Heo6xoDuMblx ek3aMeHoB'}
 						appProf.save()
@@ -824,7 +896,7 @@ def SaveApplication(request):
 				else:
 					result = {'result':0, 'error_msg':'АЛЛО гараж период приема заявлений по направлению '+profile.profile.name+' '+profile.profile.edu_prog.qualification.value+' '+profile.eduform+' еще не начался'}
 			#if profileValid >0:
-				
+
 			#FIX DELS	#ApplicationProfiles.objects.filter(application=application).delete()
 			"""	
 				for i in range(len(forms)):
@@ -1004,9 +1076,9 @@ def AbiturientList(request):
 
 def GetAbiturient(request):
 	result = []
-	year = datetime.datetime.strftime(datetime.datetime.now(), '%Y')	
+	year = datetime.datetime.strftime(datetime.datetime.now(), '%Y')
 	abitId = []
-	appTypes = AttrValue.objects.filter(attribute__name__icontains=u'Тип договора образования')	
+	appTypes = AttrValue.objects.filter(attribute__name__icontains=u'Тип договора образования')
 	
 	
 	"""	
@@ -1017,11 +1089,11 @@ def GetAbiturient(request):
 			if len(request.GET['eduprof'])>0:
 				print('eduprof len > 0')
 				abitId = [x.application.abiturient.id for x in ApplicationProfiles.objects.filter(
-					profile__year=year).filter(profile__profile__id=int(request.GET['eduprof']))]			
+					profile__year=year).filter(profile__profile__id=int(request.GET['eduprof']))]
 				abiturients = abiturients.filter(id__in=abitId)
 	"""
 
-	
+
 	if appTypes is not None:
 		if len(appTypes) > 0:
 
