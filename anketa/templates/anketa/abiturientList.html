@@ -27,26 +27,109 @@ function Applay(){
 			dataProcess:true,
 			timeout:300,
 			success:function(data){
+				console.log($data = data);
+				var used = {};
+				var filtered = data.filter(function(obj){
+					return obj.abiturient in used ? 0:(used[obj.abiturient]=1);
+				});
+				data = filtered;
+				console.log(data);
+
 				var new_tbody = document.createElement('tbody');
-				var old_tbody = document.getElementById('tbodys')
-				for(var i=0;i<data.length;i++){
-					var new_row = document.createElement('tr');
-					var new_td1 = document.createElement('td');
-					new_td1.append(i+1);
-					var new_td2 = document.createElement('td');
-					new_td2.append(data[i]['abiturient']);
-					var new_td3 = document.createElement('td');
-					if(data[i]['points']==null){
-						new_td3.append(0);
-					}
-					else{
-						new_td3.append(data[i]['points']);
-					}				
-					new_row.append(new_td1,new_td2,new_td3);
-					new_tbody.append(new_row);				
-				}
+				var old_tbody = document.getElementById('tbodys');
 				new_tbody.id="tbodys";
 				old_tbody.parentNode.replaceChild(new_tbody, old_tbody);
+				for(var i=0;i<data.length;i++){
+					if(i==0){
+						var new_row = document.createElement('tr');
+						new_row.id = "target";
+						var new_th1 = document.createElement('th');
+						var new_th2 = document.createElement('th');
+						var new_th3 = document.createElement('th');
+						new_th1.append("Целевые");
+						new_th2.append(" ");
+						new_th3.append(" ");
+						new_row.append(new_th2,new_th1,new_th3);
+						new_tbody.append(new_row);
+						var new_row = document.createElement('tr');
+						new_row.id = "priv";
+						var new_th1 = document.createElement('th');
+						var new_th2 = document.createElement('th');
+						var new_th3 = document.createElement('th');
+						new_th1.append("Льготные");
+						new_th2.append(" ");
+						new_th3.append(" ");
+						new_row.append(new_th2,new_th1,new_th3);
+						new_tbody.append(new_row);
+						var new_row = document.createElement('tr');
+						new_row.id = "all";
+						var new_th1 = document.createElement('th');
+						var new_th2 = document.createElement('th');
+						var new_th3 = document.createElement('th');
+						new_th1.append("Общие");
+						new_th2.append(" ");
+						new_th3.append(" ");
+						new_row.append(new_th2,new_th1,new_th3);
+						new_tbody.append(new_row);
+					}
+					if(data[i]['appType'] == 94){
+						var new_row = document.createElement('tr');
+						var new_td1 = document.createElement('td');
+						new_td1.append(i+1);
+						new_td1.id = "index";
+						var new_td2 = document.createElement('td');
+						new_td2.append(data[i]['abiturient']);
+						var new_td3 = document.createElement('td');
+						if(data[i]['points']==null){
+							new_td3.append(0);
+						}
+						else{
+							new_td3.append(data[i]['points']);
+						}				
+						new_row.append(new_td1,new_td2,new_td3);
+						//new_tbody.append(new_row);
+						document.getElementById('target').after(new_row);				
+					}
+					if(data[i]['appType'] == 95){
+						var new_row = document.createElement('tr');
+						var new_td1 = document.createElement('td');
+						new_td1.append(i+1);
+						new_td1.id = "index";
+						var new_td2 = document.createElement('td');
+						new_td2.append(data[i]['abiturient']);
+						var new_td3 = document.createElement('td');
+						if(data[i]['points']==null){
+							new_td3.append(0);
+						}
+						else{
+							new_td3.append(data[i]['points']);
+						}				
+						new_row.append(new_td1,new_td2,new_td3);
+						//new_tbody.append(new_row);
+						document.getElementById('priv').after(new_row);				
+					}
+					if(data[i]['appType'] == '-1'){
+						var new_row = document.createElement('tr');
+						var new_td1 = document.createElement('td');
+						new_td1.append(i+1);
+						new_td1.id = "index";
+						var new_td2 = document.createElement('td');
+						new_td2.append(data[i]['abiturient']);
+						var new_td3 = document.createElement('td');
+						if(data[i]['points']==null){
+							new_td3.append(0);
+						}
+						else{
+							new_td3.append(data[i]['points']);
+						}				
+						new_row.append(new_td1,new_td2,new_td3);
+						//new_tbody.append(new_row);
+						document.getElementById('all').after(new_row);				
+					}
+					
+				}
+				console.log($jepa = new_tbody);
+				
 			},
 			error:function(){
 				alert('krivoi kod');
