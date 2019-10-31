@@ -35,7 +35,7 @@
   "description": "JavaScript's functional programming helper library.",
   "devDependencies": {
     "docco": "*",
-    "eslint": "0.6.x",
+    "eslint": "6.6.x",
     "karma": "~0.12.31",
     "karma-qunit": "~0.1.4",
     "qunit-cli": "~0.2.0",
